@@ -11,19 +11,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import SaveIcon from '@material-ui/icons/Save';
-import Button from '@material-ui/core/Button';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
 import { deepOrange } from '@material-ui/core/colors';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
@@ -64,22 +55,8 @@ const useStyles = makeStyles((theme)=>({
       },
   }));
 
-  const theme = createMuiTheme({
-    palette: {
-    primary: {
-        main: "#ff9800",
-    },
-    secondary: {
-        main: "#ff3d00",
-    },
-    blue:{
-        main: "#2196f3"
-    }
-    },
-});
-
 const Subreq = () => {
-    const classes = useStyles(theme);
+    const classes = useStyles();
     const [name, setName] = useState();
     const [avatar,setAvatar] = useState();
     const [intro, setIntro] = useState();
@@ -94,83 +71,82 @@ const Subreq = () => {
     }
 
     return(
-        <ThemeProvider theme={theme}>
-            <Container maxWidth="sm">
-                <Card className={classes.root}>
-                    <CardContent>
-                    <Typography variant="h5" component="h1">訂閱審核</Typography>
-                    <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
-                    <List dense>
-                            <ListItem>
-                                <ListItemAvatar>
-                                <Avatar alt="啊" src={""}/>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary="垃圾廢物的人"
-                                />
-                                <ListItemSecondaryAction>
-                                <IconButton className={classes.button} variant="contained" color="primary" >
-                                    <CheckCircleIcon />
-                                </IconButton>
-                                <IconButton
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}>
-                                        <DeleteIcon />
-                                </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <ListItem>
-                                <ListItemAvatar>
-                                <Avatar alt="啊" src={""}/>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary="垃圾廢物的人"
-                                />
-                                <ListItemSecondaryAction>
-                                <IconButton className={classes.button} variant="contained" color="primary" >
-                                    <CheckCircleIcon />
-                                </IconButton>
-                                <IconButton
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}>
-                                        <DeleteIcon />
-                                </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <ListItem>
-                                <ListItemAvatar>
-                                <Avatar alt="啊" src={""}/>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary="垃圾廢物的人"
-                                />
-                                <ListItemSecondaryAction>
-                                <IconButton className={classes.button} variant="contained" color="primary" >
-                                    <CheckCircleIcon />
-                                </IconButton>
-                                <IconButton
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}>
-                                        <DeleteIcon />
-                                </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
 
-                            <Typography variant="h2" component="h1" gutterBottom>
-                                (＾ｰ^)ノ <br/>
-                            </Typography>
-                            <Typography variant="h5" component="span">
-                                呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
-                            </Typography>
-                    </List>
-       
-                    </CardContent>
-                </Card>
-            </Container>
-        </ThemeProvider>
+        <Container maxWidth="sm">
+            <Card className={classes.root}>
+                <CardContent>
+                <Typography variant="h5" component="h1">訂閱審核</Typography>
+                <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
+                <List dense>
+                        <ListItem>
+                            <ListItemAvatar>
+                            <Avatar alt="啊" src={""}/>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary="垃圾廢物的人"
+                            />
+                            <ListItemSecondaryAction>
+                            <IconButton className={classes.button} variant="contained" color="primary" >
+                                <CheckCircleIcon />
+                            </IconButton>
+                            <IconButton
+                                variant="contained"
+                                color="secondary"
+                                className={classes.button}>
+                                    <DeleteIcon />
+                            </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                        <ListItem>
+                            <ListItemAvatar>
+                            <Avatar alt="啊" src={""}/>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary="垃圾廢物的人"
+                            />
+                            <ListItemSecondaryAction>
+                            <IconButton className={classes.button} variant="contained" color="primary" >
+                                <CheckCircleIcon />
+                            </IconButton>
+                            <IconButton
+                                variant="contained"
+                                color="secondary"
+                                className={classes.button}>
+                                    <DeleteIcon />
+                            </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                        <ListItem>
+                            <ListItemAvatar>
+                            <Avatar alt="啊" src={""}/>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary="垃圾廢物的人"
+                            />
+                            <ListItemSecondaryAction>
+                            <IconButton className={classes.button} variant="contained" color="primary" >
+                                <CheckCircleIcon />
+                            </IconButton>
+                            <IconButton
+                                variant="contained"
+                                color="secondary"
+                                className={classes.button}>
+                                    <DeleteIcon />
+                            </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+
+                        <Typography variant="h2" component="h1" gutterBottom>
+                            ╮(╯▽╰)╭ <br/>
+                        </Typography>
+                        <Typography variant="h5" component="span">
+                            呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
+                        </Typography>
+                </List>
+
+                </CardContent>
+            </Card>
+        </Container>
 
 
     );

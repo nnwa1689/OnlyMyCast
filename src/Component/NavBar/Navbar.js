@@ -72,103 +72,94 @@ const NavBar = (props) => {
     const history = useHistory();
     const classes = useStyles();
     const [sideBar, setSideBar] = useState(false);
-    const theme = createMuiTheme({
-        palette: {
-          primary: {
-            main: "#ff9800",
-          },
-          secondary: {
-            main: "#ff3d00",
-          },
-        },
-      });
 
     return (
-        <ThemeProvider theme={theme}>
-            <div>
-                <AppBar position="fixed">
-                <Toolbar>
-                    <IconButton
-                    edge="start"
-                    className={classes.menuButton}
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={ ()=>{ setSideBar(true) } }>
-                        <MenuIcon />
-                    </IconButton>
-                    <Link component={RLink} to="/" ><Typography variant="h6" noWrap><span style={{color:"white"}}>OnlyMyCast</span></Typography></Link>
-                    <div className={classes.grow}/>
-                    <IconButton
-                        edge="end"
-                        color="inherit"
-                        aria-label="searching"
-                        >
-                        <SearchIcon />
-                        </IconButton>
-                </Toolbar>
-                </AppBar>
+  
+      <div>
+          <AppBar position="fixed">
+          <Toolbar>
+              <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="open drawer"
+              onClick={ ()=>{ setSideBar(true) } }>
+                  <MenuIcon />
+              </IconButton>
+              <Link component={RLink} to="/" ><Typography variant="h6" noWrap><span style={{color:"white"}}>OnlyMyCast</span></Typography></Link>
+              <div className={classes.grow}/>
+              <IconButton
+                  edge="end"
+                  color="inherit"
+                  aria-label="searching"
+                  component={RLink} 
+                  to="/search"
+                  >
+                  <SearchIcon />
+                  </IconButton>
+          </Toolbar>
+          </AppBar>
 
-                <Drawer anchor="left" open={ sideBar } onClose={ ()=> setSideBar(false) }>
-                    <div className={ classes.list } 
-                        role="presentation"
-                        onClick={ ()=>{ setSideBar(false) } }
-                        onKeyDown={ ()=>{ setSideBar(false) } }>
-                        <List>
-                            <ListItem key="account">
-                                <ListItemIcon><Avatar alt="啊哈（白痴怪談）" src="/static/images/avatar/1.jpg" className={ classes.orange } /></ListItemIcon>
-                                <ListItemText primary="啊哈（白痴怪談）"></ListItemText>
-                            </ListItem>
-                        </List>
-                        <Divider />
-                        <List>
-                            <ListItem button component={RLink} to="/account" key="setting">
-                                <ListItemIcon><AccountBoxIcon /></ListItemIcon>
-                                <ListItemText primary="帳號設定"></ListItemText>
-                            </ListItem>
-                            <ListItem button component={RLink} to="/podcastaccount" key="podcastsetting">
-                                <ListItemIcon><GraphicEqIcon /></ListItemIcon>
-                                <ListItemText primary="電台設定"></ListItemText>
-                            </ListItem>
-                            <ListItem button key="logout">
-                                <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                                <ListItemText primary="登出"></ListItemText>
-                            </ListItem>
-                        </List>
-                        <Divider />
-                        <List>
-                            <ListItem button key="publish">
-                                <ListItemIcon><PublishIcon /></ListItemIcon>
-                                <ListItemText primary="上傳節目"></ListItemText>
-                            </ListItem>
-                            <ListItem button key="editpod">
-                                <ListItemIcon><EditIcon /></ListItemIcon>
-                                <ListItemText primary="編輯節目"></ListItemText>
-                            </ListItem>
-                            <ListItem button component={RLink} to="/subreq" key="subreq">
-                                <ListItemIcon>
-                                    <Badge badgeContent={4} color="secondary">
-                                        <InboxIcon />
-                                    </Badge>
-                                </ListItemIcon>
-                                <ListItemText primary="審核訂閱"></ListItemText>
-                            </ListItem>
-                        </List>
-                        <Divider />
+          <Drawer anchor="left" open={ sideBar } onClose={ ()=> setSideBar(false) }>
+              <div className={ classes.list } 
+                  role="presentation"
+                  onClick={ ()=>{ setSideBar(false) } }
+                  onKeyDown={ ()=>{ setSideBar(false) } }>
+                  <List>
+                      <ListItem key="account">
+                          <ListItemIcon><Avatar alt="啊哈（白痴怪談）" src="/static/images/avatar/1.jpg" className={ classes.orange } /></ListItemIcon>
+                          <ListItemText primary="啊哈（白痴怪談）"></ListItemText>
+                      </ListItem>
+                  </List>
+                  <Divider />
+                  <List>
+                      <ListItem button component={RLink} to="/account" key="setting">
+                          <ListItemIcon><AccountBoxIcon /></ListItemIcon>
+                          <ListItemText primary="帳號設定"></ListItemText>
+                      </ListItem>
+                      <ListItem button component={RLink} to="/podcastaccount" key="podcastsetting">
+                          <ListItemIcon><GraphicEqIcon /></ListItemIcon>
+                          <ListItemText primary="電台設定"></ListItemText>
+                      </ListItem>
+                      <ListItem button key="logout">
+                          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                          <ListItemText primary="登出"></ListItemText>
+                      </ListItem>
+                  </List>
+                  <Divider />
+                  <List>
+                      <ListItem button component={RLink} to="/uploadpodcast" key="publish">
+                          <ListItemIcon><PublishIcon /></ListItemIcon>
+                          <ListItemText primary="上傳單集"></ListItemText>
+                      </ListItem>
+                      <ListItem button key="editpod">
+                          <ListItemIcon><EditIcon /></ListItemIcon>
+                          <ListItemText primary="單集管理"></ListItemText>
+                      </ListItem>
+                      <ListItem button component={RLink} to="/subreq" key="subreq">
+                          <ListItemIcon>
+                              <Badge badgeContent={4} color="secondary">
+                                  <InboxIcon />
+                              </Badge>
+                          </ListItemIcon>
+                          <ListItemText primary="審核訂閱"></ListItemText>
+                      </ListItem>
+                  </List>
+                  <Divider />
 
-                        <List>
-                            <ListItem key="privatepolic" fontSize={5}>
-                                <Link href="/" variant="body3">隱私權政策</Link>
-                                &nbsp;
-                                <Link href="/" variant="body3">條款</Link>
-                            </ListItem>
-                            <ListItem key="privatepolic">
-                                <div fontSize={10}>©2021<br/>OnlyMyCast - 建立自己的私人 PodCast</div>
-                            </ListItem>
-                        </List>
-                    </div>
-                </Drawer>
-            </div>
-        </ThemeProvider>
+                  <List>
+                      <ListItem key="privatepolic" fontSize={5}>
+                          <Link href="/" variant="body3">隱私權政策</Link>
+                          &nbsp;
+                          <Link href="/" variant="body3">條款</Link>
+                      </ListItem>
+                      <ListItem key="privatepolic">
+                          <div fontSize={10}>©2021<br/>OnlyMyCast - 建立自己的私人 PodCast</div>
+                      </ListItem>
+                  </List>
+              </div>
+          </Drawer>
+      </div>
     );
 }
 export default NavBar;

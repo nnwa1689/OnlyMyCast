@@ -26,6 +26,8 @@ import Badge from '@material-ui/core/Badge';
 import Link from '@material-ui/core/Link';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import GraphicEqIcon from '@material-ui/icons/GraphicEq';
+import LogoIcon from '../../static/only-my-cast-icon.svg'
+import Logo from '../../static/only-my-cast.svg'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -72,6 +74,9 @@ const NavBar = (props) => {
     const history = useHistory();
     const classes = useStyles();
     const [sideBar, setSideBar] = useState(false);
+    const handleLogout = ()=>{
+      console.log('logout');
+    }
 
     return (
   
@@ -86,7 +91,9 @@ const NavBar = (props) => {
               onClick={ ()=>{ setSideBar(true) } }>
                   <MenuIcon />
               </IconButton>
-              <Link component={RLink} to="/" ><Typography variant="h6" noWrap><span style={{color:"white"}}>OnlyMyCast</span></Typography></Link>
+              <Link component={RLink} to="/" >
+                <img alt="OnlyMyCast" src={Logo} width="140" height="50" />
+              </Link>
               <div className={classes.grow}/>
               <IconButton
                   edge="end"
@@ -121,7 +128,7 @@ const NavBar = (props) => {
                           <ListItemIcon><GraphicEqIcon /></ListItemIcon>
                           <ListItemText primary="電台設定"></ListItemText>
                       </ListItem>
-                      <ListItem button key="logout">
+                      <ListItem onClick={handleLogout} button key="logout">
                           <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                           <ListItemText primary="登出"></ListItemText>
                       </ListItem>
@@ -132,7 +139,7 @@ const NavBar = (props) => {
                           <ListItemIcon><PublishIcon /></ListItemIcon>
                           <ListItemText primary="上傳單集"></ListItemText>
                       </ListItem>
-                      <ListItem button key="editpod">
+                      <ListItem button component={RLink} to="/editpodcast" key="editpod">
                           <ListItemIcon><EditIcon /></ListItemIcon>
                           <ListItemText primary="單集管理"></ListItemText>
                       </ListItem>
@@ -153,7 +160,7 @@ const NavBar = (props) => {
                           &nbsp;
                           <Link href="/" variant="body3">條款</Link>
                       </ListItem>
-                      <ListItem key="privatepolic">
+                      <ListItem key="copyright">
                           <div fontSize={10}>©2021<br/>OnlyMyCast - 建立自己的私人 PodCast</div>
                       </ListItem>
                   </List>

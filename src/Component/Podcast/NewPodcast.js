@@ -19,6 +19,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import AttachmentIcon from '@material-ui/icons/Attachment';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -69,10 +70,13 @@ const useStyles = makeStyles((theme)=>({
     const [intro, setIntro] = useState("");
     const [podcastTitle, setPodcastTitle] = useState("");
     const [uploadStatu, setUploadStatu] = useState(0);
+    //0:init 1:suc 2:uploading 3:err
 
     const handleUploadPodcast = () => {
         var file = new File([fileBit], filename);
         console.log(file);
+        setActiveStep(3);
+        setUploadStatu(2);
     }
 
     return(
@@ -103,7 +107,13 @@ const useStyles = makeStyles((theme)=>({
                         multiple
                         type="file"
                         startIcon={<AttachmentIcon />}
-                        onChange={(e)=>{setFilename(e.target.files[0].name);setFileBit(e.target.files[0])}}
+                        onChange={(e)=>{
+                            console.log(e.target.files);
+                            if (e.target.files.length >= 1) {
+                                setFilename(e.target.files[0].name);
+                                setFileBit(e.target.files[0])
+                            }
+                        }}
                     />
                     <label htmlFor="contained-button-file">
                         <Button variant="contained" size="large" color="primary" component="span">
@@ -150,26 +160,40 @@ const useStyles = makeStyles((theme)=>({
                 )
                  }
 
-                <br/><br/>
-                <Divider/>
-                <br/>
-
-                <Button
-                    disabled={activeStep === 0}
-                    onClick={()=>setActiveStep(activeStep - 1)}
-                    className={classes.backButton}
-                >
-                    上一步
-                </Button>
-                {activeStep === 2 ? 
-                <Button variant="contained" color="primary" onClick={()=>handleUploadPodcast()}>
-                    完成
-                </Button>
-                :
-                <Button disabled={ (filename==="" && activeStep===0) || (podcastTitle===""&& activeStep===1) || (intro==="" && activeStep===1) } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
-                    下一步
-                </Button>
+                { uploadStatu === 2 && 
+                    <>
+                        <CircularProgress size={80} />
+                        <Typography variant="h6" gutterBottom>
+                            正在處理上傳作業，請稍候！ 
+                        </Typography>
+                    </>
                 }
+
+                <br/><br/>
+
+                { activeStep < 3 &&
+                    <>
+                        <Divider/>
+                        <br/>
+                        <Button
+                            disabled={activeStep === 0}
+                            onClick={()=>setActiveStep(activeStep - 1)}
+                            className={classes.backButton}
+                        >
+                            上一步
+                        </Button>
+                        {activeStep === 2 ? 
+                        <Button variant="contained" color="primary" onClick={()=>handleUploadPodcast()}>
+                            完成
+                        </Button>
+                        :
+                        <Button disabled={ (filename==="" && activeStep===0) || (podcastTitle===""&& activeStep===1) || (intro==="" && activeStep===1) } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
+                            下一步
+                        </Button>
+                        }
+                    </>
+                }
+ 
   
                 </CardContent>
             </Card>

@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,6 +11,7 @@ import ReactPlayer from 'react-player'
 import Typography from '@material-ui/core/Typography';
 import Replay10Icon from '@material-ui/icons/Replay10';
 import Forward10Icon from '@material-ui/icons/Forward10';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -40,6 +41,14 @@ const Player = (props) => {
     const [playSec, setPlaySec] = useState(0);
     const [duration, setDuration] = useState(0);
     const playerRef = createRef();
+    const [ready, setReady] = useState(false);
+
+    useEffect(
+        ()=>{
+            setReady(false);
+            setPlayState(true);
+        },[props.url]
+    )
 
     const handleNextTenClick= (e)=>{
         playerRef.current.seekTo(playSec.playedSeconds + 10)
@@ -59,28 +68,32 @@ const Player = (props) => {
 
     return (
         <>
-        {props.children}  
-        <ReactPlayer 
-            ref={playerRef}
-            url={props.url}
-            playing={playState}
-            onReady={()=>console.log('ready')}
-            onPause={()=>setPlayState(false)}
-            onPlay={()=>console.log('play')}
-            width="0"
-            height="0"
-            onProgress={(p)=>(setPlaySec(p))}
-            onDuration={(d)=>(setDuration(d))}
-            volume={1}
-        />
+        {props.children}
+        {
+        (props.url !== undefined && props.url !== "") &&
+        <>
+            <ReactPlayer 
+                ref={playerRef}
+                url={props.url}
+                onReady={()=>setReady(true)}
+                onPause={()=>setPlayState(false)}
+                onPlay={()=>console.log('play')}
+                width="0"
+                height="0"
+                onProgress={(p)=>(setPlaySec(p))}
+                onDuration={(d)=>(setDuration(d))}
+                volume={1}
+                playing={playState}
+            />
             <AppBar position="fixed" color="inherit" className={classes.appBar}>
+            { !ready && <LinearProgress style={{width:"100%"}}/>}
                 <Toolbar variant="dense">
                     <Avatar variant="rounded" className={classes.large} alt="幹話電台" src={props.coverUrl} />
                     <Typography style={{ marginTop: "10px" } } variant="subtitle2">
                         {props.singleName} - {props.podcastName}
                     </Typography>
                     <Typography className="playTime" style={{ marginTop: "10px" } } variant="subtitle2">
-                        ({ "-" + parseInt(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))/60)) + ":" + parseInt(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))%60))})
+                        ({ "剩" + parseInt(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))/60)) + "分" + parseInt(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))%60))+"秒"})
                     </Typography>
                 </Toolbar>
                 <Toolbar variant="dense">
@@ -110,7 +123,8 @@ const Player = (props) => {
                 </Toolbar>
             </AppBar>
         </>
+        }
+        </>
     );
     }
-
 export default Player;

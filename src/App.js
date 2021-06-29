@@ -12,6 +12,11 @@ import Search from './Component/Search/Search'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import PodcastHome from './Component/Podcast/PodcastHome';
 import NewPodcast from './Component/Podcast/NewPodcast'
+import PodcastDetails from './Component/Podcast/PodcastDetails'
+import EditPodcast from './Component/Podcast/EditPodcast'
+import EditPodcastDetails from './Component/Podcast/EditPodcastDetails';
+import SignIn from './Component/SignIn/SignIn';
+import SignUp from './Component/SignUp/SignUp';
 
 const App = () => {
   var basename = "/";
@@ -31,9 +36,9 @@ const App = () => {
   });
 
   const [playerUrl, setPlayerUrl] = useState();
-  const [playerTitle, setPlayerTitle] = useState();
-  const [podcastName, setPodcastName] = useState();
-  const [coverUri, setCoverUri] = useState();
+  const [playerTitle, setPlayerTitle] = useState("");
+  const [podcastName, setPodcastName] = useState("");
+  const [coverUri, setCoverUri] = useState("");
 
   const setPlayer = (e) => {
     console.log(e.currentTarget.dataset.titlename);
@@ -42,6 +47,7 @@ const App = () => {
     setPodcastName(e.currentTarget.dataset.podcastname)
     setCoverUri(e.currentTarget.dataset.coveruri)
   }
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -58,8 +64,17 @@ const App = () => {
                  render={(props) => (
                     <PodcastHome {...props} setPlayer={setPlayer} />
                   )} />
+              <Route path="/podcastdetail/:id"                  
+                render={(props) => (
+                    <PodcastDetails {...props} setPlayer={setPlayer} />
+                  )} />
               <Route exact path="/uploadpodcast" component={NewPodcast} />
-            </Player>
+              <Route exact path="/editpodcast" component={EditPodcast} />
+              <Route path="/editpodcast/:id" component={EditPodcastDetails} />
+              <Route path="/editpodcast/:id" component={EditPodcastDetails} />
+          </Player>
+              <Route exact path="/signin" component={SignIn} />
+              <Route exact path="/signup" component={SignUp} />
         </BrowserRouter> 
       </div>
     </ThemeProvider>

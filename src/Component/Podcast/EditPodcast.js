@@ -29,6 +29,7 @@ import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { Link as RLink, useHistory } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
+import EditIcon from '@material-ui/icons/Edit';
 
 
 
@@ -69,7 +70,7 @@ const useStyles = makeStyles((theme)=>({
   }));
 
 
-const PodcastHome = (props) => {
+const EditPodcast = (props) => {
     const history = useHistory();
     const classes = useStyles();
     const [name, setName] = useState();
@@ -102,62 +103,32 @@ const PodcastHome = (props) => {
             <Card className={classes.root}>
                 <CardContent>
                 
-                <Avatar variant="rounded" alt="啊哈（白痴怪談）" src={avatar} className={classes.large} />
-                <Typography variant="h5" component="h1">哈囉白痴</Typography>
-                <Typography variant="body1" component="span">聽這個電台的都是白癡</Typography>
-                <br/><br/>
-                <Button onClick={(e)=>handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
-                    要求追蹤
-                </Button>
-                <Button onClick={(e)=>handleUnsub(e)} variant="outlined" color="secondary" size="large" startIcon={<StarBorderIcon />}>
-                    取消追蹤
-                </Button>
-
-                <Button variant="outlined" size="large" onClick={(e)=>handleRemoveReq(e)}>已送出請求</Button>
+                <Typography variant="h5" component="h1">單集管理</Typography><br/>
+                <Typography variant="body1" component="span">修改或刪除您電台的單集以及單集簡介</Typography>
                 <br/>
                 <br/>
                 <Divider/>
 
-                {/*獨立出去 PodcastespListItem*/}
+                {/*獨立出去 PodcastespEditListItem
+                props hashvalue*/}
                 <ListItem component="span">
+                    <ListItemText>
+                        <Typography component="span" to={"/podcastdetail/" + "flkj"} variant="h6">哈囉白痴</Typography><br/>
+                        <Typography variant="body2" component="datetime">發佈於 {"2020/202/"}</Typography>
+                    </ListItemText>
                     <ListItemIcon>
                         <IconButton 
                         aria-label="play"
                         value="hashPod"
-                        data-uri="https://firebasestorage.googleapis.com/v0/b/noteshazuya.appspot.com/o/%E5%85%89%E8%89%AF%20Michael%20Wong%E6%9B%B9%E6%A0%BC%20Gary%20Chaw%E3%80%90%E5%B0%91%E5%B9%B4%E3%80%91Official%20Music%20Video.mp3?alt=media&token=44b2b151-45c2-4997-aa5a-9b01c95b5d49"
-                        data-coveruri="https://img.mymusic.net.tw/mms/album/L/036/36.jpg"
-                        data-titlename="少年"
-                        data-podcastname="幹話"
-                        onClick={props.setPlayer}>
-                            <PlayArrowIcon/>
+                        component={RLink}
+                        to={"/editpodcast/abc"}
+                        >
+                            <EditIcon/>
                         </IconButton>
                     </ListItemIcon>
-                    <ListItemText>
-                        <Link component={RLink} to={"/podcastdetail/" + "flkj"} variant="h6">哈囉白痴</Link><br/>
-                        <Typography variant="body1" component="span">這是白癡電台的第一個廣播，請多多指教哦哦哦！！！！</Typography>
-                    </ListItemText>
                 </ListItem>
                 <Divider/>
-                <ListItem component="span">
-                    <ListItemIcon>
-                        <IconButton 
-                        aria-label="play"
-                        value="hashPod2"
-                        data-uri="https://firebasestorage.googleapis.com/v0/b/noteshazuya.appspot.com/o/testmusic.mp3?alt=media&token=4dd8d990-9ec3-4f40-863d-6381793afed8"
-                        data-coveruri="https://i.kfs.io/album/tw/18854,2v1/fit/500x500.jpg"
-                        data-titlename="簡單愛愛"
-                        data-podcastname="幹話"
-                        onClick={props.setPlayer}>
-                            <PlayArrowIcon/>
-                        </IconButton>
-                    </ListItemIcon>
-                    <ListItemText>
-                        <Link component={RLink} to={"/podcastdetail/" + "flkj"} variant="h6">哈囉白痴</Link><br/>
-                        <Typography variant="body1" component="span">這是白癡電台的第一個廣播，請多多指教哦哦哦！！！！</Typography>
-                    </ListItemText>
-                </ListItem>
-                <Divider/>
-                {/*獨立出去 PodcastespListItem*/}
+                {/*獨立出去 PodcastespEditListItem*/}
                 
 
                 </CardContent>
@@ -168,4 +139,4 @@ const PodcastHome = (props) => {
     );
 
 }
-export default PodcastHome;
+export default EditPodcast;

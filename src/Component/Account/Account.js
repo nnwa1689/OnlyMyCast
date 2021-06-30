@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -11,6 +11,14 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import { deepOrange } from '@material-ui/core/colors';
+import AttachmentIcon from '@material-ui/icons/Attachment';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
+
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -46,50 +54,149 @@ const useStyles = makeStyles((theme)=>({
         marginBottom: theme.spacing(2),
         marginTop:theme.spacing(2)
       },
+    input: {
+        display: 'none',
+      },
   }));
 
-const Account = () => {
+const Account = (props) => {
     const classes = useStyles();
-    const [name, setName] = useState();
-    const [avatar,setAvatar] = useState();
-    const [newPassword, setNewPassword] = useState();
-    const [oldPassword, setOldPassword] = useState();
+    const [handleCode, setHandleCode] = useState('init');
+    const [name, setName] = useState(props.user.name);
+    const [avatar,setAvatar] = useState(props.user.avatar);
+    const [newPassword, setNewPassword] = useState("");
+    const [oldPassword, setOldPassword] = useState("");
+    const [filename, setFilename] = useState("");
+    const [fileBit, setFileBit] = useState();
+    const [nameErr, setNameErr] = useState(false);
+    const [oldPwErr, setOldPwErr] = useState(false);
+    const [newPwErr, setNewPwErr] = useState(false);
+
+    const handleUpdateAccount = ()=>{
+        setHandleCode('loading');
+        setNameErr(false);
+        setOldPwErr(false);
+        setNewPwErr(false);
+        if (name==="" || oldPassword==="") {
+            if (name==="")
+                setNameErr("暱稱不可為空");
+            if (oldPassword==="")
+                setOldPwErr("舊密碼不可為空")
+            setHandleCode('error')
+        } else {
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                  var credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
+                  user.reauthenticateWithCredential(credential).then(()=> {
+
+                      if (newPassword!=="") {
+                        user.updatePassword(newPassword).then(()=>{
+                            // 修改密碼完成
+                 
+                          }).catch((error)=> {
+                            if (error.code==="auth/weak-password") {
+                                setNewPwErr("密碼必須大於6位數");
+                                setHandleCode('error')
+                            }
+                          });
+                      }
+                      
+                      if (handleCode !== "error"){
+                        if (filename !== "") {
+                            //uploadAvatar
+                            var storageRef = firebase.storage().ref().child('avatar/' + user.uid + "/" + filename);
+                            storageRef.put(fileBit).then((s) => {
+                                storageRef.getDownloadURL()
+                                .then((url) => {
+                                    setAvatar(url);
+                                    firebase.firestore().collection("user").doc(user.uid).set({
+                                        avatar:url
+                                    }, { merge: true })
+                                })
+                              });
+                        }
+                        firebase.firestore().collection("user").doc(user.uid).set({
+                            name: name,
+                        }, { merge: true }).then(
+                            ()=>{
+                                setHandleCode('suc');
+                                setFilename("");
+                                setFileBit();
+                                setOldPassword("");
+                                setNewPassword("");
+                            }
+                        );
+                      }
+                  }).catch((error)=>{
+                      setOldPwErr("舊密碼錯誤");
+                      setHandleCode('error');
+                  });
+                } else {
+                  // User is signed out
+                  // ...
+                }
+              });
+        }
+    }
 
     return(
  
         <Container maxWidth="sm">
             <Card className={classes.root}>
                 <CardContent>
+                { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
                 <Typography variant="h5" component="h1">帳號設定</Typography>
                 <Typography variant="body1" component="span">更新您的個人資訊<br/>這裡的資訊將用於您訂閱他人時顯示</Typography>
-                <Avatar alt="啊哈（白痴怪談）" src={avatar} className={classes.large} />
+                <Avatar alt={name} src={avatar} className={classes.large} />
                 <form noValidate autoComplete="off">
-                <FormControl fullWidth className={classes.margin}>
-                    <TextField value={avatar} onChange={(e)=>setAvatar(e.target.value)} id="outlined-basic" label="您的頭貼" variant="outlined" />
-                </FormControl>
-                <FormControl fullWidth className={classes.margin}>
-                    <TextField value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="您的暱稱" variant="outlined" />
-                </FormControl>
-                <Divider/>
-                <Typography variant="h5" component="h1"><br/>帳號安全</Typography>
-                <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
-                <FormControl fullWidth className={classes.margin}>
-                    <TextField type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="outlined-basic" label="新密碼" variant="outlined" />
-                </FormControl>
-                <FormControl fullWidth className={classes.margin}>
-                    <TextField type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="outlined-basic" label="確認舊密碼" variant="outlined" />
-                </FormControl>
+                    <FormControl fullWidth className={classes.margin}>
+                    <input
+                        accept="image/*"
+                        className={classes.input}
+                        id="contained-button-file"
+                        multiple
+                        type="file"
+                        startIcon={<AttachmentIcon />}
+                        disabled={handleCode==="loading"}
+                        onChange={(e)=>{
+                            if (e.target.files.length >= 1) {
+                                setFilename(e.target.files[0].name);
+                                setFileBit(e.target.files[0])
+                            }
+                        }}
+                    />
+                    <label htmlFor="contained-button-file">
+                        <Button variant="contained" size="large" fullWidth color="primary" component="span">
+                            <AttachmentIcon />
+                            { filename === "" ? "上傳新頭貼" : filename }</Button>
+                    </label>
+                    </FormControl>
+                    <FormControl fullWidth className={classes.margin}>
+                        <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="暱稱" variant="outlined" />
+                    </FormControl>
+                    <Divider/>
+                    <Typography variant="h5" component="h1"><br/>帳號安全</Typography>
+                    <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
+                    <FormControl fullWidth className={classes.margin}>
+                        <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="outlined-basic" label="新密碼" variant="outlined" />
+                    </FormControl>
+                    <FormControl fullWidth className={classes.margin}>
+                        <TextField disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="outlined-basic" label="確認舊密碼" variant="outlined" />
+                    </FormControl>
                 </form>
                 <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            className={classes.button}
-            startIcon={<SaveIcon />}>
-            儲存設定
-        </Button>
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    className={classes.button}
+                    startIcon={<SaveIcon />}
+                    onClick={handleUpdateAccount}
+                    disabled={handleCode==="loading"}>
+                    儲存設定
+                </Button>
                 </CardContent>
             </Card>
+            <Snackbar open={handleCode==="suc"} autoHideDuration={6000} onClose={()=>{setHandleCode('init');}} message="您的變更已經儲存"/>
         </Container>
 
 

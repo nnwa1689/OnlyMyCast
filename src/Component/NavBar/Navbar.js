@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Link as RLink, useHistory } from 'react-router-dom';
+import { Link as RLink } from 'react-router-dom';
+import firebase from "firebase/app";
+import "firebase/auth";
+/*google themes */
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -71,10 +74,15 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = (props) => {
 
-    const history = useHistory();
+  console.log(props.user)
     const classes = useStyles();
     const [sideBar, setSideBar] = useState(false);
     const handleLogout = ()=>{
+      firebase.auth().signOut().then(() => {
+        // Sign-out successful.
+      }).catch((error) => {
+        // An error happened.
+      });
       console.log('logout');
     }
 
@@ -114,8 +122,8 @@ const NavBar = (props) => {
                   onKeyDown={ ()=>{ setSideBar(false) } }>
                   <List>
                       <ListItem key="account">
-                          <ListItemIcon><Avatar alt="啊哈（白痴怪談）" src="/static/images/avatar/1.jpg" className={ classes.orange } /></ListItemIcon>
-                          <ListItemText primary="啊哈（白痴怪談）"></ListItemText>
+                          <ListItemIcon><Avatar alt={props.user.name} src={props.user.avatar==="" ? "." : props.user.avatar} className={ classes.orange } /></ListItemIcon>
+                          <ListItemText primary={props.user.name}></ListItemText>
                       </ListItem>
                   </List>
                   <Divider />

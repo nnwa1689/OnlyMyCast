@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -17,6 +17,11 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
 
 
 const useStyles = makeStyles((theme)=>({
@@ -55,19 +60,104 @@ const useStyles = makeStyles((theme)=>({
       },
   }));
 
-const Subreq = () => {
+const Subreq = (props) => {
     const classes = useStyles();
-    const [name, setName] = useState();
+    const [reqList, setReqList] = useState(Array());
     const [avatar,setAvatar] = useState();
     const [intro, setIntro] = useState();
     const [oldPassword, setOldPassword] = useState();
+    const isFirstLoad = useRef(true);
 
-    const sucReq= (e)=>{
+    useEffect(
+        ()=>{
+            if (isFirstLoad.current) {
+                getReqList();
+                isFirstLoad.current=false;
+            }
+        }
+    )
 
+    const handleSucReq= (e)=>{
+        firebase.firestore().collection("subscribe").doc(e).set(
+            {[props.user.userId] : props.user.userId},{ merge: true }
+        ).then(
+            firebase.firestore().collection("fans").doc(props.user.userId).set(
+                {[e] : e},{ merge: true }
+            ).then(()=>{
+                firebase.database().ref('/subreq/' + e + "/" + props.user.userId).remove().then(()=>{
+                    firebase.database().ref('/subcheck/' + props.user.userId + "/" + e).remove().then(()=>{
+                        getReqList();
+                    })
+                }).catch()
+            }
+            )  
+        );
     }
 
-    const rejReq= (e)=>{
+    const handleRejReq= (e)=>{
+        console.log(props.user.userId);
+        firebase.database().ref('/subreq/' + e + "/" + props.user.userId).remove().then(()=>{
+            firebase.database().ref('/subcheck/' + props.user.userId + "/" + e).remove().then(()=>{
+                getReqList();
+            })
+        }).catch()
+    }
 
+    const genListItem = async(data)=>{
+        var changeArr = Array();
+        for (var i of Object.entries(data)){
+            await firebase.firestore().collection("user").doc(i[0]).get()
+            .then((doc)=>{
+                const data = doc.data();
+                changeArr.push(
+                    <ListItem key={i[0]}>
+                        <ListItemAvatar>
+                        <Avatar alt={data.name} src={data.avatar}/>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={data.name}
+                        />
+                        <ListItemSecondaryAction>
+                        <IconButton 
+                        className={classes.button} 
+                        variant="contained" 
+                        value={i[0]}
+                        onClick={(e)=>{handleSucReq(e.currentTarget.value)}}
+                        color="primary" >
+                            <CheckCircleIcon />
+                        </IconButton>
+                        <IconButton
+                            variant="contained"
+                            color="secondary"
+                            value={i[0]}
+                            onClick={(e)=>{handleRejReq(e.currentTarget.value)}}
+                            className={classes.button}>
+                                <DeleteIcon />
+                        </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem> 
+                )
+            })
+        }
+        return changeArr;
+    }
+
+    const getReqList = async()=>{
+        firebase.database().ref('/subcheck/' + props.user.userId).once("value", e => {
+          }).then(async(e)=>{
+              const data = e.val();
+              console.log(data);
+              if (data !== undefined && data !== null) {
+                  genListItem(data).then((arr)=>{
+                    setReqList(arr);
+                  }
+                  );
+                  
+              } else {
+                  setReqList("");
+              }
+
+          })
     }
 
     return(
@@ -78,77 +168,22 @@ const Subreq = () => {
                 <Typography variant="h5" component="h1">訂閱審核</Typography>
                 <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
                 <List dense>
-                        <ListItem>
-                            <ListItemAvatar>
-                            <Avatar alt="啊" src={""}/>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="垃圾廢物的人"
-                            />
-                            <ListItemSecondaryAction>
-                            <IconButton className={classes.button} variant="contained" color="primary" >
-                                <CheckCircleIcon />
-                            </IconButton>
-                            <IconButton
-                                variant="contained"
-                                color="secondary"
-                                className={classes.button}>
-                                    <DeleteIcon />
-                            </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                            <Avatar alt="啊" src={""}/>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="垃圾廢物的人"
-                            />
-                            <ListItemSecondaryAction>
-                            <IconButton className={classes.button} variant="contained" color="primary" >
-                                <CheckCircleIcon />
-                            </IconButton>
-                            <IconButton
-                                variant="contained"
-                                color="secondary"
-                                className={classes.button}>
-                                    <DeleteIcon />
-                            </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                            <Avatar alt="啊" src={""}/>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="垃圾廢物的人"
-                            />
-                            <ListItemSecondaryAction>
-                            <IconButton className={classes.button} variant="contained" color="primary" >
-                                <CheckCircleIcon />
-                            </IconButton>
-                            <IconButton
-                                variant="contained"
-                                color="secondary"
-                                className={classes.button}>
-                                    <DeleteIcon />
-                            </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-
-                        <Typography variant="h2" component="h1" gutterBottom>
-                            ╮(╯▽╰)╭ <br/>
-                        </Typography>
-                        <Typography variant="h5" component="span">
-                            呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
-                        </Typography>
+                    {reqList === "" ? 
+                        <>
+                            <Typography variant="h2" component="h1" gutterBottom>
+                                ╮(╯▽╰)╭ <br/>
+                            </Typography>
+                            <Typography variant="h5" component="span">
+                                呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
+                            </Typography>
+                        </>
+                    :
+                    reqList
+                    }
                 </List>
-
                 </CardContent>
             </Card>
         </Container>
-
-
     );
 
 }

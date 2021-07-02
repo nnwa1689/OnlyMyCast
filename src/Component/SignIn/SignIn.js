@@ -66,7 +66,7 @@ const SignIn = () => {
 
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      // Signed in
+      window.location.reload();
     })
     .catch((error) => {
       if(error.code==="auth/invalid-email")

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -12,6 +12,12 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link as RLink, useHistory } from 'react-router-dom';
+import PodcastList from '../Home/PodcastList';
+
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
 
 
 
@@ -54,7 +60,36 @@ const useStyles = makeStyles((theme)=>({
 const Search = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    const [query, setQuery] = useState( props.match.params.q );
+    const [searchResult, setSearchResult] = useState("");
+    const isFirstLoad = useRef(true);
+    const [query, setQuery] = useState((props.match.params.q===undefined ? "" : props.match.params.q));
+
+    useEffect(
+        ()=>{
+            if (isFirstLoad.current) {
+                handleSearch();
+                isFirstLoad.current=false;
+            }   
+        }
+    )
+
+    const handleSearch = () =>{
+        history.push('/search/' + query);
+        setSearchResult("");
+        if (query !== "") {
+            firebase.firestore().collection("channel").where(
+                firebase.firestore.FieldPath.documentId(), "==", query).get()
+            .then((querySnapshot)=>{ 
+                querySnapshot.forEach(
+                    (doc)=>{
+                        setSearchResult(
+                            <PodcastList podcastName={doc.data().name} podcastIntro={doc.data().intro} podcastCover={doc.data().icon} podcastId={query}></PodcastList>);
+                    }
+                )
+
+           })
+        }
+    }
 
     return(
         <Container maxWidth="sm">
@@ -66,14 +101,14 @@ const Search = (props) => {
                 <InputLabel htmlFor="queryInput">Search</InputLabel>
                     <OutlinedInput id="queryInput" value={query} defaultValue={props.q} onChange={(e)=>setQuery(e.target.value)} label="Search" endAdornment={
                         <InputAdornment position="end">
-                            <IconButton onClick={()=>{history.push('/search/' + query)}} aria-label="search" className={classes.margin}>
+                            <IconButton onClick={handleSearch} aria-label="search" className={classes.margin}>
                                 <SearchIcon fontSize="large" />
                             </IconButton>
                         </InputAdornment>
                     } />
                 </FormControl>
                     <br/><br/>
-
+                {searchResult!=="" && searchResult}
                 </CardContent>
             </Card>
         </Container>

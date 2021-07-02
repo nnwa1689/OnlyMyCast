@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RLink } from 'react-router-dom';
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -77,17 +77,33 @@ const NavBar = (props) => {
   console.log(props.user)
     const classes = useStyles();
     const [sideBar, setSideBar] = useState(false);
+    const [reqCount, setReqCount] = useState("");
     const handleLogout = ()=>{
       firebase.auth().signOut().then(() => {
         // Sign-out successful.
       }).catch((error) => {
         // An error happened.
       });
-      console.log('logout');
+    }
+
+    useEffect(
+      ()=>{
+        getReqCount();
+      }
+    )
+
+    const getReqCount = ()=>{
+      firebase.database().ref('/subcheck/' + props.user.userId).once("value", e => {
+      }).then((e)=>{
+        if (e.val() !== null) {
+          setReqCount(Object.entries(e.val()).length);
+        } else {
+          setReqCount(0);
+        }
+      })
     }
 
     return (
-  
       <div>
           <AppBar position="fixed">
           <Toolbar>
@@ -153,7 +169,7 @@ const NavBar = (props) => {
                       </ListItem>
                       <ListItem button component={RLink} to="/subreq" key="subreq">
                           <ListItemIcon>
-                              <Badge badgeContent={4} color="secondary">
+                              <Badge badgeContent={props.reqCount} color="secondary">
                                   <InboxIcon />
                               </Badge>
                           </ListItemIcon>

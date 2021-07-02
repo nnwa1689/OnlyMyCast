@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -15,6 +15,12 @@ import { deepOrange } from '@material-ui/core/colors';
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
 import Link from '@material-ui/core/Link';
 import { Link as RLink, useHistory } from 'react-router-dom';
+
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
+import "firebase/database"
 
 
 
@@ -61,7 +67,12 @@ const PodcastDetails = (props) => {
     const [avatar,setAvatar] = useState();
     const [intro, setIntro] = useState();
 
-    //get 此頻道資料  是否被目前使用者訂閱（
+    useEffect(
+      ()=>{
+      }
+    )
+
+    
 
     const handlePlayEvent = (e)=>{
         console.log(e.currentTarget.value);
@@ -114,8 +125,6 @@ const PodcastDetails = (props) => {
                 </CardContent>
             </Card>
         </Container>
-
-
     );
 
 }

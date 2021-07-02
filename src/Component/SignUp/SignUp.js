@@ -92,6 +92,7 @@ const SignUp = ()=>{
           }
         ).then(() => {
           console.log("Document successfully written!");
+          window.location.reload();
         })
         .catch((error) => {
             console.error("Error writing document: ", error);

@@ -32,8 +32,10 @@ const App = () => {
   const [playerTitle, setPlayerTitle] = useState("");
   const [podcastName, setPodcastName] = useState("");
   const [coverUri, setCoverUri] = useState("");
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState("");
   const [userUpdate, setUserUpdate] = useState(0);
+  const [reqCount, setReqCount] = useState("");
+  const userUid = useRef();
 
   var basename = "/";
   if (!firebase.apps.length) {
@@ -52,7 +54,6 @@ const App = () => {
 
   const handleUserUpdate = ()=>{
     setUserUpdate(userUpdate + 1);
-    console.log(userUpdate);
   }
 
   useEffect(
@@ -63,6 +64,7 @@ const App = () => {
           .then(
             (doc)=>{
               setUserData(doc.data());
+              userUid.current = user.uid;
               setAuth(true);
             }
           );
@@ -73,6 +75,14 @@ const App = () => {
     },[userUpdate]
   )
 
+ 
+  useEffect(
+    ()=>{
+      getReqCount();
+    }
+  )
+  
+
   const setPlayer = (e) => {
     console.log(e.currentTarget.dataset.titlename);
     setPlayerTitle(e.currentTarget.dataset.titlename)
@@ -80,6 +90,18 @@ const App = () => {
     setPodcastName(e.currentTarget.dataset.podcastname)
     setCoverUri(e.currentTarget.dataset.coveruri)
   }
+
+  const getReqCount = ()=>{
+    firebase.database().ref('/subcheck/' + userData.userId).once("value", e => {
+    }).then((e)=>{
+      if (e.val() !== null) {
+        setReqCount(Object.entries(e.val()).length);
+      } else {
+        setReqCount(0);
+      }
+    })
+  }
+  
 
   const theme = createMuiTheme({
     palette: {
@@ -100,21 +122,30 @@ const App = () => {
       <div className="App">
         <BrowserRouter basename={ basename }>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>
-            { isAuth !== 0 ? 
+            { isAuth !== 0 ?  
                 <>
-                  <Route exact path="/" component={Home} />
+                  <Route exact path="/" 
+                    render={(props) => (
+                        <Home {...props} user={userData} userUid={userUid.current} />
+                      )}/>
                   <Route exact path="/account"
                     render={(props) => (
-                        <Account {...props} user={userData} dataupdate={handleUserUpdate} />
+                        <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} />
                       )}
                   />
-                  <Route exact path="/podcastaccount" component={PodcastAccount} />
-                  <Route exact path="/subreq" component={Subreq} />
+                  <Route exact path="/podcastaccount" 
+                    render={(props) => (
+                        <PodcastAccount {...props} user={userData} userUid={userUid.current}/>
+                      )}/>
+                  <Route exact path="/subreq" 
+                    render={(props) => (
+                        <Subreq {...props} user={userData} userUid={userUid.current} callDataUpdate={getReqCount}/>
+                      )} />
                   <Route exact path="/search" component={Search} />
                   <Route path="/search/:q" component={Search} />
                   <Route path="/podcast/:id"
                     render={(props) => (
-                        <PodcastHome {...props} setPlayer={setPlayer} />
+                        <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} />
                       )} />
                   <Route path="/podcastdetail/:id"                  
                     render={(props) => (
@@ -127,7 +158,7 @@ const App = () => {
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
                   { isAuth ? "" : <Redirect to='/signin'/> }
-                  { isAuth && <Navbar user={userData}></Navbar> }
+                  { isAuth && <Navbar user={userData} reqCount={reqCount}></Navbar> }
                 </>
                 :
                 <LinearProgress style={{ wdith: 100 }}/>
@@ -137,7 +168,6 @@ const App = () => {
         </BrowserRouter> 
       </div>
     </ThemeProvider>
-
   );
 }
 export default App;

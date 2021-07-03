@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Link as RLink } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -6,12 +7,11 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { deepOrange } from '@material-ui/core/colors';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
@@ -63,9 +63,6 @@ const useStyles = makeStyles((theme)=>({
 const Subreq = (props) => {
     const classes = useStyles();
     const [reqList, setReqList] = useState(Array());
-    const [avatar,setAvatar] = useState();
-    const [intro, setIntro] = useState();
-    const [oldPassword, setOldPassword] = useState();
     const isFirstLoad = useRef(true);
 
     useEffect(
@@ -160,31 +157,56 @@ const Subreq = (props) => {
           })
     }
 
-    return(
-
-        <Container maxWidth="sm">
-            <Card className={classes.root}>
-                <CardContent>
-                <Typography variant="h5" component="h1">訂閱審核</Typography>
-                <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
-                <List dense>
-                    {reqList === "" ? 
-                        <>
-                            <Typography variant="h2" component="h1" gutterBottom>
-                                ╮(╯▽╰)╭ <br/>
-                            </Typography>
-                            <Typography variant="h5" component="span">
-                                呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
-                            </Typography>
-                        </>
-                    :
-                    reqList
-                    }
-                </List>
-                </CardContent>
-            </Card>
-        </Container>
-    );
-
+    if (props.user.userId==="") {
+        return(
+            <Container maxWidth="sm">
+                <Card className={classes.root}>
+                    <CardContent>
+                        <Typography variant="h2" component="h1" gutterBottom>
+                            (＾ｰ^)ノ<br/>
+                        </Typography>
+                        <Typography variant="h5" component="span">
+                            嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
+                        </Typography>
+                        <br/>
+                        <Button
+                            component={RLink}
+                            to="/podcastaccount"
+                            color="primary"
+                            fullWidth
+                            size="large"
+                            variant="contained"
+                            >              
+                            立即建立屬於我的私人電台
+                            </Button>
+                    </CardContent>
+                </Card>
+            </Container>
+        )} else {
+            return(
+                <Container maxWidth="sm">
+                    <Card className={classes.root}>
+                        <CardContent>
+                        <Typography variant="h5" component="h1">訂閱審核</Typography>
+                        <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
+                        <List dense>
+                            {reqList === "" ? 
+                                <>
+                                    <Typography variant="h2" component="h1" gutterBottom>
+                                        ╮(╯▽╰)╭ <br/>
+                                    </Typography>
+                                    <Typography variant="h5" component="span">
+                                        呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
+                                    </Typography>
+                                </>
+                            :
+                            reqList
+                            }
+                        </List>
+                        </CardContent>
+                    </Card>
+                </Container>
+            );
+        }
 }
 export default Subreq;

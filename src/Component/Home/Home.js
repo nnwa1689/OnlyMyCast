@@ -47,7 +47,6 @@ const Home = (props) => {
     const [subscribeList, setSubscribeList] = useState();
     const [selfChannel, setSelfChannel] = useState();
     const isFirstLoad = useRef(true);
-    let tarData = Array();
     
     useEffect(
       ()=>{
@@ -60,6 +59,8 @@ const Home = (props) => {
     )
 
     const getSubscribe = async()=>{
+      var changeArr = Array();
+      let tarData = Array();
       firebase.firestore().collection("subscribe").doc(props.userUid).get()
       .then(async(doc)=>{ 
           if (doc.exists) {
@@ -70,22 +71,23 @@ const Home = (props) => {
                   await firebase.firestore().collection("channel").doc(value[0]).get()
                   .then((doc)=>{
                       tarData.push(doc.data());
+                      console.log(doc.data())
                   })
                 }
+                for (var value of tarData.sort(function(a,b) {return b.updateTime.seconds - a.updateTime.seconds;})) {
+                  console.log("push")
+                  changeArr.push(
+                    <PodcastList 
+                      key={value.userId} 
+                      podcastName={value.name} 
+                      podcastIntro={value.intro} 
+                      podcastCover={value.icon} 
+                      podcastId={value.userId}>
+                  </PodcastList>
+                  )
+                }
+                setSubscribeList(changeArr);
               }
-              var changeArr = Array();
-              for (var value of tarData.sort(function(a,b) {return b.updateTime.seconds - a.updateTime.seconds;})) {
-                changeArr.push(
-                  <PodcastList 
-                    key={value.userId} 
-                    podcastName={value.name} 
-                    podcastIntro={value.intro} 
-                    podcastCover={value.icon} 
-                    podcastId={value.userId}>
-                </PodcastList>
-                )
-              }
-              setSubscribeList(changeArr);
           } else {
               setSubscribeList("");
           }

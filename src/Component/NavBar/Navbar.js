@@ -163,7 +163,7 @@ const NavBar = (props) => {
                           <ListItemIcon><PublishIcon /></ListItemIcon>
                           <ListItemText primary="上傳單集"></ListItemText>
                       </ListItem>
-                      <ListItem button component={RLink} to="/editpodcast" key="editpod">
+                      <ListItem button component={RLink} to="/editpodcasts" key="editpod">
                           <ListItemIcon><EditIcon /></ListItemIcon>
                           <ListItemText primary="單集管理"></ListItemText>
                       </ListItem>

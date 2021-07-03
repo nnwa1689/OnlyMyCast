@@ -96,7 +96,6 @@ const PodcastAccount = (props) => {
     const [showDelMsg, setShowDelMsg] = useState(false);
     const willDelFansId = useRef("");
     const [fansList, setFansList] = useState(Array());
-    let changeArr = Array();
 
     useEffect(
         ()=>{
@@ -149,7 +148,8 @@ const PodcastAccount = (props) => {
                                 name:name,
                                 intro:intro,
                                 userId: userId,
-                                updateTime:firebase.firestore.FieldValue.serverTimestamp()
+                                updateTime:firebase.firestore.FieldValue.serverTimestamp(),
+                                uid : props.userUid
                             }, { merge: true }).then(
                                 ()=>{
                                     if (filename !== "") {
@@ -286,10 +286,6 @@ const PodcastAccount = (props) => {
 
     const handelDelFans = (e)=>{
         setShowDelMsg(false);
-        /*
-        firebase.firestore().collection("subscribe").doc(userId).set({
-            [userId] : userId
-        }, { merge: true }).then()*/
         firebase.firestore().collection("subscribe").doc(willDelFansId.current).update(
             {[props.user.userId] : firebase.firestore.FieldValue.delete()}
         ).then(

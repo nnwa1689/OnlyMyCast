@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -30,8 +30,14 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { Link as RLink, useHistory } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import EditIcon from '@material-ui/icons/Edit';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
+import "firebase/database"
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -71,72 +77,121 @@ const useStyles = makeStyles((theme)=>({
 
 
 const EditPodcast = (props) => {
-    const history = useHistory();
+
     const classes = useStyles();
-    const [name, setName] = useState();
-    const [avatar,setAvatar] = useState();
-    const [intro, setIntro] = useState();
+    const [spList, setSpList] = useState();
+    const isFirstLoad = useRef(true);
 
-    //get 此頻道資料  是否被目前使用者訂閱（
+    useEffect(
+        ()=>{
+            if (isFirstLoad.current) {
+                if (props.user.userId !== "") {
+                    getPodcastList();
+                }
+                isFirstLoad.current = false;
+            }
+        }
+    )
 
-    const handlePlayEvent = (e)=>{
-        console.log(e.currentTarget.value);
+    const toDataTime = (sec)=>{
+        var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
+        t.setUTCSeconds(sec);
+        return t.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'},);
+      }
 
+    const getPodcastList = ()=>{
+        var changeArr = Array();
+        firebase.firestore().collection("podcast").doc(props.user.userId).collection('podcast').orderBy('updateTime', 'desc').get()
+        .then(async(e)=>{
+            if (e.docs.length ===0) {
+                setSpList("")
+            } else {
+                for (var doc of e.docs) {
+                    changeArr.push(
+                        <>
+                        <ListItem key={doc.id} component="span">
+                            <ListItemText>
+                                <Link component={RLink} to={"/podcastdetail/"+ props.user.userId + "/" + doc.id} variant="h6">{doc.data().title}</Link><br/>
+                                <Typography variant="body2" component="datetime">發佈於 {toDataTime(doc.data().updateTime.seconds)}</Typography>
+                            </ListItemText>
+                            <ListItemIcon>
+                                <IconButton 
+                                aria-label="play"
+                                value={doc.id}
+                                component={RLink}
+                                to={"/editpodcast/"+ props.user.userId + "/" + doc.id}
+                                >
+                                    <EditIcon/>
+                                </IconButton>
+                            </ListItemIcon>
+                        </ListItem>
+                        <Divider/>
+                        </>
+                    )
+                }  
+            }
+        }).then(()=>{
+            setSpList(changeArr);
+        })
     }
 
-    const handleUnsub = (e) => {
-
-    }
-
-    const handleSub = (e) => {
-
-    }
-
-    const handleRemoveReq = (e) => {
-
-    }
-
-
-    return(
-
-        <Container maxWidth="sm">
-            <Card className={classes.root}>
-                <CardContent>
-                
-                <Typography variant="h5" component="h1">單集管理</Typography><br/>
-                <Typography variant="body1" component="span">修改或刪除您電台的單集以及單集簡介</Typography>
-                <br/>
-                <br/>
-                <Divider/>
-
-                {/*獨立出去 PodcastespEditListItem
-                props hashvalue*/}
-                <ListItem component="span">
-                    <ListItemText>
-                        <Typography component="span" to={"/podcastdetail/" + "flkj"} variant="h6">哈囉白痴</Typography><br/>
-                        <Typography variant="body2" component="datetime">發佈於 {"2020/202/"}</Typography>
-                    </ListItemText>
-                    <ListItemIcon>
-                        <IconButton 
-                        aria-label="play"
-                        value="hashPod"
-                        component={RLink}
-                        to={"/editpodcast/abc"}
-                        >
-                            <EditIcon/>
-                        </IconButton>
-                    </ListItemIcon>
-                </ListItem>
-                <Divider/>
-                {/*獨立出去 PodcastespEditListItem*/}
-                
-
-                </CardContent>
-            </Card>
-        </Container>
-
-
-    );
-
+    if (props.user.userId==="") {
+        return(
+            <Container maxWidth="sm">
+                <Card className={classes.root}>
+                    <CardContent>
+                        <Typography variant="h2" component="h1" gutterBottom>
+                            (＾ｰ^)ノ<br/>
+                        </Typography>
+                        <Typography variant="h5" component="span">
+                            嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
+                        </Typography>
+                        <br/>
+                        <Button
+                            component={RLink}
+                            to="/podcastaccount"
+                            color="primary"
+                            fullWidth
+                            size="large"
+                            variant="contained"
+                            >              
+                            立即建立屬於我的私人電台
+                            </Button>
+                    </CardContent>
+                </Card>
+            </Container>
+        )} else {
+            if (spList===undefined) {
+                return(<CircularProgress style={{marginTop: "25%"}} />);
+            } else {
+                return(
+                    <Container maxWidth="sm">
+                        <Card className={classes.root}>
+                            <CardContent>
+                            <Typography variant="h5" component="h1">單集管理</Typography><br/>
+                            <Typography variant="body1" component="span">修改或刪除您電台的單集以及單集簡介</Typography>
+                            <br/>
+                            <br/>
+                            <Divider/>
+                            {spList==="" || spList.length===0 ? 
+                                <Button
+                                component={RLink}
+                                to="/uploadpodcast"
+                                color="primary"
+                                fullWidth
+                                size="large"
+                                variant="contained"
+                                >              
+                                立即新增節目
+                                </Button>
+                            :
+                            spList
+                            }
+                            </CardContent>
+                        </Card>
+                    </Container>
+                );
+            }
+        }
 }
 export default EditPodcast;

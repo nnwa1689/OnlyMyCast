@@ -143,18 +143,28 @@ const App = () => {
                       )} />
                   <Route exact path="/search" component={Search} />
                   <Route path="/search/:q" component={Search} />
+                  <Route path="/podcastdetail/:id/:podId"                  
+                    render={(props) => (
+                        <PodcastDetails {...props} setPlayer={setPlayer} />
+                      )} />
                   <Route path="/podcast/:id"
                     render={(props) => (
                         <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} />
                       )} />
-                  <Route path="/podcastdetail/:id"                  
+                  <Route exact path="/uploadpodcast"
                     render={(props) => (
-                        <PodcastDetails {...props} setPlayer={setPlayer} />
+                        <NewPodcast {...props} user={userData} userUid={userUid.current} />
                       )} />
-                  <Route exact path="/uploadpodcast" component={NewPodcast} />
-                  <Route exact path="/editpodcast" component={EditPodcast} />
-                  <Route path="/editpodcast/:id" component={EditPodcastDetails} />
-                  <Route path="/editpodcast/:id" component={EditPodcastDetails} />
+                  <Route exact path="/editpodcasts" 
+                    render={(props) => (
+                        <EditPodcast {...props} user={userData} />
+                      )} 
+                  />
+                  <Route path="/editpodcast/:id/:podId" 
+                    render={(props) => (
+                        <EditPodcastDetails {...props} user={userData} />
+                      )} 
+                  />
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
                   { isAuth ? "" : <Redirect to='/signin'/> }

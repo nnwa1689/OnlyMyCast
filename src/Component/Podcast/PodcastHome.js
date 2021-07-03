@@ -4,33 +4,16 @@ import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
 import { deepOrange } from '@material-ui/core/colors';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import FolderIcon from '@material-ui/icons/Folder';
-import DeleteIcon from '@material-ui/icons/Delete';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { Link as RLink, useHistory } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PeopleIcon from '@material-ui/icons/People';
+import PodcastspList from './PodcastspList';
 
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -83,25 +66,52 @@ const PodcastHome = (props) => {
     const [name, setName] = useState("");
     const [avatar,setAvatar] = useState("");
     const [intro, setIntro] = useState("");
-    const [loaded, setLoaded] = useState(false);
     const [subStatu, setSubStatu] = useState(0);
     //0:init 1:sub 2:unsub 3:req
     const isFirstLoad = useRef(true);
     const [subCount, setSubCount] = useState(0);
+    const [spList, setSpList] = useState();
 
 
     useEffect(
         ()=>{
             //get 此頻道資料  是否被目前使用者訂閱
             if (isFirstLoad.current) {
+                getPodcastList();
                 getChannleData();
                 getSubStatu();
-                isFirstLoad.current = false;
                 countSub();
-                setLoaded(true);
+                isFirstLoad.current = false;
             }
         }
     )
+
+    const getPodcastList = ()=>{
+        var changeArr = Array();
+        firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').orderBy('updateTime', "desc").get()
+        .then(async(e)=>{
+            if (e.docs.length ===0) {
+                setSpList("")
+            } else {
+                for (var doc of e.docs) {
+                    changeArr.push(
+                        <PodcastspList
+                            key={doc.id}
+                            podId={doc.id}
+                            podTitle={doc.data().title}
+                            channelName={name}
+                            audioUrl={doc.data().url}
+                            podIcon={avatar}
+                            podIntro={doc.data().intro}
+                            setPlayer={props.setPlayer}
+                            userId={props.match.params.id}
+                        />
+                    )
+                }  
+            }
+        }).then(setSpList(changeArr))
+        console.log(changeArr);
+    }
 
     const countSub = ()=>{
         firebase.firestore().collection("fans").doc(props.match.params.id).get()
@@ -155,11 +165,6 @@ const PodcastHome = (props) => {
         });
     }
 
-    const handlePlayEvent = (e)=>{
-        console.log(e.currentTarget.value);
-
-    }
-
     const handleUnsub = (e) => {
         firebase.firestore().collection("subscribe").doc(props.userUid).update(
             {[props.match.params.id] : firebase.firestore.FieldValue.delete()}
@@ -196,7 +201,7 @@ const PodcastHome = (props) => {
         }).catch();
     }
 
-    if (!loaded || name==="" || avatar==="" || subStatu===0) {
+    if ( name==="" || avatar==="" || subStatu===0 || spList===undefined) {
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
@@ -241,29 +246,14 @@ const PodcastHome = (props) => {
                     <Divider/>
 
                     { subStatu===1 || props.user.userId === props.match.params.id ?   
-                        <>
-                        {/*獨立出去 PodcastespListItem*/}
-                            <ListItem component="span">
-                                <ListItemIcon>
-                                    <IconButton 
-                                    aria-label="play"
-                                    value="hashPod"
-                                    data-uri="https://firebasestorage.googleapis.com/v0/b/noteshazuya.appspot.com/o/%E5%85%89%E8%89%AF%20Michael%20Wong%E6%9B%B9%E6%A0%BC%20Gary%20Chaw%E3%80%90%E5%B0%91%E5%B9%B4%E3%80%91Official%20Music%20Video.mp3?alt=media&token=44b2b151-45c2-4997-aa5a-9b01c95b5d49"
-                                    data-coveruri="https://img.mymusic.net.tw/mms/album/L/036/36.jpg"
-                                    data-titlename="少年"
-                                    data-podcastname="幹話"
-                                    onClick={props.setPlayer}>
-                                        <PlayArrowIcon/>
-                                    </IconButton>
-                                </ListItemIcon>
-                                <ListItemText>
-                                    <Link component={RLink} to={"/podcastdetail/" + "flkj"} variant="h6">哈囉白痴</Link><br/>
-                                    <Typography variant="body1" component="span">這是白癡電台的第一個廣播，請多多指教哦哦哦！！！！</Typography>
-                                </ListItemText>
-                            </ListItem>
-                            <Divider/>
-                            {/*獨立出去 PodcastespListItem*/}
-                        </>
+                        
+                        (
+                            spList === "" ? 
+                            <Typography variant="h3" component="h1"><br/>¯\_(ツ)_/¯<br/>還沒有任何節目<br/>稍後再回來吧</Typography>
+                            :
+                            spList
+                        )
+                        
                     :
                         <Typography variant="h3" component="h1"><br/>(＞^ω^＜)<br/><br/>訂閱後即可收聽</Typography>
                     }

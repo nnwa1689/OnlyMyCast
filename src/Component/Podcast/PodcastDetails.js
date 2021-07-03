@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -15,6 +15,7 @@ import { deepOrange } from '@material-ui/core/colors';
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
 import Link from '@material-ui/core/Link';
 import { Link as RLink, useHistory } from 'react-router-dom';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -66,43 +67,73 @@ const PodcastDetails = (props) => {
     const [name, setName] = useState();
     const [avatar,setAvatar] = useState();
     const [intro, setIntro] = useState();
+    const [updateTime, setUpdateTime] = useState();
+    const [channelName, setChannelName] = useState();
+    const [audioUrl, setAudioUrl] = useState();
+
+    const isFirstLoad = useRef(true);
 
     useEffect(
       ()=>{
+        if (isFirstLoad.current) {
+          getSPData();
+          getChannelData();
+          isFirstLoad.current = false;
+        }
       }
     )
 
+    const toDataTime = (sec)=>{
+      var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
+      t.setUTCSeconds(sec);
+      return t.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'},);
+    }
+
+    const getChannelData = ()=>{
+      firebase.firestore().collection("channel").doc(props.match.params.id).get()
+        .then((doc)=>{
+          const data = doc.data();
+          if (data===undefined) {
+
+          } else if (Object.entries(data).length===0) {
+
+          } else {
+            setChannelName(data.name)
+            setAvatar(data.icon);
+        }
+      })
+    }
+
+    const getSPData = ()=>{
+      firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').doc(props.match.params.podId).get()
+        .then((doc)=>{
+          const data = doc.data();
+          if (data===undefined) {
+
+          } else if (Object.entries(data).length===0) {
+
+          } else {
+            setName(data.title);
+            setIntro(data.intro);
+            setUpdateTime(toDataTime(data.updateTime.seconds));
+            setAudioUrl(data.url)
+          }
+        })
+    }
     
-
-    const handlePlayEvent = (e)=>{
-        console.log(e.currentTarget.value);
-
-    }
-
-    const handleUnsub = (e) => {
-
-    }
-
-    const handleSub = (e) => {
-
-    }
-
-    const handleRemoveReq = (e) => {
-
-    }
-
-
-    return(
-
+    if (name===undefined || audioUrl===undefined || intro===undefined || updateTime===undefined || channelName===undefined) {
+      return(<CircularProgress style={{marginTop: "25%"}} />);
+    } else {
+      return(
         <Container maxWidth="sm">
             <Card className={classes.root}>
                 <CardContent>
                 
-                <Avatar variant="rounded" alt="啊哈（白痴怪談）" src={avatar} className={classes.large} />
-                <Typography variant="h5" component="h1">哈囉白痴，第一集的廢話啊哈</Typography>
-                <Link component={RLink} to={"/podcast/sasf"} variant="h6">廢物日誌</Link>
+                <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                <Typography variant="h5" component="h1">{name}</Typography>
+                <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h6">{channelName}</Link>
                 <br/>
-                <Typography variant="body1" component="datetime">2020/12/20</Typography>
+                <Typography variant="body1" component="datetime">{updateTime}</Typography>
                 <br/><br/>
                 <Button 
                     color="primary"
@@ -110,22 +141,22 @@ const PodcastDetails = (props) => {
                     size="large"
                     fullWidth 
                     startIcon={<PlayCircleFilledWhiteIcon />}
-                    value="hashPod"
-                    data-uri="https://firebasestorage.googleapis.com/v0/b/noteshazuya.appspot.com/o/%E5%85%89%E8%89%AF%20Michael%20Wong%E6%9B%B9%E6%A0%BC%20Gary%20Chaw%E3%80%90%E5%B0%91%E5%B9%B4%E3%80%91Official%20Music%20Video.mp3?alt=media&token=44b2b151-45c2-4997-aa5a-9b01c95b5d49"
-                    data-coveruri="https://img.mymusic.net.tw/mms/album/L/036/36.jpg"
-                    data-titlename="少年"
-                    data-podcastname="幹話"
+                    value={props.match.params.podId}
+                    data-uri={audioUrl}
+                    data-coveruri={avatar}
+                    data-titlename={channelName}
+                    data-podcastname={name}
                     onClick={props.setPlayer}>
                     播放單集
                 </Button>
                 <br/><br/>
                 <Divider/>
                 <br/><br/>
-                <Typography variant="body1" component="span">哈囉白痴</Typography>
+                <Typography variant="body1" component="span">{intro}</Typography>
                 </CardContent>
             </Card>
         </Container>
-    );
-
+      );
+    }
 }
 export default PodcastDetails;

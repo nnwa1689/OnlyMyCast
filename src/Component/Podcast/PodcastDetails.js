@@ -1,28 +1,26 @@
+//react
 import React, { useState, useEffect, useRef } from 'react'
+import { Link as RLink } from 'react-router-dom';
+//ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import { deepOrange } from '@material-ui/core/colors';
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
 import Link from '@material-ui/core/Link';
-import { Link as RLink, useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 import "firebase/database"
-
 
 
 const useStyles = makeStyles((theme)=>({
@@ -128,12 +126,11 @@ const PodcastDetails = (props) => {
         <Container maxWidth="sm">
             <Card className={classes.root}>
                 <CardContent>
-                
                 <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                 <Typography variant="h5" component="h1">{name}</Typography>
                 <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h6">{channelName}</Link>
                 <br/>
-                <Typography variant="body1" component="datetime">{updateTime}</Typography>
+                <Typography variant="body1" component="datetime"><AccessTimeIcon/>{updateTime}</Typography>
                 <br/><br/>
                 <Button 
                     color="primary"

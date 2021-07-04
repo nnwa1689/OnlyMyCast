@@ -1,4 +1,6 @@
+//react
 import React, { useState, useEffect, useRef } from 'react'
+//ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -17,11 +19,6 @@ import FormControl from '@material-ui/core/FormControl';
 import { deepOrange } from '@material-ui/core/colors';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -31,7 +28,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -269,7 +266,6 @@ const PodcastAccount = (props) => {
                 } else if(Object.entries(doc.data()).length===0){
                     setFansList("");
                 } else {
-                    console.log(doc.data())
                     genListItem(doc.data()).then((arr)=>setFansList(arr))
                 }                
             });
@@ -332,7 +328,9 @@ const PodcastAccount = (props) => {
                                     <label htmlFor="contained-button-file">
                                         <Button disabled={handleCode==='loading'|| handleCode==="suc"} variant="contained" size="large" fullWidth color="primary" component="span">
                                             <AttachmentIcon />
-                                            { filename === "" ? "上傳ICON" : filename }</Button>
+                                            { filename === "" ? "上傳ICON" : filename }
+                                        </Button>
+                                        <Typography variant="body2" component="span">只能上傳.jpg / .jpeg</Typography>
                                     </label>
                                     </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
@@ -411,7 +409,9 @@ const PodcastAccount = (props) => {
                                     <label htmlFor="contained-button-file">
                                         <Button disabled={handleCode==="loading"} variant="contained" size="large" fullWidth color="primary" component="span">
                                             <AttachmentIcon />
-                                            { filename === "" ? "上傳ICON" : filename }</Button>
+                                            { filename === "" ? "上傳ICON" : filename }
+                                        </Button>
+                                        <Typography variant="body2" component="span">只能上傳.jpg / .jpeg</Typography>
                                     </label>
                                     </FormControl>
                                 <FormControl fullWidth className={classes.margin}>

@@ -1,36 +1,39 @@
+//react
 import React, {useState, useEffect} from 'react';
 import { Link as RLink, useHistory } from 'react-router-dom';
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 /*Google Theme*/
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import LogoIcon from '../../static/only-my-cast-icon.svg'
+import LogoIcon from '../../static/only-my-cast-icon-pink.svg'
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {'Copyright © ' + new Date().getFullYear()}<br/>
+      <Link href="https://lab.notes-hz.com/">
+        <span style={ {fontSize: "24px", color: "#028ff3", fontWeight: "bold"} }>Lab</span>
+        <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>H</span>
+        <span style={ {fontSize: "24px", color: "#FF8738", fontWeight: "bold"} }>a</span>
+        <span style={ {fontSize: "24px", color: "#FFA900", fontWeight: "bold"} }>z</span>
+        <span style={ {fontSize: "24px", color: "#00A752", fontWeight: "bold"} }>u</span>
+        <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
+        <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
+        </Link><br/>
+        <Link href="https://www.notes-hz.com/">筆記長也NotesHazuya</Link>
+        <br/><br/>
     </Typography>
   );
 }
@@ -131,7 +134,7 @@ const SignUp = ()=>{
       <Card className={classes.paper}>
           <CardContent>
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
-          <img src={LogoIcon} width="128"></img>
+          <img style={{fill: "#FD3E49"}} src={LogoIcon} width="128"></img>
         <Typography component="h1" variant="h5">
           立即註冊，建立自己私人的Podcast！
         </Typography>
@@ -198,9 +201,18 @@ const SignUp = ()=>{
           >
             立即註冊
           </Button>
-          <Grid container justify="flex-end">
+          <Grid container justify="center">
             <Grid item>
-              <Link component={RLink} to="/signin" variant="body2">
+              <Typography component="body2" variant="span">
+                註冊即同意本網站的<Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body1">服務條款</Link>
+                、<Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body1">隱私政策</Link>。
+              </Typography>
+            </Grid>
+          </Grid>
+          <br/>
+          <Grid container justify="center">
+            <Grid item>
+              <Link component={RLink} to="/signin" variant="body1">
                 已有帳號？立即登入
               </Link>
             </Grid>

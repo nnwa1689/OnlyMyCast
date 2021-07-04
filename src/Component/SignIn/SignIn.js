@@ -1,5 +1,7 @@
+/*react*/
 import React, { useState, useEffect } from 'react';
 import { Link as RLink, useHistory } from 'react-router-dom';
+/*Firebase*/
 import firebase from "firebase/app";
 import "firebase/auth";
 /*Google themes*/
@@ -10,7 +12,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import LogoIcon from '../../static/only-my-cast-icon.svg'
+import LogoIcon from '../../static/only-my-cast-icon-pink.svg'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -19,12 +21,18 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {'Copyright © ' + new Date().getFullYear()}<br/>
+      <Link href="https://lab.notes-hz.com/">
+        <span style={ {fontSize: "24px", color: "#028ff3", fontWeight: "bold"} }>Lab</span>
+        <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>H</span>
+        <span style={ {fontSize: "24px", color: "#FF8738", fontWeight: "bold"} }>a</span>
+        <span style={ {fontSize: "24px", color: "#FFA900", fontWeight: "bold"} }>z</span>
+        <span style={ {fontSize: "24px", color: "#00A752", fontWeight: "bold"} }>u</span>
+        <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
+        <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
+        </Link><br/>
+        <Link href="https://www.notes-hz.com/">筆記長也NotesHazuya</Link>
+        <br/><br/>
     </Typography>
   );
 }

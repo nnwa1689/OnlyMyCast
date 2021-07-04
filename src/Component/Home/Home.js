@@ -1,15 +1,15 @@
+//react
 import React, { useState, useEffect, useRef } from 'react'
+//ui
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { Container } from '@material-ui/core';
 import CastIcon from '@material-ui/icons/Cast';
-import Link from '@material-ui/core/Link';
 import PodcastList from './PodcastList';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Divider from '@material-ui/core/Divider';
-
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -71,11 +71,9 @@ const Home = (props) => {
                   await firebase.firestore().collection("channel").doc(value[0]).get()
                   .then((doc)=>{
                       tarData.push(doc.data());
-                      console.log(doc.data())
                   })
                 }
                 for (var value of tarData.sort(function(a,b) {return b.updateTime.seconds - a.updateTime.seconds;})) {
-                  console.log("push")
                   changeArr.push(
                     <PodcastList 
                       key={value.userId} 

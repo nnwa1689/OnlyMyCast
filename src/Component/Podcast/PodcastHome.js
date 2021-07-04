@@ -1,4 +1,7 @@
+//react
 import React, { useState, useEffect, useRef } from 'react'
+import { Link as RLink, useHistory } from 'react-router-dom';
+//ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -10,11 +13,10 @@ import Button from '@material-ui/core/Button';
 import { deepOrange } from '@material-ui/core/colors';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import { Link as RLink, useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PeopleIcon from '@material-ui/icons/People';
 import PodcastspList from './PodcastspList';
-
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -105,6 +107,7 @@ const PodcastHome = (props) => {
                             podIntro={doc.data().intro}
                             setPlayer={props.setPlayer}
                             userId={props.match.params.id}
+                            updateTime={doc.data().updateTime}
                         />
                     )
                 }  

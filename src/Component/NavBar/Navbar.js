@@ -1,13 +1,13 @@
+//react
 import React, { useState, useEffect } from 'react';
 import { Link as RLink } from 'react-router-dom';
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 /*google themes */
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -17,9 +17,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Drawer from '@material-ui/core/Drawer';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange } from '@material-ui/core/colors';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -29,6 +27,8 @@ import Badge from '@material-ui/core/Badge';
 import Link from '@material-ui/core/Link';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import GraphicEqIcon from '@material-ui/icons/GraphicEq';
+import Typography from '@material-ui/core/Typography';
+//static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
 
@@ -74,7 +74,6 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = (props) => {
 
-  console.log(props.user)
     const classes = useStyles();
     const [sideBar, setSideBar] = useState(false);
     const [reqCount, setReqCount] = useState("");
@@ -105,7 +104,7 @@ const NavBar = (props) => {
 
     return (
       <div>
-          <AppBar position="fixed">
+          <AppBar color="secondary" position="fixed">
           <Toolbar>
               <IconButton
               edge="start"
@@ -116,7 +115,7 @@ const NavBar = (props) => {
                   <MenuIcon />
               </IconButton>
               <Link component={RLink} to="/" >
-                <img alt="OnlyMyCast" src={Logo} width="140" height="50" />
+                <img alt="OnlyMyCast" src={Logo} width="200" height="40" />
               </Link>
               <div className={classes.grow}/>
               <IconButton
@@ -180,13 +179,29 @@ const NavBar = (props) => {
 
                   <List>
                       <ListItem key="privatepolic" fontSize={5}>
-                          <Link href="/" variant="body3">隱私權政策</Link>
+                          <Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body3">隱私權</Link>
                           &nbsp;
-                          <Link href="/" variant="body3">條款</Link>
+                          <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body3">條款</Link>
+                          &nbsp;
+                          <Link target="_blank" href="https://www.notes-hz.com/page/readerService" variant="body3">聯繫</Link>
                       </ListItem>
                       <ListItem key="copyright">
                           <div fontSize={10}>©2021<br/>OnlyMyCast - 建立自己的私人 PodCast</div>
                       </ListItem>
+                      <Typography variant="body2" color="textSecondary" align="center">
+                        {'Copyright © ' + new Date().getFullYear()}<br/>
+                        <Link href="https://lab.notes-hz.com/">
+                          <span style={ {fontSize: "24px", color: "#028ff3", fontWeight: "bold"} }>Lab</span>
+                          <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>H</span>
+                          <span style={ {fontSize: "24px", color: "#FF8738", fontWeight: "bold"} }>a</span>
+                          <span style={ {fontSize: "24px", color: "#FFA900", fontWeight: "bold"} }>z</span>
+                          <span style={ {fontSize: "24px", color: "#00A752", fontWeight: "bold"} }>u</span>
+                          <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
+                          <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
+                          </Link><br/>
+                          <Link href="https://www.notes-hz.com/">筆記長也NotesHazuya</Link>
+                          <br/><br/>
+                      </Typography>
                   </List>
               </div>
           </Drawer>

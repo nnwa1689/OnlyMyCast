@@ -1,10 +1,12 @@
-import logo from './logo.svg';
+//react
 import './App.css';
 import { useState, useRef, useEffect } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+//component
 import Home from './Component/Home/Home'
 import Account from './Component/Account/Account'
 import Player from './Component/Player/Player'
@@ -12,7 +14,6 @@ import Navbar from './Component/NavBar/Navbar';
 import PodcastAccount from './Component/Account/PodcastAccount';
 import Subreq from './Component/Account/Subreq';
 import Search from './Component/Search/Search'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import PodcastHome from './Component/Podcast/PodcastHome';
 import NewPodcast from './Component/Podcast/NewPodcast'
 import PodcastDetails from './Component/Podcast/PodcastDetails'
@@ -20,9 +21,10 @@ import EditPodcast from './Component/Podcast/EditPodcast'
 import EditPodcastDetails from './Component/Podcast/EditPodcastDetails';
 import SignIn from './Component/SignIn/SignIn';
 import SignUp from './Component/SignUp/SignUp';
-/*UI*/
+/*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const App = () => {
 
@@ -47,7 +49,7 @@ const App = () => {
       //const appCheck = firebase.appCheck();
       //appCheck.activate('6Lfs9TQbAAAAANxrKWGaZgx71yy6PHZ26t5CGE4h');
     }
-    basename = "/apps/one-sen-day/"
+    basename = "/apps/"
   }
 
   document.body.style.backgroundColor = "#f7f7f7";
@@ -106,15 +108,15 @@ const App = () => {
   const theme = createMuiTheme({
     palette: {
     primary: {
-        main: "#ff9800",
+        main: "#FD3E49",
     },
     secondary: {
-        main: "#ff3d00",
+        main: "#424242",
     },
-    white:{
-        main: "#00000"
+    },
+    typography: {
+      fontFamily: 'NotoSansTC-Regular',
     }
-    },
   });
 
   return (
@@ -173,7 +175,6 @@ const App = () => {
                 :
                 <LinearProgress style={{ wdith: 100 }}/>
                 }
-
           </Player>
         </BrowserRouter> 
       </div>

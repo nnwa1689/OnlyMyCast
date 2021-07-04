@@ -1,19 +1,25 @@
+//react
 import React from 'react'
-
+import { Link as RLink } from 'react-router-dom';
+//ui
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import IconButton from '@material-ui/core/IconButton';
-import { Link as RLink, useHistory } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 
 const PodcastspList = (props)=>{
+
+    const toDataTime = (sec)=>{
+        var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
+        t.setUTCSeconds(sec);
+        return t.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'},);
+      }
     
     return(
     <>
@@ -33,7 +39,8 @@ const PodcastspList = (props)=>{
             </ListItemIcon>
             <ListItemText>
                 <Link component={RLink} to={"/podcastdetail/" + props.userId + "/" + props.podId} variant="h6">{props.podTitle}</Link><br/>
-                <Typography variant="body1" component="span">{props.podIntro}</Typography>
+                <Typography variant="body1" component="span"><ListItemIcon><AccessTimeIcon/>{toDataTime(props.updateTime.seconds)}</ListItemIcon></Typography>
+                
             </ListItemText>
         </ListItem>
         <Divider/>

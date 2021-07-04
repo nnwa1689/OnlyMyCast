@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+//react
+import React, { useState, useEffect, useRef } from 'react';
+import { Link as RLink, useHistory } from 'react-router-dom';
+//ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -11,14 +14,13 @@ import { deepOrange } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { Link as RLink, useHistory } from 'react-router-dom';
+//component
 import PodcastList from '../Home/PodcastList';
-
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
-
 
 
 const useStyles = makeStyles((theme)=>({

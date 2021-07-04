@@ -1,4 +1,6 @@
+//react
 import React, { useState, useEffect, useRef } from 'react'
+//googleUi
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -26,7 +28,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+//firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -248,7 +250,7 @@ const Account = (props) => {
                     <form noValidate autoComplete="off">
                         <FormControl fullWidth className={classes.margin}>
                         <input
-                            accept="image/*"
+                            accept="image/jpeg"
                             className={classes.input}
                             id="contained-button-file"
                             multiple
@@ -265,7 +267,9 @@ const Account = (props) => {
                         <label htmlFor="contained-button-file">
                             <Button variant="contained" size="large" fullWidth color="primary" component="span">
                                 <AttachmentIcon />
-                                { filename === "" ? "上傳新頭貼" : filename }</Button>
+                                { filename === "" ? "上傳新頭貼" : filename }
+                            </Button>
+                            <Typography variant="body2" component="span">只能上傳.jpg / .jpeg</Typography>
                         </label>
                         </FormControl>
                         <FormControl fullWidth className={classes.margin}>

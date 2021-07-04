@@ -63,7 +63,6 @@ const useStyles = makeStyles((theme)=>({
 
 
 const PodcastHome = (props) => {
-    const history = useHistory();
     const classes = useStyles();
     const [name, setName] = useState("");
     const [avatar,setAvatar] = useState("");
@@ -74,12 +73,10 @@ const PodcastHome = (props) => {
     const [subCount, setSubCount] = useState(0);
     const [spList, setSpList] = useState();
 
-
     useEffect(
         ()=>{
             //get 此頻道資料  是否被目前使用者訂閱
             if (isFirstLoad.current) {
-                getPodcastList();
                 getChannleData();
                 getSubStatu();
                 countSub();
@@ -88,10 +85,16 @@ const PodcastHome = (props) => {
         }
     )
 
+    useEffect(
+        ()=>{
+            getPodcastList();
+        }, [name, avatar]
+    )
+
     const getPodcastList = ()=>{
         var changeArr = Array();
         firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').orderBy('updateTime', "desc").get()
-        .then(async(e)=>{
+        .then((e)=>{
             if (e.docs.length ===0) {
                 setSpList("")
             } else {
@@ -113,7 +116,6 @@ const PodcastHome = (props) => {
                 }  
             }
         }).then(setSpList(changeArr))
-        console.log(changeArr);
     }
 
     const countSub = ()=>{
@@ -139,7 +141,6 @@ const PodcastHome = (props) => {
               } else {
 
               }
-
           }
         );
     }

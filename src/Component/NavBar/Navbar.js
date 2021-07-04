@@ -179,11 +179,11 @@ const NavBar = (props) => {
 
                   <List>
                       <ListItem key="privatepolic" fontSize={5}>
-                          <Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body3">隱私權</Link>
+                          <Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私權</Link>
                           &nbsp;
-                          <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body3">條款</Link>
+                          <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body2">條款</Link>
                           &nbsp;
-                          <Link target="_blank" href="https://www.notes-hz.com/page/readerService" variant="body3">聯繫</Link>
+                          <Link target="_blank" href="https://www.notes-hz.com/page/readerService" variant="body2">聯繫</Link>
                       </ListItem>
                       <ListItem key="copyright">
                           <div fontSize={10}>©2021<br/>OnlyMyCast - 建立自己的私人 PodCast</div>

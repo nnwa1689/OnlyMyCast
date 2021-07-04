@@ -188,7 +188,6 @@ const useStyles = makeStyles((theme)=>({
                             type="file"
                             startIcon={<AttachmentIcon />}
                             onChange={(e)=>{
-                                console.log(e.target.files);
                                 if (e.target.files.length >= 1) {
                                     setFilename(e.target.files[0].name);
                                     setFileBit(e.target.files[0]);
@@ -199,6 +198,10 @@ const useStyles = makeStyles((theme)=>({
                             <Button variant="contained" size="large" color="primary" component="span">
                                 <AttachmentIcon />
                                 { filename === "" ? "選擇檔案" : filename }</Button>
+                                <br/><br/>
+                                <Typography variant="body1" gutterBottom>
+                                    僅限 mp3 格式  
+                                </Typography>
                         </label>
                         <br/>
                     </>)

@@ -79,13 +79,14 @@ const Player = (props) => {
                 url={props.url}
                 onReady={()=>setReady(true)}
                 onPause={()=>setPlayState(false)}
-                onPlay={()=>console.log('play')}
+                onPlay={()=>setPlayState(true)}
                 width="0"
                 height="0"
                 onProgress={(p)=>(setPlaySec(p))}
                 onDuration={(d)=>(setDuration(d))}
                 volume={1}
                 playing={playState}
+                config={{ file:{ forceAudio:true } }}
             />
             <AppBar position="fixed" color="inherit" className={classes.appBar}>
             { !ready && <LinearProgress style={{width:"100%"}}/>}

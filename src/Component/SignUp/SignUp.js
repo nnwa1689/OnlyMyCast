@@ -94,7 +94,6 @@ const SignUp = ()=>{
             avatar : ""
           }
         ).then(() => {
-          console.log("Document successfully written!");
           window.location.reload();
         })
         .catch((error) => {

@@ -130,14 +130,14 @@ const PodcastDetails = (props) => {
                 <Typography variant="h5" component="h1">{name}</Typography>
                 <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h6">{channelName}</Link>
                 <br/>
-                <Typography variant="body1" component="datetime"><AccessTimeIcon/>{updateTime}</Typography>
+                <Typography variant="body1" component="span"><AccessTimeIcon/>{updateTime}</Typography>
                 <br/><br/>
                 <Button 
                     color="primary"
                     variant="contained"
                     size="large"
                     fullWidth 
-                    startIcon={<PlayCircleFilledWhiteIcon />}
+                    startIcon={<PlayCircleFilledWhiteIcon/>}
                     value={props.match.params.podId}
                     data-uri={audioUrl}
                     data-coveruri={avatar}

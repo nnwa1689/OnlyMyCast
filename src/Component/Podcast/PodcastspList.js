@@ -31,8 +31,8 @@ const PodcastspList = (props)=>{
                 value={props.podId}
                 data-uri={props.audioUrl}
                 data-coveruri={props.podIcon}
-                data-titlename={props.podTitle}
-                data-podcastname={props.channelName}
+                data-titlename={props.channelName}
+                data-podcastname={props.podTitle}
                 onClick={props.setPlayer}>
                     <PlayArrowIcon/>
                 </IconButton>

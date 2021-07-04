@@ -97,7 +97,7 @@ const EditPodcast = (props) => {
                         <ListItem key={doc.id} component="span">
                             <ListItemText>
                                 <Link component={RLink} to={"/podcastdetail/"+ props.user.userId + "/" + doc.id} variant="h6">{doc.data().title}</Link><br/>
-                                <Typography variant="body2" component="datetime">發佈於 {toDataTime(doc.data().updateTime.seconds)}</Typography>
+                                <Typography variant="body2" component="span">發佈於 {toDataTime(doc.data().updateTime.seconds)}</Typography>
                             </ListItemText>
                             <ListItemIcon>
                                 <IconButton 

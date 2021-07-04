@@ -49,7 +49,7 @@ const App = () => {
       //const appCheck = firebase.appCheck();
       //appCheck.activate('6Lfs9TQbAAAAANxrKWGaZgx71yy6PHZ26t5CGE4h');
     }
-    basename = "/apps/"
+    basename = "/webapp/"
   }
 
   document.body.style.backgroundColor = "#f7f7f7";
@@ -86,7 +86,6 @@ const App = () => {
   
 
   const setPlayer = (e) => {
-    console.log(e.currentTarget.dataset.titlename);
     setPlayerTitle(e.currentTarget.dataset.titlename)
     setPlayerUrl(e.currentTarget.dataset.uri)
     setPodcastName(e.currentTarget.dataset.podcastname)

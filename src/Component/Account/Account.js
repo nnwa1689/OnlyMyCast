@@ -191,7 +191,9 @@ const Account = (props) => {
                                         avatar:url
                                     }, { merge: true })
                                 })
-                            });
+                            }).catch(
+                                (e)=>{}
+                            );
                         }
 
                         firebase.firestore().collection("user").doc(user.uid).set({
@@ -250,7 +252,7 @@ const Account = (props) => {
                     <form noValidate autoComplete="off">
                         <FormControl fullWidth className={classes.margin}>
                         <input
-                            accept="image/jpeg"
+                            accept="image/jpeg, image/png"
                             className={classes.input}
                             id="contained-button-file"
                             multiple
@@ -269,7 +271,7 @@ const Account = (props) => {
                                 <AttachmentIcon />
                                 { filename === "" ? "上傳新頭貼" : filename }
                             </Button>
-                            <Typography variant="body2" component="span">只能上傳.jpg / .jpeg</Typography>
+                            <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
                         </label>
                         </FormControl>
                         <FormControl fullWidth className={classes.margin}>

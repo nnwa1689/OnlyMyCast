@@ -2,6 +2,11 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom';
 import { Link as RLink, useHistory } from 'react-router-dom';
+import {Recorder} from 'react-voice-recorder'
+import 'react-voice-recorder/dist/index.css'
+import sha256 from 'crypto-js/sha256';
+import InlinePlayer from '../Player/InlinePlayer';
+import MDEditor from '@uiw/react-md-editor';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -17,6 +22,8 @@ import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import AttachmentIcon from '@material-ui/icons/Attachment';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -65,32 +72,62 @@ const useStyles = makeStyles((theme)=>({
   const NewPodcast = (props) => {
 
     const classes = useStyles();
-    const history = useHistory();
     const [activeStep, setActiveStep] = useState(0);
     const [filename, setFilename] = useState("");
+    const [filePath, SetFilePath] = useState();
     const [fileBit, setFileBit] = useState();
     const [intro, setIntro] = useState("");
     const [podcastTitle, setPodcastTitle] = useState("");
+    const [titleErr, setTitleErr] = useState(false);
+    const [introErr, setIntroErr] = useState(false);
     const [uploadStatu, setUploadStatu] = useState(0);
     //0:init 1:suc 2:uploading 3:err
     let audioFileRef = "";
 
-    const cyrb53 = function(str, seed = 0) {
-        let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
-        for (let i = 0, ch; i < str.length; i++) {
-            ch = str.charCodeAt(i);
-            h1 = Math.imul(h1 ^ ch, 2654435761);
-            h2 = Math.imul(h2 ^ ch, 1597334677);
+    const [audioDetails, setAudioDetails] = useState(
+        {
+            url:null,
+            blob:null,
+            chunks:null,
+            duration:{
+                h:0,m:0,s:0
+            }
         }
-        h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
-        h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
-        return 4294967296 * (2097151 & h2) + (h1>>>0);
-    };
+    )
+
+    const handleAudioStop = (data) => {
+        setAudioDetails(data);
+        var filename = sha256(new Date().toISOString()).toString();
+        setFileBit(data.blob);
+        console.log(data);
+        console.log(data.blob);
+        setFilename(filename);
+        console.log(data.blob.type)
+        
+    }
+
+    const handleAudioUpload = (file) => {
+        console.log(file);
+    }
+
+    const handleReset = () => {
+        const resetData =         
+        {
+            url:null,
+            blob:null,
+            chunks:null,
+            duration:{
+                h:0,m:0,s:0
+            }
+        }
+
+        setAudioDetails(resetData);
+    }
 
     const uploadAudioFile = async()=> {
         //upload
-        const hashFilename = cyrb53(filename);
-        const fileRef = 'podcastaudio/' + props.user.userId + "/" + hashFilename;
+        const hashFilename = sha256(filename);
+        const fileRef = 'podcastaudio/' + props.user.userId + "/" + hashFilename + ".mp3";
         audioFileRef = fileRef;
         var storageRef = firebase.storage().ref().child(fileRef);
         return new Promise(async(resole, reject)=>{
@@ -115,21 +152,30 @@ const useStyles = makeStyles((theme)=>({
     }
     
     const handleUploadPodcast = async() => {
-        setActiveStep(3);setUploadStatu(2);
-        await uploadAudioFile().then(async(url)=>{
-            await firebase.firestore().collection("podcast").doc(props.user.userId).collection("podcast").add({
-                url: url,
-                intro:intro,
-                title: podcastTitle,
-                updateTime:firebase.firestore.FieldValue.serverTimestamp(),
-                uid:props.userUid,
-                fileRef:audioFileRef
-            }, { merge: true }).then((event)=>{
-                updateChannelDate().then(setUploadStatu(1))
-            }).catch((error)=>{
-    
-            })
-        });
+        if (podcastTitle==="" || intro==="") {
+            if (podcastTitle==="") {
+                setTitleErr("單集標題不能為空");
+            }
+            if (intro==="") {
+                setIntroErr("單集介紹不能為空");
+            }
+        } else {
+            setActiveStep(3);setUploadStatu(2);
+            await uploadAudioFile().then(async(url)=>{
+                await firebase.firestore().collection("podcast").doc(props.user.userId).collection("podcast").add({
+                    url: url,
+                    intro:intro,
+                    title: podcastTitle,
+                    updateTime:firebase.firestore.FieldValue.serverTimestamp(),
+                    uid:props.userUid,
+                    fileRef:audioFileRef
+                }, { merge: true }).then((event)=>{
+                    updateChannelDate().then(setUploadStatu(1))
+                }).catch((error)=>{
+        
+                })
+            });
+        }
     }
 
     if (props.user.userId==="") {
@@ -177,7 +223,7 @@ const useStyles = makeStyles((theme)=>({
                             <StepLabel>{"準備上傳"}</StepLabel>
                         </Step>
                     </Stepper>
-    
+
                     { activeStep === 0 &&
                     (<>
                          <input
@@ -191,9 +237,13 @@ const useStyles = makeStyles((theme)=>({
                                 if (e.target.files.length >= 1) {
                                     setFilename(e.target.files[0].name);
                                     setFileBit(e.target.files[0]);
+                                    SetFilePath(URL.createObjectURL(e.target.files[0]));
                                 }
                             }}
                         />
+                        <br/>
+                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size}/>}
+                        <br/>
                         <label htmlFor="contained-button-file">
                             <Button variant="contained" size="large" color="primary" component="span">
                                 <AttachmentIcon />
@@ -214,15 +264,14 @@ const useStyles = makeStyles((theme)=>({
                                 <TextField value={podcastTitle} onChange={(e)=>setPodcastTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
                             </FormControl>
                             <FormControl fullWidth className={classes.margin}>
-                                <TextField
-                                    id="outlined-multiline-static"
-                                    label="單集介紹"
-                                    multiline
-                                    rows={6}
+                            <InputLabel>電台簡介</InputLabel>
+                                <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
+                                <br/>
+                                <MDEditor
                                     value={intro}
-                                    onChange={(e)=>setIntro(e.target.value)}
-                                    variant="outlined"
-                                    />                    
+                                    onChange={setIntro}
+                                />   
+                                <br/> <br/>                                   
                             </FormControl>    
                         </>
                     )
@@ -296,8 +345,6 @@ const useStyles = makeStyles((theme)=>({
                             }
                         </>
                     }
-     
-      
                     </CardContent>
                 </Card>
             </Container>

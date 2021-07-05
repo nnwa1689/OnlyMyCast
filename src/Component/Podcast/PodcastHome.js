@@ -1,6 +1,7 @@
 //react
 import React, { useState, useEffect, useRef } from 'react'
-import { Link as RLink, useHistory } from 'react-router-dom';
+import { Link as RLink } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown'
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -91,9 +92,9 @@ const PodcastHome = (props) => {
         }, [name, avatar]
     )
 
-    const getPodcastList = ()=>{
+    const getPodcastList = async()=>{
         var changeArr = Array();
-        firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').orderBy('updateTime', "desc").get()
+        await firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').orderBy('updateTime', "desc").get()
         .then((e)=>{
             if (e.docs.length ===0) {
                 setSpList("")
@@ -115,7 +116,7 @@ const PodcastHome = (props) => {
                     )
                 }  
             }
-        }).then(setSpList(changeArr))
+        }).then(()=>{setSpList(changeArr)})
     }
 
     const countSub = ()=>{
@@ -217,8 +218,8 @@ const PodcastHome = (props) => {
                     <br/>
                     <Divider />
                     <br/>
-                    <Typography variant="body1" component="span">{intro}</Typography>
-                    <br/><br/>
+                    <Typography variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
+
                     <Typography variant="body2" component="span"><PeopleIcon /><br/>{subCount} 位聽眾</Typography>
                     <br/><br/>
                     { props.user.userId === props.match.params.id ?
@@ -244,7 +245,6 @@ const PodcastHome = (props) => {
                         </>
                     }
                     
-    
                     <br/>
                     <br/>
                     <Divider/>

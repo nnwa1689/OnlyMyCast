@@ -77,33 +77,13 @@ const App = () => {
     },[userUpdate]
   )
 
- 
-  useEffect(
-    ()=>{
-      getReqCount();
-    }
-  )
-  
-
   const setPlayer = (e) => {
     setPlayerTitle(e.currentTarget.dataset.titlename)
     setPlayerUrl(e.currentTarget.dataset.uri)
     setPodcastName(e.currentTarget.dataset.podcastname)
     setCoverUri(e.currentTarget.dataset.coveruri)
   }
-
-  const getReqCount = ()=>{
-    firebase.database().ref('/subcheck/' + userData.userId).once("value", e => {
-    }).then((e)=>{
-      if (e.val() !== null) {
-        setReqCount(Object.entries(e.val()).length);
-      } else {
-        setReqCount(0);
-      }
-    })
-  }
   
-
   const theme = createMuiTheme({
     palette: {
     primary: {
@@ -140,7 +120,7 @@ const App = () => {
                       )}/>
                   <Route exact path="/subreq" 
                     render={(props) => (
-                        <Subreq {...props} user={userData} userUid={userUid.current} callDataUpdate={getReqCount}/>
+                        <Subreq {...props} user={userData} userUid={userUid.current}/>
                       )} />
                   <Route exact path="/search" component={Search} />
                   <Route path="/search/:q" component={Search} />
@@ -169,7 +149,7 @@ const App = () => {
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
                   { isAuth ? "" : <Redirect to='/signin'/> }
-                  { isAuth && <Navbar user={userData} reqCount={reqCount}></Navbar> }
+                  { isAuth && <Navbar user={userData}></Navbar> }
                 </>
                 :
                 <LinearProgress style={{ wdith: 100 }}/>

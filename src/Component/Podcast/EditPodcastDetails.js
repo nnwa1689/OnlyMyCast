@@ -1,6 +1,7 @@
 //react
 import React, { useState, useEffect, useRef } from 'react'
 import { Redirect } from 'react-router-dom';
+import MDEditor from '@uiw/react-md-editor';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -19,6 +20,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -151,18 +154,14 @@ const useStyles = makeStyles((theme)=>({
                             <TextField error={titleErr!==false} helperText={ titleErr !== false && titleErr} disabled={handleCode==="loading"} value={title} onChange={(e)=>setTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
                         </FormControl>
                         <FormControl fullWidth className={classes.margin}>
-                            <TextField
-                                id="outlined-multiline-static"
-                                label="單集介紹"
-                                multiline
-                                rows={6}
-                                value={intro}
-                                onChange={(e)=>setIntro(e.target.value)}
-                                variant="outlined"
-                                disabled={handleCode==="loading"}
-                                error={ introErr!==false }
-                                helperText={ introErr !== false && introErr}
-                                />                    
+                        <InputLabel>電台簡介</InputLabel>
+                                <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
+                                <br/>
+                                <MDEditor
+                                    value={intro}
+                                    onChange={setIntro}
+                                />   
+                                <br/> <br/>                         
                         </FormControl>
                         <FormControl fullWidth className={classes.margin}>
                         <Button
@@ -215,6 +214,24 @@ const useStyles = makeStyles((theme)=>({
                 </div>
                 <Snackbar open={handleCode==="suc"} autoHideDuration={6000} onClose={()=>{setHandleCode("init")}} message="您的變更已經儲存"/>
                 { handleCode==="delSuc" && <Redirect to='/editpodcasts'/> }
+                <Dialog
+                    open={introErr!==false || titleErr!==false}
+                    onClose={()=>{setIntroErr(false);setTitleErr(false)}}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"提示"}</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {introErr}<br/>{titleErr}
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={()=>{setIntroErr(false); setTitleErr(false)}} color="primary" autoFocus>
+                        好
+                    </Button>
+                    </DialogActions>
+                </Dialog>
             </Container>
         );    
     }

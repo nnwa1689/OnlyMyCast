@@ -1,5 +1,6 @@
 //react
 import React, { useState, useEffect, useRef } from 'react'
+import MDEditor from '@uiw/react-md-editor';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -28,6 +29,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -311,7 +314,7 @@ const PodcastAccount = (props) => {
                                 <form noValidate autoComplete="off">
                                 <FormControl fullWidth className={classes.margin}>
                                     <input
-                                        accept="image/*"
+                                        accept="image/jpeg, image/png, image/jpg"
                                         className={classes.input}
                                         id="contained-button-file"
                                         multiple
@@ -330,7 +333,7 @@ const PodcastAccount = (props) => {
                                             <AttachmentIcon />
                                             { filename === "" ? "上傳ICON" : filename }
                                         </Button>
-                                        <Typography variant="body2" component="span">只能上傳.jpg / .jpeg</Typography>
+                                        <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
                                     </label>
                                     </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
@@ -356,18 +359,14 @@ const PodcastAccount = (props) => {
                                     disabled={handleCode==='loading'|| handleCode==="suc"} />
                                 </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
-                                    <TextField
-                                        id="outlined-multiline-static"
-                                        label="電台介紹"
-                                        multiline
-                                        rows={6}
-                                        value={intro}
-                                        onChange={(e)=>setIntro(e.target.value)}
-                                        variant="outlined"
-                                        error={ introErr!==false }
-                                        disabled={handleCode==='loading'|| handleCode==="suc"}
-                                        helperText={ introErr !== false && introErr}
-                                        />                    
+                                <InputLabel>電台簡介</InputLabel>
+                                <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
+                                <br/>
+                                <MDEditor
+                                    value={intro}
+                                    onChange={setIntro}
+                                />   
+                                <br/> <br/>                  
                                 </FormControl>      
                                     <Button
                                         variant="contained"
@@ -392,7 +391,7 @@ const PodcastAccount = (props) => {
                                 <form noValidate autoComplete="off">
                                 <FormControl fullWidth className={classes.margin}>
                                     <input
-                                        accept="image/*"
+                                        accept="image/jpge, image/jpg, image/png"
                                         className={classes.input}
                                         id="contained-button-file"
                                         multiple
@@ -411,25 +410,23 @@ const PodcastAccount = (props) => {
                                             <AttachmentIcon />
                                             { filename === "" ? "上傳ICON" : filename }
                                         </Button>
-                                        <Typography variant="body2" component="span">只能上傳.jpg / .jpeg</Typography>
+                                        <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
                                     </label>
                                     </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
                                     <TextField disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="電台名稱" variant="outlined" />
                                 </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
-                                    <TextField
-                                        id="outlined-multiline-static"
-                                        label="電台介紹"
-                                        multiline
-                                        rows={6}
-                                        value={intro}
-                                        disabled={handleCode==="loading"}
-                                        onChange={(e)=>setIntro(e.target.value)}
-                                        variant="outlined"
-                                        />                    
-                                </FormControl>      
-                                    <Button
+                                <InputLabel>電台簡介</InputLabel>
+                                <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
+                                <br/>
+                                <MDEditor
+                                    value={intro}
+                                    onChange={setIntro}
+                                />
+                                </FormControl>     
+                                <br/> <br/> 
+                                <Button
                                         variant="contained"
                                         color="primary"
                                         size="large"
@@ -474,6 +471,24 @@ const PodcastAccount = (props) => {
                                     </div>
                                 </>
                         }
+                        <Dialog
+                            open={introErr!==false || nameErr!==false}
+                            onClose={()=>{setIntroErr(false);setNameErr(false)}}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"提示"}</DialogTitle>
+                            <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {introErr}<br/>{nameErr}
+                            </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                            <Button onClick={()=>{setIntroErr(false); setNameErr(false)}} color="primary" autoFocus>
+                                好
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
                         </CardContent>
                     </Card>
                 </Container>

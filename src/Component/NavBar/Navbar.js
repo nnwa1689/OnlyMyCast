@@ -28,6 +28,8 @@ import Link from '@material-ui/core/Link';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import Typography from '@material-ui/core/Typography';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
@@ -37,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
   search: {
     position: 'relative',
@@ -115,9 +117,13 @@ const NavBar = (props) => {
                   <MenuIcon />
               </IconButton>
               <Link component={RLink} to="/" >
-                <img alt="OnlyMyCast" src={Logo} width="200" height="40" />
+                <img alt="OnlyMyCast" src={LogoIcon} width="48" height="48" />
               </Link>
+              <Typography variant="body2">OnlyMyCast</Typography>
               <div className={classes.grow}/>
+              <Fab component={RLink} to="/uploadpodcast" color="primary" aria-label="add" size="small" className={classes.menuButton} edge="end" >
+                    <AddIcon />
+              </Fab>
               <IconButton
                   edge="end"
                   color="inherit"
@@ -168,7 +174,7 @@ const NavBar = (props) => {
                       </ListItem>
                       <ListItem button component={RLink} to="/subreq" key="subreq">
                           <ListItemIcon>
-                              <Badge badgeContent={props.reqCount} color="secondary">
+                              <Badge badgeContent={reqCount} color="secondary">
                                   <InboxIcon />
                               </Badge>
                           </ListItemIcon>
@@ -176,7 +182,6 @@ const NavBar = (props) => {
                       </ListItem>
                   </List>
                   <Divider />
-
                   <List>
                       <ListItem key="privatepolic" fontSize={5}>
                           <Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私權</Link>

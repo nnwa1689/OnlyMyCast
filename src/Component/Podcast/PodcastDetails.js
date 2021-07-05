@@ -1,6 +1,7 @@
 //react
 import React, { useState, useEffect, useRef } from 'react'
 import { Link as RLink } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown'
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -149,7 +150,7 @@ const PodcastDetails = (props) => {
                 <br/><br/>
                 <Divider/>
                 <br/><br/>
-                <Typography variant="body1" component="span">{intro}</Typography>
+                <Typography variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
                 </CardContent>
             </Card>
         </Container>

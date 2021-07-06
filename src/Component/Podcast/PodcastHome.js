@@ -97,7 +97,7 @@ const PodcastHome = (props) => {
         await firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').orderBy('updateTime', "desc").get()
         .then((e)=>{
             if (e.docs.length ===0) {
-                setSpList("")
+                changeArr = "";
             } else {
                 for (var doc of e.docs) {
                     changeArr.push(
@@ -251,12 +251,12 @@ const PodcastHome = (props) => {
 
                     { subStatu===1 || props.user.userId === props.match.params.id ?   
                         
-                        (
+                        
                             spList === "" ? 
                             <Typography variant="h3" component="h1"><br/>¯\_(ツ)_/¯<br/>還沒有任何節目<br/>稍後再回來吧</Typography>
                             :
                             spList
-                        )
+                        
                         
                     :
                         <Typography variant="h3" component="h1"><br/>(＞^ω^＜)<br/><br/>訂閱後即可收聽</Typography>

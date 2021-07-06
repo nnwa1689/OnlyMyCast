@@ -44,11 +44,13 @@ const Player = (props) => {
     const [duration, setDuration] = useState(0);
     const playerRef = createRef();
     const [ready, setReady] = useState(false);
+    const [singleName, setSingleName] = useState();
 
     useEffect(
         ()=>{
             setReady(false);
             setPlayState(true);
+            setSingleName(props.singleName.length >= 15 ? props.singleName.substring(0, 4) + "..." : props.singleName);
         },[props.url]
     )
 
@@ -91,12 +93,12 @@ const Player = (props) => {
             <AppBar position="fixed" color="inherit" className={classes.appBar}>
             { !ready && <LinearProgress style={{width:"100%"}}/>}
                 <Toolbar variant="dense">
-                    <Avatar variant="rounded" className={classes.large} alt="幹話電台" src={props.coverUrl} />
+                    <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.coverUrl} />
                     <Typography style={{ marginTop: "10px" } } variant="subtitle2">
-                        {props.singleName} - {props.podcastName}
+                        {props.podcastName} - {singleName}
                     </Typography>
                     <Typography className="playTime" style={{ marginTop: "10px" } } variant="subtitle2">
-                        ({ "剩" + parseInt(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))/60)) + "分" + Math.ceil(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))%60)) +"秒"})
+                        ({ "剩" + parseInt(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))/60)) + ":" + Math.ceil(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))%60))})
                     </Typography>
                 </Toolbar>
                 <Toolbar variant="dense">

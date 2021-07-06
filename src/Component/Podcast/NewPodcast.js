@@ -1,7 +1,7 @@
 //react
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Redirect } from 'react-router-dom';
-import { Link as RLink, useHistory } from 'react-router-dom';
+import { Link as RLink } from 'react-router-dom';
 import {Recorder} from 'react-voice-recorder'
 import 'react-voice-recorder/dist/index.css'
 import sha256 from 'crypto-js/sha256';
@@ -81,8 +81,11 @@ const useStyles = makeStyles((theme)=>({
     const [titleErr, setTitleErr] = useState(false);
     const [introErr, setIntroErr] = useState(false);
     const [uploadStatu, setUploadStatu] = useState(0);
+    const duration = useRef("");
     //0:init 1:suc 2:uploading 3:err
     let audioFileRef = "";
+
+    /*
 
     const [audioDetails, setAudioDetails] = useState(
         {
@@ -123,6 +126,11 @@ const useStyles = makeStyles((theme)=>({
 
         setAudioDetails(resetData);
     }
+    */
+
+    const fromPlayerGetDuration = (value) => {
+         duration.current = parseInt(value/60, 10) + ":" + Math.ceil(parseInt(value, 10)%60);
+    }
 
     const uploadAudioFile = async()=> {
         //upload
@@ -162,13 +170,15 @@ const useStyles = makeStyles((theme)=>({
         } else {
             setActiveStep(3);setUploadStatu(2);
             await uploadAudioFile().then(async(url)=>{
+                console.log(duration.current);
                 await firebase.firestore().collection("podcast").doc(props.user.userId).collection("podcast").add({
                     url: url,
                     intro:intro,
                     title: podcastTitle,
                     updateTime:firebase.firestore.FieldValue.serverTimestamp(),
                     uid:props.userUid,
-                    fileRef:audioFileRef
+                    fileRef:audioFileRef,
+                    duration:duration.current
                 }, { merge: true }).then((event)=>{
                     updateChannelDate().then(setUploadStatu(1))
                 }).catch((error)=>{
@@ -242,7 +252,7 @@ const useStyles = makeStyles((theme)=>({
                             }}
                         />
                         <br/>
-                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size}/>}
+                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
                         <br/>
                         <label htmlFor="contained-button-file">
                             <Button variant="contained" size="large" color="primary" component="span">

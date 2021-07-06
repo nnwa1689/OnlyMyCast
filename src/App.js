@@ -36,7 +36,6 @@ const App = () => {
   const [coverUri, setCoverUri] = useState("");
   const [userData, setUserData] = useState("");
   const [userUpdate, setUserUpdate] = useState(0);
-  const [reqCount, setReqCount] = useState("");
   const userUid = useRef();
 
   var basename = "/";

@@ -51,6 +51,10 @@ const InlinePlayer = (props) => {
             setPlayState(true);
         },[props.url]
     )
+
+    useEffect(
+        ()=>{props.returnDuration(duration);}
+    )
     
 
     const handleNextTenClick= (e)=>{

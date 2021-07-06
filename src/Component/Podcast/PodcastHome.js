@@ -112,6 +112,7 @@ const PodcastHome = (props) => {
                             setPlayer={props.setPlayer}
                             userId={props.match.params.id}
                             updateTime={doc.data().updateTime}
+                            duration={doc.data().duration}
                         />
                     )
                 }  
@@ -216,10 +217,6 @@ const PodcastHome = (props) => {
                     <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                     <Typography variant="h5" component="h1">{name}</Typography>
                     <br/>
-                    <Divider />
-                    <br/>
-                    <Typography variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
-
                     <Typography variant="body2" component="span"><PeopleIcon /><br/>{subCount} 位聽眾</Typography>
                     <br/><br/>
                     { props.user.userId === props.match.params.id ?
@@ -244,8 +241,11 @@ const PodcastHome = (props) => {
                         }
                         </>
                     }
-                    
-                    <br/>
+                    <br/><br/>
+                    <Divider />
+                    <Typography style={{textAlign:"left"}} variant="body1" component="span">
+                        <ReactMarkdown>{intro}</ReactMarkdown>
+                    </Typography>
                     <br/>
                     <Divider/>
 

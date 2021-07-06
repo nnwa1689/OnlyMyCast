@@ -16,6 +16,8 @@ import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite'
 import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import EventIcon from '@material-ui/icons/Event';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -69,6 +71,7 @@ const PodcastDetails = (props) => {
     const [updateTime, setUpdateTime] = useState();
     const [channelName, setChannelName] = useState();
     const [audioUrl, setAudioUrl] = useState();
+    const [duration, setDuration] =  useState("");
 
     const isFirstLoad = useRef(true);
 
@@ -116,6 +119,7 @@ const PodcastDetails = (props) => {
             setIntro(data.intro);
             setUpdateTime(toDataTime(data.updateTime.seconds));
             setAudioUrl(data.url)
+            setDuration(data.duration)
           }
         })
     }
@@ -131,7 +135,11 @@ const PodcastDetails = (props) => {
                 <Typography variant="h5" component="h1">{name}</Typography>
                 <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h6">{channelName}</Link>
                 <br/>
-                <Typography variant="body1" component="span"><AccessTimeIcon/>{updateTime}</Typography>
+                <Typography variant="body1" component="span">
+                <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon>
+                  &nbsp;
+                  <ListItemIcon><AccessTimeIcon/>{duration}</ListItemIcon>
+                  </Typography>
                 <br/><br/>
                 <Button 
                     color="primary"
@@ -142,15 +150,15 @@ const PodcastDetails = (props) => {
                     value={props.match.params.podId}
                     data-uri={audioUrl}
                     data-coveruri={avatar}
-                    data-titlename={channelName}
-                    data-podcastname={name}
+                    data-titlename={name}
+                    data-podcastname={channelName}
                     onClick={props.setPlayer}>
                     播放單集
                 </Button>
                 <br/><br/>
                 <Divider/>
                 <br/><br/>
-                <Typography variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
+                <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
                 </CardContent>
             </Card>
         </Container>

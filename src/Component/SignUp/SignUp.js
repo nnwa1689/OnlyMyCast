@@ -202,8 +202,9 @@ const SignUp = ()=>{
           </Button>
           <Grid container justify="center">
             <Grid item>
-              <Typography component="body2" variant="span">
-                註冊即同意本網站的<Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body1">服務條款</Link>
+              <Typography component="span" variant="body2">
+                註冊即同意本網站的
+                <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body1">服務條款</Link>
                 、<Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body1">隱私政策</Link>。
               </Typography>
             </Grid>

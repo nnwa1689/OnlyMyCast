@@ -237,7 +237,7 @@ const useStyles = makeStyles((theme)=>({
                     { activeStep === 0 &&
                     (<>
                          <input
-                            accept=".mp3"
+                            accept=".mp3, .mp4, .m4a"
                             className={classes.input}
                             id="contained-button-file"
                             multiple
@@ -260,7 +260,7 @@ const useStyles = makeStyles((theme)=>({
                                 { filename === "" ? "選擇檔案" : filename }</Button>
                                 <br/><br/>
                                 <Typography variant="body1" gutterBottom>
-                                    僅限 mp3 格式  
+                                    僅限 mp3/mp4/m4a 格式  
                                 </Typography>
                         </label>
                         <br/>

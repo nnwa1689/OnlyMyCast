@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme)=>({
     const classes = useStyles();  
     return (
         <div>
-            <ListItem alignItems="flex-start">
+            <ListItem component={RLink} to={"/podcast/" + props.podcastId} alignItems="flex-start">
                 <ListItemAvatar>
                 <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
                 </ListItemAvatar>

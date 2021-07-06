@@ -22,5 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.src/FirebaseConfig
-.src/fonts
+src/FirebaseConfig
+src/fonts

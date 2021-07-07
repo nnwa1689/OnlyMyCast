@@ -191,7 +191,7 @@ const NavBar = (props) => {
                           <Link target="_blank" href="https://www.notes-hz.com/page/readerService" variant="body2">聯繫</Link>
                       </ListItem>
                       <ListItem key="copyright">
-                          <div fontSize={10}>©2021<br/>OnlyMyCast - 建立自己的私人 PodCast</div>
+                          <Typography fontSize={10}>©2021<br/>OnlyMyCast - 建立自己的私人 PodCast</Typography>
                       </ListItem>
                       <Typography variant="body2" color="textSecondary" align="center">
                         {'Copyright © ' + new Date().getFullYear()}<br/>

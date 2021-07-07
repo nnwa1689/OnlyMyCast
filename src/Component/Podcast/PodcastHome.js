@@ -147,15 +147,22 @@ const PodcastHome = (props) => {
         );
     }
 
+    const updateClickDate = ()=>{
+        firebase.firestore().collection("subscribe").doc(props.userUid).set(
+            {[props.match.params.id] : firebase.firestore.FieldValue.serverTimestamp()},{ merge: true }
+        )
+    }
+
     const getSubStatu = ()=>{
         //已經訂閱
         firebase.firestore().collection("subscribe").doc(props.userUid).get()
         .then((doc)=>{ 
             const data = (doc.data()===undefined ? "" : doc.data());
             const found = Object.entries(data).find(
-                ([key, value]) => key === props.match.params.id && value === props.match.params.id);
+                ([key, value]) => key === props.match.params.id );
             if (found !== undefined){
                 setSubStatu(1);
+                updateClickDate();
             } else {
                 firebase.database().ref('/subreq/' + props.userUid + "/" + props.match.params.id).once("value", e => {
                 //

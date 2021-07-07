@@ -1,6 +1,6 @@
 //react
 import React, { useState, useEffect, useRef } from 'react'
-import { Link as RLink } from 'react-router-dom';
+import { Link as RLink, Redirect } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown'
 //ui
 import Typography from '@material-ui/core/Typography';
@@ -72,6 +72,7 @@ const PodcastDetails = (props) => {
     const [channelName, setChannelName] = useState();
     const [audioUrl, setAudioUrl] = useState();
     const [duration, setDuration] =  useState("");
+    const [subStatu, setSubStatu] = useState();
 
     const isFirstLoad = useRef(true);
 
@@ -80,10 +81,26 @@ const PodcastDetails = (props) => {
         if (isFirstLoad.current) {
           getSPData();
           getChannelData();
+          getSubStatu();
           isFirstLoad.current = false;
         }
       }
     )
+
+    const getSubStatu = ()=>{
+      //已經訂閱
+      firebase.firestore().collection("subscribe").doc(props.userUid).get()
+      .then((doc)=>{ 
+          const data = (doc.data()===undefined ? "" : doc.data());
+          const found = Object.entries(data).find(
+              ([key, value]) => key === props.match.params.id);
+          if (found !== undefined){
+              setSubStatu(1);
+          } else {
+            setSubStatu(0);
+          }
+      });
+  }
 
     const toDataTime = (sec)=>{
       var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
@@ -124,12 +141,13 @@ const PodcastDetails = (props) => {
         })
     }
     
-    if (name===undefined || audioUrl===undefined || intro===undefined || updateTime===undefined || channelName===undefined) {
+    if (name===undefined || audioUrl===undefined || intro===undefined || updateTime===undefined || channelName===undefined || subStatu===undefined) {
       return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
       return(
         <Container maxWidth="sm">
-            <Card className={classes.root}>
+          { subStatu===1 || props.user.userId === props.match.params.id ?
+              <Card className={classes.root}>
                 <CardContent>
                 <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                 <Typography variant="h5" component="h1">{name}</Typography>
@@ -160,7 +178,10 @@ const PodcastDetails = (props) => {
                 <br/><br/>
                 <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
                 </CardContent>
-            </Card>
+              </Card>
+          :
+          <Redirect to={'/podcast/' +props.match.params.id }/>
+        }
         </Container>
       );
     }

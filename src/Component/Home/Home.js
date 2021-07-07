@@ -9,6 +9,7 @@ import { Container } from '@material-ui/core';
 import CastIcon from '@material-ui/icons/Cast';
 import PodcastList from './PodcastList';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -18,8 +19,7 @@ import "firebase/storage";
 
 const useStyles = makeStyles((theme)=>({
     root: {
-      minWidth: 275,
-      marginTop: 100,
+      marginTop: 30,
       marginBottom: 150
     },
     bullet: {
@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme)=>({
         height: theme.spacing(10),
         marginRight: theme.spacing(2)
       },
+    topCard: {
+      marginTop: 100
+    }
   })
   );
 
@@ -58,6 +61,14 @@ const Home = (props) => {
       }
     )
 
+    const checkHaveEP = async(channelUpdateTime, userClickTime)=>{
+      if (userClickTime===undefined) {
+        return true;
+      } else {
+        return channelUpdateTime >= userClickTime;
+      }
+    }
+
     const getSubscribe = async()=>{
       var changeArr = Array();
       let tarData = Array();
@@ -70,17 +81,20 @@ const Home = (props) => {
                 for (var value of Object.entries(doc.data())) {
                   await firebase.firestore().collection("channel").doc(value[0]).get()
                   .then((doc)=>{
-                      tarData.push(doc.data());
+                      tarData.push({"data":doc.data(), "date": value[1] });
                   })
                 }
-                for (var value of tarData.sort(function(a,b) {return b.updateTime.seconds - a.updateTime.seconds;})) {
+                for (var value of tarData.sort(function(a,b) {return b.data.updateTime.seconds - a.data.updateTime.seconds;})) {
+                  const haveep = await checkHaveEP(value.data.updateTime.seconds, value.date.seconds);
                   changeArr.push(
                     <PodcastList 
-                      key={value.userId} 
-                      podcastName={value.name} 
-                      podcastIntro={value.intro} 
-                      podcastCover={value.icon} 
-                      podcastId={value.userId}>
+                      key={value.data.userId} 
+                      podcastName={value.data.name} 
+                      podcastIntro={value.data.intro} 
+                      podcastCover={value.data.icon} 
+                      podcastId={value.data.userId}
+                      haveNewEP={haveep}
+                      >
                   </PodcastList>
                   )
                 }
@@ -109,9 +123,9 @@ const Home = (props) => {
   } else {
     return (
       <Container maxWidth="sm">
-          <Card className={classes.root}>
-              <CardContent>
-              <Typography variant="h5" component="h1">
+          <Card className={classes.topCard}>
+            <CardContent>
+            <Typography variant="h5" component="h1">
                   <CastIcon/>你的電台
               </Typography>
               {
@@ -122,9 +136,12 @@ const Home = (props) => {
                 :
                 <PodcastList key={0} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></PodcastList>
               }
-              <br/>
+            </CardContent>
+          </Card>
+          <Card className={classes.root}>
+              <CardContent>
               <Typography variant="h5" component="h1">
-                  <CastIcon/>你的訂閱
+                  <FavoriteIcon/>你的訂閱
               </Typography>
               <Typography variant="body1" component="span">
                   你訂閱的電台都在這裡了，盡情享用吧～
@@ -132,8 +149,8 @@ const Home = (props) => {
               <br/><br/>
               {subscribeList ==="" ?
                 <>
-                  <Typography variant="h2" component="h1" gutterBottom>
-                      (＾ｰ^)ノ<br/>
+                  <Typography variant="h2" component="h1">
+                      (^ｰ^)ノ<br/>
                   </Typography>
                   <Typography variant="h5" component="span">
                       嗨<br/>你還沒有訂閱任何電台<br/>快去尋找屬於你的電台吧！

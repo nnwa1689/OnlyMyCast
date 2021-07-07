@@ -1,5 +1,5 @@
 //react
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link as RLink } from 'react-router-dom';
 //ui
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,6 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
+import Badge from '@material-ui/core/Badge';
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -36,29 +37,51 @@ const useStyles = makeStyles((theme)=>({
   })
   );
 
+
   const PodcastList = (props) => {
     const classes = useStyles();  
+    const [haveNewEP, setHaveNewEP] = useState(false);
+    const [intro, setIntro] = useState(props.podcastIntro.length>=45 ? props.podcastIntro.substring(0, 45) + "......" : props.podcastIntro);
+    const [podcastName, setPodcastName] = useState(props.podcastName.length>=15 ? props.podcastName.substring(0, 14) + "......" : props.podcastName);
+    useEffect(
+      ()=>{
+        if (props.haveNewEP!==false && props.haveNewEP!==undefined) {
+          setHaveNewEP(true);
+        }
+      }
+    )
     return (
         <div>
             <ListItem component={RLink} to={"/podcast/" + props.podcastId} alignItems="flex-start">
                 <ListItemAvatar>
-                <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
+                  { haveNewEP ? 
+                    <Badge
+                    color="primary" badgeContent="新單集"
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}>
+                        <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
+                    </Badge>
+                  :
+                  <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
+                }
                 </ListItemAvatar>
                 <ListItemText
                 secondary={
                     <React.Fragment>
                     <Typography
                         component="span"
-                        variant="h5"
+                        variant="h6"
                         color="textPrimary">
                         <Link component={RLink} to={"/podcast/" + props.podcastId}>{props.podcastName}</Link> 
                     </Typography>
                     <br/>
                     <Typography
                         component="span"
-                        variant="body1"
+                        variant="body2"
                         color="textPrimary">
-                    {props.podcastIntro.substring(0,50) + "......"}
+                    {intro}
                     </Typography>
                     </React.Fragment>
                 }

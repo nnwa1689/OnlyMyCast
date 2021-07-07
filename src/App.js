@@ -125,7 +125,7 @@ const App = () => {
                   <Route path="/search/:q" component={Search} />
                   <Route path="/podcastdetail/:id/:podId"                  
                     render={(props) => (
-                        <PodcastDetails {...props} setPlayer={setPlayer} />
+                        <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} />
                       )} />
                   <Route path="/podcast/:id"
                     render={(props) => (

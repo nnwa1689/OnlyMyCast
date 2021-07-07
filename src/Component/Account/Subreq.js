@@ -77,7 +77,7 @@ const Subreq = (props) => {
 
     const handleSucReq= (e)=>{
         firebase.firestore().collection("subscribe").doc(e).set(
-            {[props.user.userId] : props.user.userId},{ merge: true }
+            {[props.user.userId] : firebase.firestore.FieldValue.serverTimestamp()},{ merge: true }
         ).then(
             firebase.firestore().collection("fans").doc(props.user.userId).set(
                 {[e] : e},{ merge: true }

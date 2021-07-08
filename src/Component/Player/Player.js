@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme)=>({
   },
 }));
 
+
 const Player = (props) => {
     const classes = useStyles();
     const [playState, setPlayState] = useState(true);
@@ -113,7 +114,16 @@ const Player = (props) => {
                 playbackRate={playBackRate}
             />
             <AppBar position="fixed" color="inherit" className={classes.appBar}>
-            { !ready ? <LinearProgress style={{width:"100%"}}/> : <Slider style={{marginTop: -15, marginBottom:-15}} step={1} min={0} max={100} onChangeCommitted={(e, newValue)=>{setPlayerOnSeek(e, newValue)}} defaultValue={0} onChange={(e, newValue)=>{setPlayerSec(e, newValue)}} value={playSec!==undefined ? (playSec/duration)*100:0} aria-labelledby="disabled-slider" />}
+            { !ready ? <LinearProgress style={{width:"100%"}}/> : 
+                <Slider 
+                style={{marginTop: -15, marginBottom:-15}} 
+                step={1} 
+                min={0} 
+                max={100} 
+                onChangeCommitted={(e, newValue)=>{setPlayerOnSeek(e, newValue)}} 
+                defaultValue={0} 
+                onChange={(e, newValue)=>{setPlayerSec(e, newValue)}} 
+                value={playSec!==undefined ? (playSec/duration)*100:0}/>}
                 <Toolbar variant="dense">
                     <Avatar style={{ marginTop: "10px" } } variant="rounded" className={classes.large} alt={podcastName} src={props.coverUrl} />
                     <Typography style={{ marginTop: "10px" } } variant="subtitle2">
@@ -147,18 +157,16 @@ const Player = (props) => {
                             <Forward10Icon />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
                     <Select
                     value={playBackRate}
                     onChange={(e)=>{changePlayBackRate(e)}}
+                    variant="outlined"
                     >
                         <MenuItem value={0.5}>x0.5</MenuItem>
                         <MenuItem value={1}>x1.0</MenuItem>
                         <MenuItem value={1.5}>x1.5</MenuItem>
                         <MenuItem value={2.0}>x2.0</MenuItem>
-                    </Select>
-                    </Tooltip>
-                    
+                    </Select>                    
                 </Toolbar>
             </AppBar>
         </>

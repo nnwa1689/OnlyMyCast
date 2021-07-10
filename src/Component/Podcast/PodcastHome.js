@@ -81,9 +81,7 @@ const PodcastHome = (props) => {
                 getChannleData();
                 getSubStatu();
                 countSub();
-                console.log('tut')
             } else if (props.user==="" || props.userUid === "") {
-                console.log('fafa');
                 getChannleData();
                 setSpList("");
                 setSubStatu(4);

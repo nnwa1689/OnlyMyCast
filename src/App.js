@@ -80,7 +80,7 @@ const App = (props) => {
 
   useEffect(
     ()=>{  
-      setPathname(window.location.pathname.split('/')[1]);
+      setPathname(window.location.pathname.split('/')[2]);
     }
   )
 

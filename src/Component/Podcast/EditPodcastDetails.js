@@ -166,7 +166,7 @@ const useStyles = makeStyles((theme)=>({
                         <FormControl fullWidth className={classes.margin}>
                         <Button
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             size="large"
                             className={classes.button}
                             startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
@@ -178,7 +178,7 @@ const useStyles = makeStyles((theme)=>({
                         <br/>
                         <Button
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             className={classes.button}
                             startIcon={<DeleteIcon />}
                             onClick={()=>{setShowMsgBox(true)}}

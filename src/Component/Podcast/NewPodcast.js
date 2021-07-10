@@ -24,6 +24,8 @@ import AttachmentIcon from '@material-ui/icons/Attachment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -69,6 +71,21 @@ const useStyles = makeStyles((theme)=>({
   })
   );
 
+  function LinearProgressWithLabel(props) {
+    return (
+      <Box display="flex" alignItems="center">
+        <Box width="100%" mr={1}>
+          <LinearProgress variant="determinate" {...props} />
+        </Box>
+        <Box minWidth={35}>
+          <Typography variant="body2" color="textSecondary">{`${Math.round(
+            props.value,
+          )}%`}</Typography>
+        </Box>
+      </Box>
+    );
+  }
+
   const NewPodcast = (props) => {
 
     const classes = useStyles();
@@ -80,7 +97,9 @@ const useStyles = makeStyles((theme)=>({
     const [podcastTitle, setPodcastTitle] = useState("");
     const [titleErr, setTitleErr] = useState(false);
     const [introErr, setIntroErr] = useState(false);
+    const [err, setErr] = useState(false);
     const [uploadStatu, setUploadStatu] = useState(0);
+    const [uploadProgress, setUploadProgres] = useState();
     const duration = useRef("");
     //0:init 1:suc 2:uploading 3:err
     let audioFileRef = "";
@@ -134,16 +153,22 @@ const useStyles = makeStyles((theme)=>({
 
     const uploadAudioFile = async()=> {
         //upload
-        const hashFilename = sha256(filename);
-        const fileRef = 'podcastaudio/' + props.user.userId + "/" + hashFilename + ".mp3";
+        const hashFilename = sha256(filename + Date.now());
+        const fileRef = 'podcastaudio/' + props.user.userId + "/" + hashFilename;
         audioFileRef = fileRef;
         var storageRef = firebase.storage().ref().child(fileRef);
         return new Promise(async(resole, reject)=>{
-            await storageRef.put(fileBit).then(async(s) => {
+            var uploadTask = storageRef.put(fileBit);
+            uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                setUploadProgres(progress);
+            },(error)=>{setUploadStatu(3); setErr(error)});
+            uploadTask.then((s) => {
             storageRef.getDownloadURL()
             .then(async(url) => {
                 resole(url);
-            })
+            });
         });
         }) 
     }
@@ -155,7 +180,7 @@ const useStyles = makeStyles((theme)=>({
         }, { merge: true }).then((event)=>{
 
         }).catch((error)=>{
-
+            setUploadStatu(3); setErr(error);
         })
     }
     
@@ -182,7 +207,7 @@ const useStyles = makeStyles((theme)=>({
                 }, { merge: true }).then((event)=>{
                     updateChannelDate().then(setUploadStatu(1))
                 }).catch((error)=>{
-        
+                    setUploadStatu(3); setErr(error);
                 })
             });
         }
@@ -312,9 +337,12 @@ const useStyles = makeStyles((theme)=>({
                     {  //uploadErr
                         uploadStatu === 3 && 
                         <>
-                            <CircularProgress size={80} />
                             <Typography variant="h6" gutterBottom>
-                                正在處理上傳作業，請稍候！ <br/>不要離開頁面唷(＞^ω^＜)
+                                (￣◇￣;)<br/><br/>
+                                歐歐，上傳處理發生錯誤，一群猴子正在極力強修
+                            </Typography>
+                            <Typography variant="body2" gutterBottom>
+                                {"ErrorMsg:" + err}
                             </Typography>
                         </>
                     }
@@ -323,6 +351,9 @@ const useStyles = makeStyles((theme)=>({
                         uploadStatu === 2 && 
                         <>
                             <CircularProgress size={80} />
+                            <br/><br/>
+                                <LinearProgressWithLabel value={uploadProgress} />
+                            <br/>
                             <Typography variant="h6" gutterBottom>
                                 正在處理上傳作業，請稍候！ <br/>不要離開頁面唷(＞^ω^＜)
                             </Typography>

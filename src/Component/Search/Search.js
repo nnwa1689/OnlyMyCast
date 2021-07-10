@@ -71,7 +71,7 @@ const Search = (props) => {
             if (isFirstLoad.current) {
                 handleSearch();
                 isFirstLoad.current=false;
-            }   
+            }
         }
     )
 

@@ -1,11 +1,12 @@
 //react
 import './App.css';
 import { useState, useRef, useEffect } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, useLocation  } from 'react-router-dom';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
 //component
 import Home from './Component/Home/Home'
 import Account from './Component/Account/Account'
@@ -21,12 +22,12 @@ import EditPodcast from './Component/Podcast/EditPodcast'
 import EditPodcastDetails from './Component/Podcast/EditPodcastDetails';
 import SignIn from './Component/SignIn/SignIn';
 import SignUp from './Component/SignUp/SignUp';
+import UnloginNavBar from './Component/NavBar/UnloginNavbar';
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
-import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
-const App = () => {
+const App = (props) => {
 
   const isFirstLoad = useRef(true);
   const [isAuth, setAuth] = useState(0);
@@ -36,7 +37,8 @@ const App = () => {
   const [coverUri, setCoverUri] = useState("");
   const [userData, setUserData] = useState("");
   const [userUpdate, setUserUpdate] = useState(0);
-  const userUid = useRef();
+  const [pathname, setPathname] = useState();
+  const userUid = useRef("");
 
   var basename = "/";
   if (!firebase.apps.length) {
@@ -74,6 +76,12 @@ const App = () => {
         }
       });
     },[userUpdate]
+  )
+
+  useEffect(
+    ()=>{  
+      setPathname(window.location.pathname.split('/')[1]);
+    }
   )
 
   const setPlayer = (e) => {
@@ -147,7 +155,8 @@ const App = () => {
                   />
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
-                  { isAuth ? "" : <Redirect to='/signin'/> }
+                  { !isAuth && pathname !== "podcast" && <Redirect to='/signin'/>}
+                  { !isAuth && pathname ==="podcast" && <UnloginNavBar></UnloginNavBar>}
                   { isAuth && <Navbar user={userData}></Navbar> }
                 </>
                 :

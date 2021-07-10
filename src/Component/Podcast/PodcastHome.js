@@ -77,19 +77,29 @@ const PodcastHome = (props) => {
     useEffect(
         ()=>{
             //get 此頻道資料  是否被目前使用者訂閱
-            if (isFirstLoad.current) {
+            if (isFirstLoad.current && props.user!=="" && props.userUid!=="") {
                 getChannleData();
                 getSubStatu();
                 countSub();
-                isFirstLoad.current = false;
+                console.log('tut')
+            } else if (props.user==="" || props.userUid === "") {
+                console.log('fafa');
+                getChannleData();
+                setSpList("");
+                setSubStatu(4);
             }
+            isFirstLoad.current = false;
         }
     )
 
     useEffect(
         ()=>{
-            getPodcastList();
-        }, [name, avatar]
+            if (subStatu===1 || props.user.userId === props.match.params.id) {
+                getPodcastList();
+            } else {
+                setSpList(false);
+            }
+        }, [subStatu]
     )
 
     const getPodcastList = async()=>{
@@ -223,9 +233,7 @@ const PodcastHome = (props) => {
                     <CardContent>
                     <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                     <Typography variant="h5" component="h1">{name}</Typography>
-                    <br/>
-                    <Typography variant="body2" component="span"><PeopleIcon /><br/>{subCount} 位聽眾</Typography>
-                    <br/><br/>
+                    { subStatu !== 4 && (<Typography variant="body2" component="span"><br/><PeopleIcon /><br/>{subCount} 位聽眾<br/><br/></Typography>) }
                     { props.user.userId === props.match.params.id ?
                         <Button variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
                     :
@@ -258,23 +266,18 @@ const PodcastHome = (props) => {
 
                     { subStatu===1 || props.user.userId === props.match.params.id ?   
                         
-                        
                             spList === "" ? 
-                            <Typography variant="h3" component="h1"><br/>¯\_(ツ)_/¯<br/>還沒有任何節目<br/>稍後再回來吧</Typography>
+                            <Typography variant="h4" component="span"><br/>¯\_(ツ)_/¯<br/>還沒有任何節目<br/>稍後再回來吧</Typography>
                             :
                             spList
-                        
-                        
+                          
                     :
-                        <Typography variant="h3" component="h1"><br/>(＞^ω^＜)<br/><br/>訂閱後即可收聽</Typography>
+                        <Typography variant="h4" component="span"><br/>(＞^ω^＜)<br/><br/>訂閱後即可收聽</Typography>
                     }
-    
                     </CardContent>
                 </Card>
             </Container>
         );
     }
-    
-
 }
 export default PodcastHome;

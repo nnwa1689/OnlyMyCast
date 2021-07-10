@@ -31,6 +31,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import LinkIcon from '@material-ui/icons/Link';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -277,6 +279,15 @@ const PodcastAccount = (props) => {
         }
     }
 
+    const handleCopyUrl = (url)=> {
+        navigator.clipboard.writeText(url)
+        .then(() => {
+        console.log("Text copied to clipboard...")
+    })
+        .catch(err => {
+        console.log('Something went wrong', err);
+    })
+    }
 
     const showDelFansMsgBox = (e) =>{
         setShowDelMsg(true);
@@ -387,7 +398,16 @@ const PodcastAccount = (props) => {
                                 <Typography variant="h5" component="h1">編輯電台資訊</Typography>
                                 <Typography variant="body1" component="span">更新您的電台資訊<br/>這裡的資訊將於電台首頁公布</Typography>
                                 <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
-                                <Typography variant="body1" component="span">電台ID：{userId}</Typography>
+                                <Typography variant="body1" component="span">電台ID：{userId}</Typography><br/><br/>
+                                <ButtonGroup size="small">
+                                    <TextField
+                                        label="電台URL"
+                                        defaultValue={"https://onlymycast.notes-hz.com/webapp/podcast/" + userId}
+                                        variant="outlined"
+                                        />
+                                        <Button startIcon={<LinkIcon/>} color="primary" variant="outlined" onClick={()=>{handleCopyUrl("https://onlymycast.notes-hz.com/webapp/podcast/" + userId)}}>複製</Button>
+                                </ButtonGroup><br/>
+                                <Typography variant="body2" component="span">向你的朋友分享這個網址，讓他們來收聽你的電台</Typography><br/>
                                 <form noValidate autoComplete="off">
                                 <FormControl fullWidth className={classes.margin}>
                                     <input
@@ -418,7 +438,7 @@ const PodcastAccount = (props) => {
                                 </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
                                 <InputLabel>電台簡介</InputLabel>
-                                <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
+                                <OutlinedInput id="component-outlined" style={{display:"none"}}/>
                                 <br/>
                                 <MDEditor
                                     value={intro}

@@ -53,7 +53,7 @@ const Home = (props) => {
     
     useEffect(
       ()=>{
-        if (isFirstLoad.current) {
+        if (isFirstLoad.current && props.user!=="") {
           getSubscribe();
           getSelfChannelData();
           isFirstLoad.current=false;

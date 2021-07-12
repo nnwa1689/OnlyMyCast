@@ -26,6 +26,8 @@ import UnloginNavBar from './Component/NavBar/UnloginNavbar';
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+
 
 const App = (props) => {
 
@@ -38,6 +40,7 @@ const App = (props) => {
   const [userData, setUserData] = useState("");
   const [userUpdate, setUserUpdate] = useState(0);
   const [pathname, setPathname] = useState();
+  const [inApp, setInApp] = useState(false);
   const userUid = useRef("");
 
   var basename = "/";
@@ -54,6 +57,11 @@ const App = (props) => {
   }
 
   document.body.style.backgroundColor = "#f7f7f7";
+
+  const isInApp = () => {
+    var useragent = navigator.userAgent || navigator.vendor || window.opera;
+    return (useragent.indexOf("FBAN") > -1) || (useragent.indexOf("FBAV") > -1) || (useragent.indexOf("Instagram") > -1) || (useragent.indexOf("Line") > -1);
+  }
 
   const handleUserUpdate = ()=>{
     setUserUpdate(userUpdate + 1);
@@ -81,6 +89,7 @@ const App = (props) => {
   useEffect(
     ()=>{  
       setPathname(window.location.pathname.split('/')[2]);
+      setInApp(isInApp());
     }
   )
 
@@ -110,6 +119,7 @@ const App = (props) => {
       <div className="App">
         <BrowserRouter basename={ basename }>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>
+            { inApp===true ? <Typography variant="h6" component="span">我們發現您可能正在使用 APP 內置的瀏覽器，如果要體驗完整功能，請透過手機的瀏覽器(Chrome、Safari...etc.)開啟本網站！</Typography> : ""}
             { isAuth !== 0 ?  
                 <>
                   <Route exact path="/" 

@@ -76,19 +76,22 @@ const Search = (props) => {
     )
 
     const handleSearch = () =>{
+        var changeArr = Array();
         history.push('/search/' + query);
         setSearchResult("");
         if (query !== "") {
             firebase.firestore().collection("channel").where(
-                firebase.firestore.FieldPath.documentId(), "==", query).get()
-            .then((querySnapshot)=>{ 
-                querySnapshot.forEach(
-                    (doc)=>{
-                        setSearchResult(
-                            <PodcastList podcastName={doc.data().name} podcastIntro={doc.data().intro} podcastCover={doc.data().icon} podcastId={query}></PodcastList>);
-                    }
-                )
-
+                firebase.firestore.FieldPath.documentId(), "==", query)
+            .get()
+            .then(async(querySnapshot)=>{
+                console.log(Object.entries(querySnapshot.docs))
+                for (var value of Object.entries(querySnapshot.docs)) {
+                    changeArr.push(
+                        <PodcastList podcastName={value[1].data().name} podcastIntro={value[1].data().intro} podcastCover={value[1].data().icon} podcastId={query}></PodcastList>
+                    )
+                }
+           }).then(()=>{
+               setSearchResult(changeArr);
            })
         }
     }

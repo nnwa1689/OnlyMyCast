@@ -7,20 +7,12 @@ import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import { deepOrange } from '@material-ui/core/colors';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AttachmentIcon from '@material-ui/icons/Attachment';
@@ -32,7 +24,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import LinkIcon from '@material-ui/icons/Link';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -95,10 +86,6 @@ const PodcastAccount = (props) => {
     const [introErr, setIntroErr] = useState(false);
     const isFirstLoad = useRef(true);
 
-    const [showDelMsg, setShowDelMsg] = useState(false);
-    const willDelFansId = useRef("");
-    const [fansList, setFansList] = useState(Array());
-
     useEffect(
         ()=>{
             if (props.user.userId !== "" && isFirstLoad.current) {
@@ -111,10 +98,6 @@ const PodcastAccount = (props) => {
                     setAvatar(doc.data().icon);
                   }
                 );
-            }
-
-            if (isFirstLoad.current) {
-               getFansList();
             }
             isFirstLoad.current = false;
             setPageLoaded(true);
@@ -232,53 +215,6 @@ const PodcastAccount = (props) => {
         }
     }
 
-    const genListItem = async(data)=>{
-        var changeArr = Array();
-        for (var value of Object.entries(data)) {
-            await firebase.firestore().collection("user").doc(value[0]).get()
-            .then((doc)=>{
-                changeArr.push(
-                    <ListItem key={value[0]}>
-                    <ListItemAvatar>
-                    <Avatar alt={doc.data().name} src={doc.data().avatar}/>
-                    </ListItemAvatar>
-                    <ListItemText
-                        primary={doc.data().name}
-                    />
-                    <ListItemSecondaryAction>
-                    <IconButton
-                        variant="contained"
-                        color="secondary"
-                        value={value[0]}
-                        onClick={(e)=>{showDelFansMsgBox(e)}}
-                        className={classes.button}>
-                            <DeleteIcon />
-                    </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>
-                )
-            });
-        }
-        return changeArr; 
-    }
-
-    const getFansList = async()=>{
-        if (props.user.userId !== "") {
-            firebase.firestore().collection("fans").doc(props.user.userId).get()
-            .then((doc)=>{
-                if (doc.data()===undefined){
-                    setFansList("");
-                } else if(Object.entries(doc.data()).length===0){
-                    setFansList("");
-                } else {
-                    genListItem(doc.data()).then((arr)=>setFansList(arr))
-                }                
-            });
-        } else {
-            setFansList("");
-        }
-    }
-
     const handleCopyUrl = (url)=> {
         navigator.clipboard.writeText(url)
         .then(() => {
@@ -289,25 +225,7 @@ const PodcastAccount = (props) => {
     })
     }
 
-    const showDelFansMsgBox = (e) =>{
-        setShowDelMsg(true);
-        willDelFansId.current = e.currentTarget.value;
-    }
-
-    const handelDelFans = (e)=>{
-        setShowDelMsg(false);
-        firebase.firestore().collection("subscribe").doc(willDelFansId.current).update(
-            {[props.user.userId] : firebase.firestore.FieldValue.delete()}
-        ).then(
-            firebase.firestore().collection("fans").doc(props.user.userId).update(
-                {[willDelFansId.current] : firebase.firestore.FieldValue.delete()}
-            ).then(
-                ()=>{getFansList();}
-            )  
-        )
-    }
-
-    if (fansList===undefined){
+    if (name===undefined){
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
@@ -399,13 +317,14 @@ const PodcastAccount = (props) => {
                                 <Typography variant="body1" component="span">更新您的電台資訊<br/>這裡的資訊將於電台首頁公布</Typography>
                                 <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                                 <Typography variant="body1" component="span">電台ID：{userId}</Typography><br/><br/>
-                                <ButtonGroup size="small">
+                                <ButtonGroup size="small" fullWidth>
                                     <TextField
                                         label="電台URL"
                                         defaultValue={"https://onlymycast.notes-hz.com/webapp/podcast/" + userId}
                                         variant="outlined"
+                                        style={{width: "60%"}}
                                         />
-                                        <Button startIcon={<LinkIcon/>} color="primary" variant="outlined" onClick={()=>{handleCopyUrl("https://onlymycast.notes-hz.com/webapp/podcast/" + userId)}}>複製</Button>
+                                        <Button style={{width: "40%"}} color="primary" variant="outlined" onClick={()=>{handleCopyUrl("https://onlymycast.notes-hz.com/webapp/podcast/" + userId)}}>複製</Button>
                                 </ButtonGroup><br/>
                                 <Typography variant="body2" component="span">向你的朋友分享這個網址，讓他們來收聽你的電台</Typography><br/>
                                 <form noValidate autoComplete="off">
@@ -459,36 +378,6 @@ const PodcastAccount = (props) => {
                                     <br/><br/>
                                     <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={()=>{setHandleCode("init")}} message="您的變更已經儲存"/>
                                 </form>
-                                <Divider/>
-                                <Typography variant="h5" component="h1"><br/>追蹤管理</Typography>
-                                <Typography variant="body1" component="span">移除已經被允許追蹤的人</Typography>
-                                <List dense>
-                                    {
-                                        fansList
-                                    }
-                                </List>
-    
-                                <div>
-                                    <Dialog
-                                        open={showDelMsg}
-                                        onClose={()=>{setShowDelMsg(false)}}
-                                    >
-                                        <DialogTitle>移除追蹤</DialogTitle>
-                                        <DialogContent>
-                                        <DialogContentText>
-                                            確定要移除追蹤？<br/>移除後對方必須重新追蹤才能再收聽您的頻道。
-                                        </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                        <Button onClick={()=>{setShowDelMsg(false)}} color="primary" autoFocus>
-                                            取消
-                                        </Button>
-                                        <Button onClick={handelDelFans} color="primary">
-                                            確定
-                                        </Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                    </div>
                                 </>
                         }
                         <Dialog

@@ -1,5 +1,5 @@
 //react
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link as RLink } from 'react-router-dom';
 //firebase
 import firebase from "firebase/app";
@@ -7,16 +7,11 @@ import "firebase/auth";
 /*google themes */
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
 import { deepOrange } from '@material-ui/core/colors';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
@@ -71,11 +66,10 @@ const UnloginNavBar = (props) => {
               <Link component={RLink} to="/" >
                 <img alt="OnlyMyCast" src={LogoIcon} width="48" height="48" />
               </Link>
-              <Typography variant="body2">OnlyMyCast</Typography>
               <div className={classes.grow}/>
-              <Typography variant="h6">建立或收聽私人Podcast！</Typography>
+              <Typography variant="h6">建立、收聽私人Podcast</Typography>
               <div className={classes.grow}/>
-                <Button href="/signin" size="large" variant="contained" color="primary">
+                <Button href="/signin" size="medium" variant="contained" color="primary">
                     登入
                 </Button>
           </Toolbar>

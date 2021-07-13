@@ -30,6 +30,9 @@ import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import FaceIcon from '@material-ui/icons/Face';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
@@ -145,41 +148,49 @@ const NavBar = (props) => {
                   <List>
                       <ListItem key="account">
                           <ListItemIcon><Avatar alt={props.user.name} src={props.user.avatar==="" ? "." : props.user.avatar} className={ classes.orange } /></ListItemIcon>
-                          <ListItemText primary={props.user.name}></ListItemText>
+                          <Typography variant="body2" component="span">
+                            {props.user.name}
+                            <br/>
+                            <Typography variant="caption" component="span">{props.userEmail}</Typography>
+                          </Typography>
+                      </ListItem>
+                      <ListItem key="accountedit">
+                      <ButtonGroup size="large" orientation="vertical" aria-label="outlined primary button group" fullWidth>
+                        <Button key="accoutsetting" component={RLink} to="/account" variant="outlined"><AccountBoxIcon />編輯個人資訊</Button>
+                        <Button key="logout" onClick={handleLogout} variant="outlined"><ExitToAppIcon />登出</Button>
+                      </ButtonGroup>
                       </ListItem>
                   </List>
                   <Divider />
                   <List>
-                      <ListItem button component={RLink} to="/account" key="setting">
-                          <ListItemIcon><AccountBoxIcon /></ListItemIcon>
-                          <ListItemText primary="帳號設定"></ListItemText>
-                      </ListItem>
-                      <ListItem button component={RLink} to="/podcastaccount" key="podcastsetting">
+                  <ListItem button component={RLink} to="/podcastaccount" key="podcastsetting">
                           <ListItemIcon><GraphicEqIcon /></ListItemIcon>
                           <ListItemText primary="電台設定"></ListItemText>
                       </ListItem>
-                      <ListItem onClick={handleLogout} button key="logout">
-                          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                          <ListItemText primary="登出"></ListItemText>
-                      </ListItem>
-                  </List>
-                  <Divider />
-                  <List>
                       <ListItem button component={RLink} to="/uploadpodcast" key="publish">
                           <ListItemIcon><PublishIcon /></ListItemIcon>
-                          <ListItemText primary="上傳單集"></ListItemText>
+                          <ListItemText primary="單集發佈"></ListItemText>
                       </ListItem>
                       <ListItem button component={RLink} to="/editpodcasts" key="editpod">
                           <ListItemIcon><EditIcon /></ListItemIcon>
                           <ListItemText primary="單集管理"></ListItemText>
                       </ListItem>
-                      <ListItem button component={RLink} to="/subreq" key="subreq">
+                  </List>
+                  <Divider />
+                  <List>
+                  <ListItem button component={RLink} to="/subreq" key="subreq">
                           <ListItemIcon>
-                              <Badge badgeContent={reqCount} color="secondary">
+                              <Badge badgeContent={reqCount} color="primary">
                                   <InboxIcon />
                               </Badge>
                           </ListItemIcon>
-                          <ListItemText primary="審核訂閱"></ListItemText>
+                          <ListItemText primary="追蹤請求"></ListItemText>
+                      </ListItem>
+                    <ListItem button component={RLink} to="/fansadmin" key="fansadmin">
+                          <ListItemIcon>
+                            <FaceIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="追蹤管理"></ListItemText>
                       </ListItem>
                   </List>
                   <Divider />

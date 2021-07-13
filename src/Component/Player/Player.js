@@ -141,13 +141,13 @@ const Player = (props) => {
                     </Tooltip>
                     { (playState) ? 
                     <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause">
-                        <IconButton className={classes.menuButton}  color="inherit">
+                        <IconButton className={classes.menuButton}  color="inherit" size="small">
                             <PauseCircleFilledIcon fontSize="large" />
                         </IconButton>
                     </Tooltip>
                     : 
                     <Tooltip onClick={ handlePlayClick } title="播放" aria-label="play">
-                        <IconButton className={classes.menuButton}  color="inherit">
+                        <IconButton className={classes.menuButton}  color="inherit" size="small">
                             <PlayCircleFilledIcon fontSize="large" />
                         </IconButton>
                     </Tooltip>
@@ -160,7 +160,6 @@ const Player = (props) => {
                     <Select
                     value={playBackRate}
                     onChange={(e)=>{changePlayBackRate(e)}}
-                    variant="outlined"
                     >
                         <MenuItem value={0.5}>x0.5</MenuItem>
                         <MenuItem value={1}>x1.0</MenuItem>

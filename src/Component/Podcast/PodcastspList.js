@@ -12,49 +12,52 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EventIcon from '@material-ui/icons/Event';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 
 const PodcastspList = (props)=>{
 
-    const [title, setTitle] = useState( props.podTitle.length >= 20 ? props.podTitle.substring(0,19) + "......" : props.podTitle);
+    const [title, setTitle] = useState( props.podTitle.length >= 30 ? props.podTitle.substring(0,29) + "⋯" : props.podTitle);
 
     const toDataTime = (sec)=>{
         var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
         t.setUTCSeconds(sec);
-        return t.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'},);
+        return new Intl.DateTimeFormat("zh-TW" , {
+            dateStyle: "short"
+          }).format(t);
       }
     
     return(
     <>
-        {/*獨立出去 PodcastespListItem*/}
-        <ListItem component="span">
-            <ListItemIcon>
-                <IconButton 
-                aria-label="play"
-                value={props.podId}
-                data-uri={props.audioUrl}
-                data-coveruri={props.podIcon}
-                data-titlename={props.podTitle}
-                data-podcastname={props.channelName}
-                onClick={props.setPlayer}>
-                    <PlayArrowIcon/>
-                </IconButton>
-            </ListItemIcon>
+        <ListItem>
             <ListItemText>
-                <Link component={RLink} to={"/podcastdetail/" + props.userId + "/" + props.podId} variant="h6">
+                <Link component={RLink} to={"/podcastdetail/" + props.userId + "/" + props.podId} variant="body1">
                     {title}</Link><br/>
-                <Typography variant="body1" component="span">
-                    <ListItemIcon><EventIcon/>
+                <Typography variant="subtitle2" component="span">
+                    <ListItemIcon><EventIcon fontSize="small"/>
                     {toDataTime(props.updateTime.seconds)}</ListItemIcon>
                     &nbsp;
-                    <ListItemIcon><AccessTimeIcon/>
+                    <ListItemIcon><AccessTimeIcon fontSize="small"/>
                     {props.duration}
                     </ListItemIcon>
                 </Typography>
             </ListItemText>
+            <ListItemSecondaryAction>
+                    <IconButton 
+                    aria-label="play"
+                    value={props.podId}
+                    data-uri={props.audioUrl}
+                    data-coveruri={props.podIcon}
+                    data-titlename={props.podTitle}
+                    data-podcastname={props.channelName}
+                    onClick={props.setPlayer}
+                    size="small"
+                    >
+                        <PlayArrowIcon/>
+                    </IconButton>
+            </ListItemSecondaryAction>
         </ListItem>
         <Divider/>
-        {/*獨立出去 PodcastespListItem*/}
     </>
     )
 }

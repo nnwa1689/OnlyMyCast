@@ -1,7 +1,7 @@
 //react
 import './App.css';
 import { useState, useRef, useEffect } from 'react';
-import { BrowserRouter, Route, Redirect, useLocation  } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -23,6 +23,7 @@ import EditPodcastDetails from './Component/Podcast/EditPodcastDetails';
 import SignIn from './Component/SignIn/SignIn';
 import SignUp from './Component/SignUp/SignUp';
 import UnloginNavBar from './Component/NavBar/UnloginNavbar';
+import FansAdmin from './Component/Account/FansAdmin';
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -42,6 +43,7 @@ const App = (props) => {
   const [pathname, setPathname] = useState();
   const [inApp, setInApp] = useState(false);
   const userUid = useRef("");
+  const userEmail = useRef("");
 
   var basename = "/";
   if (!firebase.apps.length) {
@@ -76,6 +78,7 @@ const App = (props) => {
             (doc)=>{
               setUserData(doc.data());
               userUid.current = user.uid;
+              userEmail.current = user.email;
               setAuth(true);
             }
           );
@@ -119,7 +122,7 @@ const App = (props) => {
       <div className="App">
         <BrowserRouter basename={ basename }>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>
-            { inApp===true ? <Typography variant="h6" component="span">我們發現您可能正在使用 APP 內置的瀏覽器，如果要體驗完整功能，請透過手機的瀏覽器(Chrome、Safari...etc.)開啟本網站！</Typography> : ""}
+            { inApp===true ? <Typography variant="h6" component="span"><br/><br/>您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過手機的瀏覽器(Chrome、Safari...etc.)開啟</Typography> : ""}
             { isAuth !== 0 ?  
                 <>
                   <Route exact path="/" 
@@ -135,6 +138,10 @@ const App = (props) => {
                     render={(props) => (
                         <PodcastAccount {...props} user={userData} userUid={userUid.current}/>
                       )}/>
+                  <Route exact path="/fansadmin"
+                    render={(props) => (
+                        <FansAdmin {...props} user={userData} userUid={userUid.current} />
+                      )} />
                   <Route exact path="/subreq" 
                     render={(props) => (
                         <Subreq {...props} user={userData} userUid={userUid.current}/>
@@ -167,7 +174,7 @@ const App = (props) => {
                   <Route exact path="/signup" component={SignUp} />
                   { !isAuth && pathname !== "podcast" && <Redirect to='/signin'/>}
                   { !isAuth && pathname ==="podcast" && <UnloginNavBar></UnloginNavBar>}
-                  { isAuth && <Navbar user={userData}></Navbar> }
+                  { isAuth && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }
                 </>
                 :
                 <LinearProgress style={{ wdith: 100 }}/>

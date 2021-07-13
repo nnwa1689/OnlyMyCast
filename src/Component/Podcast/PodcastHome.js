@@ -17,6 +17,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PeopleIcon from '@material-ui/icons/People';
 import PodcastspList from './PodcastspList';
+import List from '@material-ui/core/List';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -267,8 +268,9 @@ const PodcastHome = (props) => {
                             spList === "" ? 
                             <Typography variant="h4" component="span"><br/>¯\_(ツ)_/¯<br/>還沒有任何節目<br/>稍後再回來吧</Typography>
                             :
-                            spList
-                          
+                            <List>
+                                {spList}
+                            </List>
                     :
                         <Typography variant="h4" component="span"><br/>(＞^ω^＜)<br/><br/>訂閱後即可收聽</Typography>
                     }

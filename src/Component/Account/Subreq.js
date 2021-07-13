@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme)=>({
 
 const Subreq = (props) => {
     const classes = useStyles();
-    const [reqList, setReqList] = useState(Array());
+    const [reqList, setReqList] = useState();
     const isFirstLoad = useRef(true);
 
     useEffect(
@@ -186,7 +186,7 @@ const Subreq = (props) => {
                 <Container maxWidth="sm">
                     <Card className={classes.root}>
                         <CardContent>
-                        <Typography variant="h5" component="h1">訂閱審核</Typography>
+                        <Typography variant="h5" component="h1">追蹤審核</Typography>
                         <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
                         <List dense>
                             {reqList === "" ? 

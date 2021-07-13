@@ -1,5 +1,6 @@
 //react
 import React, { useState, useEffect, useRef } from 'react'
+import { Link as RLink } from 'react-router-dom';
 //googleUi
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -28,6 +29,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Link from '@material-ui/core/Link';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -104,9 +106,9 @@ const Account = (props) => {
                         <ListItemAvatar>
                         <Avatar variant="rounded" alt={data.name} src={data.icon}/>
                         </ListItemAvatar>
-                        <ListItemText
-                            primary={data.name}
-                        />
+                        <Link variant="body2" component={RLink} to={"/podcast/" + value[0]}>
+                            {data.name}
+                        </Link>
                         <ListItemSecondaryAction>
                         <IconButton
                             variant="contained"
@@ -314,8 +316,7 @@ const Account = (props) => {
                     :
                     <Typography variant="h4" component="h1"><br/>╮(╯▽╰)╭<br/>目前沒有任何訂閱！<br/>快去訂閱喜歡的頻道吧！</Typography>
                     }
-                
-    
+
                     <div>
                         <Dialog
                             open={showUnsubMsg}
@@ -342,7 +343,6 @@ const Account = (props) => {
                 <Snackbar open={handleCode==="suc"} autoHideDuration={6000} onClose={props.dataupdate} message="您的變更已經儲存"/>
             </Container>
         );
-    
     }
 }
 export default Account;

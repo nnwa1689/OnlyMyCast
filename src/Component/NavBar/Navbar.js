@@ -33,6 +33,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FaceIcon from '@material-ui/icons/Face';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
@@ -174,7 +175,7 @@ const NavBar = (props) => {
                       </ListItem>
                       <ListItem key="accountedit">
                       <ButtonGroup size="large" orientation="vertical" aria-label="outlined primary button group" fullWidth>
-                        <Button key="accoutsetting" component={RLink} to="/account" variant="outlined"><AccountBoxIcon />編輯個人資訊</Button>
+                        <Button key="accoutsetting" component={RLink} to="/account" variant="outlined"><AccountBoxIcon />個人管理</Button>
                         <Button key="logout" onClick={handleLogout} variant="outlined"><ExitToAppIcon />登出</Button>
                       </ButtonGroup>
                       </ListItem>
@@ -213,6 +214,15 @@ const NavBar = (props) => {
                   </List>
                   <Divider />
                   <List>
+                    <ListItem button component={RLink} to="/podcast/onlymycast" key="offical">
+                            <ListItemIcon>
+                                    <QuestionAnswerIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="官方頻道"></ListItemText>
+                    </ListItem>
+                  </List>
+                  <Divider />
+                  <List alignItems="center">
                       <ListItem key="privatepolic" fontSize={5}>
                           <Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私權</Link>
                           &nbsp;
@@ -220,23 +230,23 @@ const NavBar = (props) => {
                           &nbsp;
                           <Link target="_blank" href="https://www.notes-hz.com/page/readerService" variant="body2">聯繫</Link>
                       </ListItem>
-                      <ListItem key="copyright">
-                          <Typography fontSize={10}>©2021<br/>OnlyMyCast - 建立自己的私人 PodCast</Typography>
+                      <ListItem key="copyright" fontSize={5}>
+                        <Typography variant="body2" color="textSecondary">
+                          {'Copyright © ' + new Date().getFullYear()}<br/>OnlyMyCast建立私人PodCast<br/>
+                          <Link href="https://lab.notes-hz.com/">
+                            <span style={ {fontSize: "24px", color: "#028ff3", fontWeight: "bold"} }>Lab</span>
+                            <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>H</span>
+                            <span style={ {fontSize: "24px", color: "#FF8738", fontWeight: "bold"} }>a</span>
+                            <span style={ {fontSize: "24px", color: "#FFA900", fontWeight: "bold"} }>z</span>
+                            <span style={ {fontSize: "24px", color: "#00A752", fontWeight: "bold"} }>u</span>
+                            <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
+                            <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
+                            </Link><br/>
+                            <Link href="https://www.notes-hz.com/">筆記長也NotesHazuya</Link>
+                            <br/><br/>
+                        </Typography>
                       </ListItem>
-                      <Typography variant="body2" color="textSecondary" align="center">
-                        {'Copyright © ' + new Date().getFullYear()}<br/>
-                        <Link href="https://lab.notes-hz.com/">
-                          <span style={ {fontSize: "24px", color: "#028ff3", fontWeight: "bold"} }>Lab</span>
-                          <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>H</span>
-                          <span style={ {fontSize: "24px", color: "#FF8738", fontWeight: "bold"} }>a</span>
-                          <span style={ {fontSize: "24px", color: "#FFA900", fontWeight: "bold"} }>z</span>
-                          <span style={ {fontSize: "24px", color: "#00A752", fontWeight: "bold"} }>u</span>
-                          <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
-                          <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
-                          </Link><br/>
-                          <Link href="https://www.notes-hz.com/">筆記長也NotesHazuya</Link>
-                          <br/><br/>
-                      </Typography>
+
                   </List>
               </div>
           </Drawer>

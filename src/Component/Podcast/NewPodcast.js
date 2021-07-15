@@ -1,5 +1,5 @@
 //react
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Redirect } from 'react-router-dom';
 import { Link as RLink } from 'react-router-dom';
 import {Recorder} from 'react-voice-recorder'
@@ -26,6 +26,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Box from '@material-ui/core/Box';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import SaveIcon from '@material-ui/icons/Save';
+import Tooltip from '@material-ui/core/Tooltip';
+import Snackbar from '@material-ui/core/Snackbar';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -100,9 +103,20 @@ const useStyles = makeStyles((theme)=>({
     const [err, setErr] = useState(false);
     const [uploadStatu, setUploadStatu] = useState(0);
     const [uploadProgress, setUploadProgres] = useState();
+    const [handleDarftCode, setHandleDarftCode] = useState('init');
     const duration = useRef("");
+    const isFirstLoad = useRef(true);
     //0:init 1:suc 2:uploading 3:err
     let audioFileRef = "";
+
+    useEffect(
+        ()=>{
+            if (isFirstLoad.current && activeStep===1) {
+                getDarft();
+                isFirstLoad.current = false;
+            }
+        }
+    )
 
     /*
 
@@ -173,6 +187,44 @@ const useStyles = makeStyles((theme)=>({
         }) 
     }
 
+    const getDarft = () => {
+        firebase.database().ref('/castDarft/' + props.user.userId).once("value", e => {
+        }).then(async(e)=>{
+            const data = e.val();
+            if (data !== undefined && data !== null) {
+                setHandleDarftCode("get");
+                setPodcastTitle(data.podcastTitle);
+                setIntro(data.intro);
+            }
+        })
+    }
+
+    const handleRemoveDarft = async() => {
+        await firebase.database().ref('/castDarft/' + props.user.userId).remove();
+    }
+
+    const handleSaveDarft = () => {
+        if (podcastTitle==="" || intro==="") {
+            setErr(true);
+            if (podcastTitle==="") {
+                setTitleErr("單集標題不能為空");
+            }
+            if (intro==="") {
+                setIntroErr("單集介紹不能為空");
+            }
+        } else {
+            setHandleDarftCode('loading');
+            firebase.database().ref('/castDarft/' + props.user.userId).update(
+                {
+                    podcastTitle : podcastTitle,
+                    intro:intro,
+                }
+            ).then(()=>{
+                setHandleDarftCode('suc');
+            }).catch();
+        }
+    }
+
     const updateChannelDate = async()=>{
         await firebase.firestore().collection("channel").doc(props.user.userId).set({
             updateTime:firebase.firestore.FieldValue.serverTimestamp(),
@@ -205,7 +257,10 @@ const useStyles = makeStyles((theme)=>({
                     fileRef:audioFileRef,
                     duration:duration.current
                 }, { merge: true }).then((event)=>{
-                    updateChannelDate().then(setUploadStatu(1))
+                    updateChannelDate().then(()=>{
+                        handleRemoveDarft().then(setUploadStatu(1));
+                    }
+                    )
                 }).catch((error)=>{
                     setUploadStatu(3); setErr(error);
                 })
@@ -244,9 +299,8 @@ const useStyles = makeStyles((theme)=>({
             <Container maxWidth="sm">
                 <Card className={classes.root}>
                     <CardContent>
-                    <Typography variant="h5" component="h1">新增單集</Typography>
-                    <Typography variant="body1" component="span">依照步驟來新增您電台的單集</Typography>
-                    
+                    <Typography variant="h5" component="h1">發佈單集</Typography>
+                    <Typography variant="body1" component="span">依照步驟來發佈您電台的單集</Typography>
                     <Stepper activeStep={activeStep} alternativeLabel>
                         <Step key={0}>
                             <StepLabel>{"選擇預錄好的音檔"}</StepLabel>
@@ -285,7 +339,7 @@ const useStyles = makeStyles((theme)=>({
                                 { filename === "" ? "選擇檔案" : filename }</Button>
                                 <br/><br/>
                                 <Typography variant="body1" gutterBottom>
-                                    僅限 mp3/mp4/m4a 格式  
+                                    僅限 mp3/mp4/m4a 格式<br/><br/>手機版 Safari 可能會上傳卡住的問題<br/>請先改用 Chrome
                                 </Typography>
                         </label>
                         <br/>
@@ -299,14 +353,17 @@ const useStyles = makeStyles((theme)=>({
                                 <TextField value={podcastTitle} onChange={(e)=>setPodcastTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
                             </FormControl>
                             <FormControl fullWidth className={classes.margin}>
-                            <InputLabel>電台簡介</InputLabel>
+                            <InputLabel>單集簡介</InputLabel>
                                 <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
                                 <br/>
                                 <MDEditor
                                     value={intro}
                                     onChange={setIntro}
                                 />   
-                                <br/> <br/>                                   
+                                <br/> <br/> 
+                                <div className={classes.wrapper}>
+
+                                </div>                                 
                             </FormControl>    
                         </>
                     )
@@ -315,7 +372,7 @@ const useStyles = makeStyles((theme)=>({
                     { activeStep === 2 &&
                     (
                         <>
-                            <Typography variant="h1" gutterBottom>
+                            <Typography variant="h6" gutterBottom>
                                 （*＾3＾） 
                             </Typography>
                             <br/>
@@ -376,9 +433,21 @@ const useStyles = makeStyles((theme)=>({
                                 上一步
                             </Button>
                             {activeStep === 2 ? 
-                            <Button variant="contained" color="primary" onClick={()=>handleUploadPodcast()}>
-                                完成
-                            </Button>
+                            <>
+                                <Tooltip className={classes.backButton} onClick={handleSaveDarft} title="草稿不會儲存您的檔案，而且一但上傳完成後就會被清除" aria-label="save">
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.button}
+                                        startIcon={ handleDarftCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                                        disabled={handleDarftCode==="loading"}>
+                                        儲存草稿
+                                    </Button>
+                                </Tooltip>
+                                <Button variant="contained" color="primary" onClick={()=>handleUploadPodcast()}>
+                                    完成並發布
+                                </Button>
+                            </>
                             :
                             <Button disabled={ (filename==="" && activeStep===0) || (podcastTitle===""&& activeStep===1) || (intro==="" && activeStep===1) } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
                                 下一步
@@ -386,6 +455,8 @@ const useStyles = makeStyles((theme)=>({
                             }
                         </>
                     }
+                        <Snackbar open={handleDarftCode==="suc"} autoHideDuration={2000} onClose={()=>{setHandleDarftCode('init')}} message="您的草稿已經儲存"/>
+                        <Snackbar open={handleDarftCode==="get"} onClose={()=>{setHandleDarftCode('init')}} autoHideDuration={2000} message="您的草稿已經還原"/>
                     </CardContent>
                 </Card>
             </Container>

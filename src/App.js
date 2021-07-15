@@ -46,10 +46,12 @@ const App = (props) => {
   const userEmail = useRef("");
 
   var basename = "/";
+
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig);  
   }
 
+  //產品環境
   if (process.env.NODE_ENV !== "development") {
     if (isFirstLoad.current) {
       //const appCheck = firebase.appCheck();
@@ -102,7 +104,7 @@ const App = (props) => {
     setPodcastName(e.currentTarget.dataset.podcastname)
     setCoverUri(e.currentTarget.dataset.coveruri)
   }
-  
+
   const theme = createMuiTheme({
     palette: {
     primary: {
@@ -172,7 +174,9 @@ const App = (props) => {
                   />
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
-                  { !isAuth && pathname !== "podcast" && <Redirect to='/signin'/>}
+                  { /* 如果頁面是廣播首頁則允許沒有登入預覽 */
+                    !isAuth && pathname !== "podcast" && <Redirect to='/signin'/>
+                  }
                   { !isAuth && pathname ==="podcast" && <UnloginNavBar></UnloginNavBar>}
                   { isAuth && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }
                 </>

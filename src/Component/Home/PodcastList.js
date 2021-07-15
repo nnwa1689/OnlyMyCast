@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme)=>({
       marginBottom: 12,
     },
     large: {
-        width: theme.spacing(10),
-        height: theme.spacing(10),
+        width: theme.spacing(8),
+        height: theme.spacing(8),
         marginRight: theme.spacing(2)
       },
   })
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme)=>({
   const PodcastList = (props) => {
     const classes = useStyles();  
     const [haveNewEP, setHaveNewEP] = useState(false);
-    const [intro, setIntro] = useState(props.podcastIntro.length>=45 ? props.podcastIntro.substring(0, 45) + "......" : props.podcastIntro);
+    const [intro, setIntro] = useState(props.podcastIntro.length>=50 ? props.podcastIntro.substring(0, 49) + "⋯" : props.podcastIntro);
     const [podcastName, setPodcastName] = useState(props.podcastName.length>=15 ? props.podcastName.substring(0, 14) + "......" : props.podcastName);
     useEffect(
       ()=>{
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme)=>({
                 <ListItemAvatar>
                   { haveNewEP ? 
                     <Badge
-                    color="primary" badgeContent="新單集"
+                    color="primary" variant="dot"
                     anchorOrigin={{
                       vertical: 'top',
                       horizontal: 'left',
@@ -72,14 +72,14 @@ const useStyles = makeStyles((theme)=>({
                     <React.Fragment>
                     <Typography
                         component="span"
-                        variant="h6"
+                        variant="body1"
                         color="textPrimary">
                         <Link component={RLink} to={"/podcast/" + props.podcastId}>{props.podcastName}</Link> 
                     </Typography>
                     <br/>
                     <Typography
                         component="span"
-                        variant="body2"
+                        variant="subtitle2"
                         color="textPrimary">
                     {intro}
                     </Typography>

@@ -112,7 +112,24 @@ const NavBar = (props) => {
       <div>
           <AppBar color="secondary" position="fixed">
           <Toolbar>
-              <IconButton
+            { reqCount > 0 ?
+                <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="open drawer"
+                onClick={ ()=>{ setSideBar(true) } }>
+                <Badge
+                  color="primary" variant="dot"
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}><MenuIcon />
+                </Badge>
+                </IconButton>            
+              
+            :
+            <IconButton
               edge="start"
               className={classes.menuButton}
               color="inherit"
@@ -120,6 +137,7 @@ const NavBar = (props) => {
               onClick={ ()=>{ setSideBar(true) } }>
                   <MenuIcon />
               </IconButton>
+            }
               <Link component={RLink} to="/" >
                 <img alt="OnlyMyCast" src={LogoIcon} width="48" height="48" />
               </Link>

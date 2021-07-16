@@ -33,7 +33,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FaceIcon from '@material-ui/icons/Face';
-import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
+import HelpIcon from '@material-ui/icons/Help';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
@@ -174,8 +174,8 @@ const NavBar = (props) => {
                           </Typography>
                       </ListItem>
                       <ListItem key="accountedit">
-                      <ButtonGroup size="large" orientation="vertical" aria-label="outlined primary button group" fullWidth>
-                        <Button key="accoutsetting" component={RLink} to="/account" variant="outlined"><AccountBoxIcon />個人管理</Button>
+                      <ButtonGroup size="large" aria-label="outlined primary button group" fullWidth>
+                        <Button key="accoutsetting" component={RLink} to="/account" variant="outlined"><AccountBoxIcon />設定</Button>
                         <Button key="logout" onClick={handleLogout} variant="outlined"><ExitToAppIcon />登出</Button>
                       </ButtonGroup>
                       </ListItem>
@@ -214,11 +214,11 @@ const NavBar = (props) => {
                   </List>
                   <Divider />
                   <List>
-                    <ListItem button component={RLink} to="/podcast/onlymycast" key="offical">
+                    <ListItem button component={RLink} to="/help" key="help">
                             <ListItemIcon>
-                                    <QuestionAnswerIcon />
+                                    <HelpIcon />
                             </ListItemIcon>
-                            <ListItemText primary="官方頻道"></ListItemText>
+                            <ListItemText primary="說明支援"></ListItemText>
                     </ListItem>
                   </List>
                   <Divider />

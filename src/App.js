@@ -25,6 +25,7 @@ import SignUp from './Component/SignUp/SignUp';
 import UnloginNavBar from './Component/NavBar/UnloginNavbar';
 import FansAdmin from './Component/Account/FansAdmin';
 import HelpCenter from './Component/HelpCenter/HelpCenter';
+import ForgetPassword from './Component/Account/ForgetPassword';
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -176,6 +177,7 @@ const App = (props) => {
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/help" component={HelpCenter} />
+                  <Route exact path="/forgetpassword" component={ForgetPassword} />
                   { /* 如果頁面是廣播首頁則允許沒有登入預覽 */
                     !isAuth && pathname !== "podcast" && <Redirect to='/signin'/>
                   }

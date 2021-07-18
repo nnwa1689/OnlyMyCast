@@ -135,7 +135,7 @@ const SignUp = ()=>{
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
           <img style={{fill: "#FD3E49"}} src={LogoIcon} width="128"></img>
         <Typography component="h1" variant="h5">
-          立即註冊，建立自己私人的Podcast！
+          立即註冊<br/>建立自己私人的Podcast
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>

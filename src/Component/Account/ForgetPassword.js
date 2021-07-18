@@ -16,6 +16,7 @@ import LogoIcon from '../../static/only-my-cast-icon-pink.svg'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
 
 
 function Copyright() {
@@ -58,39 +59,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const SignIn = () => {
+const ForgetPassword = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [emailErr, setEmailErr] = useState(false);
-  const [pwErr, setPwErr] = useState(false);
   const [handleCode, setHandleCode] = useState("init");
   const history = useHistory();
 
   const handleSignin = ()=>{
     setHandleCode("loading")
     setEmailErr(false);
-    setPwErr(false);
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      window.location.reload();
-    })
-    .catch((error) => {
-      if(error.code==="auth/invalid-email")
-        setEmailErr("Email格式錯誤")
-      if(error.code==="auth/wrong-password")
-        setPwErr("密碼錯誤")
-      if(error.code==="auth/user-not-found")
-        setEmailErr("使用者不存在")
-      setHandleCode("error");
-    });
+    firebase.auth().sendPasswordResetEmail(email).then(()=> {
+        setHandleCode("suc");
+      }).catch(function(error) {
+        console.log(error.message);
+        if(error.code==="auth/invalid-email")
+            setEmailErr("Email格式錯誤");
+        if(error.code==="auth/user-not-found")
+            setEmailErr("使用者不存在")
+        setHandleCode("error");
+      });
   }
 
   useEffect(
     ()=>{
         firebase.auth().onAuthStateChanged((user)=> {
-            if(user) {
+            if (user) {
               // 使用者已登入，redirect to Homepage
               history.push('/')
             }
@@ -104,7 +99,8 @@ const SignIn = () => {
           <CardContent>
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
             <img src={LogoIcon} width="128"></img>
-            <Typography component="h1" variant="h5">立即登入<br/>建立或收聽私人Podcast</Typography>
+            <Typography component="h1" variant="h5">忘記密碼</Typography><br/>
+            <Typography component="body1" variant="span">輸入註冊的E-Mail<br/>將會將重設密碼連結送至你的信箱。</Typography>
             <form className={classes.form} noValidate>
             <TextField
                 variant="outlined"
@@ -122,22 +118,6 @@ const SignIn = () => {
                 helperText={ emailErr !== false && (emailErr) }
                 disabled={handleCode==="loading"}
             />
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="密碼"
-                label="密碼"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e)=>{setPassword(e.target.value)}}
-                error={pwErr !== false}
-                helperText={ pwErr !== false && (pwErr) }
-                disabled={handleCode==="loading"}
-            />
             <Button
                 type="button"
                 fullWidth
@@ -145,17 +125,21 @@ const SignIn = () => {
                 color="primary"
                 className={classes.submit}
                 onClick={handleSignin}
-                disabled={handleCode==="loading"}
+                disabled={handleCode==="loading" || handleCode==="suc"}
             >
-                登入
+                送出
             </Button>
-            <Link component={RLink} to="/signup" variant="body2">
-                    {"立即註冊"}
-            </Link> &nbsp;&nbsp;
-            <Link component={RLink} to="/forgetpassword" variant="body2">
-                    {"忘記密碼"}
+            <Link component={RLink} to="/signin" variant="body2">
+                    {"<-返回登入"}
             </Link>
             </form>
+            <Snackbar
+                open={handleCode==="suc"}
+                onClose={()=>{window.location.reload()}}
+                message="重設密碼連結已經送至你的信箱！"
+                key={0}
+                autoHideDuration={4000}
+            />
           </CardContent>
       </Card>
       <Box mt={8}>
@@ -164,4 +148,4 @@ const SignIn = () => {
     </Container>
   );
 }
-export default SignIn;
+export default ForgetPassword;

@@ -8,6 +8,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
 //component
+import AdsenseComponent from './Component/Adsense/AdsenseComponent';
 import Home from './Component/Home/Home'
 import Account from './Component/Account/Account'
 import Player from './Component/Player/Player'
@@ -183,6 +184,8 @@ const App = (props) => {
                   }
                   { !isAuth && pathname ==="podcast" && <UnloginNavBar></UnloginNavBar>}
                   { isAuth && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }
+                  {/*Google Adsense*/}
+                  <AdsenseComponent/>
                 </>
                 :
                 <LinearProgress style={{ wdith: 100 }}/>

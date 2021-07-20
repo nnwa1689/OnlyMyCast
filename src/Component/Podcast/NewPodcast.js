@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
       minWidth: 275,
       marginTop: 100,
-      marginBottom: 150
+      marginBottom: 0,
     },
     bullet: {
       display: 'inline-block',
@@ -113,6 +113,7 @@ const useStyles = makeStyles((theme)=>({
         ()=>{
             if (isFirstLoad.current && activeStep===1) {
                 getDarft();
+                window.scrollTo(0, 0);
                 isFirstLoad.current = false;
             }
         }

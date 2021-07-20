@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        marginBottom: 150,
+        
         alignItems:"center",
         textAlign:"center"
     },
@@ -98,8 +98,9 @@ const PodcastAccount = (props) => {
                     setAvatar(doc.data().icon);
                   }
                 );
+                isFirstLoad.current = false;
             }
-            isFirstLoad.current = false;
+            window.scrollTo(0, 0);
             setPageLoaded(true);
         }
     )

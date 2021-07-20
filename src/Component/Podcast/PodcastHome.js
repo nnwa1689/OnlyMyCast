@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        marginBottom: 150,
+        
         alignItems:"center",
         textAlign:"center"
     },
@@ -78,16 +78,19 @@ const PodcastHome = (props) => {
     useEffect(
         ()=>{
             //get 此頻道資料  是否被目前使用者訂閱
-            if (isFirstLoad.current && props.user!=="" && props.userUid!=="") {
-                getChannleData();
-                getSubStatu();
-                countSub();
-            } else if (props.user==="" || props.userUid === "") {
-                getChannleData();
-                setSpList("");
-                setSubStatu(4);
+            if (isFirstLoad.current) {
+                if (props.user!=="" && props.userUid!=="") {
+                    getChannleData();
+                    getSubStatu();
+                    countSub();
+                } else if (props.user==="" || props.userUid === "") {
+                    getChannleData();
+                    setSpList("");
+                    setSubStatu(4);
+                }
+                window.scrollTo(0, 0);
+                isFirstLoad.current = false;
             }
-            isFirstLoad.current = false;
         }
     )
 
@@ -230,7 +233,7 @@ const PodcastHome = (props) => {
             <Container maxWidth="sm">
                 <Card className={classes.root}>
                     <CardContent>
-                    <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                    <Avatar variant="rounded" alt={name} src={avatar==="" ? "." : avatar} className={classes.large} />
                     <Typography variant="h5" component="h1">{name}</Typography>
                     { subStatu !== 4 && (<Typography variant="body2" component="span"><br/><PeopleIcon /><br/>{subCount} 位聽眾<br/><br/></Typography>) }
                     { props.user.userId === props.match.params.id ?

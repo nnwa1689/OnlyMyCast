@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        marginBottom: 150,
+        
         alignItems:"center",
         textAlign:"center"
     },
@@ -70,6 +70,7 @@ const Search = (props) => {
         ()=>{
             if (isFirstLoad.current) {
                 handleSearch();
+                window.scrollTo(0, 0);
                 isFirstLoad.current=false;
             }
         }

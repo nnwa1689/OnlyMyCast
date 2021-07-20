@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
       minWidth: 275,
       marginTop: 100,
-      marginBottom: 150
+      marginBottom: 0,
     },
     bullet: {
       display: 'inline-block',
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme)=>({
                       vertical: 'top',
                       horizontal: 'left',
                     }}>
-                        <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
+                        <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover==="" ? "." : props.podcastCover} />
                     </Badge>
                   :
                   <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />

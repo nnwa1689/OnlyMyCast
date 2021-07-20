@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        marginBottom: 150,
+        
         alignItems:"center",
         textAlign:"center"
     },
@@ -81,8 +81,9 @@ const FansAdmin = (props) => {
         ()=>{
             if (isFirstLoad.current) {
                 getFansList();
+                window.scrollTo(0, 0);
+                isFirstLoad.current = false;
              }
-             isFirstLoad.current = false;
         }
     )
 
@@ -94,7 +95,7 @@ const FansAdmin = (props) => {
                 changeArr.push(
                     <ListItem key={value[0]}>
                     <ListItemAvatar>
-                    <Avatar alt={doc.data().name} src={doc.data().avatar}/>
+                    <Avatar alt={doc.data().name} src={doc.data().avatar==="" ? "." : doc.data().avatar}/>
                     </ListItemAvatar>
                     <ListItemText
                         primary={doc.data().name}

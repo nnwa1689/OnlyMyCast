@@ -241,9 +241,7 @@ const NavBar = (props) => {
                             <span style={ {fontSize: "24px", color: "#00A752", fontWeight: "bold"} }>u</span>
                             <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
                             <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
-                            </Link><br/>
-                            <Link href="https://www.notes-hz.com/">筆記長也NotesHazuya</Link>
-                            <br/><br/>
+                            </Link>
                         </Typography>
                       </ListItem>
 

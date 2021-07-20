@@ -20,7 +20,6 @@ import "firebase/storage";
 const useStyles = makeStyles((theme)=>({
     root: {
       marginTop: 30,
-      marginBottom: 150
     },
     bullet: {
       display: 'inline-block',
@@ -56,6 +55,7 @@ const Home = (props) => {
         if (isFirstLoad.current && props.user!=="") {
           getSubscribe();
           getSelfChannelData();
+          window.scrollTo(0, 0);
           isFirstLoad.current=false;
         }
       }

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        marginBottom: 150,
+        
         alignItems:"center",
         textAlign:"center"
     },
@@ -70,6 +70,7 @@ const Subreq = (props) => {
         ()=>{
             if (isFirstLoad.current) {
                 getReqList();
+                window.scrollTo(0, 0);
                 isFirstLoad.current=false;
             }
         }
@@ -109,7 +110,7 @@ const Subreq = (props) => {
                 changeArr.push(
                     <ListItem key={i[0]}>
                         <ListItemAvatar>
-                        <Avatar alt={data.name} src={data.avatar}/>
+                        <Avatar alt={data.name} src={data.avatar==="" ? "." : data.avatar}/>
                         </ListItemAvatar>
                         <ListItemText
                             primary={data.name}

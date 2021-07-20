@@ -1,5 +1,5 @@
 //react
-import React from 'react'
+import React, {useEffect} from 'react'
 //ui
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: theme.typography.fontWeightRegular,
     },
     bottom: {
-        marginBottom: 150
+        marginBottom: 0,
     }
   }));
 
@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
   const HelpCenter = (props) => {
 
     const classes = useStyles();
+    useEffect(
+        ()=>{
+            window.scrollTo(0, 0);
+        }
+    )
     return(
         <Container maxWidth="sm">
             <Card className={classes.root}>
@@ -166,6 +171,9 @@ const useStyles = makeStyles((theme) => ({
                         <Typography variant="body1">後製</Typography>
                         如果你使用 Mac 或是 iPhone，我們建議你使用 garageband 來錄製並後製你的節目。
                         如果你使用 Windows ，可以使用 Audacity 來後製你的節目。
+                        <br/><br/><Divider/><br/>
+                        <Typography variant="body1">GarageBand教學</Typography>
+                        如有需要，我們提供iOS以及MacOS上GarageBand的基本教學：https://www.notes-hz.com/post/228
                     </Typography>
                     </AccordionDetails>
                 </Accordion>

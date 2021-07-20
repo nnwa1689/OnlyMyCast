@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        marginBottom: 150,
+        
         alignItems:"center",
         textAlign:"center"
     },
@@ -73,6 +73,7 @@ const EditPodcast = (props) => {
                 if (props.user.userId !== "") {
                     getPodcastList();
                 }
+                window.scrollTo(0, 0);
                 isFirstLoad.current = false;
             }
         }

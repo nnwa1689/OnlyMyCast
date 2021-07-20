@@ -32,7 +32,9 @@ const useStyles = makeStyles((theme)=>({
     large: {
         width: theme.spacing(8),
         height: theme.spacing(8),
-        marginRight: theme.spacing(2)
+        marginRight: theme.spacing(2),
+        color: "#FFFFFF",
+        backgroundColor: "#FD3E49",
       },
   })
   );

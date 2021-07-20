@@ -33,32 +33,13 @@ const useStyles = makeStyles((theme)=>({
         alignItems:"center",
         textAlign:"center"
     },
-    appBar: {
-      top: 'auto',
-      bottom: 0,
-      alignItems:"center"
-    },
-    large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
-      marginBottom: theme.spacing(3),
-      marginTop:theme.spacing(3),
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
-      marginLeft:"auto",
-      marginRight:"auto"
-    },
-    orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
-      },
     button: {
       margin: theme.spacing(0),
     },
-    margin: {
-        marginBottom: theme.spacing(2),
-        marginTop:theme.spacing(2)
-      },
+    pink:{
+        color: "#FFFFFF",
+        backgroundColor: "#FD3E49",
+    }
   }));
 
 const Subreq = (props) => {
@@ -110,7 +91,7 @@ const Subreq = (props) => {
                 changeArr.push(
                     <ListItem key={i[0]}>
                         <ListItemAvatar>
-                        <Avatar alt={data.name} src={data.avatar==="" ? "." : data.avatar}/>
+                        <Avatar alt={data.name} src={data.avatar==="" ? "." : data.avatar} className={classes.pink}/>
                         </ListItemAvatar>
                         <ListItemText
                             primary={data.name}

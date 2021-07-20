@@ -9,14 +9,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import { deepOrange } from '@material-ui/core/colors';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import AttachmentIcon from '@material-ui/icons/Attachment';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -33,7 +30,6 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        
         alignItems:"center",
         textAlign:"center"
     },
@@ -42,30 +38,10 @@ const useStyles = makeStyles((theme)=>({
       bottom: 0,
       alignItems:"center"
     },
-    large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
-      marginBottom: theme.spacing(3),
-      marginTop:theme.spacing(3),
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
-      marginLeft:"auto",
-      marginRight:"auto"
-    },
-    orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
-      },
-    menuButton: {
-      margin: theme.spacing(1),
-    },
-    margin: {
-        marginBottom: theme.spacing(2),
-        marginTop:theme.spacing(2)
-      },
-    input: {
-        display: 'none',
-      },
+    pink:{
+        color: "#FFFFFF",
+        backgroundColor: "#FD3E49",
+    }
   }));
 
 
@@ -95,7 +71,7 @@ const FansAdmin = (props) => {
                 changeArr.push(
                     <ListItem key={value[0]}>
                     <ListItemAvatar>
-                    <Avatar alt={doc.data().name} src={doc.data().avatar==="" ? "." : doc.data().avatar}/>
+                    <Avatar alt={doc.data().name} src={doc.data().avatar==="" ? "." : doc.data().avatar} className={classes.pink}/>
                     </ListItemAvatar>
                     <ListItemText
                         primary={doc.data().name}

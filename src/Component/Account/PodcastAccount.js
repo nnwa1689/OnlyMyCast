@@ -88,19 +88,21 @@ const PodcastAccount = (props) => {
 
     useEffect(
         ()=>{
-            if (props.user.userId !== "" && isFirstLoad.current) {
-                firebase.firestore().collection("channel").doc(props.user.userId).get()
-                .then(
-                  (doc)=>{
-                    setChannelData(doc.data());
-                    setName(doc.data().name);
-                    setIntro(doc.data().intro);
-                    setAvatar(doc.data().icon);
-                  }
-                );
+            if (isFirstLoad.current) {
+                if (props.user.userId !== "") {
+                    firebase.firestore().collection("channel").doc(props.user.userId).get()
+                    .then(
+                      (doc)=>{
+                        setChannelData(doc.data());
+                        setName(doc.data().name);
+                        setIntro(doc.data().intro);
+                        setAvatar(doc.data().icon);
+                      }
+                    );
+                }
+                window.scrollTo(0, 0);
                 isFirstLoad.current = false;
             }
-            window.scrollTo(0, 0);
             setPageLoaded(true);
         }
     )

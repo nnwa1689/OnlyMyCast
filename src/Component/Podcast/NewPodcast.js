@@ -111,8 +111,10 @@ const useStyles = makeStyles((theme)=>({
 
     useEffect(
         ()=>{
-            if (isFirstLoad.current && activeStep===1) {
-                getDarft();
+            if (isFirstLoad.current) {
+                if (activeStep===1) {
+                    getDarft();
+                }
                 window.scrollTo(0, 0);
                 isFirstLoad.current = false;
             }

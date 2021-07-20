@@ -11,7 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import { deepOrange } from '@material-ui/core/colors';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -31,7 +30,6 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        
         alignItems:"center",
         textAlign:"center"
     },
@@ -45,22 +43,11 @@ const useStyles = makeStyles((theme)=>({
       height: theme.spacing(20),
       marginBottom: theme.spacing(3),
       marginTop:theme.spacing(3),
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
+      color: "#FFFFFF",
+      backgroundColor: "#FD3E49",
       marginLeft:"auto",
       marginRight:"auto"
     },
-    orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
-      },
-    menuButton: {
-      margin: theme.spacing(1),
-    },
-    margin: {
-        marginBottom: theme.spacing(2),
-        marginTop:theme.spacing(2)
-      },
   }));
 
 

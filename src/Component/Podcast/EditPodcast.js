@@ -97,7 +97,7 @@ const EditPodcast = (props) => {
                         <>
                         <ListItem key={doc.id} component="span">
                             <ListItemText>
-                                <Link component={RLink} to={"/podcastdetail/"+ props.user.userId + "/" + doc.id} variant="h6">{doc.data().title.length >= 20 ? doc.data().title.substring(0,19) + "......" : doc.data().title}</Link><br/>
+                                <Link component={RLink} to={"/podcastdetail/"+ props.user.userId + "/" + doc.id} variant="body1">{doc.data().title.length >= 30 ? doc.data().title.substring(0,29) + "......" : doc.data().title}</Link><br/>
                                 <Typography variant="body2" component="span">發佈於 {toDataTime(doc.data().updateTime.seconds)}</Typography>
                             </ListItemText>
                             <ListItemIcon>

@@ -11,7 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import { deepOrange } from '@material-ui/core/colors';
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
 import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -30,36 +29,19 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        
         alignItems:"center",
         textAlign:"center"
-    },
-    appBar: {
-      top: 'auto',
-      bottom: 0,
-      alignItems:"center"
     },
     large: {
       width: theme.spacing(20),
       height: theme.spacing(20),
       marginBottom: theme.spacing(3),
       marginTop:theme.spacing(3),
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
+      color: "#FFFFFF",
+      backgroundColor: "#FD3E49",
       marginLeft:"auto",
       marginRight:"auto"
     },
-    orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
-      },
-    menuButton: {
-      margin: theme.spacing(1),
-    },
-    margin: {
-        marginBottom: theme.spacing(2),
-        marginTop:theme.spacing(2)
-      },
   }));
 
 

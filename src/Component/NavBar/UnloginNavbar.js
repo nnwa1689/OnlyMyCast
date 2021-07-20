@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
-import Logo from '../../static/only-my-cast.svg'
+
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -70,7 +70,7 @@ const UnloginNavBar = (props) => {
               <Typography variant="h6">建立、收聽私人Podcast</Typography>
               <div className={classes.grow}/>
                 <Button href="/signin" size="medium" variant="contained" color="primary">
-                    登入
+                    開始
                 </Button>
           </Toolbar>
           </AppBar>

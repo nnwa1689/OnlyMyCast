@@ -76,6 +76,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.getContrastText(deepOrange[500]),
     backgroundColor: deepOrange[500],
   },
+  pink: {
+    color: "#FFFFFF",
+    backgroundColor: "#FD3E49",
+  },
 }));
 
 const NavBar = (props) => {
@@ -140,9 +144,8 @@ const NavBar = (props) => {
               </IconButton>
             }
               <Link component={RLink} to="/" >
-                <img alt="OnlyMyCast" src={LogoIcon} width="48" height="48" />
+                <img alt="OnlyMyCast" src={Logo} height="48" />
               </Link>
-              <Typography variant="body2">OnlyMyCast</Typography>
               <div className={classes.grow}/>
               <Fab component={RLink} to="/uploadpodcast" color="primary" aria-label="add" size="small" className={classes.menuButton} edge="end" >
                     <AddIcon />
@@ -166,7 +169,7 @@ const NavBar = (props) => {
                   onKeyDown={ ()=>{ setSideBar(false) } }>
                   <List>
                       <ListItem key="account">
-                          <ListItemIcon><Avatar alt={props.user.name} src={props.user.avatar==="" ? "." : props.user.avatar} className={ classes.orange } /></ListItemIcon>
+                          <ListItemIcon><Avatar alt={props.user.name} src={props.user.avatar==="" ? "." : props.user.avatar} className={ classes.pink } /></ListItemIcon>
                           <Typography variant="body2" component="span">
                             {props.user.name}
                             <br/>

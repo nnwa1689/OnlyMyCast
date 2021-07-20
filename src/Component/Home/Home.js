@@ -26,17 +26,6 @@ const useStyles = makeStyles((theme)=>({
       margin: '0 2px',
       transform: 'scale(0.8)',
     },
-    title: {
-      fontSize: 14,
-    },
-    pos: {
-      marginBottom: 12,
-    },
-    large: {
-        width: theme.spacing(10),
-        height: theme.spacing(10),
-        marginRight: theme.spacing(2)
-      },
     topCard: {
       marginTop: 100
     }

@@ -17,7 +17,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slider from '@material-ui/core/Slider';
-import { withStyles } from '@material-ui/styles';
+
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -36,6 +36,17 @@ const useStyles = makeStyles((theme)=>({
   },  
   menuButton: {
     margin: theme.spacing(1),
+  },
+  epTitleBox:{
+    width: "150px",
+    overflow: "hidden",
+    margin: theme.spacing(1),
+  },
+  epTitle:{
+    display: "inline-block",
+    whiteSpace: "nowrap",
+    animation: "floatText 15s infinite linear",
+    marginTop: "10px",
   },
 }));
 
@@ -56,8 +67,8 @@ const Player = (props) => {
         ()=>{
             setReady(false);
             setPlayState(true);
-            setSingleName(props.singleName.length >= 10 ? props.singleName.substring(0, 10) + "..." : props.singleName);
-            setPodcastName(props.podcastName.length >= 10 ? props.podcastName.substring(0, 10) + "..." : props.podcastName)
+            setSingleName(props.singleName);
+            setPodcastName(props.podcastName)
         },[props.url]
     )
 
@@ -95,6 +106,19 @@ const Player = (props) => {
         {
         (props.url !== undefined && props.url !== "") &&
         <>
+        <style>
+            {`
+                @keyframes floatText {
+                    from {
+                        transform: translateX(100%);
+                    }
+                    to {
+                        transform: translateX(-100%);
+                    }
+                }
+            }`
+            }
+        </style>
             <ReactPlayer 
                 ref={playerRef}
                 url={props.url}
@@ -105,7 +129,7 @@ const Player = (props) => {
                 height="0"
                 onProgress={(p)=>{
                     setPlaySec(p.playedSeconds);
-                    setLoadedRate(p.loaded)
+                    setLoadedRate(p.loaded);
                 }}
                 onDuration={(d)=>(setDuration(d))}
                 volume={1}
@@ -126,9 +150,11 @@ const Player = (props) => {
                 value={playSec!==undefined ? (playSec/duration)*100:0}/>}
                 <Toolbar variant="dense">
                     <Avatar style={{ marginTop: "10px" } } variant="rounded" className={classes.large} alt={podcastName} src={props.coverUrl} />
-                    <Typography style={{ marginTop: "10px" } } variant="subtitle2">
-                        {podcastName} - {singleName}
-                    </Typography>
+                    <div className={classes.epTitleBox}>
+                        <Typography className={classes.epTitle} variant="subtitle2">
+                            {podcastName} - {singleName}
+                        </Typography>     
+                    </div>
                     <Typography style={{ marginTop: "10px" } } variant="subtitle2">
                         ({ "剩" + parseInt(((parseInt(duration, 10) - parseInt(playSec, 10))/60)) + ":" + Math.ceil(((parseInt(duration, 10) - parseInt(playSec, 10))%60))})
                     </Typography>

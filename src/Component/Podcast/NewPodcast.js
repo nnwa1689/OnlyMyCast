@@ -102,21 +102,21 @@ const useStyles = makeStyles((theme)=>({
     const [introErr, setIntroErr] = useState(false);
     const [err, setErr] = useState(false);
     const [uploadStatu, setUploadStatu] = useState(0);
+        //0:init 1:suc 2:uploading 3:err
     const [uploadProgress, setUploadProgres] = useState();
     const [handleDarftCode, setHandleDarftCode] = useState('init');
     const duration = useRef("");
     const isFirstLoad = useRef(true);
-    //0:init 1:suc 2:uploading 3:err
     let audioFileRef = "";
 
     useEffect(
         ()=>{
             if (isFirstLoad.current) {
-                if (activeStep===1) {
-                    getDarft();
-                }
                 window.scrollTo(0, 0);
                 isFirstLoad.current = false;
+            }
+            if (activeStep===1 && handleDarftCode==="init") {
+                getDarft();
             }
         }
     )
@@ -459,7 +459,7 @@ const useStyles = makeStyles((theme)=>({
                         </>
                     }
                         <Snackbar open={handleDarftCode==="suc"} autoHideDuration={2000} onClose={()=>{setHandleDarftCode('init')}} message="您的草稿已經儲存"/>
-                        <Snackbar open={handleDarftCode==="get"} onClose={()=>{setHandleDarftCode('init')}} autoHideDuration={2000} message="您的草稿已經還原"/>
+                        <Snackbar open={handleDarftCode==="get"} onClose={()=>{setHandleDarftCode('fin')}} autoHideDuration={2000} message="您的草稿已經還原"/>
                     </CardContent>
                 </Card>
             </Container>

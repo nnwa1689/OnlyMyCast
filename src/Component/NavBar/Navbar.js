@@ -39,50 +39,50 @@ import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
 
 const useStyles = makeStyles((theme) => ({
-  grow: {
-    flexGrow: 1,
-  },
-  appBar: {
-    boxShadow: '0px 0px 0px 0px',
-  },
-  menuButton: {
-    marginRight: theme.spacing(1),
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+    grow: {
+      flexGrow: 1,
     },
-    margin: 0,
-    width: 'auto',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 1),
-    // vertical padding + font size from searchIcon
-  }, 
-  list: {
-    width: 250,
-  },
-  fullList: {
-    width: 'auto',
-  },
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-  },
-  orange: {
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500],
-  },
-  pink: {
-    color: "#FFFFFF",
-    backgroundColor: "#FD3E49",
-  },
+    appBar: {
+
+    },
+    menuButton: {
+      marginRight: theme.spacing(1),
+    },
+    search: {
+      position: 'relative',
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: fade(theme.palette.common.white, 0.15),
+      '&:hover': {
+        backgroundColor: fade(theme.palette.common.white, 0.25),
+      },
+      margin: 0,
+      width: 'auto',
+    },
+    inputRoot: {
+      color: 'inherit',
+    },
+    inputInput: {
+      padding: theme.spacing(1, 1, 1, 1),
+      // vertical padding + font size from searchIcon
+    }, 
+    list: {
+      width: 250,
+    },
+    fullList: {
+      width: 'auto',
+    },
+    large: {
+      width: theme.spacing(7),
+      height: theme.spacing(7),
+    },
+    orange: {
+      color: theme.palette.getContrastText(deepOrange[500]),
+      backgroundColor: deepOrange[500],
+    },
+    pink: {
+      color: "#FFFFFF",
+      backgroundColor: "#FD3E49",
+    },
 }));
 
 const NavBar = (props) => {

@@ -37,9 +37,11 @@ import "firebase/storage";
 
 const useStyles = makeStyles((theme)=>({
     root: {
-      minWidth: 275,
-      marginTop: 100,
-      marginBottom: 0,
+        minWidth: 275,
+        marginTop: 100,
+        borderRadius: "10px",
+        alignItems:"center",
+        textAlign:"center"
     },
     bullet: {
       display: 'inline-block',

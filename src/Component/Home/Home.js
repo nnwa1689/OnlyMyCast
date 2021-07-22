@@ -20,15 +20,13 @@ import "firebase/storage";
 const useStyles = makeStyles((theme)=>({
     root: {
       marginTop: 30,
+      borderRadius: "10px",
     },
     bullet: {
       display: 'inline-block',
       margin: '0 2px',
       transform: 'scale(0.8)',
     },
-    topCard: {
-      marginTop: 100
-    }
   })
   );
 
@@ -112,7 +110,7 @@ const Home = (props) => {
   } else {
     return (
       <Container maxWidth="md">
-          <Card className={classes.topCard}>
+          <Card className={classes.root} style={{marginTop: 100}}>
             <CardContent>
             <Typography variant="h5" component="h1">
                   <CastIcon/>你的電台

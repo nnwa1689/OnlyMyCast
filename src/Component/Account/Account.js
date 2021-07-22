@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        
+        borderRadius: "10px",
         alignItems:"center",
         textAlign:"center"
     },

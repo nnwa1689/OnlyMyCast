@@ -132,7 +132,7 @@ const FansAdmin = (props) => {
     } else {
         return(
             <>
-                <Container maxWidth="sm">
+                <Container maxWidth="md">
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography variant="h5" component="h1">追蹤管理</Typography>

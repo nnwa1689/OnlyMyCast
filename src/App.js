@@ -114,7 +114,7 @@ const App = (props) => {
         main: "#FD3E49",
     },
     secondary: {
-        main: "#424242",
+        main: "#363636",
     },
     },
     typography: {

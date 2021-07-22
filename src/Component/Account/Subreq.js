@@ -140,7 +140,7 @@ const Subreq = (props) => {
 
     if (props.user.userId==="") {
         return(
-            <Container maxWidth="sm">
+            <Container maxWidth="md">
                 <Card className={classes.root}>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>
@@ -165,7 +165,7 @@ const Subreq = (props) => {
             </Container>
         )} else {
             return(
-                <Container maxWidth="sm">
+                <Container maxWidth="md">
                     <Card className={classes.root}>
                         <CardContent>
                         <Typography variant="h5" component="h1">追蹤審核</Typography>

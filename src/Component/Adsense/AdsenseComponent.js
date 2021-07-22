@@ -29,7 +29,7 @@ const AdsenseComponent = () => {
     )
 
     return(
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
             <Card className={classes.root}>
                 <CardContent>
                     <ins className="adsbygoogle"

@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme)=>({
     )
     return (
         <div>
-            <ListItem component={RLink} to={"/podcast/" + props.podcastId} alignItems="flex-start">
+            <ListItem button component={RLink} to={"/podcast/" + props.podcastId} alignItems="flex-start">
                 <ListItemAvatar>
                   { haveNewEP ? 
                     <Badge
@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme)=>({
                         component="span"
                         variant="body1"
                         color="textPrimary">
-                        <Link component={RLink} to={"/podcast/" + props.podcastId}>{props.podcastName}</Link> 
+                        <Link>{props.podcastName}</Link> 
                     </Typography>
                     <br/>
                     <Typography

@@ -17,7 +17,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 const PodcastspList = (props)=>{
 
-    const [title, setTitle] = useState( props.podTitle.length >= 30 ? props.podTitle.substring(0,29) + "⋯" : props.podTitle);
+    const [title, setTitle] = useState( props.podTitle.length >= 35 ? props.podTitle.substring(0,34) + "⋯" : props.podTitle);
 
     const toDataTime = (sec)=>{
         var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
@@ -29,17 +29,20 @@ const PodcastspList = (props)=>{
     
     return(
     <>
-        <ListItem>
+        <ListItem button component={RLink} to={"/podcastdetail/" + props.userId + "/" + props.podId}>
             <ListItemText>
-                <Link component={RLink} to={"/podcastdetail/" + props.userId + "/" + props.podId} variant="body1">
-                    {title}</Link><br/>
-                <Typography variant="subtitle2" component="span">
-                    <ListItemIcon><EventIcon fontSize="small"/>
+                <Link variant="body1">
+                    {title}</Link>
+                    <br/>
+                    <Typography variant="subtitle2" component="span">
+                    <ListItemIcon><EventIcon/>
                     {toDataTime(props.updateTime.seconds)}</ListItemIcon>
+                </Typography>
+                <Typography variant="subtitle2" component="span">
                     &nbsp;
-                    <ListItemIcon><AccessTimeIcon fontSize="small"/>
-                    {props.duration}
-                    </ListItemIcon>
+                        <ListItemIcon><AccessTimeIcon/>
+                        {props.duration}
+                        </ListItemIcon>
                 </Typography>
             </ListItemText>
             <ListItemSecondaryAction>
@@ -51,9 +54,9 @@ const PodcastspList = (props)=>{
                     data-titlename={props.podTitle}
                     data-podcastname={props.channelName}
                     onClick={props.setPlayer}
-                    size="small"
+                    edge="end"
                     >
-                        <PlayArrowIcon/>
+                        <PlayArrowIcon />
                     </IconButton>
             </ListItemSecondaryAction>
         </ListItem>

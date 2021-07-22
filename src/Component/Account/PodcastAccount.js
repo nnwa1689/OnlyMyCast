@@ -235,7 +235,7 @@ const PodcastAccount = (props) => {
             <>
             {
                 pageLoaded ?
-                    <Container maxWidth="sm">
+                    <Container maxWidth="md">
                     <Card className={classes.root}>
                         <CardContent>
                             { props.user.userId === "" ? 
@@ -325,9 +325,9 @@ const PodcastAccount = (props) => {
                                         label="電台URL"
                                         defaultValue={"https://onlymycast.notes-hz.com/webapp/podcast/" + userId}
                                         variant="outlined"
-                                        style={{width: "60%"}}
+                                        style={{width: "70%"}}
                                         />
-                                        <Button style={{width: "40%"}} color="primary" variant="outlined" onClick={()=>{handleCopyUrl("https://onlymycast.notes-hz.com/webapp/podcast/" + userId)}}>複製</Button>
+                                        <Button style={{width: "30%"}} color="primary" variant="outlined" onClick={()=>{handleCopyUrl("https://onlymycast.notes-hz.com/webapp/podcast/" + userId)}}>複製</Button>
                                 </ButtonGroup><br/>
                                 <Typography variant="body2" component="span">向你的朋友分享這個網址，讓他們來收聽你的電台</Typography><br/>
                                 <form noValidate autoComplete="off">
@@ -350,7 +350,7 @@ const PodcastAccount = (props) => {
                                     <label htmlFor="contained-button-file">
                                         <Button disabled={handleCode==="loading"} variant="contained" size="large" fullWidth color="primary" component="span">
                                             <AttachmentIcon />
-                                            { filename === "" ? "上傳ICON" : filename }
+                                            { filename === "" ? "上傳頻道封面" : filename }
                                         </Button>
                                         <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
                                     </label>

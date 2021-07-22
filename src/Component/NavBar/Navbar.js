@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
+  appBar: {
+    boxShadow: '0px 0px 0px 0px',
+  },
   menuButton: {
     marginRight: theme.spacing(1),
   },
@@ -115,7 +118,7 @@ const NavBar = (props) => {
 
     return (
       <div>
-          <AppBar color="secondary" position="fixed">
+          <AppBar className={classes.appBar} color="secondary" position="fixed">
           <Toolbar>
             { reqCount > 0 ?
                 <IconButton

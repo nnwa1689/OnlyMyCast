@@ -128,7 +128,7 @@ const PodcastDetails = (props) => {
       return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
       return(
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           { subStatu===1 || props.user.userId === props.match.params.id ?
               <Card className={classes.root}>
                 <CardContent>

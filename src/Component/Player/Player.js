@@ -17,6 +17,10 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slider from '@material-ui/core/Slider';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -28,7 +32,7 @@ const useStyles = makeStyles((theme)=>({
   appBar: {
     top: 'auto',
     bottom: 0,
-    alignItems:"center"
+    alignItems:"center",
   },
   large: {
     width: theme.spacing(5),
@@ -46,8 +50,30 @@ const useStyles = makeStyles((theme)=>({
     display: "inline-block",
     whiteSpace: "nowrap",
     animation: "floatText 15s infinite linear",
-    marginTop: "10px",
   },
+  expandPanel:{
+      border: 0,
+      margin: 2,
+      boxShadow: "none",
+      background: "none",
+      padding: 2,
+      '&.MuiAccordion-root:before': {
+        height: 0,
+      },
+      alignItems:"center",
+  },
+  expandDetail:{
+    margin: 0,
+    padding: 0,
+    alignItems:"center",
+  },
+    expandAccordionSummary: {
+        alignItems:"center",
+        '&.Mui-expanded': {
+            minHeight: 48,
+            maxHeight: 48,
+        },
+    }
 }));
 
 
@@ -147,19 +173,28 @@ const Player = (props) => {
                 onChangeCommitted={(e, newValue)=>{setPlayerOnSeek(e, newValue)}} 
                 defaultValue={0} 
                 onChange={(e, newValue)=>{setPlayerSec(e, newValue)}} 
-                value={playSec!==undefined ? (playSec/duration)*100:0}/>}
+                value={playSec!==undefined ? (playSec/duration)*100:0}/>
+            }
+
+                <Accordion elevation={0} className={classes.expandPanel}>
+                <AccordionSummary
+                expandIcon={<ExpandLessIcon />}
+                className={classes.expandAccordionSummary}
+                >
                 <Toolbar variant="dense">
-                    <Avatar style={{ marginTop: "10px" } } variant="rounded" className={classes.large} alt={podcastName} src={props.coverUrl} />
+                    <Avatar variant="rounded" className={classes.large} alt={podcastName} src={props.coverUrl} />
                     <div className={classes.epTitleBox}>
                         <Typography className={classes.epTitle} variant="subtitle2">
                             {podcastName} - {singleName}
                         </Typography>     
                     </div>
-                    <Typography style={{ marginTop: "10px" } } variant="subtitle2">
+                    <Typography variant="subtitle2">
                         ({ "剩" + parseInt(((parseInt(duration, 10) - parseInt(playSec, 10))/60)) + ":" + Math.ceil(((parseInt(duration, 10) - parseInt(playSec, 10))%60))})
                     </Typography>
                 </Toolbar>
-                <Toolbar variant="dense">
+                </AccordionSummary>
+                <AccordionDetails className={classes.expandDetail}>
+                <Toolbar variant="dense" style={{margin: "auto",}}>
                     <Tooltip onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
                         <IconButton className={classes.menuButton} edge="end" color="inherit">
                             <Replay10Icon />
@@ -191,8 +226,13 @@ const Player = (props) => {
                         <MenuItem value={1}>x1.0</MenuItem>
                         <MenuItem value={1.5}>x1.5</MenuItem>
                         <MenuItem value={2.0}>x2.0</MenuItem>
+                        <MenuItem value={3.0}>x3.0</MenuItem>
                     </Select>                    
                 </Toolbar>
+                </AccordionDetails>
+            </Accordion>
+
+                
             </AppBar>
         </>
         }

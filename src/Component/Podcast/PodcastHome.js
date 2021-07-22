@@ -217,7 +217,7 @@ const PodcastHome = (props) => {
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
-            <Container maxWidth="sm">
+            <Container maxWidth="md">
                 <Card className={classes.root}>
                     <CardContent>
                     <Avatar variant="rounded" alt={name} src={avatar==="" ? "." : avatar} className={classes.large} />

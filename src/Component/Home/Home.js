@@ -111,7 +111,7 @@ const Home = (props) => {
     return(<CircularProgress style={{marginTop: "25%"}} />);
   } else {
     return (
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
           <Card className={classes.topCard}>
             <CardContent>
             <Typography variant="h5" component="h1">

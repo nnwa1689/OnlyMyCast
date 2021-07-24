@@ -11,7 +11,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
-import { deepOrange } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Link from '@material-ui/core/Link';
@@ -37,20 +36,6 @@ const useStyles = makeStyles((theme)=>({
       bottom: 0,
       alignItems:"center"
     },
-    large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
-      marginBottom: theme.spacing(3),
-      marginTop:theme.spacing(3),
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
-      marginLeft:"auto",
-      marginRight:"auto"
-    },
-    orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
-      },
     menuButton: {
       margin: theme.spacing(1),
     },
@@ -95,9 +80,9 @@ const EditPodcast = (props) => {
                 for (var doc of e.docs) {
                     changeArr.push(
                         <>
-                        <ListItem key={doc.id} component="span">
+                        <ListItem button component={RLink} to={"/podcastdetail/"+ props.user.userId + "/" + doc.id} key={doc.id}>
                             <ListItemText>
-                                <Link component={RLink} to={"/podcastdetail/"+ props.user.userId + "/" + doc.id} variant="body1">{doc.data().title.length >= 30 ? doc.data().title.substring(0,29) + "......" : doc.data().title}</Link><br/>
+                                <Link variant="body1">{doc.data().title.length >= 30 ? doc.data().title.substring(0,29) + "......" : doc.data().title}</Link><br/>
                                 <Typography variant="body2" component="span">發佈於 {toDataTime(doc.data().updateTime.seconds)}</Typography>
                             </ListItemText>
                             <ListItemIcon>

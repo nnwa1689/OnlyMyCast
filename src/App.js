@@ -27,6 +27,7 @@ import UnloginNavBar from './Component/NavBar/UnloginNavbar';
 import FansAdmin from './Component/Account/FansAdmin';
 import HelpCenter from './Component/HelpCenter/HelpCenter';
 import ForgetPassword from './Component/Account/ForgetPassword';
+import EmbedChannel from './Component/Podcast/EmbedChannel';
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -34,8 +35,10 @@ import Typography from '@material-ui/core/Typography';
 
 
 const App = (props) => {
+  const allowUnloginPath = ['podcast', 'embed'];
+  const removeNavbarPath = ['embed'];
+  const removeAdsensePath = ['embed'];
 
-  const isFirstLoad = useRef(true);
   const [isAuth, setAuth] = useState(0);
   const [playerUrl, setPlayerUrl] = useState();
   const [playerTitle, setPlayerTitle] = useState("");
@@ -49,6 +52,7 @@ const App = (props) => {
   const userEmail = useRef("");
 
   var basename = "/";
+  var basenameIndex = 1;
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig);  
@@ -56,11 +60,8 @@ const App = (props) => {
 
   //產品環境
   if (process.env.NODE_ENV !== "development") {
-    if (isFirstLoad.current) {
-      //const appCheck = firebase.appCheck();
-      //appCheck.activate('6Lfs9TQbAAAAANxrKWGaZgx71yy6PHZ26t5CGE4h');
-    }
-    basename = "/webapp/"
+    basename = "/webapp/";
+    basenameIndex = 2;
   }
 
   document.body.style.backgroundColor = "#f7f7f7";
@@ -96,7 +97,7 @@ const App = (props) => {
 
   useEffect(
     ()=>{  
-      setPathname(window.location.pathname.split('/')[2]);
+      setPathname(window.location.pathname.split('/')[basenameIndex]);
       setInApp(isInApp());
     }
   )
@@ -175,17 +176,23 @@ const App = (props) => {
                         <EditPodcastDetails {...props} user={userData} />
                       )} 
                   />
+                  <Route path="/embed/:id" 
+                    render={(props) => (
+                        <EmbedChannel {...props} user={userData} />
+                      )} 
+                  />
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/help" component={HelpCenter} />
                   <Route exact path="/forgetpassword" component={ForgetPassword} />
                   { /* 如果頁面是廣播首頁則允許沒有登入預覽 */
-                    !isAuth && pathname !== "podcast" && <Redirect to='/signin'/>
+                    !isAuth && (!allowUnloginPath.includes(pathname)) && <Redirect to='/signin'/>
                   }
                   { !isAuth && pathname ==="podcast" && <UnloginNavBar></UnloginNavBar>}
-                  { isAuth && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }
+                  { isAuth && (!removeNavbarPath.includes(pathname)) && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }
+                  
                   {/*Google Adsense*/}
-                  <AdsenseComponent/>
+                  { !(removeAdsensePath.includes(pathname)) && <AdsenseComponent/>}
                 </>
                 :
                 <LinearProgress style={{ wdith: 100 }}/>

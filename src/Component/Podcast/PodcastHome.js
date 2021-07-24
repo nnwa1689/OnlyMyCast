@@ -140,8 +140,6 @@ const PodcastHome = (props) => {
                 setName(doc.data().name);
                 setIntro(doc.data().intro);
                 setAvatar(doc.data().icon);
-              } else {
-
               }
           }
         );

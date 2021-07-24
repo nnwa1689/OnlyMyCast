@@ -6,13 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import { deepOrange } from '@material-ui/core/colors';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AttachmentIcon from '@material-ui/icons/Attachment';
@@ -24,11 +23,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import AppBar from '@material-ui/core/AppBar';
+import SwipeableViews from 'react-swipeable-views';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+import { Divider } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -46,19 +50,15 @@ const useStyles = makeStyles((theme)=>({
       alignItems:"center"
     },
     large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
-      marginBottom: theme.spacing(3),
-      marginTop:theme.spacing(3),
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
-      marginLeft:"auto",
-      marginRight:"auto"
+        width: theme.spacing(20),
+        height: theme.spacing(20),
+        marginBottom: theme.spacing(3),
+        marginTop:theme.spacing(3),
+        color: "#FFFFFF",
+        backgroundColor: "#FD3E49",
+        marginLeft:"auto",
+        marginRight:"auto"
     },
-    orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
-      },
     menuButton: {
       margin: theme.spacing(1),
     },
@@ -69,10 +69,35 @@ const useStyles = makeStyles((theme)=>({
     input: {
         display: 'none',
       },
+    tabBar: {
+        marginBottom: 10,
+        boxShadow : "none",
+    }
   }));
 
+const TabPanel = (props) => {
+    const { children, value, index, ...other } = props;
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`full-width-tabpanel-${index}`}
+        aria-labelledby={`full-width-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <div p={0}>
+            {children}
+          </div>
+        )}
+      </div>
+    );
+  }
+  
+  
 const PodcastAccount = (props) => {
     const classes = useStyles();
+    const theme = useTheme();
     const [pageLoaded, setPageLoaded] = useState(false);
     const [name, setName] = useState("");
     const [avatar,setAvatar] = useState("");
@@ -86,6 +111,10 @@ const PodcastAccount = (props) => {
     const [userIdErr, setUserIdErr] = useState(false);
     const [introErr, setIntroErr] = useState(false);
     const isFirstLoad = useRef(true);
+    const [embedCode, setEmbedCode] = useState();
+    const [showCopyMsg, setShowCopyMsg] = useState(false);
+
+    const [tabValue, setTabValue] = useState(0);
 
     useEffect(
         ()=>{
@@ -98,6 +127,9 @@ const PodcastAccount = (props) => {
                         setName(doc.data().name);
                         setIntro(doc.data().intro);
                         setAvatar(doc.data().icon);
+                        setEmbedCode(
+                            `<iframe frameborder="0" height="200px" style="width:100%;max-width:660px;overflow:hidden;" src="https://onlymycast.notes-hz.com/webapp/embed/` + props.user.userId + `"></iframe>`
+                        )
                       }
                     );
                 }
@@ -106,8 +138,16 @@ const PodcastAccount = (props) => {
             }
             setPageLoaded(true);
         }
-    )
+    );
 
+    const handleChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+    
+    const handleChangeIndex = (index) => {
+        setTabValue(index);
+    };
+    
     const handleCreateChannel = () => {
         setHandleCode('loading');
         setNameErr(false);
@@ -222,11 +262,19 @@ const PodcastAccount = (props) => {
     const handleCopyUrl = (url)=> {
         navigator.clipboard.writeText(url)
         .then(() => {
-        console.log("Text copied to clipboard...")
-    })
-        .catch(err => {
+            setShowCopyMsg(true);
+        }).catch(err => {
         console.log('Something went wrong', err);
-    })
+        })
+    }
+
+    const handleCopyEmbedCode = () => {
+        navigator.clipboard.writeText(embedCode)
+        .then(() => {
+            setShowCopyMsg(true);
+        }).catch(err => {
+            //
+        })
     }
 
     if (name===undefined){
@@ -237,10 +285,9 @@ const PodcastAccount = (props) => {
             {
                 pageLoaded ?
                     <Container maxWidth="md">
-                    <Card className={classes.root}>
-                        <CardContent>
-                            { props.user.userId === "" ? 
-                            <>
+                        { props.user.userId === "" ? 
+                            <Card className={classes.root}>
+                                <CardContent>
                                 <Typography variant="h5" component="h1">建立電台</Typography>
                                 <Typography variant="body1" component="span">建立屬於您的私人電台<br/>這裡的資訊將於電台首頁公布</Typography>
                                 <Avatar variant="rounded" src={avatar} className={classes.large} />
@@ -314,76 +361,139 @@ const PodcastAccount = (props) => {
                                     <br/><br/>
                                     <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={()=>{window.location.reload()}} message="您的頻道已經建立"/>
                                 </form>
-                            </>
+                                </CardContent>
+                            </Card>
                             :
                             <>
-                                <Typography variant="h5" component="h1">編輯電台資訊</Typography>
-                                <Typography variant="body1" component="span">更新您的電台資訊<br/>這裡的資訊將於電台首頁公布</Typography>
-                                <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
-                                <Typography variant="body1" component="span">電台ID：{userId}</Typography><br/><br/>
-                                <ButtonGroup size="small" fullWidth>
-                                    <TextField
-                                        label="電台URL"
-                                        defaultValue={"https://onlymycast.notes-hz.com/webapp/podcast/" + userId}
-                                        variant="outlined"
-                                        style={{width: "70%"}}
-                                        />
-                                        <Button style={{width: "30%"}} color="primary" variant="outlined" onClick={()=>{handleCopyUrl("https://onlymycast.notes-hz.com/webapp/podcast/" + userId)}}>複製</Button>
-                                </ButtonGroup><br/>
-                                <Typography variant="body2" component="span">向你的朋友分享這個網址，讓他們來收聽你的電台</Typography><br/>
-                                <form noValidate autoComplete="off">
-                                <FormControl fullWidth className={classes.margin}>
-                                    <input
-                                        accept="image/jpge, image/jpg, image/png"
-                                        className={classes.input}
-                                        id="contained-button-file"
-                                        multiple
-                                        type="file"
-                                        startIcon={<AttachmentIcon />}
-                                        disabled={handleCode==="loading"}
-                                        onChange={(e)=>{
-                                            if (e.target.files.length >= 1) {
-                                                setFilename(e.target.files[0].name);
-                                                setFileBit(e.target.files[0])
-                                            }
-                                        }}
-                                    />
-                                    <label htmlFor="contained-button-file">
-                                        <Button disabled={handleCode==="loading"} variant="contained" size="large" fullWidth color="primary" component="span">
-                                            <AttachmentIcon />
-                                            { filename === "" ? "上傳頻道封面" : filename }
-                                        </Button>
-                                        <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
-                                    </label>
-                                    </FormControl>
-                                <FormControl fullWidth className={classes.margin}>
-                                    <TextField disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="電台名稱" variant="outlined" />
-                                </FormControl>
-                                <FormControl fullWidth className={classes.margin}>
-                                <InputLabel>電台簡介</InputLabel>
-                                <OutlinedInput id="component-outlined" style={{display:"none"}}/>
-                                <br/>
-                                <MDEditor
-                                    value={intro}
-                                    onChange={setIntro}
-                                />
-                                </FormControl>     
-                                <br/> <br/> 
-                                <Button
-                                        variant="contained"
-                                        color="primary"
-                                        size="large"
-                                        className={classes.button}
-                                        onClick={handleUpdateChannel}
-                                        disabled={handleCode==="loading"}
-                                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                        儲存設定
-                                    </Button>
-                                    <br/><br/>
-                                    <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={()=>{setHandleCode("init")}} message="您的變更已經儲存"/>
-                                </form>
-                                </>
+                            <Card className={classes.root}>
+                                <CardContent>
+                                <AppBar className={classes.tabBar} position="static" color="default">
+                                    <Tabs
+                                    value={tabValue}
+                                    onChange={handleChange}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    variant="fullWidth"
+                                    aria-label="full width tabs example"
+                                    >
+                                    <Tab label="編輯" />
+                                    <Tab label="推廣" />
+                                    </Tabs>
+                                </AppBar>
+                                <SwipeableViews
+                                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                    index={tabValue}
+                                    onChangeIndex={handleChangeIndex}>
+                                    <TabPanel value={tabValue} index={0}>
+                                            <Typography variant="h5" component="h1">編輯電台資訊</Typography>
+                                            <Typography variant="body1" component="span">更新您的電台資訊<br/>這裡的資訊將於電台首頁公布</Typography>
+                                            <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                                            <form noValidate autoComplete="off">
+                                            <FormControl fullWidth className={classes.margin}>
+                                                <input
+                                                    accept="image/jpge, image/jpg, image/png"
+                                                    className={classes.input}
+                                                    id="contained-button-file"
+                                                    multiple
+                                                    type="file"
+                                                    startIcon={<AttachmentIcon />}
+                                                    disabled={handleCode==="loading"}
+                                                    onChange={(e)=>{
+                                                        if (e.target.files.length >= 1) {
+                                                            setFilename(e.target.files[0].name);
+                                                            setFileBit(e.target.files[0])
+                                                        }
+                                                    }}
+                                                />
+                                                <label htmlFor="contained-button-file">
+                                                    <Button disabled={handleCode==="loading"} variant="contained" size="large" fullWidth color="primary" component="span">
+                                                        <AttachmentIcon />
+                                                        { filename === "" ? "上傳頻道封面" : filename }
+                                                    </Button>
+                                                    <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
+                                                </label>
+                                                </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                                <TextField disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="電台名稱" variant="outlined" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                            <InputLabel>電台簡介</InputLabel>
+                                            <OutlinedInput id="component-outlined" style={{display:"none"}}/>
+                                            <br/>
+                                            <MDEditor
+                                                value={intro}
+                                                onChange={setIntro}
+                                            />
+                                            </FormControl>     
+                                            <br/> <br/> 
+                                            <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    size="large"
+                                                    className={classes.button}
+                                                    onClick={handleUpdateChannel}
+                                                    disabled={handleCode==="loading"}
+                                                    startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                                    儲存設定
+                                                </Button>
+                                                <br/><br/>
+                                            </form>
+                                    </TabPanel>
+                                    <TabPanel value={tabValue} index={1}>
+                                            <Typography variant="h5" component="h1">推廣電台</Typography>
+                                            <Typography variant="body1" component="span">把電台和朋友一起分享:))</Typography>
+                                            <br/><br/><Divider/><br/>
+                                            <Typography variant="h5" component="span">透過電台ID</Typography><br/><br/>
+                                            <Typography variant="h4" component="span">{userId} </Typography><br/><br/>
+                                            <Typography variant="body1" component="span">將電台ID分享給朋友，朋友可以透過搜尋來找到你的電台。</Typography>
+                                            <br/><br/>
+                                            <Divider/>
+                                            <br/>
+                                            <Typography variant="h5" component="span">透過URL</Typography><br/><br/>
+                                            <ButtonGroup size="large">
+                                                <TextField
+                                                    label="電台URL"
+                                                    defaultValue={"https://onlymycast.notes-hz.com/webapp/podcast/" + userId}
+                                                    variant="outlined"
+                                                    />
+                                                    <Button color="primary" variant="outlined" onClick={()=>{handleCopyUrl("https://onlymycast.notes-hz.com/webapp/podcast/" + userId)}}>複製</Button>
+                                            </ButtonGroup><br/><br/>
+                                            <Typography variant="body1" component="span">向你的朋友分享這個網址，讓他們來收聽你的電台</Typography><br/>
+                                            <br/><br/>
+                                            <Divider/>
+                                            <br/>
+                                            <Typography variant="h5" component="span">透過嵌入貼紙</Typography><br/><br/>
+                                            <Typography variant="body1" component="span">透過程式碼，將電台資訊嵌入在個人網站上面</Typography><br/>
+                                            <br/>
+                                            <iframe frameborder="0" height="200px" style={{width:"100%", maxWidth:"660px", overflow:"hidden"}} src={"https://onlymycast.notes-hz.com/webapp/embed/" + props.user.userId}></iframe>
+                                            <br/><br/>
+                                            <TextField
+                                                label="程式碼"
+                                                multiline
+                                                rows={4}
+                                                defaultValue={embedCode}
+                                                variant="outlined"
+                                                fullWidth
+                                            />
+                                            <br/><br/>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="large"
+                                                className={classes.button}
+                                                onClick={handleCopyEmbedCode}
+                                                >
+                                                複製程式碼
+                                            </Button>
+                                            <br/><br/>
+                                    </TabPanel>
+                                </SwipeableViews>                                            
+                                </CardContent>
+                            </Card>
+                            </>
                         }
+                        <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={()=>{setHandleCode("init")}} message="您的變更已經儲存"/>
+                        <Snackbar open={showCopyMsg===true} autoHideDuration={3000} onClose={()=>{setShowCopyMsg(false)}} message="已經複製到剪貼簿"/>
                         <Dialog
                             open={introErr!==false || nameErr!==false}
                             onClose={()=>{setIntroErr(false);setNameErr(false)}}
@@ -402,8 +512,6 @@ const PodcastAccount = (props) => {
                             </Button>
                             </DialogActions>
                         </Dialog>
-                        </CardContent>
-                    </Card>
                 </Container>
                 :
                 <CircularProgress />

@@ -340,7 +340,7 @@ const Account = (props) => {
                         </div>
                     </CardContent>
                 </Card>
-                <Snackbar open={handleCode==="suc"} autoHideDuration={6000} onClose={props.dataupdate} message="您的變更已經儲存"/>
+                <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={props.dataupdate} message="您的變更已經儲存"/>
             </Container>
         );
     }

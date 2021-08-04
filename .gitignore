@@ -24,3 +24,4 @@ yarn-error.log*
 
 src/FirebaseConfig
 src/fonts
+public/firebase-messaging-sw.js

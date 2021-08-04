@@ -215,7 +215,7 @@ const NavBar = (props) => {
                   </List>
                   <Divider />
                   <List>
-                    <ListItem button component={RLink} to="/help" key="help">
+                    <ListItem button target="_blank" component={Link} href="https://nnwa1689.gitbook.io/onlymycast-helpcenter/" key="help">
                             <ListItemIcon>
                                     <HelpIcon />
                             </ListItemIcon>

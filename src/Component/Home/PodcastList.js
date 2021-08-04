@@ -58,7 +58,8 @@ const useStyles = makeStyles((theme)=>({
                 <ListItemAvatar>
                   { haveNewEP ? 
                     <Badge
-                    color="primary" variant="dot"
+                    color="primary"
+                    badgeContent={"新單集"}
                     anchorOrigin={{
                       vertical: 'top',
                       horizontal: 'left',

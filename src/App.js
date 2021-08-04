@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/messaging";
 import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
 //component
 import AdsenseComponent from './Component/Adsense/AdsenseComponent';
@@ -32,13 +33,14 @@ import EmbedChannel from './Component/Podcast/EmbedChannel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+//Other
+import Cookies from 'universal-cookie';
 
 
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed'];
   const removeNavbarPath = ['embed'];
   const removeAdsensePath = ['embed'];
-
   const [isAuth, setAuth] = useState(0);
   const [playerUrl, setPlayerUrl] = useState();
   const [playerTitle, setPlayerTitle] = useState("");
@@ -50,21 +52,28 @@ const App = (props) => {
   const [inApp, setInApp] = useState(false);
   const userUid = useRef("");
   const userEmail = useRef("");
-
-  var basename = "/";
-  var basenameIndex = 1;
+  const isFirstLoading = useRef(true);
+  const cookies = new Cookies();
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig);  
   }
 
-  //產品環境
-  if (process.env.NODE_ENV !== "development") {
+  //開發環境
+  var basename = "/";
+  var basenameIndex = 1;
+  var fcmVapidKey = 'BBPvT3efBxPguqWhRsn349AGlOkCa5KoGECtVQqOrcAMgDUKEZebLORp5v_KJ6kgVsWGqLvu-TqVG8wTgDA34RY';
+
+  if (process.env.NODE_ENV !== "development") {  //產品環境
     basename = "/webapp/";
     basenameIndex = 2;
+    fcmVapidKey = 'BF1eW1y0DHQl40_Vz1IPqvxKRlOiSr98s2ZlUWDdHT6-VPxMIPXPrWxtCii4g8cdEBSMX37YB1suR85fGjtxpHI';
+  } else {
+    // 僅在本機測試環境啟用，如產品環境使用 src/service-worker.js 提供 FCM 功能
+    const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`;
+    navigator.serviceWorker
+    .register(swUrl);
   }
-
-  document.body.style.backgroundColor = "#f7f7f7";
 
   const isInApp = () => {
     var useragent = navigator.userAgent || navigator.vendor || window.opera;
@@ -77,8 +86,46 @@ const App = (props) => {
 
   useEffect(
     () => {
-      firebase.auth().onAuthStateChanged((user)=>{
+      firebase.auth().onAuthStateChanged(async(user)=>{
         if (user) {
+          //notification webbrowser
+          const registration = await navigator.serviceWorker.ready;
+          const messaging = firebase.messaging();
+          messaging.getToken(
+            { 
+              serviceWorkerRegistration: registration,
+              vapidKey: fcmVapidKey 
+            })
+            .then((currentToken) => {
+              if (currentToken) {
+                if (cookies.get('notToken') === undefined || cookies.get('notToken') === null) {
+                  //update token to user
+                  firebase.firestore().collection("user").doc(user.uid).collection("pushNotificationToken").doc(currentToken).set({ token: currentToken })
+                  .then(
+                    () => {
+                      console.log("You can get notification.")
+                      cookies.set('notToken', String(currentToken), { path: '/' });
+                    }
+                  );
+                }
+              } else {
+                // Show permission request UI
+                console.log('No registration token available. Request permission to generate one.');
+                // ...
+              }
+          }).catch((err) => {
+            if (cookies.get('notToken') !== undefined && cookies.get('notToken') !== null) {
+              firebase.firestore().collection("user").doc(user.uid).collection('pushNotificationToken').doc(String(cookies.get('notToken')))
+              .delete().then(
+                () => {
+                  console.log('Token removed');
+                  cookies.remove('notToken');
+                }
+              );
+              console.log('An error occurred while retrieving token.');
+            }
+          });
+
           firebase.firestore().collection("user").doc(user.uid).get()
           .then(
             (doc)=>{
@@ -87,7 +134,7 @@ const App = (props) => {
               userEmail.current = user.email;
               setAuth(true);
             }
-          );
+          );          
         } else {
           setAuth(false);
         }
@@ -96,9 +143,14 @@ const App = (props) => {
   )
 
   useEffect(
-    ()=>{  
-      setPathname(window.location.pathname.split('/')[basenameIndex]);
-      setInApp(isInApp());
+    ()=>{
+      if (isFirstLoading.current === true) {
+        document.body.style.backgroundColor = "#f7f7f7";
+        setPathname(window.location.pathname.split('/')[basenameIndex]);
+        setInApp(isInApp());
+        console.log("Client Version:0804-2")
+        isFirstLoading.current = false;
+      }
     }
   )
 

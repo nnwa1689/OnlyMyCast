@@ -12,6 +12,10 @@ import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
+import firebase from "firebase/app";
+import "firebase/messaging";
+
 
 clientsClaim();
 
@@ -69,4 +73,19 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Any other custom service worker logic can go here.
+firebase.initializeApp(FirebaseConfig);
+
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage(messaging, (payload) => {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+  // Customize notification here
+  const notificationTitle = 'Background Message Title';
+  const notificationOptions = {
+    body: 'Background Message body.',
+    icon: './only-my-cast-icon-pink.svg'
+  };
+
+  self.registration.showNotification(notificationTitle,
+    notificationOptions);
+});

@@ -34,6 +34,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+import "firebase/functions";
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -192,6 +193,17 @@ const useStyles = makeStyles((theme)=>({
         }) 
     }
 
+    const handlePushMessage = async() => {
+        const pushMessage = firebase.functions().httpsCallable('pushMessage');
+        await pushMessage({ text: "send" })
+          .then((result) => {
+            // Read result of the Cloud Function.
+            /** @type {any} */
+            const data = result.data;
+            const sanitizedMessage = data.result;
+          });
+    }
+
     const getDarft = () => {
         firebase.database().ref('/castDarft/' + props.user.userId).once("value", e => {
         }).then(async(e)=>{
@@ -262,10 +274,11 @@ const useStyles = makeStyles((theme)=>({
                     fileRef:audioFileRef,
                     duration:duration.current
                 }, { merge: true }).then((event)=>{
-                    updateChannelDate().then(()=>{
+                    updateChannelDate().then(async()=>{
                         handleRemoveDarft().then(setUploadStatu(1));
+                        await handlePushMessage();
                     }
-                    )
+                )
                 }).catch((error)=>{
                     setUploadStatu(3); setErr(error);
                 })

@@ -20,6 +20,7 @@
     "react-scripts": "4.0.3",
     "react-swipeable-views": "^0.14.0",
     "react-voice-recorder": "^2.1.0",
+    "universal-cookie": "^4.0.4",
     "web-vitals": "^1.1.2",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",

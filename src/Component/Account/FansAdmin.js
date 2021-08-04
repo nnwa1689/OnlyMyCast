@@ -102,7 +102,7 @@ const FansAdmin = (props) => {
                 } else if(Object.entries(doc.data()).length===0){
                     setFansList("");
                 } else {
-                    genListItem(doc.data()).then((arr)=>setFansList(arr))
+                    genListItem(doc.data()).then((arr)=>setFansList(arr));
                 }                
             });
         } else {

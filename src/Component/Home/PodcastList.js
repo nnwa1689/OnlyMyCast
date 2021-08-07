@@ -73,16 +73,11 @@ const useStyles = makeStyles((theme)=>({
                 <ListItemText
                 secondary={
                     <React.Fragment>
-                    <Typography
-                        component="span"
-                        variant="body1"
-                        color="textPrimary">
-                        <Link>{props.podcastName}</Link> 
-                    </Typography>
+                    <Link variant="body1" underline="none">{props.podcastName}</Link> 
                     <br/>
                     <Typography
                         component="span"
-                        variant="subtitle2"
+                        variant="subtitle1"
                         color="textPrimary">
                     {intro}
                     </Typography>

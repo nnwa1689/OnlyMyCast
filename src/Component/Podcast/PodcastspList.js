@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EventIcon from '@material-ui/icons/Event';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 const PodcastspList = (props)=>{
@@ -31,14 +32,14 @@ const PodcastspList = (props)=>{
     <>
         <ListItem button component={RLink} to={"/podcastdetail/" + props.userId + "/" + props.podId}>
             <ListItemText>
-                <Link variant="body1">
+                <Link variant="body1" underline="none">
                     {title}</Link>
                     <br/>
-                    <Typography variant="subtitle2" component="span">
+                    <Typography variant="subtitle1" component="span">
                     <ListItemIcon><EventIcon/>
                     {toDataTime(props.updateTime.seconds)}</ListItemIcon>
                 </Typography>
-                <Typography variant="subtitle2" component="span">
+                <Typography variant="subtitle1" component="span">
                     &nbsp;
                         <ListItemIcon><AccessTimeIcon/>
                         {props.duration}
@@ -46,6 +47,7 @@ const PodcastspList = (props)=>{
                 </Typography>
             </ListItemText>
             <ListItemSecondaryAction>
+                <Tooltip title="播放">
                     <IconButton 
                     aria-label="play"
                     value={props.podId}
@@ -58,6 +60,7 @@ const PodcastspList = (props)=>{
                     >
                         <PlayArrowIcon />
                     </IconButton>
+                </Tooltip>
             </ListItemSecondaryAction>
         </ListItem>
         <Divider/>

@@ -27,12 +27,12 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
+import { Divider } from '@material-ui/core';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
-import { Divider } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -72,6 +72,7 @@ const useStyles = makeStyles((theme)=>({
     tabBar: {
         marginBottom: 10,
         boxShadow : "none",
+        background: "#FFFFFF"
     }
   }));
 
@@ -419,7 +420,7 @@ const PodcastAccount = (props) => {
                                             <FormControl fullWidth className={classes.margin}>
                                             <InputLabel>電台簡介</InputLabel>
                                             <OutlinedInput id="component-outlined" style={{display:"none"}}/>
-                                            <br/>
+                                            <br/><br/>
                                             <MDEditor
                                                 value={intro}
                                                 onChange={setIntro}

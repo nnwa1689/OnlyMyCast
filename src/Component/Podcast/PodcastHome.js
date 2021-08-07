@@ -25,7 +25,6 @@ import "firebase/storage";
 import "firebase/database"
 
 
-
 const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
@@ -35,20 +34,23 @@ const useStyles = makeStyles((theme)=>({
         textAlign:"center"
     },
     appBar: {
-      top: 'auto',
-      bottom: 0,
-      alignItems:"center"
+        top: 'auto',
+        bottom: 0,
+        alignItems:"center"
     },
     large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
-      marginBottom: theme.spacing(3),
-      marginTop:theme.spacing(3),
-      color: "#FFFFFF",
-      backgroundColor: "#FD3E49",
-      marginLeft:"auto",
-      marginRight:"auto"
+        width: theme.spacing(20),
+        height: theme.spacing(20),
+        marginBottom: theme.spacing(3),
+        marginTop:theme.spacing(3),
+        color: "#FFFFFF",
+        backgroundColor: "#FD3E49",
+        marginLeft:"auto",
+        marginRight:"auto"
     },
+    markDownBlock: {
+        color: "#000000"
+    }
   }));
 
 
@@ -251,7 +253,6 @@ const PodcastHome = (props) => {
                     </Typography>
                     <br/>
                     <Divider/>
-
                     { subStatu===1 || props.user.userId === props.match.params.id ?   
                         
                             spList === "" ? 

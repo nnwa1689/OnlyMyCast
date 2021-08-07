@@ -33,6 +33,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FaceIcon from '@material-ui/icons/Face';
 import HelpIcon from '@material-ui/icons/Help';
+import Tooltip from '@material-ui/core/Tooltip';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
@@ -115,48 +116,54 @@ const NavBar = (props) => {
       <div>
           <AppBar className={classes.appBar} color="secondary" position="fixed">
           <Toolbar>
-            { reqCount > 0 ?
+              <Tooltip title="選單">
+                { reqCount > 0 ?
+                    <IconButton
+                    edge="start"
+                    className={classes.menuButton}
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={ ()=>{ setSideBar(true) } }>
+                    <Badge
+                      color="primary" variant="dot"
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}><MenuIcon />
+                    </Badge>
+                    </IconButton>            
+                  
+                :
                 <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="open drawer"
-                onClick={ ()=>{ setSideBar(true) } }>
-                <Badge
-                  color="primary" variant="dot"
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}><MenuIcon />
-                </Badge>
-                </IconButton>            
-              
-            :
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="open drawer"
-              onClick={ ()=>{ setSideBar(true) } }>
-                  <MenuIcon />
-              </IconButton>
-            }
+                  edge="start"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={ ()=>{ setSideBar(true) } }>
+                      <MenuIcon />
+                  </IconButton>
+                }
+              </Tooltip>
               <Link component={RLink} to="/" >
                 <img alt="OnlyMyCast" src={Logo} height="48" />
               </Link>
               <div className={classes.grow}/>
-              <Fab component={RLink} to="/uploadpodcast" color="primary" aria-label="add" size="small" className={classes.menuButton} edge="end" >
-                    <AddIcon />
-              </Fab>
-              <IconButton
-                  edge="end"
-                  color="inherit"
-                  aria-label="searching"
-                  component={RLink} 
-                  to="/search"
-                  >
-                  <SearchIcon />
+              <Tooltip title="發佈單集">
+                <Fab component={RLink} to="/uploadpodcast" color="primary" aria-label="add" size="small" className={classes.menuButton} edge="end" >
+                      <AddIcon />
+                </Fab>
+              </Tooltip>
+              <Tooltip title="搜尋">
+                  <IconButton
+                      edge="end"
+                      color="inherit"
+                      aria-label="searching"
+                      component={RLink} 
+                      to="/search"
+                      >
+                      <SearchIcon />
                   </IconButton>
+              </Tooltip>
           </Toolbar>
           </AppBar>
 

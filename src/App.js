@@ -26,7 +26,6 @@ import SignIn from './Component/SignIn/SignIn';
 import SignUp from './Component/SignUp/SignUp';
 import UnloginNavBar from './Component/NavBar/UnloginNavbar';
 import FansAdmin from './Component/Account/FansAdmin';
-import HelpCenter from './Component/HelpCenter/HelpCenter';
 import ForgetPassword from './Component/Account/ForgetPassword';
 import EmbedChannel from './Component/Podcast/EmbedChannel';
 /*GoogleUI*/
@@ -148,7 +147,7 @@ const App = (props) => {
         document.body.style.backgroundColor = "#f7f7f7";
         setPathname(window.location.pathname.split('/')[basenameIndex]);
         setInApp(isInApp());
-        console.log("Client Version:0804-2")
+        console.log("Client Version:0807-1")
         isFirstLoading.current = false;
       }
     }
@@ -163,12 +162,12 @@ const App = (props) => {
 
   const theme = createMuiTheme({
     palette: {
-    primary: {
-        main: "#FD3E49",
-    },
-    secondary: {
-        main: "#363636",
-    },
+      primary: {
+          main: "#FD3E49",
+      },
+      secondary: {
+          main: "#363636",
+      },
     },
     typography: {
       fontFamily: 'NotoSansTC-Regular',
@@ -235,7 +234,6 @@ const App = (props) => {
                   />
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
-                  <Route exact path="/help" component={HelpCenter} />
                   <Route exact path="/forgetpassword" component={ForgetPassword} />
                   { /* 如果頁面是廣播首頁則允許沒有登入預覽 */
                     !isAuth && (!allowUnloginPath.includes(pathname)) && <Redirect to='/signin'/>

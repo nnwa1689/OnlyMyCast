@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import SaveIcon from '@material-ui/icons/Save';
@@ -29,6 +29,10 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Link from '@material-ui/core/Link';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import AppBar from '@material-ui/core/AppBar';
+import SwipeableViews from 'react-swipeable-views';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -73,12 +77,18 @@ const useStyles = makeStyles((theme)=>({
     input: {
         display: 'none',
       },
+    tabBar: {
+        marginBottom: 10,
+        boxShadow : "none",
+        background: "#FFFFFF"
+    }
   }));
 
 const Account = (props) => {
     const classes = useStyles();
     const [handleCode, setHandleCode] = useState('init');
     const [name, setName] = useState(props.user.name);
+    const theme = useTheme();
     const [avatar,setAvatar] = useState(props.user.avatar);
     const [newPassword, setNewPassword] = useState("");
     const [oldPassword, setOldPassword] = useState("");
@@ -92,6 +102,34 @@ const Account = (props) => {
     const willUnsubId = useRef("");
     const isFirstLoad = useRef(true);
     const [loaded, setLoaded] = useState(false);
+
+    const [tabValue, setTabValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+    
+    const handleChangeIndex = (index) => {
+        setTabValue(index);
+    };
+    const TabPanel = (props) => {
+        const { children, value, index, ...other } = props;
+        return (
+          <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+            {...other}
+          >
+            {value === index && (
+              <div p={0}>
+                {children}
+              </div>
+            )}
+          </div>
+        );
+      }
 
 
     const genListItem = async(data)=>{
@@ -248,96 +286,118 @@ const Account = (props) => {
             <Container maxWidth="md">
                 <Card className={classes.root}>
                     <CardContent>
-                    <Typography variant="h5" component="h1">帳號設定</Typography>
-                    <Typography variant="body1" component="span">更新您的個人資訊<br/>這裡的資訊將用於您訂閱他人時顯示</Typography>
-                    <Avatar alt={name} src={avatar} className={classes.large} />
-                    <form noValidate autoComplete="off">
-                        <FormControl fullWidth className={classes.margin}>
-                        <input
-                            accept="image/jpeg, image/png"
-                            className={classes.input}
-                            id="contained-button-file"
-                            multiple
-                            type="file"
-                            startIcon={<AttachmentIcon />}
-                            disabled={handleCode==="loading"}
-                            onChange={(e)=>{
-                                if (e.target.files.length >= 1) {
-                                    setFilename(e.target.files[0].name);
-                                    setFileBit(e.target.files[0])
-                                }
-                            }}
-                        />
-                        <label htmlFor="contained-button-file">
-                            <Button variant="contained" size="large" fullWidth color="primary" component="span">
-                                <AttachmentIcon />
-                                { filename === "" ? "上傳新頭貼" : filename }
-                            </Button>
-                            <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
-                        </label>
-                        </FormControl>
-                        <FormControl fullWidth className={classes.margin}>
-                            <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="暱稱" variant="outlined" />
-                        </FormControl>
-                        <Divider/>
-                        <Typography variant="h5" component="h1"><br/>帳號安全</Typography>
-                        <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
-                        <FormControl fullWidth className={classes.margin}>
-                            <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="outlined-basic" label="新密碼" variant="outlined" />
-                        </FormControl>
-                        <FormControl fullWidth className={classes.margin}>
-                            <TextField disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="outlined-basic" label="確認舊密碼" variant="outlined" />
-                        </FormControl>
-                    </form>
-                    <div className={classes.wrapper}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            className={classes.button}
-                            startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                            onClick={handleUpdateAccount}
-                            disabled={handleCode==="loading"}>
-                            儲存設定
-                        </Button>
-                    </div>
-                    <br/><br/>
-                    <Divider/>
-
-                    { subscribeList !== "" ? 
-                    <>
-                        <Typography variant="h5" component="h1"><br/>訂閱管理</Typography>
-                        <Typography variant="body1" component="span">取消已經訂閱的頻道</Typography>
-                        <List dense>
-                            {  subscribeList }
-        
-                        </List>
-                    </>
-                    :
-                    <Typography variant="h4" component="h1"><br/>╮(╯▽╰)╭<br/>目前沒有任何訂閱！<br/>快去訂閱喜歡的頻道吧！</Typography>
-                    }
-
-                    <div>
-                        <Dialog
-                            open={showUnsubMsg}
-                            onClose={()=>{setShowUnsubMsg(false)}}
+                    <AppBar className={classes.tabBar} position="static" color="default">
+                        <Tabs
+                        value={tabValue}
+                        onChange={handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                        aria-label="full width tabs example"
                         >
-                            <DialogTitle>取消訂閱</DialogTitle>
-                            <DialogContent>
-                            <DialogContentText>
-                                確定要取消"{willUnsubId.current}"的訂閱嗎？<br/>移除後您必須重新追蹤才能再收聽該頻道。
-                            </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                            <Button onClick={()=>{setShowUnsubMsg(false)}} color="primary" autoFocus>
-                                取消
-                            </Button>
-                            <Button onClick={handelUnSub} color="primary">
-                                確定
-                            </Button>
-                            </DialogActions>
-                        </Dialog>
-                        </div>
+                        <Tab label="個人資訊與密碼" />
+                        <Tab label="我的追蹤" />
+                        </Tabs>
+                    </AppBar>
+                    <SwipeableViews
+                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                        index={tabValue}
+                        onChangeIndex={handleChangeIndex}>
+                        <TabPanel value={tabValue} index={0}>
+                            <br/>
+                            <Typography variant="h5" component="h1">帳號設定</Typography>
+                            <Typography variant="body1" component="span">更新您的個人資訊<br/>這裡的資訊將用於您訂閱他人時顯示</Typography>
+                            <Avatar alt={name} src={avatar} className={classes.large} />
+                            <form noValidate autoComplete="off">
+                                <FormControl fullWidth className={classes.margin}>
+                                <input
+                                    accept="image/jpeg, image/png"
+                                    className={classes.input}
+                                    id="contained-button-file"
+                                    multiple
+                                    type="file"
+                                    startIcon={<AttachmentIcon />}
+                                    disabled={handleCode==="loading"}
+                                    onChange={(e)=>{
+                                        if (e.target.files.length >= 1) {
+                                            setFilename(e.target.files[0].name);
+                                            setFileBit(e.target.files[0])
+                                        }
+                                    }}
+                                />
+                                <label htmlFor="contained-button-file">
+                                    <Button variant="contained" size="large" fullWidth color="primary" component="span">
+                                        <AttachmentIcon />
+                                        { filename === "" ? "上傳新頭貼" : filename }
+                                    </Button>
+                                    <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
+                                </label>
+                                </FormControl>
+                                <FormControl fullWidth className={classes.margin}>
+                                    <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="暱稱" variant="outlined" />
+                                </FormControl>
+                                <Divider/>
+                                <Typography variant="h5" component="h1"><br/>帳號安全</Typography>
+                                <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
+                                <FormControl fullWidth className={classes.margin}>
+                                    <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="outlined-basic" label="新密碼" variant="outlined" />
+                                </FormControl>
+                                <FormControl fullWidth className={classes.margin}>
+                                    <TextField disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="outlined-basic" label="確認舊密碼" variant="outlined" />
+                                </FormControl>
+                            </form>
+                            <div className={classes.wrapper}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    className={classes.button}
+                                    startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                                    onClick={handleUpdateAccount}
+                                    disabled={handleCode==="loading"}>
+                                    儲存設定
+                                </Button>
+                            </div>
+                            <br/><br/>
+                        </TabPanel>
+                        <TabPanel value={tabValue} index={1}>
+                        { subscribeList !== "" ? 
+                            <>
+                                <Typography variant="h5" component="h1"><br/>訂閱管理</Typography>
+                                <Typography variant="body1" component="span">取消已經訂閱的頻道</Typography>
+                                <List dense>
+                                    {  subscribeList }
+                
+                                </List>
+                            </>
+                            :
+                            <Typography variant="h4" component="h1"><br/>╮(╯▽╰)╭<br/>目前沒有任何訂閱！<br/>快去訂閱喜歡的頻道吧！</Typography>
+                            }
+
+                            <div>
+                                <Dialog
+                                    open={showUnsubMsg}
+                                    onClose={()=>{setShowUnsubMsg(false)}}
+                                >
+                                    <DialogTitle>取消訂閱</DialogTitle>
+                                    <DialogContent>
+                                    <DialogContentText>
+                                        確定要取消"{willUnsubId.current}"的訂閱嗎？<br/>移除後您必須重新追蹤才能再收聽該頻道。
+                                    </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                    <Button onClick={()=>{setShowUnsubMsg(false)}} color="primary" autoFocus>
+                                        取消
+                                    </Button>
+                                    <Button onClick={handelUnSub} color="primary">
+                                        確定
+                                    </Button>
+                                    </DialogActions>
+                                </Dialog>
+                            </div>
+                        </TabPanel>
+                    </SwipeableViews>  
+                    <Divider/>
                     </CardContent>
                 </Card>
                 <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={props.dataupdate} message="您的變更已經儲存"/>

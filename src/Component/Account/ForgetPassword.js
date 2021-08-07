@@ -101,7 +101,7 @@ const ForgetPassword = () => {
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
             <img src={LogoIcon} width="128"></img>
             <Typography component="h1" variant="h5">忘記密碼</Typography><br/>
-            <Typography component="body1" variant="span">輸入註冊的E-Mail<br/>將會將重設密碼連結送至你的信箱。</Typography>
+            <Typography component="span" variant="body1">輸入註冊的E-Mail<br/>將會將重設密碼連結送至你的信箱。</Typography>
             <form className={classes.form} noValidate>
             <TextField
                 variant="outlined"

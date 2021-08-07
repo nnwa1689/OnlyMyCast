@@ -88,42 +88,46 @@ const App = (props) => {
       firebase.auth().onAuthStateChanged(async(user)=>{
         if (user) {
           //notification webbrowser
-          const registration = await navigator.serviceWorker.ready;
-          const messaging = firebase.messaging();
-          messaging.getToken(
-            { 
-              serviceWorkerRegistration: registration,
-              vapidKey: fcmVapidKey 
-            })
-            .then((currentToken) => {
-              if (currentToken) {
-                if (cookies.get('notToken') === undefined || cookies.get('notToken') === null) {
-                  //update token to user
-                  firebase.firestore().collection("user").doc(user.uid).collection("pushNotificationToken").doc(currentToken).set({ token: currentToken })
-                  .then(
-                    () => {
-                      console.log("You can get notification.")
-                      cookies.set('notToken', String(currentToken), { path: '/' });
-                    }
-                  );
+          if (!('Notification' in window)) {
+            console.log('This browser does not support notification');
+          } else {
+            const messaging = firebase.messaging();
+            const registration = await navigator.serviceWorker.ready;
+            messaging.getToken(
+              { 
+                serviceWorkerRegistration: registration,
+                vapidKey: fcmVapidKey 
+              })
+              .then((currentToken) => {
+                if (currentToken) {
+                  if (cookies.get('notToken') === undefined || cookies.get('notToken') === null) {
+                    //update token to user
+                    firebase.firestore().collection("user").doc(user.uid).collection("pushNotificationToken").doc(currentToken).set({ token: currentToken })
+                    .then(
+                      () => {
+                        console.log("You can get notification.")
+                        cookies.set('notToken', String(currentToken), { path: '/' });
+                      }
+                    );
+                  }
+                } else {
+                  // Show permission request UI
+                  console.log('No registration token available. Request permission to generate one.');
+                  // ...
                 }
-              } else {
-                // Show permission request UI
-                console.log('No registration token available. Request permission to generate one.');
-                // ...
+            }).catch((err) => {
+              if (cookies.get('notToken') !== undefined && cookies.get('notToken') !== null) {
+                firebase.firestore().collection("user").doc(user.uid).collection('pushNotificationToken').doc(String(cookies.get('notToken')))
+                .delete().then(
+                  () => {
+                    console.log('Token removed');
+                    cookies.remove('notToken');
+                  }
+                );
+                console.log('An error occurred while retrieving token.');
               }
-          }).catch((err) => {
-            if (cookies.get('notToken') !== undefined && cookies.get('notToken') !== null) {
-              firebase.firestore().collection("user").doc(user.uid).collection('pushNotificationToken').doc(String(cookies.get('notToken')))
-              .delete().then(
-                () => {
-                  console.log('Token removed');
-                  cookies.remove('notToken');
-                }
-              );
-              console.log('An error occurred while retrieving token.');
-            }
-          });
+            });
+          }
 
           firebase.firestore().collection("user").doc(user.uid).get()
           .then(

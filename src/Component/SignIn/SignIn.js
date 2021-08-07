@@ -84,6 +84,8 @@ const SignIn = () => {
         setPwErr("密碼錯誤")
       if(error.code==="auth/user-not-found")
         setEmailErr("使用者不存在")
+      if(error.code==="auth/too-many-requests")
+        setEmailErr("密碼錯誤次數過多，請稍候再嘗試或使用忘記密碼")
       setHandleCode("error");
     });
   }

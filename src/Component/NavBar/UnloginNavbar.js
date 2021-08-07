@@ -63,9 +63,7 @@ const UnloginNavBar = (props) => {
       <div>
           <AppBar color="secondary" position="fixed">
           <Toolbar>
-              <Link component={RLink} to="/" >
-                <img alt="OnlyMyCast" src={LogoIcon} width="48" height="48" />
-              </Link>
+              <img alt="OnlyMyCast" src={LogoIcon} width="48" height="48" />
               <div className={classes.grow}/>
               <Typography variant="h6">建立、收聽私人Podcast</Typography>
               <div className={classes.grow}/>

@@ -82,7 +82,7 @@ const EditPodcast = (props) => {
                         <>
                         <ListItem button component={RLink} to={"/podcastdetail/"+ props.user.userId + "/" + doc.id} key={doc.id}>
                             <ListItemText>
-                                <Link variant="body1">{doc.data().title.length >= 30 ? doc.data().title.substring(0,29) + "......" : doc.data().title}</Link><br/>
+                                <Link variant="body1" underline="none">{doc.data().title.length >= 30 ? doc.data().title.substring(0,29) + "......" : doc.data().title}</Link><br/>
                                 <Typography variant="body2" component="span">發佈於 {toDataTime(doc.data().updateTime.seconds)}</Typography>
                             </ListItemText>
                             <ListItemIcon>

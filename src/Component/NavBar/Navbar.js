@@ -1,6 +1,8 @@
 //react
 import React, { useState, useEffect } from 'react';
 import { Link as RLink } from 'react-router-dom';
+//customhook
+import useWindowWidth from '../../Hook/useWindowWidth'
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -34,6 +36,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FaceIcon from '@material-ui/icons/Face';
 import HelpIcon from '@material-ui/icons/Help';
 import Tooltip from '@material-ui/core/Tooltip';
+import InputBase from '@material-ui/core/InputBase';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
@@ -49,14 +52,15 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(1),
     },
     search: {
-      position: 'relative',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
+      transition: 'background-color .15s',
+      backgroundColor: "#f7f7f7",
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
+        backgroundColor: "#ffffff",
       },
-      margin: 0,
-      width: 'auto',
+      marginLeft: theme.spacing(3),
+      width: '400px',
+      padding: "5px",
     },
     inputRoot: {
       color: 'inherit',
@@ -86,6 +90,8 @@ const NavBar = (props) => {
     const classes = useStyles();
     const [sideBar, setSideBar] = useState(false);
     const [reqCount, setReqCount] = useState("");
+    const windowWidth = useWindowWidth();
+    const [search, setSearch] = useState("");
     const handleLogout = ()=>{
       firebase.auth().signOut().then(() => {
         // Sign-out successful.
@@ -147,22 +153,40 @@ const NavBar = (props) => {
               <Link component={RLink} to="/" >
                 <img alt="OnlyMyCast" src={Logo} height="48" />
               </Link>
+              { 
+              
+              windowWidth >= 768 && 
+                <>
+                  <InputBase onChange={(e) => {setSearch(e.target.value)}} value={search} className={classes.search} placeholder="搜尋頻道" startAdornment={
+                      <IconButton component={RLink} to={"/search/" + search} aria-label="search" size="small">
+                          <SearchIcon/>
+                      </IconButton>
+                  }>
+                  </InputBase>
+                </>
+                
+              }
               <div className={classes.grow}/>
+              { 
+              
+              windowWidth < 768 && 
+              <Tooltip title="搜尋">
+                <IconButton
+                    edge="end"
+                    color="inherit"
+                    aria-label="searching"
+                    component={RLink} 
+                    to="/search"
+                    className={classes.menuButton}
+                    >
+                    <SearchIcon />
+                </IconButton>
+              </Tooltip>
+              }
               <Tooltip title="發佈單集">
                 <Fab component={RLink} to="/uploadpodcast" color="primary" aria-label="add" size="small" className={classes.menuButton} edge="end" >
                       <AddIcon />
                 </Fab>
-              </Tooltip>
-              <Tooltip title="搜尋">
-                  <IconButton
-                      edge="end"
-                      color="inherit"
-                      aria-label="searching"
-                      component={RLink} 
-                      to="/search"
-                      >
-                      <SearchIcon />
-                  </IconButton>
               </Tooltip>
           </Toolbar>
           </AppBar>
@@ -222,7 +246,7 @@ const NavBar = (props) => {
                   </List>
                   <Divider />
                   <List>
-                    <ListItem button target="_blank" component={Link} href="https://nnwa1689.gitbook.io/onlymycast-helpcenter/" key="help">
+                    <ListItem button target="_blank" component={Link} underline="none" href="https://nnwa1689.gitbook.io/onlymycast-helpcenter/" key="help">
                             <ListItemIcon>
                                     <HelpIcon />
                             </ListItemIcon>

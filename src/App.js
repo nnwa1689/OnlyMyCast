@@ -52,7 +52,7 @@ const App = (props) => {
   const userUid = useRef("");
   const userEmail = useRef("");
   const isFirstLoading = useRef(true);
-  const cookies = new Cookies();
+
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig);  
@@ -63,15 +63,20 @@ const App = (props) => {
   var basenameIndex = 1;
   var fcmVapidKey = 'BBPvT3efBxPguqWhRsn349AGlOkCa5KoGECtVQqOrcAMgDUKEZebLORp5v_KJ6kgVsWGqLvu-TqVG8wTgDA34RY';
 
-  if (process.env.NODE_ENV !== "development") {  //產品環境
+  if (process.env.NODE_ENV !== "development") {
+    //產品環境
     basename = "/webapp/";
     basenameIndex = 2;
     fcmVapidKey = 'BF1eW1y0DHQl40_Vz1IPqvxKRlOiSr98s2ZlUWDdHT6-VPxMIPXPrWxtCii4g8cdEBSMX37YB1suR85fGjtxpHI';
   } else {
-    // 僅在本機測試環境啟用，如產品環境使用 src/service-worker.js 提供 FCM 功能
-    const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`;
-    navigator.serviceWorker
-    .register(swUrl);
+    if (!(firebase.messaging.isSupported())) {
+      console.log('This browser does not support notification');
+    } else {
+      // 僅在本機測試環境啟用，如產品環境使用 src/service-worker.js 提供 FCM 功能
+      const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`;
+      navigator.serviceWorker
+      .register(swUrl);
+    }
   }
 
   const isInApp = () => {
@@ -88,7 +93,7 @@ const App = (props) => {
       firebase.auth().onAuthStateChanged(async(user)=>{
         if (user) {
           //notification webbrowser
-          if (!('Notification' in window)) {
+          if (!(firebase.messaging.isSupported())) {
             console.log('This browser does not support notification');
           } else {
             const messaging = firebase.messaging();
@@ -100,32 +105,23 @@ const App = (props) => {
               })
               .then((currentToken) => {
                 if (currentToken) {
-                  if (cookies.get('notToken') === undefined || cookies.get('notToken') === null) {
-                    //update token to user
-                    firebase.firestore().collection("user").doc(user.uid).collection("pushNotificationToken").doc(currentToken).set({ token: currentToken })
-                    .then(
-                      () => {
-                        console.log("You can get notification.")
-                        cookies.set('notToken', String(currentToken), { path: '/' });
-                      }
-                    );
-                  }
+                  //update token to user
+                  firebase.firestore().collection("user")
+                  .doc(user.uid)
+                  .collection("pushNotificationToken")
+                  .doc(currentToken)
+                  .set({ token: currentToken, updateTime: firebase.firestore.FieldValue.serverTimestamp() })
+                  .then(
+                    () => {
+                      console.log("You can got notification.")
+                    }
+                  );
                 } else {
                   // Show permission request UI
                   console.log('No registration token available. Request permission to generate one.');
-                  // ...
                 }
             }).catch((err) => {
-              if (cookies.get('notToken') !== undefined && cookies.get('notToken') !== null) {
-                firebase.firestore().collection("user").doc(user.uid).collection('pushNotificationToken').doc(String(cookies.get('notToken')))
-                .delete().then(
-                  () => {
-                    console.log('Token removed');
-                    cookies.remove('notToken');
-                  }
-                );
                 console.log('An error occurred while retrieving token.');
-              }
             });
           }
 
@@ -151,11 +147,12 @@ const App = (props) => {
         document.body.style.backgroundColor = "#f7f7f7";
         setPathname(window.location.pathname.split('/')[basenameIndex]);
         setInApp(isInApp());
-        console.log("Client Version:0807-1")
+        console.log("Client Version:0809-3")
         isFirstLoading.current = false;
       }
     }
   )
+
 
   const setPlayer = (e) => {
     setPlayerTitle(e.currentTarget.dataset.titlename)
@@ -175,7 +172,7 @@ const App = (props) => {
     },
     typography: {
       fontFamily: 'NotoSansTC-Regular',
-    }
+    },
   });
 
   return (

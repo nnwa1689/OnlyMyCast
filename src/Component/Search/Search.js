@@ -70,20 +70,27 @@ const Search = (props) => {
     useEffect(
         ()=>{
             if (isFirstLoad.current) {
-                handleSearch();
+                handleSearch("");
                 window.scrollTo(0, 0);
                 isFirstLoad.current=false;
             }
         }
     )
 
-    const handleSearch = () =>{
+    useEffect(
+        () => {
+            handleSearch(props.match.params.q===undefined ? "" : props.match.params.q);
+            setQuery(props.match.params.q===undefined ? "" : props.match.params.q)
+        }, [props.match.params.q]
+    )
+
+    const handleSearch = (queryText) =>{
         var changeArr = Array();
-        history.push('/search/' + query);
+        history.push('/search/' + queryText);
         setSearchResult("");
-        if (query !== "") {
+        if (queryText !== "") {
             firebase.firestore().collection("channel").where(
-                firebase.firestore.FieldPath.documentId(), "==", query)
+                firebase.firestore.FieldPath.documentId(), "==", queryText)
             .get()
             .then(async(querySnapshot)=>{
                 console.log(Object.entries(querySnapshot.docs))
@@ -108,14 +115,14 @@ const Search = (props) => {
                 <InputLabel htmlFor="queryInput">Search</InputLabel>
                     <OutlinedInput id="queryInput" value={query} defaultValue={props.q} onChange={(e)=>setQuery(e.target.value)} label="Search" endAdornment={
                         <InputAdornment position="end">
-                            <IconButton onClick={handleSearch} aria-label="search" className={classes.margin}>
+                            <IconButton onClick={() => {handleSearch(query)}} aria-label="search" className={classes.margin}>
                                 <SearchIcon fontSize="large" />
                             </IconButton>
                         </InputAdornment>
                     } />
                 </FormControl>
                     <br/><br/>
-                {searchResult!=="" && searchResult}
+                {searchResult!=="" || searchResult!==undefined ? searchResult : "沒有搜尋結果"}
                 </CardContent>
             </Card>
         </Container>

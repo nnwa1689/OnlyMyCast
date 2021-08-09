@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme)=>({
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0);
     const [filename, setFilename] = useState("");
-    const [filePath, SetFilePath] = useState();
+    const [filePath, setFilePath] = useState();
     const [fileBit, setFileBit] = useState();
     const [intro, setIntro] = useState("");
     const [podcastTitle, setPodcastTitle] = useState("");
@@ -124,8 +124,8 @@ const useStyles = makeStyles((theme)=>({
         }
     )
 
-    /*
 
+    /*
     const [audioDetails, setAudioDetails] = useState(
         {
             url:null,
@@ -144,6 +144,7 @@ const useStyles = makeStyles((theme)=>({
         console.log(data);
         console.log(data.blob);
         setFilename(filename);
+        setFilePath(data.url);
         console.log(data.blob.type)
         
     }
@@ -333,6 +334,7 @@ const useStyles = makeStyles((theme)=>({
 
                     { activeStep === 0 &&
                     (<>
+
                          <input
                             accept=".mp3, .mp4, .m4a"
                             className={classes.input}
@@ -344,7 +346,7 @@ const useStyles = makeStyles((theme)=>({
                                 if (e.target.files.length >= 1) {
                                     setFilename(e.target.files[0].name);
                                     setFileBit(e.target.files[0]);
-                                    SetFilePath(URL.createObjectURL(e.target.files[0]));
+                                    setFilePath(URL.createObjectURL(e.target.files[0]));
                                 }
                             }}
                         />
@@ -357,7 +359,7 @@ const useStyles = makeStyles((theme)=>({
                                 { filename === "" ? "選擇檔案" : filename }</Button>
                                 <br/><br/>
                                 <Typography variant="body1" gutterBottom>
-                                    僅限 mp3/mp4/m4a 格式<br/><br/>手機版 Safari 可能會上傳卡住的問題<br/>請先改用 Chrome
+                                    僅限 mp3/mp4/m4a 格式<br/>
                                 </Typography>
                         </label>
                         <br/>

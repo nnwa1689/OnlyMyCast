@@ -386,59 +386,59 @@ const PodcastAccount = (props) => {
                                     index={tabValue}
                                     onChangeIndex={handleChangeIndex}>
                                     <TabPanel value={tabValue} index={0}>
-                                            <Typography variant="h5" component="h1">編輯電台資訊</Typography>
-                                            <Typography variant="body1" component="span">更新您的電台資訊<br/>這裡的資訊將於電台首頁公布</Typography>
-                                            <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
-                                            <form noValidate autoComplete="off">
-                                            <FormControl fullWidth className={classes.margin}>
-                                                <input
-                                                    accept="image/jpge, image/jpg, image/png"
-                                                    className={classes.input}
-                                                    id="contained-button-file"
-                                                    multiple
-                                                    type="file"
-                                                    startIcon={<AttachmentIcon />}
-                                                    disabled={handleCode==="loading"}
-                                                    onChange={(e)=>{
-                                                        if (e.target.files.length >= 1) {
-                                                            setFilename(e.target.files[0].name);
-                                                            setFileBit(e.target.files[0])
-                                                        }
-                                                    }}
-                                                />
-                                                <label htmlFor="contained-button-file">
-                                                    <Button disabled={handleCode==="loading"} variant="contained" size="large" fullWidth color="primary" component="span">
-                                                        <AttachmentIcon />
-                                                        { filename === "" ? "上傳頻道封面" : filename }
-                                                    </Button>
-                                                    <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
-                                                </label>
-                                                </FormControl>
-                                            <FormControl fullWidth className={classes.margin}>
-                                                <TextField disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="電台名稱" variant="outlined" />
-                                            </FormControl>
-                                            <FormControl fullWidth className={classes.margin}>
-                                            <InputLabel>電台簡介</InputLabel>
-                                            <OutlinedInput id="component-outlined" style={{display:"none"}}/>
-                                            <br/><br/>
-                                            <MDEditor
-                                                value={intro}
-                                                onChange={setIntro}
+                                        <Typography variant="h5" component="h1">編輯電台資訊</Typography>
+                                        <Typography variant="body1" component="span">更新您的電台資訊<br/>這裡的資訊將於電台首頁公布</Typography>
+                                        <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                                        <form noValidate autoComplete="off">
+                                        <FormControl fullWidth className={classes.margin}>
+                                            <input
+                                                accept="image/jpge, image/jpg, image/png"
+                                                className={classes.input}
+                                                id="contained-button-file"
+                                                multiple
+                                                type="file"
+                                                startIcon={<AttachmentIcon />}
+                                                disabled={handleCode==="loading"}
+                                                onChange={(e)=>{
+                                                    if (e.target.files.length >= 1) {
+                                                        setFilename(e.target.files[0].name);
+                                                        setFileBit(e.target.files[0])
+                                                    }
+                                                }}
                                             />
-                                            </FormControl>     
-                                            <br/> <br/> 
-                                            <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    size="large"
-                                                    className={classes.button}
-                                                    onClick={handleUpdateChannel}
-                                                    disabled={handleCode==="loading"}
-                                                    startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                                    儲存設定
+                                            <label htmlFor="contained-button-file">
+                                                <Button disabled={handleCode==="loading"} variant="contained" size="large" fullWidth color="primary" component="span">
+                                                    <AttachmentIcon />
+                                                    { filename === "" ? "上傳頻道封面" : filename }
                                                 </Button>
-                                                <br/><br/>
-                                            </form>
+                                                <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
+                                            </label>
+                                        </FormControl>
+                                        <FormControl fullWidth className={classes.margin}>
+                                            <TextField disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="電台名稱" variant="outlined" />
+                                        </FormControl>
+                                        <FormControl fullWidth className={classes.margin}>
+                                        <InputLabel>電台簡介</InputLabel>
+                                        <OutlinedInput id="component-outlined" style={{display:"none"}}/>
+                                        <br/><br/>
+                                        <MDEditor
+                                            value={intro}
+                                            onChange={setIntro}
+                                        />
+                                        </FormControl>     
+                                        <br/> <br/> 
+                                        <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="large"
+                                                className={classes.button}
+                                                onClick={handleUpdateChannel}
+                                                disabled={handleCode==="loading"}
+                                                startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                                儲存設定
+                                            </Button>
+                                            <br/><br/>
+                                        </form>
                                     </TabPanel>
                                     <TabPanel value={tabValue} index={1}>
                                             <Typography variant="h5" component="h1">推廣電台</Typography>

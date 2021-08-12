@@ -62,45 +62,29 @@ const useStyles = makeStyles((theme) => ({
 const SignIn = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailErr, setEmailErr] = useState(false);
-  const [pwErr, setPwErr] = useState(false);
   const [handleCode, setHandleCode] = useState("init");
   const history = useHistory();
 
-  const handleSignin = ()=>{
-    setHandleCode("loading")
-    setEmailErr(false);
-    setPwErr(false);
-
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      window.location.reload();
-    })
-    .catch((error) => {
-      if(error.code==="auth/invalid-email")
-        setEmailErr("Email格式錯誤")
-      if(error.code==="auth/wrong-password")
-        setPwErr("密碼錯誤")
-      if(error.code==="auth/user-not-found")
-        setEmailErr("使用者不存在")
-      if(error.code==="auth/too-many-requests")
-        setEmailErr("密碼錯誤次數過多，請稍候再嘗試或使用忘記密碼")
-      setHandleCode("error");
+  const sendEmailVerification = async() => {
+    setHandleCode("loading");
+    await firebase.auth().currentUser.sendEmailVerification()
+    .then(() => {
+      // Email verification sent!
+      setHandleCode("send");
     });
   }
+
 
   useEffect(
     ()=>{
         firebase.auth().onAuthStateChanged((user)=> {
-            if(user) {
-              if (!user.emailVerified) {
-                window.location.reload();
-              } else {
+            if(!user) {
               // 使用者已登入，redirect to Homepage
-              window.location.href = '/';
-              }
-
+              history.push('/signin');
+            } else if (user.emailVerified) {
+              history.push('/');
+            } else {
+              setEmail(user.email);
             }
           });
     }
@@ -112,57 +96,22 @@ const SignIn = () => {
           <CardContent>
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
             <img src={LogoIcon} width="128"></img>
-            <Typography component="h1" variant="h5">立即登入<br/>建立或收聽私人Podcast</Typography>
+            <Typography component="h1" variant="h5">信箱驗證</Typography>
+            <br/>
+            <Typography component="span" variant="body1">驗證您的信箱之後，才能開始使用網站功能</Typography>
             <form className={classes.form} noValidate>
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={(e)=>{setEmail(e.target.value)}}
-                error={emailErr !== false}
-                helperText={ emailErr !== false && (emailErr) }
-                disabled={handleCode==="loading"}
-            />
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="密碼"
-                label="密碼"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e)=>{setPassword(e.target.value)}}
-                error={pwErr !== false}
-                helperText={ pwErr !== false && (pwErr) }
-                disabled={handleCode==="loading"}
-            />
-            <Button
-                type="button"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={handleSignin}
-                disabled={handleCode==="loading"}
-            >
-                登入
-            </Button>
-            <Link component={RLink} to="/signup" variant="body2">
-                    {"立即註冊"}
-            </Link> &nbsp;&nbsp;
-            <Link component={RLink} to="/forgetpassword" variant="body2">
-                    {"忘記密碼"}
-            </Link>
+              <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  className={classes.submit}
+                  onClick={sendEmailVerification}
+                  disabled={handleCode==="loading" || handleCode === "send"}
+              >
+                  { handleCode === "send" ? "已發送驗證信至" + email : "發送驗證Email至" + email }
+              </Button>
             </form>
           </CardContent>
       </Card>

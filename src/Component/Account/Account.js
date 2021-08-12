@@ -121,6 +121,7 @@ const Account = (props) => {
     const willUnsubId = useRef("");
     const isFirstLoad = useRef(true);
     const [loaded, setLoaded] = useState(false);
+    const [updatePassword, setUpdatePassword] = useState(false);
 
     const [tabValue, setTabValue] = useState(0);
 
@@ -132,7 +133,14 @@ const Account = (props) => {
         setTabValue(index);
     };
 
-
+    const handleLogout = () => {
+        firebase.auth().signOut().then(() => {
+            // Sign-out successful.
+            window.location.reload();
+          }).catch((error) => {
+            console.log("發生一些問題QAQ");
+          });
+    }
 
     const genListItem = async(data)=>{
         var changeArr = Array();
@@ -166,21 +174,25 @@ const Account = (props) => {
     }
 
     const getSubscribe = ()=>{
-        firebase.firestore().collection("subscribe").doc(props.userUid).get()
-        .then((doc)=>{      
-            if (doc.exists) {
-                if (Object.entries(doc.data()).length === 0) {
-                    setSubscribeList("")
+        try{
+            firebase.firestore().collection("subscribe").doc(props.userUid).get()
+            .then((doc)=>{      
+                if (doc.exists) {
+                    if (Object.entries(doc.data()).length === 0) {
+                        setSubscribeList("")
+                    } else {
+                        genListItem(doc.data()).then((arr)=>(setSubscribeList(arr)))
+                    }
+     
                 } else {
-                    genListItem(doc.data()).then((arr)=>(setSubscribeList(arr)))
+                    setSubscribeList("");
                 }
- 
-            } else {
-                setSubscribeList("");
-            }
-            setLoaded(true);
-          }
-        );
+                setLoaded(true);
+              }
+            );
+        }catch{
+            //
+        }
     }
 
     useEffect(
@@ -210,13 +222,13 @@ const Account = (props) => {
                   var credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
                   user.reauthenticateWithCredential(credential).then(()=> {
                       
-                        if (newPassword!=="") {
-                            user.updatePassword(newPassword).then(()=>{
+                        if (newPassword !== "") {
+                            user.updatePassword(newPassword).then(async()=>{
                                 // 修改密碼完成
                                 if (filename !== "") {
                                     //uploadAvatar
                                     var storageRef = firebase.storage().ref().child('avatar/' + user.uid + "/" + filename);
-                                    storageRef.put(fileBit).then((s) => {
+                                    await storageRef.put(fileBit).then((s) => {
                                         storageRef.getDownloadURL()
                                         .then((url) => {
                                             setAvatar(url);
@@ -229,7 +241,7 @@ const Account = (props) => {
                                     );
                                 }
         
-                                firebase.firestore().collection("user").doc(user.uid).set({
+                                await firebase.firestore().collection("user").doc(user.uid).set({
                                     name: name,
                                 }, { merge: true }).then(
                                     ()=>{
@@ -240,7 +252,13 @@ const Account = (props) => {
                                         setNewPassword("");
                                     }
                                 )
-                            }).catch((error)=> {
+                            }).then(
+                                () => {
+                                    // 重新驗證用戶(登出)，使用者點選確認後登出帳戶
+                                    setUpdatePassword(true);
+                                }
+                            )
+                            .catch((error)=> {
                                 if (error.code==="auth/weak-password") {
                                     setNewPwErr("密碼必須大於6位數");
                                     setHandleCode('error');
@@ -303,7 +321,6 @@ const Account = (props) => {
         )
     }
 
-
     if (!loaded || subscribeList===undefined){
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
@@ -358,6 +375,9 @@ const Account = (props) => {
                             </label>
                             </FormControl>
                             <FormControl fullWidth className={classes.margin}>
+                                <TextField disabled={true} helperText="Email一但註冊就無法修改" value={props.userEmail} id="email" label="Email" variant="outlined" />
+                            </FormControl>
+                            <FormControl fullWidth className={classes.margin}>
                                 <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="name" label="暱稱" variant="outlined" />
                             </FormControl>
                             <Divider/>
@@ -367,7 +387,7 @@ const Account = (props) => {
                                 <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />
                             </FormControl>
                             <FormControl fullWidth className={classes.margin}>
-                                <TextField disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
+                                <TextField required disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
                             </FormControl>
                         </form>
                         <div className={classes.wrapper}>
@@ -421,6 +441,23 @@ const Account = (props) => {
                     </DialogActions>
                 </Dialog>
                 <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={props.dataupdate} message="您的變更已經儲存"/>
+                <Dialog
+                    open={updatePassword}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="logout-dialog-title">{"重新登入"}</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        您的密碼已經更新<br/>請重新登入。
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleLogout} color="primary" autoFocus>
+                        好！
+                    </Button>
+                    </DialogActions>
+                </Dialog>
             </Container>
         );
     }

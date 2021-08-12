@@ -28,17 +28,16 @@ import UnloginNavBar from './Component/NavBar/UnloginNavbar';
 import FansAdmin from './Component/Account/FansAdmin';
 import ForgetPassword from './Component/Account/ForgetPassword';
 import EmbedChannel from './Component/Podcast/EmbedChannel';
+import EmailVerified from './Component/Account/EmailVerified'
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-//Other
-import Cookies from 'universal-cookie';
 
 
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed'];
-  const removeNavbarPath = ['embed'];
+  const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
   const removeAdsensePath = ['embed'];
   const [isAuth, setAuth] = useState(0);
   const [playerUrl, setPlayerUrl] = useState();
@@ -49,6 +48,7 @@ const App = (props) => {
   const [userUpdate, setUserUpdate] = useState(0);
   const [pathname, setPathname] = useState();
   const [inApp, setInApp] = useState(false);
+  const [emailVeri, setEmailVeri] = useState(true);
   const userUid = useRef("");
   const userEmail = useRef("");
   const isFirstLoading = useRef(true);
@@ -92,48 +92,57 @@ const App = (props) => {
     () => {
       firebase.auth().onAuthStateChanged(async(user)=>{
         if (user) {
-          //notification webbrowser
-          if (!(firebase.messaging.isSupported())) {
-            console.log('This browser does not support notification');
+          //checkEmailVerified
+          if (!user.emailVerified) {
+            //unVerified, 轉跳到驗證介面
+            setAuth(true);
+            setEmailVeri(false);
+            userUid.current = user.uid;
+            userEmail.current = user.email;
           } else {
-            const messaging = firebase.messaging();
-            const registration = await navigator.serviceWorker.ready;
-            messaging.getToken(
-              { 
-                serviceWorkerRegistration: registration,
-                vapidKey: fcmVapidKey 
-              })
-              .then((currentToken) => {
-                if (currentToken) {
-                  //update token to user
-                  firebase.firestore().collection("user")
-                  .doc(user.uid)
-                  .collection("pushNotificationToken")
-                  .doc(currentToken)
-                  .set({ token: currentToken, updateTime: firebase.firestore.FieldValue.serverTimestamp() })
-                  .then(
-                    () => {
-                      console.log("You can got notification.")
-                    }
-                  );
-                } else {
-                  // Show permission request UI
-                  console.log('No registration token available. Request permission to generate one.');
-                }
-            }).catch((err) => {
-                console.log('An error occurred while retrieving token.');
-            });
-          }
-
-          firebase.firestore().collection("user").doc(user.uid).get()
-          .then(
-            (doc)=>{
-              setUserData(doc.data());
-              userUid.current = user.uid;
-              userEmail.current = user.email;
-              setAuth(true);
+             //notification webbrowser
+            if (!(firebase.messaging.isSupported())) {
+              console.log('This browser does not support notification');
+            } else {
+              const messaging = firebase.messaging();
+              const registration = await navigator.serviceWorker.ready;
+              messaging.getToken(
+                { 
+                  serviceWorkerRegistration: registration,
+                  vapidKey: fcmVapidKey 
+                })
+                .then((currentToken) => {
+                  if (currentToken) {
+                    //update token to user
+                    firebase.firestore().collection("user")
+                    .doc(user.uid)
+                    .collection("pushNotificationToken")
+                    .doc(currentToken)
+                    .set({ token: currentToken, updateTime: firebase.firestore.FieldValue.serverTimestamp() })
+                    .then(
+                      () => {
+                        console.log("You can got notification.")
+                      }
+                    );
+                  } else {
+                    // Show permission request UI
+                    console.log('No registration token available. Request permission to generate one.');
+                  }
+              }).catch((err) => {
+                  console.log('An error occurred while retrieving token.');
+              });
             }
-          );          
+
+            firebase.firestore().collection("user").doc(user.uid).get()
+            .then(
+              (doc)=>{
+                setUserData(doc.data());
+                userUid.current = user.uid;
+                userEmail.current = user.email;
+                setAuth(true);
+              }
+            );  
+          }        
         } else {
           setAuth(false);
         }
@@ -145,14 +154,18 @@ const App = (props) => {
     ()=>{
       if (isFirstLoading.current === true) {
         document.body.style.backgroundColor = "#f7f7f7";
-        setPathname(window.location.pathname.split('/')[basenameIndex]);
         setInApp(isInApp());
-        console.log("Client Version:0809-3")
+        console.log("Client Version:0813-1")
         isFirstLoading.current = false;
       }
     }
   )
 
+  useEffect(
+    () => {
+      setPathname(window.location.pathname.split('/')[basenameIndex]);
+    }
+  )
 
   const setPlayer = (e) => {
     setPlayerTitle(e.currentTarget.dataset.titlename)
@@ -189,7 +202,7 @@ const App = (props) => {
                       )}/>
                   <Route exact path="/account"
                     render={(props) => (
-                        <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} />
+                        <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} />
                       )}
                   />
                   <Route exact path="/podcastaccount" 
@@ -236,14 +249,20 @@ const App = (props) => {
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/forgetpassword" component={ForgetPassword} />
+                  <Route exact path="/emailverified" component={EmailVerified} />
+                  { (!removeNavbarPath.includes(pathname)) && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }         
+                  {
+                    /* Email 沒有驗證 emailUnVerified*/
+                     !emailVeri && <Redirect to='/emailverified'/>
+                  }
                   { /* 如果頁面是廣播首頁則允許沒有登入預覽 */
                     !isAuth && (!allowUnloginPath.includes(pathname)) && <Redirect to='/signin'/>
                   }
                   { !isAuth && pathname ==="podcast" && <UnloginNavBar></UnloginNavBar>}
-                  { isAuth && (!removeNavbarPath.includes(pathname)) && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }
-                  
-                  {/*Google Adsense*/}
-                  { !(removeAdsensePath.includes(pathname)) && <AdsenseComponent/>}
+                  { 
+                    /*Google Adsense*/
+                    !(removeAdsensePath.includes(pathname)) && <AdsenseComponent/>
+                  }
                 </>
                 :
                 <LinearProgress style={{ wdith: 100 }}/>

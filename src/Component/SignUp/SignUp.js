@@ -1,6 +1,6 @@
 //react
 import React, {useState, useEffect} from 'react';
-import { Link as RLink, useHistory } from 'react-router-dom';
+import { Link as RLink } from 'react-router-dom';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = ()=>{
   const classes = useStyles();
-  const history = useHistory();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -95,10 +94,10 @@ const SignUp = ()=>{
             avatar : ""
           }
         ).then(() => {
-          window.location.reload();
+          //window.location.reload();
         })
         .catch((error) => {
-            console.error("Error writing document: ", error);
+            console.log("Error writing document: ", error);
         });  
       })
       .catch((error) => {
@@ -123,7 +122,7 @@ const SignUp = ()=>{
         firebase.auth().onAuthStateChanged((user)=> {
             if(user) {
               // 使用者已登入，redirect to Homepage
-              history.push('/')
+              //history.push('/')
             }
           });
     }
@@ -138,7 +137,7 @@ const SignUp = ()=>{
         <Typography component="h1" variant="h5">
           立即註冊<br/>建立自己私人的Podcast
         </Typography>
-        <form className={classes.form} noValidate>
+        <div className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -191,7 +190,6 @@ const SignUp = ()=>{
             </Grid>
           </Grid>
           <Button
-            type="button"
             fullWidth
             variant="contained"
             color="primary"
@@ -213,12 +211,12 @@ const SignUp = ()=>{
           <br/>
           <Grid container justify="center">
             <Grid item>
-              <Link component={RLink} to="/signin" variant="body1">
+              <Link href="/webapp/signin" variant="body1">
                 已有帳號？立即登入
               </Link>
             </Grid>
           </Grid>
-        </form>
+        </div>
         </CardContent>
       </Card>
       <Box mt={5}>

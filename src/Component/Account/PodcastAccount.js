@@ -333,7 +333,7 @@ const PodcastAccount = (props) => {
                                     error={ userIdErr!==false } 
                                     helperText={ userIdErr !== false ? userIdErr : "聽眾將透過電台ID搜尋您的頻道，建立後不可變更！"} 
                                     value={userId} 
-                                    onChange={(e)=>setUserId(e.target.value)} 
+                                    onChange={(e)=>setUserId(e.target.value.replace("/[\W]/g,''"))}
                                     id="outlined-basic" 
                                     label="電台ID" 
                                     variant="outlined"

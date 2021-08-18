@@ -67,6 +67,7 @@ const SignIn = () => {
   const [pwErr, setPwErr] = useState(false);
   const [handleCode, setHandleCode] = useState("init");
   const history = useHistory();
+  
 
   const handleSignin = ()=>{
     setHandleCode("loading")
@@ -93,14 +94,9 @@ const SignIn = () => {
   useEffect(
     ()=>{
         firebase.auth().onAuthStateChanged((user)=> {
-            if(user) {
-              if (!user.emailVerified) {
-                window.location.reload();
-              } else {
+            if (user) {
               // 使用者已登入，redirect to Homepage
-              window.location.href = '/';
-              }
-
+              window.location.href = '/webapp';
             }
           });
     }
@@ -113,7 +109,7 @@ const SignIn = () => {
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
             <img src={LogoIcon} width="128"></img>
             <Typography component="h1" variant="h5">立即登入<br/>建立或收聽私人Podcast</Typography>
-            <form className={classes.form} noValidate>
+            <div className={classes.form} noValidate>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -147,7 +143,6 @@ const SignIn = () => {
                 disabled={handleCode==="loading"}
             />
             <Button
-                type="button"
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -157,13 +152,13 @@ const SignIn = () => {
             >
                 登入
             </Button>
-            <Link component={RLink} to="/signup" variant="body2">
+            <Link href="/webapp/signup" variant="body2">
                     {"立即註冊"}
             </Link> &nbsp;&nbsp;
             <Link component={RLink} to="/forgetpassword" variant="body2">
                     {"忘記密碼"}
             </Link>
-            </form>
+            </div>
           </CardContent>
       </Card>
       <Box mt={8}>

@@ -108,14 +108,18 @@ const NavBar = (props) => {
     )
 
     const getReqCount = ()=>{
-      firebase.database().ref('/subcheck/' + props.user.userId).once("value", e => {
-      }).then((e)=>{
-        if (e.val() !== null) {
-          setReqCount(Object.entries(e.val()).length);
-        } else {
-          setReqCount(0);
-        }
-      })
+      if (props.user.userId !== undefined && props.user.userId !== null && props.user.userId !== "") {
+        firebase.database().ref('/subcheck/' + props.user.userId).once("value", e => {
+        }).then((e)=>{
+          if (e.val() !== null) {
+            setReqCount(Object.entries(e.val()).length);
+          } else {
+            setReqCount(0);
+          }
+        })
+      } else {
+        setReqCount(0);
+      }
     }
 
     return (

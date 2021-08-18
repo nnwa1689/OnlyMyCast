@@ -36,7 +36,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 const App = (props) => {
-  const allowUnloginPath = ['podcast', 'embed'];
+  const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
   const removeAdsensePath = ['embed'];
   const [isAuth, setAuth] = useState(0);
@@ -250,7 +250,7 @@ const App = (props) => {
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/forgetpassword" component={ForgetPassword} />
                   <Route exact path="/emailverified" component={EmailVerified} />
-                  { (!removeNavbarPath.includes(pathname)) && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }         
+                  { (!removeNavbarPath.includes(pathname) && isAuth) && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }         
                   {
                     /* Email 沒有驗證 emailUnVerified*/
                      !emailVeri && <Redirect to='/emailverified'/>

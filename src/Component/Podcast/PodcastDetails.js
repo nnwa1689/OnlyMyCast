@@ -154,6 +154,7 @@ const PodcastDetails = (props) => {
                     data-coveruri={avatar}
                     data-titlename={name}
                     data-podcastname={channelName}
+                    data-poduserid = { props.match.params.id }
                     onClick={props.setPlayer}>
                     播放單集
                 </Button>

@@ -18,6 +18,7 @@ import PodcastAccount from './Component/Account/PodcastAccount';
 import Subreq from './Component/Account/Subreq';
 import Search from './Component/Search/Search'
 import PodcastHome from './Component/Podcast/PodcastHome';
+import AnalyticsPodcastDetails from './Component/Podcast/AnalyticsPodcastDetails';
 import NewPodcast from './Component/Podcast/NewPodcast'
 import PodcastDetails from './Component/Podcast/PodcastDetails'
 import EditPodcast from './Component/Podcast/EditPodcast'
@@ -93,7 +94,7 @@ const App = (props) => {
       firebase.auth().onAuthStateChanged(async(user)=>{
         if (user) {
           //checkEmailVerified
-          if (!user.emailVerified) {
+          if (!user.emailVerified && process.env.NODE_ENV !== "development") {
             //unVerified, 轉跳到驗證介面
             setAuth(true);
             setEmailVeri(false);
@@ -155,7 +156,7 @@ const App = (props) => {
       if (isFirstLoading.current === true) {
         document.body.style.backgroundColor = "#f7f7f7";
         setInApp(isInApp());
-        console.log("Client Version:0813-1")
+        console.log("Client Version:11012262210")
         isFirstLoading.current = false;
       }
     }
@@ -168,6 +169,25 @@ const App = (props) => {
   )
 
   const setPlayer = (e) => {
+    //recoding play history this user
+    firebase.firestore().collection("podcast")
+    .doc(e.currentTarget.dataset.poduserid)
+    .collection('podcast')
+    .doc(e.currentTarget.value)
+    .collection('playedlist')
+    .doc(userUid.current)
+    .set(userData)
+    .then(
+      () => {
+        console.log('click');
+      }
+    )
+    .catch(
+      (e) => {
+        console.log("SomeErr");
+      }
+    )
+    //set player
     setPlayerTitle(e.currentTarget.dataset.titlename)
     setPlayerUrl(e.currentTarget.dataset.uri)
     setPodcastName(e.currentTarget.dataset.podcastname)
@@ -239,6 +259,11 @@ const App = (props) => {
                   <Route path="/editpodcast/:id/:podId" 
                     render={(props) => (
                         <EditPodcastDetails {...props} user={userData} />
+                      )} 
+                  />
+                  <Route exact path="/analyticspodcast/:id/:podId" 
+                    render={(props) => (
+                        <AnalyticsPodcastDetails {...props} user={userData} />
                       )} 
                   />
                   <Route path="/embed/:id" 

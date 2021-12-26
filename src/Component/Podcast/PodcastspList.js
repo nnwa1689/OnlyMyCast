@@ -55,6 +55,7 @@ const PodcastspList = (props)=>{
                     data-coveruri={props.podIcon}
                     data-titlename={props.podTitle}
                     data-podcastname={props.channelName}
+                    data-poduserid = { props.userId }
                     onClick={props.setPlayer}
                     edge="end"
                     >

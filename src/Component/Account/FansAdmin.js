@@ -19,6 +19,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
+import DeleteIcon from '@material-ui/icons/Delete';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -70,6 +72,7 @@ const FansAdmin = (props) => {
             await firebase.firestore().collection("user").doc(value[0]).get()
             .then((doc)=>{
                 changeArr.push(
+                <>
                     <ListItem key={value[0]}>
                     <ListItemAvatar>
                     <Avatar alt={doc.data().name} src={doc.data().avatar==="" ? "." : doc.data().avatar} className={classes.pink}/>
@@ -79,14 +82,19 @@ const FansAdmin = (props) => {
                     />
                     <ListItemSecondaryAction>
                     <Button 
-                        variant="outlined"
-                        color="secondary"
+                        variant="contained"
+                        color="primary"
                         value={value[0]}
                         onClick={(e)=>{showDelFansMsgBox(e)}}
                         className={classes.button}
+                        startIcon={<DeleteIcon />}
                     >移除</Button>
                     </ListItemSecondaryAction>
-                </ListItem>
+                    </ListItem>
+                    <br/>
+                    <Divider />
+                    <br/>
+                </>
                 )
             });
         }

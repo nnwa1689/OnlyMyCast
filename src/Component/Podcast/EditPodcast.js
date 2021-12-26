@@ -15,7 +15,9 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Link from '@material-ui/core/Link';
 import EditIcon from '@material-ui/icons/Edit';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -85,16 +87,30 @@ const EditPodcast = (props) => {
                                 <Link variant="body1" underline="none">{doc.data().title.length >= 30 ? doc.data().title.substring(0,29) + "......" : doc.data().title}</Link><br/>
                                 <Typography variant="body2" component="span">發佈於 {toDataTime(doc.data().updateTime.seconds)}</Typography>
                             </ListItemText>
-                            <ListItemIcon>
-                                <IconButton 
-                                aria-label="play"
-                                value={doc.id}
-                                component={RLink}
-                                to={"/editpodcast/"+ props.user.userId + "/" + doc.id}
-                                >
-                                    <EditIcon/>
-                                </IconButton>
-                            </ListItemIcon>
+                            <Tooltip title="單集統計">
+                                <ListItemIcon>
+                                    <IconButton 
+                                    aria-label="play"
+                                    value={doc.id}
+                                    component={RLink}
+                                    to={"/analyticspodcast/"+ props.user.userId + "/" + doc.id}
+                                    >
+                                        <AssessmentIcon/>
+                                    </IconButton>
+                                </ListItemIcon>
+                            </Tooltip>
+                            <Tooltip title="編輯單集">
+                                <ListItemIcon>
+                                    <IconButton 
+                                    aria-label="play"
+                                    value={doc.id}
+                                    component={RLink}
+                                    to={"/editpodcast/"+ props.user.userId + "/" + doc.id}
+                                    >
+                                        <EditIcon/>
+                                    </IconButton>
+                                </ListItemIcon>
+                            </Tooltip>
                         </ListItem>
                         <Divider/>
                         </>

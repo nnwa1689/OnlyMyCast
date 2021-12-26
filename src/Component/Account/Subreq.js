@@ -13,11 +13,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import { deepOrange } from '@material-ui/core/colors';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import Divider from '@material-ui/core/Divider';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -90,7 +90,8 @@ const Subreq = (props) => {
             .then((doc)=>{
                 const data = doc.data();
                 changeArr.push(
-                    <ListItem key={i[0]}>
+                    <>
+                        <ListItem key={i[0]}>
                         <ListItemAvatar>
                         <Avatar alt={data.name} src={data.avatar==="" ? "." : data.avatar} className={classes.pink}/>
                         </ListItemAvatar>
@@ -115,7 +116,11 @@ const Subreq = (props) => {
                                 <DeleteIcon />
                         </IconButton>
                         </ListItemSecondaryAction>
-                    </ListItem> 
+                    </ListItem>
+                    <br/>
+                    <Divider />
+                    <br/>
+                </>
                 )
             })
         }

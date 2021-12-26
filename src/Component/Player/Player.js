@@ -222,11 +222,11 @@ const Player = (props) => {
                     value={playBackRate}
                     onChange={(e)=>{changePlayBackRate(e)}}
                     >
+                        <MenuItem value={0.25}>x0.25</MenuItem>
                         <MenuItem value={0.5}>x0.5</MenuItem>
                         <MenuItem value={1}>x1.0</MenuItem>
                         <MenuItem value={1.5}>x1.5</MenuItem>
                         <MenuItem value={2.0}>x2.0</MenuItem>
-                        <MenuItem value={3.0}>x3.0</MenuItem>
                     </Select>                    
                 </Toolbar>
                 </AccordionDetails>

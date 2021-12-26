@@ -419,8 +419,8 @@ const PodcastAccount = (props) => {
                                         </FormControl>
                                         <FormControl fullWidth className={classes.margin}>
                                         <InputLabel>電台簡介</InputLabel>
-                                        <OutlinedInput id="component-outlined" style={{display:"none"}}/>
-                                        <br/><br/>
+                                        <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
+                                        <br/>
                                         <MDEditor
                                             value={intro}
                                             onChange={setIntro}

@@ -158,13 +158,13 @@ const useStyles = makeStyles((theme)=>({
                         </FormControl>
                         <FormControl fullWidth className={classes.margin}>
                         <InputLabel>電台簡介</InputLabel>
-                                <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
-                                <br/>
-                                <MDEditor
-                                    value={intro}
-                                    onChange={setIntro}
-                                />   
-                                <br/> <br/>                         
+                            <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
+                            <br/>
+                            <MDEditor
+                                value={intro}
+                                onChange={setIntro}
+                            />   
+                            <br/> <br/>                         
                         </FormControl>
                         <FormControl fullWidth className={classes.margin}>
                         <Button

@@ -2,12 +2,16 @@
 import './App.css';
 import { useState, useRef, useEffect } from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/messaging";
 import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
+//DevMode
+//import FirebaseConfig from './FirebaseConfig/FirebaseConfig-dev';
+
 //component
 import AdsenseComponent from './Component/Adsense/AdsenseComponent';
 import Home from './Component/Home/Home'

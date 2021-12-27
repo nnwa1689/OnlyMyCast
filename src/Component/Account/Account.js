@@ -361,6 +361,7 @@ const Account = (props) => {
                                 disabled={handleCode==="loading"}
                                 onChange={(e)=>{
                                     if (e.target.files.length >= 1) {
+                                        setAvatar(URL.createObjectURL(e.target.files[0]));
                                         setFilename(e.target.files[0].name);
                                         setFileBit(e.target.files[0])
                                     }

@@ -7,9 +7,11 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { Container } from '@material-ui/core';
 import CastIcon from '@material-ui/icons/Cast';
+import MyPodcastList from './MyPodcastList';
 import PodcastList from './PodcastList';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import Grid from '@material-ui/core/Grid';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -74,15 +76,16 @@ const Home = (props) => {
                 for (var value of tarData.sort(function(a,b) {return b.data.updateTime.seconds - a.data.updateTime.seconds;})) {
                   const haveep = await checkHaveEP(value.data.updateTime.seconds, value.date.seconds);
                   changeArr.push(
-                    <PodcastList 
+                    <MyPodcastList 
                       key={value.data.userId} 
                       podcastName={value.data.name} 
                       podcastIntro={value.data.intro} 
                       podcastCover={value.data.icon} 
                       podcastId={value.data.userId}
                       haveNewEP={haveep}
+                      updateTime={value.data.updateTime.seconds}
                       >
-                  </PodcastList>
+                  </MyPodcastList>
                   )
                 }
                 setSubscribeList(changeArr);
@@ -113,7 +116,7 @@ const Home = (props) => {
           <Card className={classes.root} style={{marginTop: 100}}>
             <CardContent>
             <Typography variant="h5" component="h1">
-                  <CastIcon/>你的電台
+                  <CastIcon/>我的頻道
               </Typography>
               {
                 props.user.userId ==="" ?
@@ -128,12 +131,12 @@ const Home = (props) => {
           <Card className={classes.root}>
               <CardContent>
               <Typography variant="h5" component="h1">
-                  <FavoriteIcon/>你的訂閱
+                  <FavoriteIcon/>我的訂閱
               </Typography>
-              <Typography variant="body1" component="span">
-                  你訂閱的電台都在這裡了，盡情享用吧～
-              </Typography>
-              <br/><br/>
+              </CardContent>
+          </Card>
+          <br/>
+          <Grid container spacing={4}>
               {subscribeList ==="" ?
                 <>
                   <Typography variant="h2" component="h1">
@@ -146,8 +149,7 @@ const Home = (props) => {
                :
                subscribeList
                }
-              </CardContent>
-          </Card>
+              </Grid>
       </Container>
     )
   }

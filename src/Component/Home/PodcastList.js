@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme)=>({
     const classes = useStyles();  
     const [haveNewEP, setHaveNewEP] = useState(false);
     const [intro, setIntro] = useState(props.podcastIntro.length>=50 ? props.podcastIntro.substring(0, 49) + "⋯" : props.podcastIntro);
-    const [podcastName, setPodcastName] = useState(props.podcastName.length>=15 ? props.podcastName.substring(0, 14) + "......" : props.podcastName);
+    const [podcastName, setPodcastName] = useState(props.podcastName.length>=20 ? props.podcastName.substring(0, 20) + "...." : props.podcastName);
     useEffect(
       ()=>{
         if (props.haveNewEP!==false && props.haveNewEP!==undefined) {
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme)=>({
                 <ListItemText
                 secondary={
                     <React.Fragment>
-                    <Link variant="body1" underline="none">{props.podcastName}</Link> 
+                    <Link variant="body1" underline="none">{podcastName}</Link> 
                     <br/>
                     <Typography
                         component="span"

@@ -3,14 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { Link as RLink } from 'react-router-dom';
 //ui
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
 import Badge from '@material-ui/core/Badge';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import CardActions from '@material-ui/core/CardActions';
+import { Divider } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -30,21 +31,45 @@ const useStyles = makeStyles((theme)=>({
       marginBottom: 12,
     },
     large: {
-        width: theme.spacing(8),
-        height: theme.spacing(8),
-        marginRight: theme.spacing(2),
+        width: '100%',
+        height: theme.spacing(36),
         color: "#FFFFFF",
         backgroundColor: "#FD3E49",
       },
+    media: {
+        borderRadius: 6,
+      },
+    card: {
+      borderRadius: 12,
+      minHeight: 430,
+      textAlign: 'center',
+    },
+    header: {
+      textAlign: 'center',
+      spacing: 10,
+    },
+    action: {
+      display: 'flex',
+      justifyContent: 'space-around',
+    }
   })
   );
 
 
   const PodcastList = (props) => {
-    const classes = useStyles();  
+
+    const classes = useStyles();
     const [haveNewEP, setHaveNewEP] = useState(false);
-    const [intro, setIntro] = useState(props.podcastIntro.length>=50 ? props.podcastIntro.substring(0, 49) + "⋯" : props.podcastIntro);
-    const [podcastName, setPodcastName] = useState(props.podcastName.length>=20 ? props.podcastName.substring(0, 20) + "...." : props.podcastName);
+    const [intro, setIntro] = useState(props.podcastIntro.length>=30 ? props.podcastIntro.substring(0, 30) + "⋯" : props.podcastIntro);
+    const [podcastName, setPodcastName] = useState(props.podcastName.length>=15 ? props.podcastName.substring(0, 15) + "..." : props.podcastName);
+    
+    const toDataTime = (sec)=>{
+      var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
+      t.setUTCSeconds(sec);
+      return t.getFullYear() + '/' + (t.getMonth()+ 1) + '/' + t.getDate()
+      //return t.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'},);
+    }
+
     useEffect(
       ()=>{
         if (props.haveNewEP!==false && props.haveNewEP!==undefined) {
@@ -53,40 +78,33 @@ const useStyles = makeStyles((theme)=>({
       }
     )
     return (
-        <div>
-            <ListItem button component={RLink} to={"/podcast/" + props.podcastId} alignItems="flex-start">
-                <ListItemAvatar>
-                  { haveNewEP ? 
-                    <Badge
-                    color="primary"
-                    badgeContent={"新單集"}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}>
-                        <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover==="" ? "." : props.podcastCover} />
-                    </Badge>
-                  :
-                  <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
-                }
-                </ListItemAvatar>
-                <ListItemText
-                secondary={
-                    <React.Fragment>
-                    <Link variant="body1" underline="none">{podcastName}</Link> 
-                    <br/>
-                    <Typography
-                        component="span"
-                        variant="subtitle1"
-                        color="textPrimary">
-                    {intro}
-                    </Typography>
-                    </React.Fragment>
-                }
-                />
-            </ListItem>
-            <Divider/>
+    <Grid item xs={12} sm={6} md={4}>
+      <Card className={classes.card}>
+      {haveNewEP ? 
+          <Badge
+          color="primary"
+          badgeContent={"新單集"}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}>
+              <Avatar component={RLink} to={"/podcast/" + props.podcastId} variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover==="" ? "." : props.podcastCover} />
+          </Badge>
+        :
+          <Avatar component={RLink} to={"/podcast/" + props.podcastId} variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
+      } 
+      <CardContent>
+      <Link component={RLink} to={"/podcast/" + props.podcastId} variant="body1" underline="hover">{podcastName}</Link>
+        <div className={classes.list}>
+          <Typography align="left">{ intro }</Typography>
         </div>
+      </CardContent>
+      <Divider variant="middle" />
+      <CardActions className={classes.action}>
+      <Typography align="left" variant="subtitle2">最後更新：{ toDataTime(props.updateTime) }</Typography>
+      </CardActions>
+    </Card>
+    </Grid>
     )
 }
 export default PodcastList;

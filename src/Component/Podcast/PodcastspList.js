@@ -35,13 +35,13 @@ const PodcastspList = (props)=>{
                 <Link variant="body1" underline="none">
                     {title}</Link>
                     <br/>
-                    <Typography variant="subtitle1" component="span">
-                    <ListItemIcon><EventIcon/>
+                    <Typography variant="subtitle2" component="span">
+                    <ListItemIcon><EventIcon fontSize='small'/>
                     {toDataTime(props.updateTime.seconds)}</ListItemIcon>
                 </Typography>
-                <Typography variant="subtitle1" component="span">
+                <Typography variant="subtitle2" component="span">
                     &nbsp;
-                        <ListItemIcon><AccessTimeIcon/>
+                        <ListItemIcon><AccessTimeIcon fontSize='small'/>
                         {props.duration}
                         </ListItemIcon>
                 </Typography>

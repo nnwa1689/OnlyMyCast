@@ -39,8 +39,8 @@ const useStyles = makeStyles((theme)=>({
         alignItems:"center"
     },
     large: {
-        width: theme.spacing(20),
-        height: theme.spacing(20),
+        width: theme.spacing(24),
+        height: theme.spacing(24),
         marginBottom: theme.spacing(3),
         marginTop:theme.spacing(3),
         color: "#FFFFFF",
@@ -97,24 +97,25 @@ const PodcastHome = (props) => {
     const getPodcastList = async()=>{
         var changeArr = Array();
         await firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').orderBy('updateTime', "desc").get()
-        .then((e)=>{
+        .then(async(e)=>{
             if (e.docs.length ===0) {
                 changeArr = "";
             } else {
                 for (var doc of e.docs) {
+                    const qd = doc.data();
                     changeArr.push(
                         <PodcastspList
                             key={doc.id}
                             podId={doc.id}
-                            podTitle={doc.data().title}
+                            podTitle={qd.title}
                             channelName={name}
-                            audioUrl={doc.data().url}
+                            audioUrl={qd.url}
                             podIcon={avatar}
-                            podIntro={doc.data().intro}
+                            podIntro={qd.intro}
                             setPlayer={props.setPlayer}
                             userId={props.match.params.id}
-                            updateTime={doc.data().updateTime}
-                            duration={doc.data().duration}
+                            updateTime={qd.updateTime}
+                            duration={qd.duration}
                         />
                     )
                 }  
@@ -222,8 +223,8 @@ const PodcastHome = (props) => {
                 <Card className={classes.root}>
                     <CardContent>
                     <Avatar variant="rounded" alt={name} src={avatar==="" ? "." : avatar} className={classes.large} />
-                    <Typography variant="h5" component="h1">{name}</Typography>
-                    { subStatu !== 4 && (<Typography variant="body2" component="span"><br/><PeopleIcon /><br/>{subCount} 位聽眾<br/><br/></Typography>) }
+                    <Typography variant="h4">{name}</Typography>
+                    { subStatu !== 4 && (<Typography variant="body1" component="span"><br/><PeopleIcon /><br/>{subCount} 位聽眾<br/><br/></Typography>) }
                     { props.user.userId === props.match.params.id ?
                         <Button variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
                     :

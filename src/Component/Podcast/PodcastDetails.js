@@ -17,6 +17,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EventIcon from '@material-ui/icons/Event';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -56,6 +57,7 @@ const PodcastDetails = (props) => {
     const [audioUrl, setAudioUrl] = useState();
     const [duration, setDuration] =  useState("");
     const [subStatu, setSubStatu] = useState();
+    const [played, setPlayed] = useState(false);
 
     const isFirstLoad = useRef(true);
 
@@ -64,12 +66,31 @@ const PodcastDetails = (props) => {
         if (isFirstLoad.current) {
           getSPData();
           getChannelData();
+          getPlayedStatu();
           getSubStatu();
           window.scrollTo(0, 0);
           isFirstLoad.current = false;
         }
       }
     )
+
+    const getPlayedStatu = () => {
+      firebase.firestore()
+                    .collection("podcast")
+                    .doc(props.match.params.id)
+                    .collection('podcast')
+                    .doc(props.match.params.podId)
+                    .collection('playedlist')
+                    .doc(props.userUid)
+                    .get()
+                    .then(
+                      (e) => {
+                        if (e.exists) {
+                          setPlayed(true);
+                        }
+                      }
+                    )
+    }
 
     const getSubStatu = ()=>{
       //已經訂閱
@@ -138,9 +159,11 @@ const PodcastDetails = (props) => {
                 <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h6">{channelName}</Link>
                 <br/>
                 <Typography variant="body1" component="span">
-                <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon>
+                  <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon>
                   &nbsp;
                   <ListItemIcon><AccessTimeIcon/>{duration}</ListItemIcon>
+                  &nbsp;
+                  { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
                   </Typography>
                 <br/><br/>
                 <Button 

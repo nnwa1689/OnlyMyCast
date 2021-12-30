@@ -40,6 +40,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 
+const clientVersion = "2021/12/30-2313";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -160,7 +161,7 @@ const App = (props) => {
       if (isFirstLoading.current === true) {
         document.body.style.backgroundColor = "#f7f7f7";
         setInApp(isInApp());
-        console.log("Client Version:11012262210")
+        console.log("Client Version:" + clientVersion);
         isFirstLoading.current = false;
       }
     }

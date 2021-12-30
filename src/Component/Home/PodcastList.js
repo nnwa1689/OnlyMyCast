@@ -79,31 +79,27 @@ const useStyles = makeStyles((theme)=>({
     )
     return (
     <Grid item xs={12} sm={6} md={4}>
-      <Card className={classes.card}>
-      {haveNewEP ? 
-          <Badge
-          color="primary"
-          badgeContent={"新單集"}
+      <Badge
+          color={haveNewEP ? "primary" : ""}
+          badgeContent={haveNewEP && "新單集"}
           anchorOrigin={{
             vertical: 'top',
-            horizontal: 'left',
+            horizontal: 'right',
           }}>
-              <Avatar component={RLink} to={"/podcast/" + props.podcastId} variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover==="" ? "." : props.podcastCover} />
-          </Badge>
-        :
+        <Card className={classes.card}>
           <Avatar component={RLink} to={"/podcast/" + props.podcastId} variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
-      } 
-      <CardContent>
-      <Link component={RLink} to={"/podcast/" + props.podcastId} variant="body1" underline="hover">{podcastName}</Link>
-        <div className={classes.list}>
-          <Typography align="left">{ intro }</Typography>
-        </div>
-      </CardContent>
-      <Divider variant="middle" />
-      <CardActions className={classes.action}>
-      <Typography align="left" variant="subtitle2">最後更新：{ toDataTime(props.updateTime) }</Typography>
-      </CardActions>
-    </Card>
+          <CardContent>
+          <Link component={RLink} to={"/podcast/" + props.podcastId} variant="body1" underline="hover">{podcastName}</Link>
+            <div className={classes.list}>
+              <Typography align="left">{ intro }</Typography>
+            </div>
+          </CardContent>
+          <Divider variant="middle" />
+          <CardActions className={classes.action}>
+          <Typography align="left" variant="subtitle2">最後更新：{ toDataTime(props.updateTime) }</Typography>
+          </CardActions>
+        </Card>
+      </Badge>
     </Grid>
     )
 }

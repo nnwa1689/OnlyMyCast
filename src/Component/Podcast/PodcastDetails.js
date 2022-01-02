@@ -155,12 +155,11 @@ const PodcastDetails = (props) => {
               <Card className={classes.root}>
                 <CardContent>
                 <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
-                <Typography variant="h5" component="h1">{name}</Typography>
-                <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h6">{channelName}</Link>
+                <Typography variant="h5">{name}</Typography>
+                <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
                 <br/>
                 <Typography variant="body1" component="span">
-                  <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon>
-                  &nbsp;
+                  <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon><br/>
                   <ListItemIcon><AccessTimeIcon/>{duration}</ListItemIcon>
                   &nbsp;
                   { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }

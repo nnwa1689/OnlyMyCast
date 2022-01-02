@@ -18,7 +18,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 const PodcastspList = (props)=>{
 
-    const [title, setTitle] = useState( props.podTitle.length >= 35 ? props.podTitle.substring(0,34) + "⋯" : props.podTitle);
+    const [title, setTitle] = useState( props.podTitle.length >= 50 ? props.podTitle.substring(0,49) + "⋯" : props.podTitle);
+    const [intro, setIntro] = useState( props.intro.length >= 100 ? props.intro.substring(0,99) + "⋯" : props.intro);
 
     const toDataTime = (sec)=>{
         var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
@@ -32,19 +33,15 @@ const PodcastspList = (props)=>{
     <>
         <ListItem button component={RLink} to={"/podcastdetail/" + props.userId + "/" + props.podId}>
             <ListItemText>
-                <Link variant="body1" underline="none">
-                    {title}</Link>
-                    <br/>
-                    <Typography variant="subtitle2" component="span">
-                    <ListItemIcon><EventIcon fontSize='small'/>
-                    {toDataTime(props.updateTime.seconds)}</ListItemIcon>
-                </Typography>
-                <Typography variant="subtitle2" component="span">
+                <Typography variant="body2" component="span">
+                    <ListItemIcon><EventIcon fontSize='small'/>{toDataTime(props.updateTime.seconds)}</ListItemIcon>
                     &nbsp;
-                        <ListItemIcon><AccessTimeIcon fontSize='small'/>
-                        {props.duration}
-                        </ListItemIcon>
+                    <ListItemIcon><AccessTimeIcon fontSize='small'/>{props.duration}</ListItemIcon>
                 </Typography>
+                <br/>
+                <Link variant="subtitle1" underline="none">{title}</Link>
+                <br/>
+                <Typography style={{ display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }} variant="body2" component="span">{props.intro}</Typography>
             </ListItemText>
             <ListItemSecondaryAction>
                 <Tooltip title="播放">
@@ -58,6 +55,7 @@ const PodcastspList = (props)=>{
                     data-poduserid = { props.userId }
                     onClick={props.setPlayer}
                     edge="end"
+                    size="small"
                     >
                         <PlayArrowIcon />
                     </IconButton>

@@ -54,9 +54,12 @@ const useStyles = makeStyles((theme) => ({
     search: {
       borderRadius: theme.shape.borderRadius,
       transition: 'background-color .15s',
-      backgroundColor: "#f7f7f7",
+      backgroundColor: "rgba(255, 255, 255, .8)",
       '&:hover': {
-        backgroundColor: "#ffffff",
+        backgroundColor: "rgba(255, 255, 255, 1)",
+      },
+      '&:focus-within': {
+        backgroundColor: "rgba(255, 255, 255, 1)",
       },
       marginLeft: theme.spacing(3),
       width: '400px',
@@ -196,7 +199,7 @@ const NavBar = (props) => {
           </AppBar>
 
           <Drawer anchor="left" open={ sideBar } onClose={ ()=> setSideBar(false) }>
-              <div className={ classes.list } 
+              <div className={ classes.list }
                   role="presentation"
                   onClick={ ()=>{ setSideBar(false) } }
                   onKeyDown={ ()=>{ setSideBar(false) } }>
@@ -268,7 +271,7 @@ const NavBar = (props) => {
                       </ListItem>
                       <ListItem key="copyright" fontSize={5}>
                         <Typography variant="body2" color="textSecondary">
-                          {'Copyright © ' + new Date().getFullYear()}<br/>OnlyMyCast建立私人PodCast<br/>
+                          {' © ' + new Date().getFullYear()}<br/>
                           <Link href="https://lab.notes-hz.com/">
                             <span style={ {fontSize: "24px", color: "#028ff3", fontWeight: "bold"} }>Lab</span>
                             <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>H</span>
@@ -280,7 +283,9 @@ const NavBar = (props) => {
                             </Link>
                         </Typography>
                       </ListItem>
-
+                      <ListItem key="clientversion" fontSize={5}>
+                        <Typography variant="subtitle2" color="textSecondary">ClientVersion:220102-22</Typography>
+                      </ListItem>
                   </List>
               </div>
           </Drawer>

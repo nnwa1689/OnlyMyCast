@@ -116,6 +116,7 @@ const PodcastHome = (props) => {
                             userId={props.match.params.id}
                             updateTime={qd.updateTime}
                             duration={qd.duration}
+                            intro={qd.intro}
                         />
                     )
                 }  

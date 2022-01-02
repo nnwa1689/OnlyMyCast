@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 //component
-import PodcastList from '../Home/PodcastList';
+import SearchPodcastList from '../Home/SearchPodcastList';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -95,8 +95,9 @@ const Search = (props) => {
             .then(async(querySnapshot)=>{
                 console.log(Object.entries(querySnapshot.docs))
                 for (var value of Object.entries(querySnapshot.docs)) {
+                    const data = value[1].data();
                     changeArr.push(
-                        <PodcastList podcastName={value[1].data().name} podcastIntro={value[1].data().intro} podcastCover={value[1].data().icon} podcastId={query}></PodcastList>
+                        <SearchPodcastList podcastName={data.name} podcastIntro={data.intro} podcastCover={data.icon} podcastId={query}></SearchPodcastList>
                     )
                 }
            }).then(()=>{

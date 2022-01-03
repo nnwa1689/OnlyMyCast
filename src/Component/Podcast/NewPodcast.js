@@ -293,7 +293,7 @@ const useStyles = makeStyles((theme)=>({
                 <Card className={classes.root}>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>
-                            (＾ｰ^)ノ<br/>
+                            (^ｰ^)ノ<br/>
                         </Typography>
                         <Typography variant="h5" component="span">
                             嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            

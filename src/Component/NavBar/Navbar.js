@@ -54,12 +54,12 @@ const useStyles = makeStyles((theme) => ({
     search: {
       borderRadius: theme.shape.borderRadius,
       transition: 'background-color .15s',
-      backgroundColor: "rgba(255, 255, 255, .8)",
+      backgroundColor: "#D3D3D3",
       '&:hover': {
-        backgroundColor: "rgba(255, 255, 255, 1)",
+        backgroundColor: "#FFFFFF",
       },
       '&:focus-within': {
-        backgroundColor: "rgba(255, 255, 255, 1)",
+        backgroundColor: "#FFFFFF",
       },
       marginLeft: theme.spacing(3),
       width: '400px',
@@ -283,8 +283,8 @@ const NavBar = (props) => {
                             </Link>
                         </Typography>
                       </ListItem>
-                      <ListItem key="clientversion" fontSize={5}>
-                        <Typography variant="subtitle2" color="textSecondary">ClientVersion:220102-22</Typography>
+                      <ListItem key="clientversion">
+                        <Typography variant="subtitle2" color="textSecondary">Client:V220103.22</Typography>
                       </ListItem>
                   </List>
               </div>

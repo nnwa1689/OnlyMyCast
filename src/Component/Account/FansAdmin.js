@@ -1,5 +1,6 @@
 //react
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
+import { Link as RLink } from 'react-router-dom';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -102,7 +103,7 @@ const FansAdmin = (props) => {
     }
 
     const getFansList = async()=>{
-        if (props.user.userId !== "") {
+        if (props.user.userId.length > 0) {
             firebase.firestore().collection("fans").doc(props.user.userId).get()
             .then((doc)=>{
                 if (doc.data()===undefined){
@@ -138,6 +139,31 @@ const FansAdmin = (props) => {
 
     if (fansList===undefined){
         return(<CircularProgress style={{marginTop: "25%"}} />);
+    } else if (props.user.userId.length <= 0) {
+        return(
+            <Container maxWidth="md">
+                <Card className={classes.root}>
+                    <CardContent>
+                        <Typography variant="h2" component="h1" gutterBottom>
+                            (^ｰ^)ノ<br/>
+                        </Typography>
+                        <Typography variant="h5" component="span">
+                            嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
+                        </Typography>
+                        <br/>
+                        <Button
+                            component={RLink}
+                            to="/podcastaccount"
+                            color="primary"
+                            fullWidth
+                            size="large"
+                            variant="contained"
+                            >              
+                            立即建立屬於我的私人電台
+                            </Button>
+                    </CardContent>
+                </Card>
+            </Container>)
     } else {
         return(
             <>

@@ -11,12 +11,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PeopleIcon from '@material-ui/icons/People';
 import PodcastspList from './PodcastspList';
 import List from '@material-ui/core/List';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import YouTubeIcon from '@material-ui/icons/YouTube';
+import TwitterIcon from '@material-ui/icons/Twitter';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -50,6 +55,22 @@ const useStyles = makeStyles((theme)=>({
     },
     markDownBlock: {
         color: "#000000"
+    },
+    facebookButton: {
+        borderColor: "#4267B2",
+        color: "#4267B2",
+    },
+    instagramButton: {
+        borderColor: "#000000",
+        color: "#000000",
+    },
+    youtubeButton: {
+        borderColor: "#FF0000",
+        color: "#FF0000",
+    },
+    twitterButton: {
+        borderColor: "#1DA1F2",
+        color: "#1DA1F2",
     }
   }));
 
@@ -64,6 +85,10 @@ const PodcastHome = (props) => {
     const isFirstLoad = useRef(true);
     const [subCount, setSubCount] = useState(0);
     const [spList, setSpList] = useState();
+    const [facebookLink, setFacebookLink] = useState();
+    const [youtubeLink, setYoutubeLink] = useState ();
+    const [instagramLink, setInstagramLink] = useState();
+    const [twitterLink, setTwitterLink] = useState();
 
     useEffect(
         ()=>{
@@ -141,9 +166,14 @@ const PodcastHome = (props) => {
         .then(
           (doc)=>{
               if (doc.exists){
-                setName(doc.data().name);
-                setIntro(doc.data().intro);
-                setAvatar(doc.data().icon);
+                const data = doc.data();
+                setName(data.name);
+                setIntro(data.intro);
+                setAvatar(data.icon);
+                setFacebookLink(data.facebook !== undefined && data.facebook);
+                setInstagramLink(data.instagram !== undefined && data.instagram);
+                setYoutubeLink(data.youtube !== undefined && data.youtube);
+                setTwitterLink(data.twitter !== undefined && data.twitter);
               }
           }
         );
@@ -224,39 +254,57 @@ const PodcastHome = (props) => {
                 <Card className={classes.root}>
                     <CardContent>
                     <Avatar variant="rounded" alt={name} src={avatar==="" ? "." : avatar} className={classes.large} />
-                    <Typography variant="h4">{name}</Typography>
-                    { subStatu !== 4 && (<Typography variant="body1" component="span"><br/><PeopleIcon /><br/>{subCount} 位聽眾<br/><br/></Typography>) }
+                    <Typography variant="h5">{name}</Typography>
+                    { subStatu !== 4 && (<Typography variant="subtitle2" component="span"><br/><PeopleIcon fontSize='small'/>&nbsp;{subCount} 位聽眾</Typography>) }
+                    <br/><br/>
                     { props.user.userId === props.match.params.id ?
-                        <Button variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
+                        <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
                     :
                         <>
                         { subStatu===1 && 
-                            <Button onClick={(e)=>handleUnsub(e)} variant="outlined" color="secondary" size="large" startIcon={<StarBorderIcon />}>
+                            <Button fullWidth onClick={(e)=>handleUnsub(e)} variant="outlined" color="secondary" size="large" startIcon={<StarBorderIcon />}>
                                 取消追蹤
                             </Button>
                         }
 
                         { subStatu===2 &&
-                            <Button onClick={(e)=>handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
+                            <Button fullWidth onClick={(e)=>handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
                                 要求追蹤
                             </Button>   
                         }
 
                         {
                             subStatu===3 &&
-                            <Button variant="outlined" size="large" onClick={(e)=>handleRemoveReq(e)}>已送出請求</Button>
+                            <Button fullWidth variant="outlined" size="large" onClick={(e)=>handleRemoveReq(e)}>已送出請求</Button>
                         }
                         </>
                     }
                     <br/><br/>
-                    <Divider />
+                    { facebookLink.length > 0 ? 
+                    <>
+                    <Button className={classes.facebookButton} size="large" fullWidth variant="outlined" href={facebookLink} target='_blank'><FacebookIcon/>FaceBook</Button><br/><br/>
+                    </>
+                    : "" }
+                    { instagramLink.length > 0 ? 
+                    <>
+                    <Button className={classes.instagramButton} size="large" fullWidth variant="outlined" href={instagramLink} target='_blank'><InstagramIcon/>Instagram</Button><br/><br/>
+                    </>
+                    : "" }
+                    { youtubeLink.length > 0 ? 
+                    <>
+                     <Button className={classes.youtubeButton} size="large" fullWidth variant="outlined" href={youtubeLink} target='_blank'><YouTubeIcon/>Youtube</Button><br/><br/>
+                    </>
+                    : "" }
+                    { twitterLink.length > 0 ? 
+                    <><Button className={classes.twitterButton} size="large" fullWidth variant="outlined" href={twitterLink} target='_blank'><TwitterIcon/>Twitter</Button><br/><br/></>
+                    : "" }
+                    <Divider/>
                     <Typography style={{textAlign:"left"}} variant="body1" component="span">
                         <ReactMarkdown>{intro}</ReactMarkdown>
                     </Typography>
                     <br/>
                     <Divider/>
-                    { subStatu===1 || props.user.userId === props.match.params.id ?   
-                        
+                    { subStatu===1 || props.user.userId === props.match.params.id ?
                             spList === "" ? 
                             <Typography variant="h4" component="span"><br/>¯\_(ツ)_/¯<br/>還沒有任何節目<br/>稍後再回來吧</Typography>
                             :

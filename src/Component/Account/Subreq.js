@@ -131,12 +131,13 @@ const Subreq = (props) => {
         firebase.database().ref('/subcheck/' + props.user.userId).once("value", e => {
           }).then(async(e)=>{
               const data = e.val();
-              if (data !== undefined && data !== null) {
+              console.log(data);
+              console.log(props.user.userId.length);
+              if (data !== undefined && data !== null && props.user.userId.length > 0) {
                   genListItem(data).then((arr)=>{
                     setReqList(arr);
                   }
-                  );
-                  
+                );  
               } else {
                   setReqList("");
               }
@@ -144,13 +145,13 @@ const Subreq = (props) => {
           })
     }
 
-    if (props.user.userId==="") {
+    if (props.user.userId.length <= 0) {
         return(
             <Container maxWidth="md">
                 <Card className={classes.root}>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>
-                            (＾ｰ^)ノ<br/>
+                            (^ｰ^)ノ<br/>
                         </Typography>
                         <Typography variant="h5" component="span">
                             嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
@@ -168,8 +169,8 @@ const Subreq = (props) => {
                             </Button>
                     </CardContent>
                 </Card>
-            </Container>
-        )} else {
+            </Container>)
+            } else {
             return(
                 <Container maxWidth="md">
                     <Card className={classes.root}>

@@ -77,15 +77,16 @@ const EditPodcast = (props) => {
         firebase.firestore().collection("podcast").doc(props.user.userId).collection('podcast').orderBy('updateTime', 'desc').get()
         .then(async(e)=>{
             if (e.docs.length ===0) {
-                setSpList("")
+                setSpList("");
             } else {
                 for (var doc of e.docs) {
+                    const data = doc.data();
                     changeArr.push(
                         <>
                         <ListItem button component={RLink} to={"/podcastdetail/"+ props.user.userId + "/" + doc.id} key={doc.id}>
                             <ListItemText>
-                                <Link variant="body1" underline="none">{doc.data().title.length >= 30 ? doc.data().title.substring(0,29) + "......" : doc.data().title}</Link><br/>
-                                <Typography variant="body2" component="span">發佈於 {toDataTime(doc.data().updateTime.seconds)}</Typography>
+                                <Link style={{ display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }} variant="body1" underline="none">{data.title}</Link>
+                                <Typography variant="body2" component="span">發佈於 {toDataTime(data.updateTime.seconds)}</Typography>
                             </ListItemText>
                             <Tooltip title="單集統計">
                                 <ListItemIcon>
@@ -128,7 +129,7 @@ const EditPodcast = (props) => {
                 <Card className={classes.root}>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>
-                            (＾ｰ^)ノ<br/>
+                            (^ｰ^)ノ<br/>
                         </Typography>
                         <Typography variant="h5" component="span">
                             嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            

@@ -18,8 +18,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 const PodcastspList = (props)=>{
 
-    const [title, setTitle] = useState( props.podTitle.length >= 50 ? props.podTitle.substring(0,49) + "⋯" : props.podTitle);
-    const [intro, setIntro] = useState( props.intro.length >= 100 ? props.intro.substring(0,99) + "⋯" : props.intro);
+    //const [title, setTitle] = useState( props.podTitle.length >= 50 ? props.podTitle.substring(0,49) + "⋯" : props.podTitle);
+    //const [intro, setIntro] = useState( props.intro.length >= 100 ? props.intro.substring(0,99) + "⋯" : props.intro);
 
     const toDataTime = (sec)=>{
         var t = new Date(Date.UTC(1970, 0, 1, 0, 0, 0))
@@ -39,8 +39,8 @@ const PodcastspList = (props)=>{
                     <ListItemIcon><AccessTimeIcon fontSize='small'/>{props.duration}</ListItemIcon>
                 </Typography>
                 <br/>
-                <Link variant="subtitle1" underline="none">{title}</Link>
-                <br/>
+                <Link style={{ display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }} variant="subtitle1" underline="none">{props.podTitle}</Link>
+
                 <Typography style={{ display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }} variant="body2" component="span">{props.intro}</Typography>
             </ListItemText>
             <ListItemSecondaryAction>

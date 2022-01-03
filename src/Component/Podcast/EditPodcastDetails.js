@@ -157,7 +157,7 @@ const useStyles = makeStyles((theme)=>({
                             <TextField error={titleErr!==false} helperText={ titleErr !== false && titleErr} disabled={handleCode==="loading"} value={title} onChange={(e)=>setTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
                         </FormControl>
                         <FormControl fullWidth className={classes.margin}>
-                        <InputLabel>電台簡介</InputLabel>
+                        <InputLabel>單集簡介</InputLabel>
                             <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
                             <br/>
                             <MDEditor

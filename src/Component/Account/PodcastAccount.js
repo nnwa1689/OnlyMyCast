@@ -28,6 +28,10 @@ import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
 import { Divider } from '@material-ui/core';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import YouTubeIcon from '@material-ui/icons/YouTube';
+import TwitterIcon from '@material-ui/icons/Twitter';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -50,8 +54,8 @@ const useStyles = makeStyles((theme)=>({
       alignItems:"center"
     },
     large: {
-        width: theme.spacing(20),
-        height: theme.spacing(20),
+        width: theme.spacing(24),
+        height: theme.spacing(24),
         marginBottom: theme.spacing(3),
         marginTop:theme.spacing(3),
         color: "#FFFFFF",
@@ -115,6 +119,11 @@ const PodcastAccount = (props) => {
     const [embedCode, setEmbedCode] = useState();
     const [showCopyMsg, setShowCopyMsg] = useState(false);
 
+    const [facebookLink, setFacebookLink] = useState();
+    const [youtubeLink, setYoutubeLink] = useState ();
+    const [instagramLink, setInstargramLink] = useState();
+    const [twitterLink, setTwitterLink] = useState();
+
     const [tabValue, setTabValue] = useState(0);
 
     useEffect(
@@ -124,10 +133,15 @@ const PodcastAccount = (props) => {
                     firebase.firestore().collection("channel").doc(props.user.userId).get()
                     .then(
                       (doc)=>{
-                        setChannelData(doc.data());
-                        setName(doc.data().name);
-                        setIntro(doc.data().intro);
-                        setAvatar(doc.data().icon);
+                        const data = doc.data();
+                        setChannelData(data);
+                        setName(data.name);
+                        setIntro(data.intro);
+                        setAvatar(data.icon);
+                        setFacebookLink(data.facebook === undefined ? "" : data.facebook);
+                        setInstargramLink(data.instagram === undefined ? "" : data.instagram);
+                        setYoutubeLink(data.youtube === undefined ? "" : data.youtube);
+                        setTwitterLink(data.twitter=== undefined ? "" : data.twitter);
                         setEmbedCode(
                             `<iframe frameborder="0" height="200px" style="width:100%;max-width:660px;overflow:hidden;" src="https://onlymycast.notes-hz.com/webapp/embed/` + props.user.userId + `"></iframe>`
                         )
@@ -229,8 +243,12 @@ const PodcastAccount = (props) => {
             setHandleCode('error')
         } else {
             firebase.firestore().collection("channel").doc(userId).set({
-                name:name,
-                intro:intro,
+                name : name,
+                intro : intro,
+                facebook : facebookLink,
+                instagram : instagramLink,
+                youtube : youtubeLink,
+                twitter : twitterLink,
             }, { merge: true }).then(
                 ()=>{
                     if (filename !== "") {
@@ -290,7 +308,7 @@ const PodcastAccount = (props) => {
                             <Card className={classes.root}>
                                 <CardContent>
                                 <Typography variant="h5" component="h1">建立電台</Typography>
-                                <Typography variant="body1" component="span">建立屬於您的私人電台<br/>這裡的資訊將於電台首頁公布</Typography>
+                                <Typography variant="body1" component="span">建立屬於您的私人電台，這裡的資訊將於電台首頁顯示</Typography>
                                 <Avatar variant="rounded" src={avatar} className={classes.large} />
                                 <form noValidate autoComplete="off">
                                 <FormControl fullWidth className={classes.margin}>
@@ -313,7 +331,7 @@ const PodcastAccount = (props) => {
                                     <label htmlFor="contained-button-file">
                                         <Button disabled={handleCode==='loading'|| handleCode==="suc"} variant="contained" size="large" fullWidth color="primary" component="span">
                                             <AttachmentIcon />
-                                            { filename === "" ? "上傳ICON" : filename }
+                                            { filename === "" ? "上傳頻道封面" : filename }
                                         </Button>
                                         <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
                                     </label>
@@ -324,10 +342,11 @@ const PodcastAccount = (props) => {
                                     helperText={ nameErr !== false && nameErr} 
                                     value={name} 
                                     onChange={(e)=>setName(e.target.value)} 
-                                    id="outlined-basic" 
-                                    label="電台名稱" 
+                                    id="outlined-name"
                                     variant="outlined"
-                                    disabled={handleCode==='loading'|| handleCode==="suc"} />
+                                    label="電台名稱"
+                                    disabled={handleCode==='loading'|| handleCode==="suc"}
+                                    required />
                                 </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
                                     <TextField
@@ -338,7 +357,9 @@ const PodcastAccount = (props) => {
                                     id="outlined-basic" 
                                     label="電台ID" 
                                     variant="outlined"
-                                    disabled={handleCode==='loading'|| handleCode==="suc"} />
+                                    disabled={handleCode==='loading'|| handleCode==="suc"} 
+                                    required
+                                    />
                                 </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
                                 <InputLabel>電台簡介</InputLabel>
@@ -378,8 +399,9 @@ const PodcastAccount = (props) => {
                                     variant="fullWidth"
                                     aria-label="full width tabs example"
                                     >
-                                    <Tab label="編輯" />
-                                    <Tab label="推廣" />
+                                    <Tab label="電台資訊" />
+                                    <Tab label="社群媒體" />
+                                    <Tab label="電台推廣" />
                                     </Tabs>
                                 </AppBar>
                                 <SwipeableViews
@@ -388,7 +410,7 @@ const PodcastAccount = (props) => {
                                     onChangeIndex={handleChangeIndex}>
                                     <TabPanel value={tabValue} index={0}>
                                         <Typography variant="h5" component="h1">編輯電台資訊</Typography>
-                                        <Typography variant="body1" component="span">更新您的電台資訊<br/>這裡的資訊將於電台首頁公布</Typography>
+                                        <Typography variant="body1" component="span">更新您的電台資訊，這裡的資訊將於電台首頁顯示。</Typography>
                                         <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                                         <form noValidate autoComplete="off">
                                         <FormControl fullWidth className={classes.margin}>
@@ -409,7 +431,7 @@ const PodcastAccount = (props) => {
                                                 }}
                                             />
                                             <label htmlFor="contained-button-file">
-                                                <Button disabled={handleCode==="loading"} variant="contained" size="large" fullWidth color="primary" component="span">
+                                                <Button disabled={handleCode==="loading"} variant="outlined" size="large" fullWidth color="primary" component="span">
                                                     <AttachmentIcon />
                                                     { filename === "" ? "上傳頻道封面" : filename }
                                                 </Button>
@@ -417,19 +439,19 @@ const PodcastAccount = (props) => {
                                             </label>
                                         </FormControl>
                                         <FormControl fullWidth className={classes.margin}>
-                                            <TextField disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="電台名稱" variant="outlined" />
+                                            <TextField required disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="電台名稱" variant="outlined" />
                                         </FormControl>
                                         <FormControl fullWidth className={classes.margin}>
                                         <InputLabel>電台簡介</InputLabel>
                                         <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
-                                        <br/>
                                         <MDEditor
                                             value={intro}
                                             onChange={setIntro}
                                         />
                                         </FormControl>     
                                         <br/> <br/> 
-                                        <Button
+                                        <FormControl fullWidth className={classes.margin}>
+                                            <Button
                                                 variant="contained"
                                                 color="primary"
                                                 size="large"
@@ -438,11 +460,60 @@ const PodcastAccount = (props) => {
                                                 disabled={handleCode==="loading"}
                                                 startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
                                                 儲存設定
-                                            </Button>
-                                            <br/><br/>
+                                            </Button>   
+                                        </FormControl>
                                         </form>
                                     </TabPanel>
                                     <TabPanel value={tabValue} index={1}>
+                                            <Typography variant="h5" component="h1">社群媒體帳號</Typography>
+                                            <Typography variant="body1" component="span">設定電台的社群媒體網址，讓聽眾在別的地方找到您</Typography>
+                                            <br/><br/><Divider/>
+                                            <FormControl fullWidth className={classes.margin}>
+                                            <Typography variant="body1" gutterBottom><FacebookIcon/>FACEBOOK</Typography>
+                                                <TextField disabled={handleCode==="loading"} 
+                                                            value={facebookLink} 
+                                                            onChange={(e)=>setFacebookLink(e.target.value)} 
+                                                            id="fb" 
+                                                            variant="outlined" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                            <Typography variant="body1" gutterBottom><InstagramIcon/>INSTARGRAM</Typography>
+                                                <TextField disabled={handleCode==="loading"} 
+                                                            value={instagramLink} 
+                                                            onChange={(e)=>setInstargramLink(e.target.value)} 
+                                                            id="ig" 
+                                                            variant="outlined" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                            <Typography variant="body1" gutterBottom><YouTubeIcon/>YOUTUBE</Typography>
+                                                <TextField disabled={handleCode==="loading"} 
+                                                            value={youtubeLink} 
+                                                            onChange={(e)=>setYoutubeLink(e.target.value)} 
+                                                            id="yt" 
+                                                            variant="outlined" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                            <Typography variant="body1" gutterBottom><TwitterIcon/>TWITTER</Typography>
+                                                <TextField disabled={handleCode==="loading"} 
+                                                            value={twitterLink} 
+                                                            onChange={(e)=>setTwitterLink(e.target.value)} 
+                                                            id="twitter" 
+                                                            variant="outlined" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="large"
+                                                className={classes.button}
+                                                onClick={handleUpdateChannel}
+                                                disabled={handleCode==="loading"}
+                                                startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                                儲存設定
+                                            </Button>   
+                                        </FormControl>
+                                    </TabPanel>
+                                    <TabPanel value={tabValue} index={2}>
                                             <Typography variant="h5" component="h1">推廣電台</Typography>
                                             <Typography variant="body1" component="span">把電台和朋友一起分享:))</Typography>
                                             <br/><br/><Divider/><br/>

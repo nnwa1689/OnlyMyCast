@@ -91,7 +91,7 @@ const EmbedChannel = (props) => {
     return (
         <Card style={{ background: "#f7f7f7", maxHeight: 200, borderRadius: 20, boxShadow: "none", maxHeight: "200px" }}>
             <div className={classes.slogan}>
-                <Typography style={{ lineHeight: "10px" }} variant="body2" component="span" color="textSecondary">
+                <Typography href="https://onlymycast.notes-hz.com/" target="_blank" style={{ lineHeight: "10px" }} variant="body2" component="span" color="textSecondary">
                     <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast - 建立自己私人的Podcast
                 </Typography>
             </div>
@@ -117,7 +117,7 @@ const EmbedChannel = (props) => {
                             color="primary"
                             size="large"
                             startIcon={<ArrowForwardIosIcon/>}>
-                            前往追蹤收聽
+                            追蹤收聽
                         </Button>
                     </div>
                 </div>

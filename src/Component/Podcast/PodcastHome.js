@@ -11,7 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -85,10 +84,10 @@ const PodcastHome = (props) => {
     const isFirstLoad = useRef(true);
     const [subCount, setSubCount] = useState(0);
     const [spList, setSpList] = useState();
-    const [facebookLink, setFacebookLink] = useState();
-    const [youtubeLink, setYoutubeLink] = useState ();
-    const [instagramLink, setInstagramLink] = useState();
-    const [twitterLink, setTwitterLink] = useState();
+    const [facebookLink, setFacebookLink] = useState("");
+    const [youtubeLink, setYoutubeLink] = useState ("");
+    const [instagramLink, setInstagramLink] = useState("");
+    const [twitterLink, setTwitterLink] = useState("");
 
     useEffect(
         ()=>{

@@ -2,8 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Redirect } from 'react-router-dom';
 import { Link as RLink } from 'react-router-dom';
-import {Recorder} from 'react-voice-recorder'
-import 'react-voice-recorder/dist/index.css'
+import MicRecorder from 'mic-recorder-to-mp3';
 import sha256 from 'crypto-js/sha256';
 import InlinePlayer from '../Player/InlinePlayer';
 import MDEditor from '@uiw/react-md-editor';
@@ -29,12 +28,17 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import SaveIcon from '@material-ui/icons/Save';
 import Tooltip from '@material-ui/core/Tooltip';
 import Snackbar from '@material-ui/core/Snackbar';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import PublishIcon from '@material-ui/icons/Publish';
+import MuiAlert from '@material-ui/lab/Alert';
+import MicIcon from '@material-ui/icons/Mic';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 import "firebase/functions";
+
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -74,6 +78,11 @@ const useStyles = makeStyles((theme)=>({
         marginBottom: theme.spacing(2),
         marginTop:theme.spacing(2)
       },
+      mostlarge: {
+        height: theme.spacing(36),
+        width: theme.spacing(36),
+        margin:theme.spacing(1),
+      },
   })
   );
 
@@ -112,9 +121,26 @@ const useStyles = makeStyles((theme)=>({
     const isFirstLoad = useRef(true);
     let audioFileRef = "";
 
+    const [recorderType, setRecorderType] = useState(0);
+    const [Mp3Recorder, setMp3Recorder] = useState(new MicRecorder({ bitRate: 128 }));
+    const [isRecording, setIsRecording] = useState(false);
+    const [isBlocked, setIsBlocked] = useState(false);
+
     useEffect(
         ()=>{
             if (isFirstLoad.current) {
+                
+                navigator.getUserMedia({ audio: true },
+                    () => {
+                      console.log('Permission Granted');
+                      setIsBlocked(false);
+                    },
+                    () => {
+                      console.log('Permission Denied');
+                      setIsBlocked(true);
+                    },
+                  );
+                
                 window.scrollTo(0, 0);
                 isFirstLoad.current = false;
             }
@@ -124,49 +150,44 @@ const useStyles = makeStyles((theme)=>({
         }
     )
 
+    const selectRecordingType = (type) => {
+        setRecorderType(type);
+        setActiveStep(1);
+    }
 
-    /*
-    const [audioDetails, setAudioDetails] = useState(
-        {
-            url:null,
-            blob:null,
-            chunks:null,
-            duration:{
-                h:0,m:0,s:0
-            }
+    const handleRecordeingButton = () => {
+        if (!isRecording) {
+            start();
+        } else {
+            stop();
         }
-    )
-
-    const handleAudioStop = (data) => {
-        setAudioDetails(data);
-        var filename = sha256(new Date().toISOString()).toString();
-        setFileBit(data.blob);
-        console.log(data);
-        console.log(data.blob);
-        setFilename(filename);
-        setFilePath(data.url);
-        console.log(data.blob.type)
-        
     }
-
-    const handleAudioUpload = (file) => {
-        console.log(file);
-    }
-
-    const handleReset = () => {
-        const resetData =         
-        {
-            url:null,
-            blob:null,
-            chunks:null,
-            duration:{
-                h:0,m:0,s:0
-            }
+    
+    const start = () => {
+        if (isBlocked) {
+          console.log('Permission Denied');
+        } else {
+          Mp3Recorder
+            .start()
+            .then(() => {
+              setIsRecording(true);
+            }).catch((e) => console.error(e));
         }
-
-        setAudioDetails(resetData);
     }
-    */
+
+    const stop = () => {
+        Mp3Recorder
+          .stop()
+          .getMp3()
+          .then(([buffer, blob]) => {
+            const blobURL = URL.createObjectURL(blob);
+            setFilePath(blobURL);
+            setFileBit(blob)
+            setFilename(sha256(new Date().toISOString()).toString());
+            setIsRecording(false);
+          }).catch((e) => console.log(e));
+      }
+
 
     const fromPlayerGetDuration = (value) => {
          duration.current = parseInt(value/60, 10) + ":" + Math.ceil(parseInt(value, 10)%60);
@@ -322,17 +343,70 @@ const useStyles = makeStyles((theme)=>({
                     <Typography variant="body1" component="span">依照步驟來發佈您電台的單集</Typography>
                     <Stepper activeStep={activeStep} alternativeLabel>
                         <Step key={0}>
-                            <StepLabel>{"選擇預錄好的音檔"}</StepLabel>
+                            <StepLabel>{"選擇錄製方式"}</StepLabel>
                         </Step>
                         <Step key={1}>
-                            <StepLabel>{"設定單集相關資訊"}</StepLabel>
+                            <StepLabel>{"錄音或選擇預錄音檔"}</StepLabel>
                         </Step>
                         <Step key={2}>
+                            <StepLabel>{"設定單集相關資訊"}</StepLabel>
+                        </Step>
+                        <Step key={3}>
                             <StepLabel>{"準備上傳"}</StepLabel>
                         </Step>
                     </Stepper>
 
                     { activeStep === 0 &&
+                    (<>
+                        <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(0) }}>
+                        <Typography variant="h4">
+                            <MicIcon fontSize="large" />
+                            <br/>快速錄製<br/><br/><Divider/><br/>
+                            <Typography variant="body1" color="textSecondary">
+                                這種方式可以讓您透過網頁直接錄製節目，建議較短或隨性節目使用此方式。
+                            </Typography></Typography><br/><br/><br/>
+                        </Button>
+
+                        <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(1) }}>
+                        <Typography variant="h4">
+                            <PublishIcon fontSize="large" />
+                            <br/>上傳預錄檔案<br/><br/><Divider/><br/>
+                            <Typography variant="body1" color="textSecondary">
+                                這種方式可以上傳您後製完成的完整節目，如需錄製較長且需進行剪輯建議使用此方式。
+                            </Typography></Typography><br/><br/><br/>
+                        </Button>
+                    </>)
+                    }
+
+                    { (activeStep === 1 && recorderType === 0 ) &&
+                    (<>
+
+                    { isBlocked ? 
+                    <MuiAlert elevation={6} variant="filled" severity='error'>您沒有安裝麥克風或沒有允許存取，請安裝麥克風或授權網站存取麥克風，才能開始錄製您的節目！</MuiAlert>
+                    : 
+                    <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={handleRecordeingButton}>
+                        <Typography variant="h4">
+                            { isRecording ? 
+                            <>
+                            <FiberManualRecordIcon fontSize="large" /><br/>
+                            正在錄製⋯⋯<br/><br/>
+                            再按一次結束
+                            </>
+                            : 
+                            <>
+                            <MicIcon fontSize="large" /><br/>
+                            { filename == "" ? "開始錄製" : "重新錄製" }
+                            </>
+                            }<br/></Typography><br/>
+                    </Button>
+                    }   
+                        <br/>
+                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
+                        <br/>
+                    </>)
+                    }
+
+                    { (activeStep === 1 && recorderType === 1 ) &&
                     (<>
 
                          <input
@@ -347,26 +421,31 @@ const useStyles = makeStyles((theme)=>({
                                     setFilename(e.target.files[0].name);
                                     setFileBit(e.target.files[0]);
                                     setFilePath(URL.createObjectURL(e.target.files[0]));
+                                    console.log(fileBit);
                                 }
                             }}
                         />
-                        <br/>
-                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
-                        <br/>
                         <label htmlFor="contained-button-file">
-                            <Button variant="contained" size="large" color="primary" component="span">
-                                <AttachmentIcon />
-                                { filename === "" ? "選擇檔案" : filename }</Button>
-                                <br/><br/>
+                            <Button className={classes.mostlarge} variant="contained" size="large" color="primary" component="span">
+                                <Typography variant="h5" gutterBottom>
+                                <AttachmentIcon fontSize='large' /><br/>
+                                { filename === "" ? "選擇檔案" : filename }
+                                <br/><br/><Divider/><br/>
                                 <Typography variant="body1" gutterBottom>
                                     僅限 mp3/mp4/m4a 格式<br/>
                                 </Typography>
+                                </Typography>
+                            </Button>
+                            <br/>
                         </label>
+                        <br/>
+                        <br/>
+                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
                         <br/>
                     </>)
                     }
     
-                    { activeStep === 1 &&
+                    { activeStep === 2 &&
                     (
                         <>
                             <FormControl fullWidth className={classes.margin}>
@@ -382,14 +461,13 @@ const useStyles = makeStyles((theme)=>({
                                 />   
                                 <br/> <br/> 
                                 <div className={classes.wrapper}>
-
                                 </div>                                 
                             </FormControl>    
                         </>
                     )
                      }
     
-                    { activeStep === 2 &&
+                    { activeStep === 3 &&
                     (
                         <>
                             <Typography variant="h6" gutterBottom>
@@ -469,7 +547,7 @@ const useStyles = makeStyles((theme)=>({
                                 </Button>
                             </>
                             :
-                            <Button disabled={ (filename==="" && activeStep===0) || (podcastTitle===""&& activeStep===1) || (intro==="" && activeStep===1) } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
+                            <Button disabled={ (activeStep===0) || (filename==="" && activeStep===1) || (podcastTitle===""&& activeStep===2) || (intro==="" && activeStep===3) } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
                                 下一步
                             </Button>
                             }

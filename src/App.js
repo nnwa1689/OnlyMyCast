@@ -40,6 +40,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 
+const clientversion = "V220106.01";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -278,7 +279,7 @@ const App = (props) => {
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/forgetpassword" component={ForgetPassword} />
                   <Route exact path="/emailverified" component={EmailVerified} />
-                  { (!removeNavbarPath.includes(pathname) && isAuth) && <Navbar user={userData} userEmail={userEmail.current}></Navbar> }         
+                  { (!removeNavbarPath.includes(pathname) && isAuth) && <Navbar ver={clientversion} user={userData} userEmail={userEmail.current}></Navbar> }         
                   {
                     /* Email 沒有驗證 emailUnVerified*/
                      !emailVeri && <Redirect to='/emailverified'/>

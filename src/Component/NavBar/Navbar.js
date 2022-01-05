@@ -284,7 +284,7 @@ const NavBar = (props) => {
                         </Typography>
                       </ListItem>
                       <ListItem key="clientversion">
-                        <Typography variant="subtitle2" color="textSecondary">Client:V220103.22</Typography>
+                        <Typography variant="subtitle2" color="textSecondary">Client:{ props.ver }</Typography>
                       </ListItem>
                   </List>
               </div>

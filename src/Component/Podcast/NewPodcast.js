@@ -32,6 +32,8 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import PublishIcon from '@material-ui/icons/Publish';
 import MuiAlert from '@material-ui/lab/Alert';
 import MicIcon from '@material-ui/icons/Mic';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -122,23 +124,49 @@ const useStyles = makeStyles((theme)=>({
     let audioFileRef = "";
 
     const [recorderType, setRecorderType] = useState(0);
-    const [Mp3Recorder, setMp3Recorder] = useState(new MicRecorder({ bitRate: 128 }));
+    const [Mp3Recorder, setMp3Recorder] = useState();
     const [isRecording, setIsRecording] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const [recordingDevice, setRecordingDevice] = useState(0);
+    const [deviceList, setDeviceList] = useState();
+    const [currentTime, setCurrentTime] = useState("0分0秒");
 
     useEffect(
         ()=>{
             if (isFirstLoad.current) {
-                
-                navigator.getUserMedia({ audio: true },
+                let changeArr = [];
+                navigator.mediaDevices.enumerateDevices()
+                    .then(function(devices) {
+                        for(var i of devices) {
+                            if (i.kind === "audioinput") {
+                                if (recordingDevice === 0) {
+                                    setRecordingDevice(i.deviceId);
+                                    setMp3Recorder(new MicRecorder({ bitRate: 128, deviceId: i.deviceId }));
+                                }
+                                changeArr.push(
+                                    <MenuItem value={ i.deviceId }>{ i.label }</MenuItem>
+                                );
+                            }
+                        }
+                        setDeviceList(changeArr);
+                    })
+                    .catch(function(err) {
+                        console.log(err.name + ": " + err.message);
+                    });
+
+                navigator.mediaDevices.getUserMedia({ audio: true },
                     () => {
-                      console.log('Permission Granted');
+                      //console.log('Permission Granted');
                       setIsBlocked(false);
                     },
                     () => {
-                      console.log('Permission Denied');
+                      //console.log('Permission Denied');
                       setIsBlocked(true);
                     },
+                  ).catch(
+                      (e) => {
+                        setIsBlocked(true);
+                      }
                   );
                 
                 window.scrollTo(0, 0);
@@ -149,6 +177,7 @@ const useStyles = makeStyles((theme)=>({
             }
         }
     )
+
 
     const selectRecordingType = (type) => {
         setRecorderType(type);
@@ -171,6 +200,11 @@ const useStyles = makeStyles((theme)=>({
             .start()
             .then(() => {
               setIsRecording(true);
+              setInterval(
+                () => {
+                    setCurrentTime(parseInt(((parseInt(Mp3Recorder.context.currentTime, 10))/60)) + "分" + Math.ceil(((parseInt(Mp3Recorder.context.currentTime, 10))%60)) +"秒");
+                }, 1000
+            );
             }).catch((e) => console.error(e));
         }
     }
@@ -180,6 +214,7 @@ const useStyles = makeStyles((theme)=>({
           .stop()
           .getMp3()
           .then(([buffer, blob]) => {
+            clearInterval();
             const blobURL = URL.createObjectURL(blob);
             setFilePath(blobURL);
             setFileBit(blob)
@@ -384,13 +419,27 @@ const useStyles = makeStyles((theme)=>({
                     { isBlocked ? 
                     <MuiAlert elevation={6} variant="filled" severity='error'>您沒有安裝麥克風或沒有允許存取，請安裝麥克風或授權網站存取麥克風，才能開始錄製您的節目！</MuiAlert>
                     : 
+                    <>
+                    <Typography variant="body1">選擇錄音裝置</Typography>
+                    <Select
+                    disabled={isRecording}
+                    variant="outlined"
+                    value={recordingDevice}
+                    onChange={(e) => { 
+                        setRecordingDevice(e.target.value);
+                        setMp3Recorder(new MicRecorder({ bitRate: 128, deviceId: e.target.value }));
+                     }}
+                    >
+                    { deviceList }
+                    </Select>
+                    <br/><br/><Divider/><br/><br/>     
                     <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={handleRecordeingButton}>
                         <Typography variant="h4">
                             { isRecording ? 
                             <>
                             <FiberManualRecordIcon fontSize="large" /><br/>
-                            正在錄製⋯⋯<br/><br/>
-                            再按一次結束
+                            正在錄製⋯⋯<br/>
+                            <Typography variant="body1">正在錄製：{currentTime}</Typography>
                             </>
                             : 
                             <>
@@ -399,6 +448,8 @@ const useStyles = makeStyles((theme)=>({
                             </>
                             }<br/></Typography><br/>
                     </Button>
+
+                    </>
                     }   
                         <br/>
                         {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}

@@ -23,7 +23,9 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
-import "firebase/database"
+import "firebase/database";
+//other
+import { Helmet } from 'react-helmet';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -151,6 +153,9 @@ const PodcastDetails = (props) => {
     } else {
       return(
         <Container maxWidth="md">
+          <Helmet>
+              <title>{ name } - { channelName } - OnlyMyCast - 建立私人的Podcast</title>
+          </Helmet>
           { subStatu===1 || props.user.userId === props.match.params.id ?
               <Card className={classes.root}>
                 <CardContent>

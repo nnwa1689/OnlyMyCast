@@ -27,6 +27,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+//other
+import { Helmet } from 'react-helmet';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -167,6 +169,9 @@ const FansAdmin = (props) => {
     } else {
         return(
             <>
+                <Helmet>
+                    <title>追蹤管理 - OnlyMyCast - 建立私人的Podcast</title>
+                </Helmet>
                 <Container maxWidth="md">
                     <Card className={classes.root}>
                         <CardContent>

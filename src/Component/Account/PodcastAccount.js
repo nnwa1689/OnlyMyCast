@@ -37,6 +37,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+//other
+import { Helmet } from 'react-helmet';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -301,6 +303,9 @@ const PodcastAccount = (props) => {
     } else {
         return(
             <>
+            <Helmet>
+                <title>電台設定 - OnlyMyCast - 建立私人的Podcast</title>
+            </Helmet>
             {
                 pageLoaded ?
                     <Container maxWidth="md">

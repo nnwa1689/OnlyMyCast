@@ -40,6 +40,8 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 import "firebase/functions";
+//other
+import { Helmet } from 'react-helmet';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -372,6 +374,9 @@ const useStyles = makeStyles((theme)=>({
     } else {
         return(
             <Container maxWidth="md">
+                <Helmet>
+                    <title>新增單集 - OnlyMyCast - 建立私人的Podcast</title>
+                </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
                     <Typography variant="h5" component="h1">發佈單集</Typography>
@@ -396,9 +401,9 @@ const useStyles = makeStyles((theme)=>({
                         <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(0) }}>
                         <Typography variant="h4">
                             <MicIcon fontSize="large" />
-                            <br/>快速錄製<br/><br/><Divider/><br/>
+                            <br/>線上快速錄製<br/><br/><Divider/><br/>
                             <Typography variant="body1" color="textSecondary">
-                                這種方式可以讓您透過網頁直接錄製節目，建議較短或隨性節目使用此方式。
+                                透過網頁直接錄製節目，建議較短或隨性節目使用此方式。
                             </Typography></Typography><br/><br/><br/>
                         </Button>
 
@@ -407,7 +412,7 @@ const useStyles = makeStyles((theme)=>({
                             <PublishIcon fontSize="large" />
                             <br/>上傳預錄檔案<br/><br/><Divider/><br/>
                             <Typography variant="body1" color="textSecondary">
-                                這種方式可以上傳您後製完成的完整節目，如需錄製較長且需進行剪輯建議使用此方式。
+                                上傳您後製完成的完整節目，如錄製較長且需剪輯建議使用此方式。
                             </Typography></Typography><br/><br/><br/>
                         </Button>
                     </>)

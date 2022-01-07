@@ -38,9 +38,10 @@ import EmailVerified from './Component/Account/EmailVerified'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import MuiAlert from '@material-ui/lab/Alert';
 
 
-const clientversion = "V220107.02";
+const clientversion = "V220108.02";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -217,7 +218,12 @@ const App = (props) => {
       <div className="App">
         <BrowserRouter basename={ basename }>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>
-            { inApp===true ? <Typography variant="h6" component="span"><br/><br/>您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過手機的瀏覽器(Chrome、Safari...etc.)開啟</Typography> : ""}
+            { inApp===true ? 
+            <><br/><br/>
+            <MuiAlert elevation={6} variant="filled" severity="warning">
+            您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過瀏覽器開啟
+            </MuiAlert>
+            </> : ""}
             { isAuth !== 0 ?  
                 <>
                   <Route exact path="/" 

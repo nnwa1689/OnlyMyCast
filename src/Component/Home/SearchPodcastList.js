@@ -10,6 +10,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Link from '@material-ui/core/Link';
 import { Divider } from '@material-ui/core';
+//other
+import { Helmet } from 'react-helmet';
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -53,6 +55,9 @@ const useStyles = makeStyles((theme)=>({
     )
     return (
         <>
+          <Helmet>
+              <title>頻道搜尋 - OnlyMyCast - 建立私人的Podcast</title>
+          </Helmet>
           <ListItem button component={RLink} to={"/podcast/" + props.podcastId} alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />

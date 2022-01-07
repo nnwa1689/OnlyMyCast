@@ -38,6 +38,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+//other
+import { Helmet } from 'react-helmet';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -326,6 +328,9 @@ const Account = (props) => {
     } else {
         return(
             <Container maxWidth="md">
+            <Helmet>
+                <title>個人設定 - OnlyMyCast - 建立私人的Podcast</title>
+            </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
                     <AppBar className={classes.tabBar} position="static" color="default">

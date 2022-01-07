@@ -18,6 +18,8 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 import "firebase/database"
+//other
+import { Helmet } from 'react-helmet';
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -99,6 +101,9 @@ const useStyles = makeStyles((theme)=>({
     } else {
         return(
             <Container maxWidth="md">
+            <Helmet>
+                <title>單集分析 - OnlyMyCast - 建立私人的Podcast</title>
+            </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
                     <Typography variant="h5" component="h1">單集點閱分析</Typography><br/>

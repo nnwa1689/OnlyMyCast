@@ -23,6 +23,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+//other
+import { Helmet } from 'react-helmet';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -148,6 +150,9 @@ const Subreq = (props) => {
     if (props.user.userId.length <= 0) {
         return(
             <Container maxWidth="md">
+                <Helmet>
+                    <title>追蹤審核 - OnlyMyCast - 建立私人的Podcast</title>
+                </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>

@@ -46,7 +46,8 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
     appBar: {
-
+       backgroundColor: "rgba(40, 40, 40, 0.85)",
+       backdropFilter: "blur(4px)",
     },
     menuButton: {
       marginRight: theme.spacing(1),
@@ -54,15 +55,15 @@ const useStyles = makeStyles((theme) => ({
     search: {
       borderRadius: theme.shape.borderRadius,
       transition: 'background-color .15s',
-      backgroundColor: "#D3D3D3",
+      backgroundColor: "rgba(200, 200, 200, 0.9)",
       '&:hover': {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
       },
       '&:focus-within': {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
       },
       marginLeft: theme.spacing(3),
-      width: '400px',
+      width: '300px',
       padding: "5px",
     },
     inputRoot: {
@@ -127,7 +128,7 @@ const NavBar = (props) => {
 
     return (
       <div>
-          <AppBar className={classes.appBar} color="secondary" position="fixed">
+          <AppBar className={classes.appBar} position="fixed">
           <Toolbar>
               <Tooltip title="選單">
                 { reqCount > 0 ?

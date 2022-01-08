@@ -37,11 +37,10 @@ import EmailVerified from './Component/Account/EmailVerified'
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import MuiAlert from '@material-ui/lab/Alert';
 
 
-const clientversion = "V220108.02";
+const clientversion = "V220108.21";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -211,6 +210,15 @@ const App = (props) => {
     typography: {
       fontFamily: 'NotoSansTC-Regular',
     },
+    overrides: {
+      MuiCard: 
+        {
+          root: {
+            boxShadow: "0 16px 32px 0 rgba(145, 158, 171, 0.2)",
+            borderRadius: "16px",
+          }
+        },
+    }
   });
 
   return (
@@ -219,8 +227,8 @@ const App = (props) => {
         <BrowserRouter basename={ basename }>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>
             { inApp===true ? 
-            <><br/><br/>
-            <MuiAlert elevation={6} variant="filled" severity="warning">
+            <>
+            <MuiAlert style={ { marginTop: "20px", } } elevation={6} variant="filled" severity="warning">
             您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過瀏覽器開啟
             </MuiAlert>
             </> : ""}

@@ -12,13 +12,10 @@ import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import { Divider } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import EventIcon from '@material-ui/icons/Event';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 const useStyles = makeStyles((theme)=>({
-    root: {
-      minWidth: 275,
-      marginTop: 100,
-      marginBottom: 0,
-    },
     bullet: {
       display: 'inline-block',
       margin: '0 2px',
@@ -32,7 +29,7 @@ const useStyles = makeStyles((theme)=>({
     },
     large: {
         width: '100%',
-        height: theme.spacing(36),
+        height: theme.spacing(24),
         color: "#FFFFFF",
         backgroundColor: "#FD3E49",
       },
@@ -41,7 +38,7 @@ const useStyles = makeStyles((theme)=>({
       },
     card: {
       borderRadius: 12,
-      minHeight: 430,
+      height: 250,
       textAlign: 'center',
     },
     header: {
@@ -60,7 +57,7 @@ const useStyles = makeStyles((theme)=>({
 
     const classes = useStyles();
     const [haveNewEP, setHaveNewEP] = useState(false);
-    const [intro, setIntro] = useState(props.podcastIntro.length>=30 ? props.podcastIntro.substring(0, 30) + "⋯" : props.podcastIntro);
+    //const [intro, setIntro] = useState(props.podcastIntro.length>=30 ? props.podcastIntro.substring(0, 30) + "⋯" : props.podcastIntro);
     const [podcastName, setPodcastName] = useState(props.podcastName.length>=15 ? props.podcastName.substring(0, 15) + "..." : props.podcastName);
     
     const toDataTime = (sec)=>{
@@ -78,7 +75,7 @@ const useStyles = makeStyles((theme)=>({
       }
     )
     return (
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid item xs={6} sm={4} md={3}>
       <Badge
           color={haveNewEP ? "primary" : ""}
           badgeContent={haveNewEP && "新單集"}
@@ -88,15 +85,10 @@ const useStyles = makeStyles((theme)=>({
           }}>
         <Card className={classes.card}>
           <Avatar component={RLink} to={"/podcast/" + props.podcastId} variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
-          <CardContent>
           <Link component={RLink} to={"/podcast/" + props.podcastId} variant="body1" underline="hover">{podcastName}</Link>
-            <div className={classes.list}>
-              <Typography align="left">{ intro }</Typography>
-            </div>
-          </CardContent>
           <Divider variant="middle" />
           <CardActions className={classes.action}>
-          <Typography align="left" variant="subtitle2">最後更新：{ toDataTime(props.updateTime) }</Typography>
+          <Typography align="left" variant="subtitle2"><ListItemIcon><EventIcon fontSize='small'/>{ toDataTime(props.updateTime) }</ListItemIcon></Typography>
           </CardActions>
         </Card>
       </Badge>

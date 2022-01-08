@@ -17,6 +17,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slider from '@material-ui/core/Slider';
+import Grid from '@material-ui/core/Grid';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -33,16 +34,29 @@ const useStyles = makeStyles((theme)=>({
     top: 'auto',
     bottom: 0,
     alignItems:"center",
+    paddingBottom: 5,
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
+    backdropFilter: "blur(6px)",
+  },
+  podcastToolbar: {
+    justifyContent: "left",
+  },
+  controlItemToolbar: {
+    justifyContent: "center",
+  },
+  speedToolbar: {
+    justifyContent: "right",
   },
   large: {
     width: theme.spacing(5),
     height: theme.spacing(5),
+    backgroundColor: "#FD3E49",
   },  
   menuButton: {
     margin: theme.spacing(1),
   },
   epTitleBox:{
-    width: "150px",
+    width: "100%",
     overflow: "hidden",
     margin: theme.spacing(1),
   },
@@ -166,7 +180,7 @@ const Player = (props) => {
             <AppBar position="fixed" color="inherit" className={classes.appBar}>
             { !ready ? <LinearProgress style={{width:"100%"}}/> : 
                 <Slider 
-                style={{marginTop: -15, marginBottom:-15}} 
+                style={{marginTop: -15,}} 
                 step={1} 
                 min={0} 
                 max={100} 
@@ -175,64 +189,67 @@ const Player = (props) => {
                 onChange={(e, newValue)=>{setPlayerSec(e, newValue)}} 
                 value={playSec!==undefined ? (playSec/duration)*100:0}/>
             }
+            <Grid container spacing={0} direction="row">
+                <Grid item xs={12} sm={4} md={4}>
+                    <Toolbar className={classes.podcastToolbar}>
+                        <Avatar variant="rounded" className={classes.large} alt={podcastName} src={props.coverUrl} />
+                        <div className={classes.epTitleBox}>
+                            <Typography className={classes.epTitle} variant="subtitle2">
+                                {podcastName} - {singleName}
+                            </Typography>     
+                        </div>
+                        <Typography variant="subtitle2">
+                            {parseInt(((parseInt(playSec, 10))/60)) + ":" + Math.ceil(((parseInt(playSec, 10))%60))}
+                            /
+                            { parseInt(parseInt(duration, 10)/60) + ":" + (parseInt(duration, 10)%60) }
+                        </Typography>
+                    </Toolbar>
+                </Grid>
+                <Grid item xs={6} sm={4} md={4}>
+                    <Toolbar className={classes.controlItemToolbar}>
+                        <Tooltip onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
+                            <IconButton className={classes.menuButton} edge="start" color="inherit" size="small">
+                                <Replay10Icon fontSize="large"/>
+                            </IconButton>  
+                        </Tooltip>
+                        { (playState) ? 
+                        <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause">
+                            <IconButton className={classes.menuButton}  color="inherit" size="small">
+                                <PauseCircleFilledIcon fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
+                        : 
+                        <Tooltip onClick={ handlePlayClick } title="播放" aria-label="play">
+                            <IconButton className={classes.menuButton}  color="inherit" size="small">
+                                <PlayCircleFilledIcon fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
+                        }
+                        <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
+                            <IconButton className={classes.menuButton}  edge="end" color="inherit" size="small">
+                                <Forward10Icon fontSize="large"/>
+                            </IconButton>
+                        </Tooltip>
+                    </Toolbar> 
+                </Grid>
+                <Grid item xs={6} sm={4} md={4}>
+                    <Toolbar className={classes.speedToolbar}>
+                        <Select
+                        value={playBackRate}
+                        variant="outlined"
+                        onChange={(e)=>{changePlayBackRate(e)}}
+                        >
+                            <MenuItem value={0.25}>x0.25</MenuItem>
+                            <MenuItem value={0.5}>x0.5</MenuItem>
+                            <MenuItem value={1}>x1.0</MenuItem>
+                            <MenuItem value={1.5}>x1.5</MenuItem>
+                            <MenuItem value={2.0}>x2.0</MenuItem>
+                        </Select> 
+                    </Toolbar>
+                </Grid>
+            </Grid>
 
-                <Accordion elevation={0} className={classes.expandPanel}>
-                <AccordionSummary
-                expandIcon={<ExpandLessIcon />}
-                className={classes.expandAccordionSummary}
-                >
-                <Toolbar variant="dense">
-                    <Avatar variant="rounded" className={classes.large} alt={podcastName} src={props.coverUrl} />
-                    <div className={classes.epTitleBox}>
-                        <Typography className={classes.epTitle} variant="subtitle2">
-                            {podcastName} - {singleName}
-                        </Typography>     
-                    </div>
-                    <Typography variant="subtitle2">
-                        ({ "剩" + parseInt(((parseInt(duration, 10) - parseInt(playSec, 10))/60)) + ":" + Math.ceil(((parseInt(duration, 10) - parseInt(playSec, 10))%60))})
-                    </Typography>
-                </Toolbar>
-                </AccordionSummary>
-                <AccordionDetails className={classes.expandDetail}>
-                <Toolbar variant="dense" style={{margin: "auto",}}>
-                    <Tooltip onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
-                        <IconButton className={classes.menuButton} edge="end" color="inherit">
-                            <Replay10Icon />
-                        </IconButton>  
-                    </Tooltip>
-                    { (playState) ? 
-                    <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause">
-                        <IconButton className={classes.menuButton}  color="inherit" size="small">
-                            <PauseCircleFilledIcon fontSize="large" />
-                        </IconButton>
-                    </Tooltip>
-                    : 
-                    <Tooltip onClick={ handlePlayClick } title="播放" aria-label="play">
-                        <IconButton className={classes.menuButton}  color="inherit" size="small">
-                            <PlayCircleFilledIcon fontSize="large" />
-                        </IconButton>
-                    </Tooltip>
-                    }
-                    <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
-                        <IconButton className={classes.menuButton}  edge="end" color="inherit">
-                            <Forward10Icon />
-                        </IconButton>
-                    </Tooltip>
-                    <Select
-                    value={playBackRate}
-                    onChange={(e)=>{changePlayBackRate(e)}}
-                    >
-                        <MenuItem value={0.25}>x0.25</MenuItem>
-                        <MenuItem value={0.5}>x0.5</MenuItem>
-                        <MenuItem value={1}>x1.0</MenuItem>
-                        <MenuItem value={1.5}>x1.5</MenuItem>
-                        <MenuItem value={2.0}>x2.0</MenuItem>
-                    </Select>                    
-                </Toolbar>
-                </AccordionDetails>
-            </Accordion>
-
-                
+                 
             </AppBar>
         </>
         }

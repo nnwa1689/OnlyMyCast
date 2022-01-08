@@ -16,6 +16,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+//other
+import { Helmet } from 'react-helmet';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -135,6 +137,9 @@ const Home = (props) => {
   } else {
     return (
       <Container maxWidth="md" style={ { marginTop: 100, } }>
+        <Helmet>
+            <title>OnlyMyCast - 建立私人的Podcast</title>
+        </Helmet>
         <Typography variant="h5" component="h1"><CastIcon/>我的頻道</Typography>
         <br/>
         <Grid container direction="row">

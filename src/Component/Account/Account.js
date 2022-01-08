@@ -14,7 +14,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import { deepOrange } from '@material-ui/core/colors';
 import AttachmentIcon from '@material-ui/icons/Attachment';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -60,15 +59,10 @@ const useStyles = makeStyles((theme)=>({
       height: theme.spacing(20),
       marginBottom: theme.spacing(3),
       marginTop:theme.spacing(3),
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
+      backgroundColor: "#FD3E49",
       marginLeft:"auto",
       marginRight:"auto"
     },
-    orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
-      },
     menuButton: {
       margin: theme.spacing(1),
     },

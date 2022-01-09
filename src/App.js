@@ -198,7 +198,7 @@ const App = (props) => {
     setPlayerTitle(e.currentTarget.dataset.titlename);
     setPlayerUrl(e.currentTarget.dataset.uri);
     setPodcastName(e.currentTarget.dataset.podcastname);
-    setCoverUri(e.currentTarget.dataset.coveruri));
+    setCoverUri(e.currentTarget.dataset.coveruri);
   }
 
   const theme = createMuiTheme({

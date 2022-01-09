@@ -175,51 +175,30 @@ const App = (props) => {
 
   const setPlayer = async(e) => {
 
-    const podUserId = e.currentTarget.dataset.poduserid;
-    const podId = e.currentTarget.value;
-    const podTitle = e.currentTarget.dataset.titlename;
-    const uri = e.currentTarget.dataset.uri;
-    const podcastName = e.currentTarget.dataset.podcastname;
-    const coverUri = e.currentTarget.dataset.coveruri;
-
     //recoding play history this user
-    //如果使用者點過，就不用再寫入
-    await firebase.firestore().collection("podcast")
-    .doc(podUserId)
+    firebase.firestore().collection("podcast")
+    .doc(e.currentTarget.dataset.poduserid)
     .collection('podcast')
-    .doc(podId)
+    .doc(e.currentTarget.value)
     .collection('playedlist')
     .doc(userUid.current)
-    .get()
+    .set(userData)
     .then(
-      (doc) => {
-        if ( !doc.exists ) {
-          firebase.firestore().collection("podcast")
-          .doc(podUserId)
-          .collection('podcast')
-          .doc(podId)
-          .collection('playedlist')
-          .doc(userUid.current)
-          .set(userData)
-          .then(
-            () => {
-              console.log('click');
-            }
-          )
-          .catch(
-            (e) => {
-              console.log("e");
-            }
-          );
-        }
+      () => {
+        console.log('click');
+      }
+    )
+    .catch(
+      (e) => {
+        console.log("e");
       }
     );
 
     //set player
-    setPlayerTitle(podTitle);
-    setPlayerUrl(uri);
-    setPodcastName(podcastName);
-    setCoverUri(coverUri);
+    setPlayerTitle(e.currentTarget.dataset.titlename);
+    setPlayerUrl(e.currentTarget.dataset.uri);
+    setPodcastName(e.currentTarget.dataset.podcastname);
+    setCoverUri(e.currentTarget.dataset.coveruri));
   }
 
   const theme = createMuiTheme({

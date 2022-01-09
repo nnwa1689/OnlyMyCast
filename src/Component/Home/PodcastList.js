@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme)=>({
       marginBottom: 12,
     },
     large: {
-        width: '100%',
+        width: theme.spacing(24),
         height: theme.spacing(24),
         color: "#FFFFFF",
         backgroundColor: "#FD3E49",
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme)=>({
       }
     )
     return (
-    <Grid item xs={6} sm={4} md={3}>
+    <Grid item xs={12} sm={4} md={3}>
       <Badge
           color={haveNewEP ? "primary" : ""}
           badgeContent={haveNewEP && "新單集"}

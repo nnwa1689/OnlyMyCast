@@ -40,7 +40,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 
 
-const clientversion = "V220108.21";
+const clientversion = "V220109.23";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -172,30 +172,54 @@ const App = (props) => {
     }
   )
 
-  const setPlayer = (e) => {
+
+  const setPlayer = async(e) => {
+
+    const podUserId = e.currentTarget.dataset.poduserid;
+    const podId = e.currentTarget.value;
+    const podTitle = e.currentTarget.dataset.titlename;
+    const uri = e.currentTarget.dataset.uri;
+    const podcastName = e.currentTarget.dataset.podcastname;
+    const coverUri = e.currentTarget.dataset.coveruri;
+
     //recoding play history this user
-    firebase.firestore().collection("podcast")
-    .doc(e.currentTarget.dataset.poduserid)
+    //如果使用者點過，就不用再寫入
+    await firebase.firestore().collection("podcast")
+    .doc(podUserId)
     .collection('podcast')
-    .doc(e.currentTarget.value)
+    .doc(podId)
     .collection('playedlist')
     .doc(userUid.current)
-    .set(userData)
+    .get()
     .then(
-      () => {
-        console.log('click');
+      (doc) => {
+        if ( !doc.exists ) {
+          firebase.firestore().collection("podcast")
+          .doc(podUserId)
+          .collection('podcast')
+          .doc(podId)
+          .collection('playedlist')
+          .doc(userUid.current)
+          .set(userData)
+          .then(
+            () => {
+              console.log('click');
+            }
+          )
+          .catch(
+            (e) => {
+              console.log("e");
+            }
+          );
+        }
       }
-    )
-    .catch(
-      (e) => {
-        console.log("SomeErr");
-      }
-    )
+    );
+
     //set player
-    setPlayerTitle(e.currentTarget.dataset.titlename)
-    setPlayerUrl(e.currentTarget.dataset.uri)
-    setPodcastName(e.currentTarget.dataset.podcastname)
-    setCoverUri(e.currentTarget.dataset.coveruri)
+    setPlayerTitle(podTitle);
+    setPlayerUrl(uri);
+    setPodcastName(podcastName);
+    setCoverUri(coverUri);
   }
 
   const theme = createMuiTheme({

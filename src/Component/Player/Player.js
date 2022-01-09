@@ -18,10 +18,6 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -39,13 +35,13 @@ const useStyles = makeStyles((theme)=>({
     backdropFilter: "blur(6px)",
   },
   podcastToolbar: {
-    justifyContent: "left",
+    justifyContent: "flex-start",
   },
   controlItemToolbar: {
     justifyContent: "center",
   },
   speedToolbar: {
-    justifyContent: "right",
+    justifyContent: "flex-end",
   },
   large: {
     width: theme.spacing(5),
@@ -65,29 +61,6 @@ const useStyles = makeStyles((theme)=>({
     whiteSpace: "nowrap",
     animation: "floatText 15s infinite linear",
   },
-  expandPanel:{
-      border: 0,
-      margin: 2,
-      boxShadow: "none",
-      background: "none",
-      padding: 2,
-      '&.MuiAccordion-root:before': {
-        height: 0,
-      },
-      alignItems:"center",
-  },
-  expandDetail:{
-    margin: 0,
-    padding: 0,
-    alignItems:"center",
-  },
-    expandAccordionSummary: {
-        alignItems:"center",
-        '&.Mui-expanded': {
-            minHeight: 48,
-            maxHeight: 48,
-        },
-    }
 }));
 
 

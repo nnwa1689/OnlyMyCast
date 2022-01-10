@@ -231,7 +231,7 @@ const App = (props) => {
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>
             { inApp===true ? 
             <>
-            <MuiAlert style={ { marginTop: "20px", } } elevation={6} variant="filled" severity="warning">
+            <MuiAlert style={ { marginTop: "100px", marginBottom: "-50px" } } elevation={6} variant="filled" severity="warning">
             您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過瀏覽器開啟
             </MuiAlert>
             </> : ""}

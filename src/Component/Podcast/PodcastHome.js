@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -60,18 +61,22 @@ const useStyles = makeStyles((theme)=>({
     facebookButton: {
         borderColor: "#4267B2",
         color: "#4267B2",
+        margin: theme.spacing(1),
     },
     instagramButton: {
-        borderColor: "#000000",
-        color: "#000000",
+        borderColor: "#C13584",
+        color: "#C13584",
+        margin: theme.spacing(1),
     },
     youtubeButton: {
         borderColor: "#FF0000",
         color: "#FF0000",
+        margin: theme.spacing(1),
     },
     twitterButton: {
         borderColor: "#1DA1F2",
         color: "#1DA1F2",
+        margin: theme.spacing(1),
     }
   }));
 
@@ -283,30 +288,31 @@ const PodcastHome = (props) => {
                         }
                         </>
                     }
-                    <br/><br/>
+                    <br/>
                     { facebookLink.length > 0 ? 
-                    <>
-                    <Button className={classes.facebookButton} size="large" fullWidth variant="outlined" href={facebookLink} target='_blank'><FacebookIcon/>FaceBook</Button><br/><br/>
-                    </>
+                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank'>
+                        <FacebookIcon fontSize="large"/>
+                    </IconButton>
                     : "" }
                     { instagramLink.length > 0 ? 
-                    <>
-                    <Button className={classes.instagramButton} size="large" fullWidth variant="outlined" href={instagramLink} target='_blank'><InstagramIcon/>Instagram</Button><br/><br/>
-                    </>
+                    <IconButton className={classes.instagramButton} href={instagramLink} target='_blank'>
+                        <InstagramIcon fontSize="large"/>
+                    </IconButton>
                     : "" }
                     { youtubeLink.length > 0 ? 
-                    <>
-                     <Button className={classes.youtubeButton} size="large" fullWidth variant="outlined" href={youtubeLink} target='_blank'><YouTubeIcon/>Youtube</Button><br/><br/>
-                    </>
+                    <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank'>
+                        <YouTubeIcon fontSize="large"/>
+                    </IconButton>
                     : "" }
                     { twitterLink.length > 0 ? 
-                    <><Button className={classes.twitterButton} size="large" fullWidth variant="outlined" href={twitterLink} target='_blank'><TwitterIcon/>Twitter</Button><br/><br/></>
+                    <IconButton className={classes.twitterButton} href={twitterLink} target='_blank'>
+                        <TwitterIcon fontSize="large"/>
+                    </IconButton>
                     : "" }
                     <Divider/>
                     <Typography style={{textAlign:"left"}} variant="body1" component="span">
                         <ReactMarkdown>{intro}</ReactMarkdown>
                     </Typography>
-                    <br/>
                     <Divider/>
                     { subStatu===1 || props.user.userId === props.match.params.id ?
                             spList === "" ? 

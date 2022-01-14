@@ -131,46 +131,12 @@ const useStyles = makeStyles((theme)=>({
     const [isBlocked, setIsBlocked] = useState(false);
     const [recordingDevice, setRecordingDevice] = useState(0);
     const [deviceList, setDeviceList] = useState();
-    const [currentTime, setCurrentTime] = useState("0分0秒");
+    const [currentTime, setCurrentTime] = useState("0 : 0");
+    let currentTimer;
 
     useEffect(
         ()=>{
             if (isFirstLoad.current) {
-                let changeArr = [];
-                navigator.mediaDevices.enumerateDevices()
-                    .then(function(devices) {
-                        for(var i of devices) {
-                            if (i.kind === "audioinput") {
-                                if (recordingDevice === 0) {
-                                    setRecordingDevice(i.deviceId);
-                                    setMp3Recorder(new MicRecorder({ bitRate: 128, deviceId: i.deviceId }));
-                                }
-                                changeArr.push(
-                                    <MenuItem value={ i.deviceId }>{ i.label }</MenuItem>
-                                );
-                            }
-                        }
-                        setDeviceList(changeArr);
-                    })
-                    .catch(function(err) {
-                        console.log(err.name + ": " + err.message);
-                    });
-
-                navigator.mediaDevices.getUserMedia({ audio: true },
-                    () => {
-                      //console.log('Permission Granted');
-                      setIsBlocked(false);
-                    },
-                    () => {
-                      //console.log('Permission Denied');
-                      setIsBlocked(true);
-                    },
-                  ).catch(
-                      (e) => {
-                        setIsBlocked(true);
-                      }
-                  );
-                
                 window.scrollTo(0, 0);
                 isFirstLoad.current = false;
             }
@@ -180,6 +146,44 @@ const useStyles = makeStyles((theme)=>({
         }
     )
 
+    const onlineRecordingInit = () => {
+        let changeArr = [];
+        navigator.mediaDevices.getUserMedia({ audio: true },
+            () => {
+                //console.log('Permission Granted');
+                setIsBlocked(false);
+            },
+            () => {
+                //console.log('Permission Denied');
+                setIsBlocked(true);
+            },
+            ).catch(
+                (e) => {
+                setIsBlocked(true);
+                }
+            ).then(
+                () => {
+                    navigator.mediaDevices.enumerateDevices()
+                    .then(function(devices) {
+                        for(var i of devices) {
+                            if (i.kind === "audioinput") {
+                                changeArr.push(
+                                    <MenuItem key={ i.deviceId } value={ i.deviceId }>{ i.label }</MenuItem>
+                                );
+                                if (recordingDevice === 0) {
+                                    setRecordingDevice(i.deviceId);
+                                    setMp3Recorder(new MicRecorder({ bitRate: 128, deviceId: i.deviceId }));
+                                }
+                            }
+                        }
+                        setDeviceList(changeArr);
+                    })
+                    .catch(function(err) {
+                        console.log(err.name + ": " + err.message);
+                    });
+                }
+            );
+    }
 
     const selectRecordingType = (type) => {
         setRecorderType(type);
@@ -198,13 +202,13 @@ const useStyles = makeStyles((theme)=>({
         if (isBlocked) {
           console.log('Permission Denied');
         } else {
-          Mp3Recorder
+            Mp3Recorder
             .start()
             .then(() => {
               setIsRecording(true);
-              setInterval(
+              currentTimer =  setInterval(
                 () => {
-                    setCurrentTime(parseInt(((parseInt(Mp3Recorder.context.currentTime, 10))/60)) + "分" + Math.ceil(((parseInt(Mp3Recorder.context.currentTime, 10))%60)) +"秒");
+                    setCurrentTime(parseInt(((parseInt(Mp3Recorder.context.currentTime, 10))/60)) + " : " + Math.ceil(((parseInt(Mp3Recorder.context.currentTime, 10))%60)));
                 }, 1000
             );
             }).catch((e) => console.error(e));
@@ -216,7 +220,7 @@ const useStyles = makeStyles((theme)=>({
           .stop()
           .getMp3()
           .then(([buffer, blob]) => {
-            clearInterval();
+            clearInterval(currentTimer);
             const blobURL = URL.createObjectURL(blob);
             setFilePath(blobURL);
             setFileBit(blob)
@@ -398,7 +402,13 @@ const useStyles = makeStyles((theme)=>({
 
                     { activeStep === 0 &&
                     (<>
-                        <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(0) }}>
+                        <Button color="primary" variant="outlined" className={classes.mostlarge} 
+                        onClick={
+                            () => { 
+                                selectRecordingType(0);
+                                onlineRecordingInit(); 
+                                }
+                            }>
                         <Typography variant="h4">
                             <MicIcon fontSize="large" />
                             <br/>線上快速錄製<br/><br/><Divider/><br/>
@@ -456,7 +466,7 @@ const useStyles = makeStyles((theme)=>({
 
                     </>
                     }   
-                        <br/>
+                        <br/><br/>
                         {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
                         <br/>
                     </>)

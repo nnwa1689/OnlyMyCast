@@ -170,13 +170,15 @@ const PodcastAccount = (props) => {
         setNameErr(false);
         setUserIdErr(false);
         setIntroErr(false);
-        if (name==="" || userId==="" || intro==="") {
+        if (name==="" || userId==="" || intro==="" || !(/^[A-Za-z0-9_.]*$/.test(userId))) {
             if (name==="")
                 setNameErr("電台名稱不能為空");
             if (userId==="")
                 setUserIdErr("電台ID不能為空");
             if (intro==="")
                 setIntroErr("電台簡介不能為空");
+            if (!(/^[A-Za-z0-9_.]*$/.test(userId)))
+                setUserIdErr("電台 ID 只能輸入英數")
             setHandleCode('error')
         } else {
             firebase.firestore().collection("channel").doc(userId).get()

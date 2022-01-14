@@ -97,9 +97,9 @@ const InlinePlayer = (props) => {
             
             <Paper variant="outlined" >
                 <Typography className="playTime" style={{ marginTop: "10px" } } variant="subtitle2">
-                    { "剩" + parseInt(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))/60)) + "分" + Math.ceil(((parseInt(duration, 10) - parseInt(playSec.playedSeconds, 10))%60)) +"秒"}
-                    { "，總長" + parseInt(duration/60, 10) + "分" + Math.ceil(parseInt(duration, 10)%60) +"秒"}
-                    {"，總容量：" + Math.round((props.fileSize/1024/1024)*100)/100 + "MB"}
+                    { parseInt(((parseInt(playSec.playedSeconds, 10))/60)) + ":" + Math.ceil(((parseInt(playSec.playedSeconds, 10))%60))}
+                    { " / " + parseInt(duration/60, 10) + ":" + Math.ceil(parseInt(duration, 10)%60)}
+                    {"，容量：" + Math.round((props.fileSize/1024/1024)*100)/100 + "MB"}
                 </Typography>
                 <Tooltip onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
                     <IconButton className={classes.menuButton} edge="end" color="inherit">

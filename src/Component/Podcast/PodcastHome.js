@@ -19,6 +19,8 @@ import PeopleIcon from '@material-ui/icons/People';
 import PodcastspList from './PodcastspList';
 import List from '@material-ui/core/List';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import TwitterIcon from '@material-ui/icons/Twitter';
@@ -30,6 +32,7 @@ import "firebase/storage";
 import "firebase/database";
 //other
 import { Helmet } from 'react-helmet';
+import { ListItem } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -87,6 +90,8 @@ const PodcastHome = (props) => {
     const [avatar,setAvatar] = useState("");
     const [intro, setIntro] = useState("");
     const [subStatu, setSubStatu] = useState(0);
+    const [podcasterName, setPodcasterName] = useState();
+    const [podcasterAvatar, setPodcasterAvatar] = useState();
     //0:init 1:sub 2:unsub 3:req
     const isFirstLoad = useRef(true);
     const [subCount, setSubCount] = useState(0);
@@ -173,6 +178,15 @@ const PodcastHome = (props) => {
           (doc)=>{
               if (doc.exists){
                 const data = doc.data();
+                //podcast擁有者
+                firebase.firestore().collection("user").doc(data.uid).get()
+                .then(
+                    (doc) => {
+                        const data = doc.data();
+                        setPodcasterAvatar(data.avatar);
+                        setPodcasterName(data.name);
+                    }
+                );
                 setName(data.name);
                 setIntro(data.intro);
                 setAvatar(data.icon);
@@ -252,20 +266,49 @@ const PodcastHome = (props) => {
         }).catch();
     }
 
-    if ( name==="" || avatar==="" || subStatu===0 || spList===undefined) {
+    if ( name==="" || avatar==="" || subStatu===0 || spList===undefined || podcasterAvatar===undefined || podcasterName===undefined) {
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
             <Container maxWidth="md">
-                 <Helmet>
+                <Helmet>
                     <title>{ name } - OnlyMyCast - 建立私人的Podcast</title>
                 </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
                     <Avatar variant="rounded" alt={name} src={avatar==="" ? "." : avatar} className={classes.large} />
                     <Typography variant="h5">{name}</Typography>
-                    { subStatu !== 4 && (<Typography variant="subtitle2" component="span"><br/><PeopleIcon fontSize='small'/>&nbsp;{subCount} 位聽眾</Typography>) }
-                    <br/><br/>
+                    <ListItem style={ {width: "fit-content", marginLeft: "auto", marginRight: "auto"} }>
+                        <ListItemAvatar>
+                        <Avatar style={ {backgroundColor: "#FD3E49"} } variant="circle" alt={podcasterName} src={podcasterAvatar==="" ? "." : podcasterAvatar}/>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={podcasterName}
+                        />     
+                    </ListItem>
+                    { subStatu !== 4 && (<Typography variant="subtitle1" component="span"><PeopleIcon fontSize='small'/>&nbsp;{subCount} 位聽眾</Typography>) }
+                    <br/>
+                    { facebookLink.length > 0 ? 
+                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
+                        <FacebookIcon/>
+                    </IconButton>
+                    : "" }
+                    { instagramLink.length > 0 ? 
+                    <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
+                        <InstagramIcon />
+                    </IconButton>
+                    : "" }
+                    { youtubeLink.length > 0 ? 
+                    <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
+                        <YouTubeIcon />
+                    </IconButton>
+                    : "" }
+                    { twitterLink.length > 0 ? 
+                    <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
+                        <TwitterIcon />
+                    </IconButton>
+                    : "" }
+                    <br/>
                     { props.user.userId === props.match.params.id ?
                         <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
                     :
@@ -288,28 +331,6 @@ const PodcastHome = (props) => {
                         }
                         </>
                     }
-                    <br/>
-                    { facebookLink.length > 0 ? 
-                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank'>
-                        <FacebookIcon fontSize="large"/>
-                    </IconButton>
-                    : "" }
-                    { instagramLink.length > 0 ? 
-                    <IconButton className={classes.instagramButton} href={instagramLink} target='_blank'>
-                        <InstagramIcon fontSize="large"/>
-                    </IconButton>
-                    : "" }
-                    { youtubeLink.length > 0 ? 
-                    <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank'>
-                        <YouTubeIcon fontSize="large"/>
-                    </IconButton>
-                    : "" }
-                    { twitterLink.length > 0 ? 
-                    <IconButton className={classes.twitterButton} href={twitterLink} target='_blank'>
-                        <TwitterIcon fontSize="large"/>
-                    </IconButton>
-                    : "" }
-                    <Divider/>
                     <Typography style={{textAlign:"left"}} variant="body1" component="span">
                         <ReactMarkdown>{intro}</ReactMarkdown>
                     </Typography>

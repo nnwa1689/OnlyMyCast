@@ -40,7 +40,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 
 
-const clientversion = "V220109.23";
+const clientversion = "V220119.22";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];

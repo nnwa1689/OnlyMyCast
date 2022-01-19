@@ -74,14 +74,15 @@ const FansAdmin = (props) => {
         for (var value of Object.entries(data)) {
             await firebase.firestore().collection("user").doc(value[0]).get()
             .then((doc)=>{
+                const data = doc.data();
                 changeArr.push(
                 <>
                     <ListItem key={value[0]}>
                     <ListItemAvatar>
-                    <Avatar alt={doc.data().name} src={doc.data().avatar==="" ? "." : doc.data().avatar} className={classes.pink}/>
+                    <Avatar alt={data.name} src={data.avatar==="" ? "." : data.avatar} className={classes.pink}/>
                     </ListItemAvatar>
                     <ListItemText
-                        primary={doc.data().name}
+                        primary={data.name}
                     />
                     <ListItemSecondaryAction>
                     <Button 
@@ -108,12 +109,13 @@ const FansAdmin = (props) => {
         if (props.user.userId.length > 0) {
             firebase.firestore().collection("fans").doc(props.user.userId).get()
             .then((doc)=>{
-                if (doc.data()===undefined){
+                const data = doc.data();
+                if (data===undefined){
                     setFansList("");
-                } else if(Object.entries(doc.data()).length===0){
+                } else if(Object.entries(data).length===0){
                     setFansList("");
                 } else {
-                    genListItem(doc.data()).then((arr)=>setFansList(arr));
+                    genListItem(data).then((arr)=>setFansList(arr));
                 }                
             });
         } else {

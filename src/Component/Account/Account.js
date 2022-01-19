@@ -104,7 +104,7 @@ const Account = (props) => {
     const [handleCode, setHandleCode] = useState('init');
     const [name, setName] = useState(props.user.name);
     const theme = useTheme();
-    const [avatar,setAvatar] = useState(props.user.avatar);
+    const [avatar,setAvatar] = useState(props.user.avatar==="" ?"." : props.user.avatar);
     const [newPassword, setNewPassword] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [filename, setFilename] = useState("");
@@ -147,7 +147,7 @@ const Account = (props) => {
                 changeArr.push(
                     <ListItem key={value[0]}>
                         <ListItemAvatar>
-                        <Avatar variant="rounded" alt={data.name} src={data.icon}/>
+                        <Avatar style={ {backgroundColor: "#FD3E49",} } variant="rounded" alt={data.name} src={data.icon}/>
                         </ListItemAvatar>
                         <Link variant="body2" component={RLink} to={"/podcast/" + value[0]}>
                             {data.name}
@@ -175,9 +175,9 @@ const Account = (props) => {
             .then((doc)=>{      
                 if (doc.exists) {
                     if (Object.entries(doc.data()).length === 0) {
-                        setSubscribeList("")
+                        setSubscribeList("");
                     } else {
-                        genListItem(doc.data()).then((arr)=>(setSubscribeList(arr)))
+                        genListItem(doc.data()).then((arr)=>(setSubscribeList(arr)));
                     }
      
                 } else {
@@ -380,8 +380,10 @@ const Account = (props) => {
                             <FormControl fullWidth className={classes.margin}>
                                 <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="name" label="暱稱" variant="outlined" />
                             </FormControl>
+                            <br/><br/>
                             <Divider/>
-                            <Typography variant="h5" component="h1"><br/>帳號安全</Typography>
+                            <br/>
+                            <Typography variant="h5" component="h1">帳號安全</Typography>
                             <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
                             <FormControl fullWidth className={classes.margin}>
                                 <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />

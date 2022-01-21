@@ -40,7 +40,7 @@ const UnloginNavBar = (props) => {
               <div className={classes.grow}/>
               <Typography variant="h6">建立、收聽私人Podcast</Typography>
               <div className={classes.grow}/>
-                <Button href="/signin" size="medium" variant="contained" color="primary">
+                <Button href="../signin" size="medium" variant="contained" color="primary">
                     開始
                 </Button>
           </Toolbar>

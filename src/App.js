@@ -40,7 +40,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 
 
-const clientversion = "V220119.22";
+const clientversion = "V220121.16";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -98,8 +98,19 @@ const App = (props) => {
     () => {
       firebase.auth().onAuthStateChanged(async(user)=>{
         if (user) {
+
+          //檢查 Token，如果 email 驗證結果沒有更新，就重新取得 token。
+          user.getIdTokenResult().then(
+            (idToken) => {
+              if (idToken.claims.email_verified !== user.emailVerified) {
+                user.getIdToken(true);
+                console.log(idToken.claims);
+              }
+            }
+          );
+
           //checkEmailVerified
-          if (!user.emailVerified && process.env.NODE_ENV !== "development") {
+          if (!user.emailVerified) {
             //unVerified, 轉跳到驗證介面
             setAuth(true);
             setEmailVeri(false);
@@ -139,6 +150,7 @@ const App = (props) => {
               });
             }
 
+            //取得 user 資料
             firebase.firestore().collection("user").doc(user.uid).get()
             .then(
               (doc)=>{

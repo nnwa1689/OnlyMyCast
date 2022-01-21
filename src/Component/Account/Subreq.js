@@ -18,6 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Divider from '@material-ui/core/Divider';
+import CircularProgress from '@material-ui/core/CircularProgress';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -176,30 +177,34 @@ const Subreq = (props) => {
                 </Card>
             </Container>)
             } else {
-            return(
-                <Container maxWidth="md">
-                    <Card className={classes.root}>
-                        <CardContent>
-                        <Typography variant="h5" component="h1">追蹤審核</Typography>
-                        <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
-                        <List dense>
-                            {reqList === "" ? 
-                                <>
-                                    <Typography variant="h2" component="h1" gutterBottom>
-                                        ╮(╯▽╰)╭ <br/>
-                                    </Typography>
-                                    <Typography variant="h5" component="span">
-                                        呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
-                                    </Typography>
-                                </>
-                            :
-                            reqList
-                            }
-                        </List>
-                        </CardContent>
-                    </Card>
-                </Container>
-            );
+                if (reqList === undefined) {
+                    return(<CircularProgress style={{marginTop: "25%"}} />);
+                } else {
+                    return(
+                        <Container maxWidth="md">
+                            <Card className={classes.root}>
+                                <CardContent>
+                                <Typography variant="h5" component="h1">追蹤審核</Typography>
+                                <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
+                                <List dense>
+                                    {reqList === "" ? 
+                                        <>
+                                            <Typography variant="h2" component="h1" gutterBottom>
+                                                ╮(╯▽╰)╭ <br/>
+                                            </Typography>
+                                            <Typography variant="h5" component="span">
+                                                呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
+                                            </Typography>
+                                        </>
+                                    :
+                                    reqList
+                                    }
+                                </List>
+                                </CardContent>
+                            </Card>
+                        </Container>
+                    );
+                }
         }
 }
 export default Subreq;

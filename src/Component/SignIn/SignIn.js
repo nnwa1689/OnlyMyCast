@@ -94,7 +94,7 @@ const SignIn = () => {
         firebase.auth().onAuthStateChanged((user)=> {
             if (user) {
               // 使用者已登入，redirect to Homepage
-              window.location.href = '/webapp';
+              window.location.href = "./";
             }
           });
     }
@@ -150,12 +150,14 @@ const SignIn = () => {
             >
                 登入
             </Button>
-            <Link href="/webapp/signup" variant="body2">
-                    {"立即註冊"}
-            </Link> &nbsp;&nbsp;
-            <Link component={RLink} to="/forgetpassword" variant="body2">
-                    {"忘記密碼"}
-            </Link>
+            <Typography component="span" variant="body2">
+              <Link href="./signup" variant="body2">
+                      {"立即註冊"}
+              </Link> &nbsp;&nbsp;
+              <Link component={RLink} to="/forgetpassword" variant="body2">
+                      {"忘記密碼"}
+              </Link>
+            </Typography>
             </div>
           </CardContent>
       </Card>

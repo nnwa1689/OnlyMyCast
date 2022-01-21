@@ -142,7 +142,7 @@ const Home = (props) => {
         </Helmet>
         <Typography variant="h5" component="h1"><CastIcon/>我的頻道</Typography>
         <br/>
-        <Grid container direction="row">
+        <Grid container justify="center" direction="row">
           {
             props.user.userId ==="" ?
             <Typography variant="body1" component="span">
@@ -159,10 +159,10 @@ const Home = (props) => {
             <FavoriteIcon/>我的訂閱
         </Typography>
         <br/>
-        <Grid container direction="row" spacing={4}>
+        <Grid container justify="center" direction="row" spacing={4}>
             {subscribeList ==="" ?
               <>
-                <Typography variant="h2" component="h1">
+                <Typography variant="h2" component="span">
                     (^ｰ^)ノ<br/>
                 </Typography>
                 <Typography variant="h5" component="span">

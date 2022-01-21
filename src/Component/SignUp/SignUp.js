@@ -1,6 +1,6 @@
 //react
 import React, {useState, useEffect} from 'react';
-import { Link as RLink } from 'react-router-dom';
+import { Link as RLink, useHistory } from 'react-router-dom';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -66,6 +66,7 @@ const SignUp = ()=>{
   const [nameError, setNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [pwError, setPwError] = useState(false);
+  const history = useHistory();
 
   const handleSignup = ()=>{
     setHandleCode('loading');
@@ -92,10 +93,10 @@ const SignUp = ()=>{
             avatar : ""
           }
         ).then(() => {
-          //window.location.reload();
+          history.push('./emailverified');
         })
         .catch((error) => {
-            console.log("Error writing document: ", error);
+            console.log("Error writing document: ");
         });  
       })
       .catch((error) => {
@@ -120,20 +121,23 @@ const SignUp = ()=>{
         firebase.auth().onAuthStateChanged((user)=> {
             if(user) {
               // 使用者已登入，redirect to Homepage
-              //history.push('/')
+              setHandleCode('login');
             }
           });
     }
   )
 
   return (
-    <Container component="main" maxWidth="xs">
+
+      handleCode === 'login' ? ""
+      :
+      <Container component="main" maxWidth="xs">
       <Card className={classes.paper}>
           <CardContent>
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
           <img style={{fill: "#FD3E49"}} src={LogoIcon} width="128"></img>
         <Typography component="h1" variant="h5">
-          立即註冊<br/>建立自己私人的Podcast
+          立即註冊<br/>即可建立私人Podcast
         </Typography>
         <div className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -209,9 +213,11 @@ const SignUp = ()=>{
           <br/>
           <Grid container justify="center">
             <Grid item>
-              <Link href="/webapp/signin" variant="body1">
-                已有帳號？立即登入
-              </Link>
+              <Typography component="span" variant="body1">
+                <Link href="./signin">
+                  已有帳號？立即登入
+                </Link>
+              </Typography>
             </Grid>
           </Grid>
         </div>

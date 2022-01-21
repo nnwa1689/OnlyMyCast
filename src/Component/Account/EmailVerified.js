@@ -31,8 +31,6 @@ function Copyright() {
         <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
         <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
         </Link><br/>
-        <Link href="https://www.notes-hz.com/">筆記長也NotesHazuya</Link>
-        <br/><br/>
     </Typography>
   );
 }
@@ -59,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const SignIn = () => {
+const EmailVerified = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [handleCode, setHandleCode] = useState("init");
@@ -79,10 +77,11 @@ const SignIn = () => {
     ()=>{
         firebase.auth().onAuthStateChanged((user)=> {
             if(!user) {
-              // 使用者已登入，redirect to Homepage
+              //沒有登入的話引導去登入畫面
               history.push('/signin');
             } else if (user.emailVerified) {
-              history.push('/');
+              // 如果已經驗證過就讓畫面做其他渲染
+              setHandleCode("verified");
             } else {
               setEmail(user.email);
             }
@@ -91,34 +90,36 @@ const SignIn = () => {
   )
 
   return (
+    handleCode === "verified" ? (window.location.href = "./")
+    :
     <Container component="main" maxWidth="xs">
-      <Card className={classes.paper}>
-          <CardContent>
-          { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
-            <img src={LogoIcon} width="128"></img>
-            <Typography component="h1" variant="h5">信箱驗證</Typography>
-            <br/>
-            <Typography component="span" variant="body1">驗證您的信箱之後，才能開始使用網站功能</Typography>
-            <form className={classes.form} noValidate>
-              <Button
-                  type="button"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  className={classes.submit}
-                  onClick={sendEmailVerification}
-                  disabled={handleCode==="loading" || handleCode === "send"}
-              >
-                  { handleCode === "send" ? "已發送驗證信至" + email : "發送驗證Email至" + email }
-              </Button>
-            </form>
-          </CardContent>
-      </Card>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+    <Card className={classes.paper}>
+        <CardContent>
+        { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
+          <img src={LogoIcon} width="128"></img>
+          <Typography component="h1" variant="h5">信箱驗證</Typography>
+          <br/>
+          <Typography component="span" variant="body1">驗證您的信箱之後，才能開始使用網站功能</Typography>
+          <form className={classes.form} noValidate>
+            <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                color="primary"
+                size="large"
+                className={classes.submit}
+                onClick={sendEmailVerification}
+                disabled={handleCode==="loading" || handleCode === "send"}
+            >
+                { handleCode === "send" ? "已發送驗證信至" + email : "發送驗證Email至" + email }
+            </Button>
+          </form>
+        </CardContent>
+    </Card>
+    <Box mt={8}>
+      <Copyright />
+    </Box>
+  </Container>
   );
 }
-export default SignIn;
+export default EmailVerified;

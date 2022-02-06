@@ -172,7 +172,7 @@ const FansAdmin = (props) => {
         return(
             <>
                 <Helmet>
-                    <title>追蹤管理 - OnlyMyCast - 建立私人的Podcast</title>
+                    <title>追蹤管理 - Onlymycast</title>
                 </Helmet>
                 <Container maxWidth="md">
                     <Card className={classes.root}>

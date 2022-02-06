@@ -323,7 +323,7 @@ const Account = (props) => {
         return(
             <Container maxWidth="md">
             <Helmet>
-                <title>個人設定 - OnlyMyCast - 建立私人的Podcast</title>
+                <title>個人設定 - Onlymycast</title>
             </Helmet>
                 <Card className={classes.root}>
                     <CardContent>

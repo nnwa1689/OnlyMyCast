@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme)=>({
         return(
             <Container maxWidth="md">
             <Helmet>
-                <title>單集分析 - OnlyMyCast - 建立私人的Podcast</title>
+                <title>單集分析 - Onlymycast</title>
             </Helmet>
                 <Card className={classes.root}>
                     <CardContent>

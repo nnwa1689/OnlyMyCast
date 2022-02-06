@@ -138,7 +138,7 @@ const Home = (props) => {
     return (
       <Container maxWidth="md" style={ { marginTop: 100, } }>
         <Helmet>
-            <title>OnlyMyCast - 建立私人的Podcast</title>
+            <title>Onlymycast</title>
         </Helmet>
         <Typography variant="h5" component="h1"><CastIcon/>我的頻道</Typography>
         <br/>

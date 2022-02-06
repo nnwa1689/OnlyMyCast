@@ -23,8 +23,11 @@ import AttachmentIcon from '@material-ui/icons/Attachment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import Box from '@material-ui/core/Box';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import SaveIcon from '@material-ui/icons/Save';
 import Tooltip from '@material-ui/core/Tooltip';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -34,6 +37,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 import MicIcon from '@material-ui/icons/Mic';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+//custom
+import LinearProgressWithLabel from '../CustomComponent/LinearProgressWithLabel';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -90,20 +95,6 @@ const useStyles = makeStyles((theme)=>({
   })
   );
 
-  function LinearProgressWithLabel(props) {
-    return (
-      <Box display="flex" alignItems="center">
-        <Box width="100%" mr={1}>
-          <LinearProgress variant="determinate" {...props} />
-        </Box>
-        <Box minWidth={35}>
-          <Typography variant="body2" color="textSecondary">{`${Math.round(
-            props.value,
-          )}%`}</Typography>
-        </Box>
-      </Box>
-    );
-  }
 
   const NewPodcast = (props) => {
 
@@ -140,9 +131,11 @@ const useStyles = makeStyles((theme)=>({
                 window.scrollTo(0, 0);
                 isFirstLoad.current = false;
             }
+            /*
             if (activeStep===1 && handleDarftCode==="init") {
                 getDarft();
             }
+            */
         }
     )
 
@@ -202,6 +195,9 @@ const useStyles = makeStyles((theme)=>({
         if (isBlocked) {
           console.log('Permission Denied');
         } else {
+            setFileBit();
+            setFilename("");
+            setFilePath();
             Mp3Recorder
             .start()
             .then(() => {
@@ -267,6 +263,7 @@ const useStyles = makeStyles((theme)=>({
           });
     }
 
+    /*
     const getDarft = () => {
         firebase.database().ref('/castDarft/' + props.user.userId).once("value", e => {
         }).then(async(e)=>{
@@ -278,12 +275,46 @@ const useStyles = makeStyles((theme)=>({
             }
         })
     }
+    */
 
+    /*
     const handleRemoveDarft = async() => {
         await firebase.database().ref('/castDarft/' + props.user.userId).remove();
     }
+    */
 
-    const handleSaveDarft = () => {
+    const handleSaveDarft = async() => {
+        if (podcastTitle==="" || intro==="") {
+            if (podcastTitle==="") {
+                setTitleErr("單集標題不能為空");
+            }
+            if (intro==="") {
+                setIntroErr("單集介紹不能為空");
+            }
+        } else {
+            setActiveStep(3);setUploadStatu(2);
+            await uploadAudioFile().then(async(url)=>{
+                console.log(duration.current);
+                await firebase.firestore()
+                .collection("podcast")
+                .doc(props.user.userId)
+                .collection("castdarft")
+                .add({
+                    url: url,
+                    intro:intro,
+                    title: podcastTitle,
+                    updateTime:firebase.firestore.FieldValue.serverTimestamp(),
+                    uid:props.userUid,
+                    fileRef:audioFileRef,
+                    duration:duration.current
+                }, { merge: true }).then((event)=>{
+                    setUploadStatu(1);
+                }).catch((error)=>{
+                    setUploadStatu(3); setErr(error);
+                })
+            });
+        }
+        /*
         if (podcastTitle==="" || intro==="") {
             setErr(true);
             if (podcastTitle==="") {
@@ -303,6 +334,7 @@ const useStyles = makeStyles((theme)=>({
                 setHandleDarftCode('suc');
             }).catch();
         }
+        */
     }
 
     const updateChannelDate = async()=>{
@@ -338,8 +370,11 @@ const useStyles = makeStyles((theme)=>({
                     duration:duration.current
                 }, { merge: true }).then((event)=>{
                     updateChannelDate().then(async()=>{
-                        handleRemoveDarft().then(setUploadStatu(1));
-                        await handlePushMessage();
+                        //handleRemoveDarft().then(setUploadStatu(1));
+                        setUploadStatu(1);
+                        if (process.env.NODE_ENV !== "development") {
+                            handlePushMessage();
+                        }
                     }
                 )
                 }).catch((error)=>{
@@ -379,7 +414,7 @@ const useStyles = makeStyles((theme)=>({
         return(
             <Container maxWidth="md">
                 <Helmet>
-                    <title>新增單集 - OnlyMyCast - 建立私人的Podcast</title>
+                    <title>新增單集 - Onlymycast</title>
                 </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
@@ -448,7 +483,7 @@ const useStyles = makeStyles((theme)=>({
                     { deviceList }
                     </Select>
                     <br/><br/><Divider/><br/><br/>     
-                    <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={handleRecordeingButton}>
+                    <Button disabled={ (deviceList === undefined ? true : false) } color="primary" variant="outlined" className={classes.mostlarge} onClick={handleRecordeingButton}>
                         <Typography variant="h4">
                             { isRecording ? 
                             <>
@@ -498,7 +533,7 @@ const useStyles = makeStyles((theme)=>({
                                 { filename === "" ? "選擇檔案" : filename }
                                 <br/><br/><Divider/><br/>
                                 <Typography variant="body1" gutterBottom>
-                                    僅限 mp3/mp4/m4a 格式<br/>
+                                    僅限 MP3/MP4/M4A 格式<br/>
                                 </Typography>
                                 </Typography>
                             </Button>
@@ -619,6 +654,24 @@ const useStyles = makeStyles((theme)=>({
                             }
                         </>
                     }
+                        <Dialog
+                            open={introErr!==false || titleErr!==false}
+                            onClose={()=>{setIntroErr(false);setTitleErr(false)}}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"提示"}</DialogTitle>
+                            <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {introErr}<br/>{titleErr}
+                            </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                            <Button onClick={()=>{setIntroErr(false); setTitleErr(false)}} color="primary" autoFocus>
+                                好
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
                         <Snackbar open={handleDarftCode==="suc"} autoHideDuration={2000} onClose={()=>{setHandleDarftCode('init')}} message="您的草稿已經儲存"/>
                         <Snackbar open={handleDarftCode==="get"} onClose={()=>{setHandleDarftCode('fin')}} autoHideDuration={2000} message="您的草稿已經還原"/>
                     </CardContent>

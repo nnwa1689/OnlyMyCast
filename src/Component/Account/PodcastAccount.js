@@ -32,6 +32,8 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import TwitterIcon from '@material-ui/icons/Twitter';
+//customUI
+import TabPanel from '../CustomComponent/TabPanel';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -79,27 +81,20 @@ const useStyles = makeStyles((theme)=>({
         marginBottom: 10,
         boxShadow : "none",
         background: "#FFFFFF"
+    },
+    facebookColor: {
+        color: "#4267B2",
+    },
+    instagramColor: {
+        color: "#C13584",
+    },
+    youtubeColor: {
+        color: "#FF0000",
+    },
+    twitterColor: {
+        color: "#1DA1F2",
     }
   }));
-
-const TabPanel = (props) => {
-    const { children, value, index, ...other } = props;
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`full-width-tabpanel-${index}`}
-        aria-labelledby={`full-width-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <div p={0}>
-            {children}
-          </div>
-        )}
-      </div>
-    );
-  }
   
   
 const PodcastAccount = (props) => {
@@ -306,7 +301,7 @@ const PodcastAccount = (props) => {
         return(
             <>
             <Helmet>
-                <title>電台設定 - OnlyMyCast - 建立私人的Podcast</title>
+                <title>電台設定 - Onlymycast</title>
             </Helmet>
             {
                 pageLoaded ?
@@ -477,36 +472,40 @@ const PodcastAccount = (props) => {
                                             <Typography variant="body1" component="span">設定電台的社群媒體網址，讓聽眾在別的地方找到您</Typography>
                                             <br/><br/><Divider/>
                                             <FormControl fullWidth className={classes.margin}>
-                                            <Typography variant="body1" gutterBottom><FacebookIcon/>FACEBOOK</Typography>
+                                            <Typography className={classes.facebookColor} variant="body1" gutterBottom><FacebookIcon/>Facebook</Typography>
                                                 <TextField disabled={handleCode==="loading"} 
                                                             value={facebookLink} 
                                                             onChange={(e)=>setFacebookLink(e.target.value)} 
                                                             id="fb" 
-                                                            variant="outlined" />
+                                                            variant="outlined"
+                                                            placeholder="https://" />
                                             </FormControl>
                                             <FormControl fullWidth className={classes.margin}>
-                                            <Typography variant="body1" gutterBottom><InstagramIcon/>INSTARGRAM</Typography>
+                                            <Typography className={classes.instagramColor} variant="body1" gutterBottom><InstagramIcon/>Instagram</Typography>
                                                 <TextField disabled={handleCode==="loading"} 
                                                             value={instagramLink} 
                                                             onChange={(e)=>setInstargramLink(e.target.value)} 
                                                             id="ig" 
-                                                            variant="outlined" />
+                                                            variant="outlined"
+                                                            placeholder="https://" />
                                             </FormControl>
                                             <FormControl fullWidth className={classes.margin}>
-                                            <Typography variant="body1" gutterBottom><YouTubeIcon/>YOUTUBE</Typography>
+                                            <Typography className={classes.youtubeColor} variant="body1" gutterBottom><YouTubeIcon/>Youtube</Typography>
                                                 <TextField disabled={handleCode==="loading"} 
                                                             value={youtubeLink} 
                                                             onChange={(e)=>setYoutubeLink(e.target.value)} 
                                                             id="yt" 
-                                                            variant="outlined" />
+                                                            variant="outlined"
+                                                            placeholder="https://" />
                                             </FormControl>
                                             <FormControl fullWidth className={classes.margin}>
-                                            <Typography variant="body1" gutterBottom><TwitterIcon/>TWITTER</Typography>
+                                            <Typography className={classes.twitterColor} variant="body1" gutterBottom><TwitterIcon/>Twitter</Typography>
                                                 <TextField disabled={handleCode==="loading"} 
                                                             value={twitterLink} 
                                                             onChange={(e)=>setTwitterLink(e.target.value)} 
                                                             id="twitter" 
-                                                            variant="outlined" />
+                                                            variant="outlined"
+                                                            placeholder="https://" />
                                             </FormControl>
                                             <FormControl fullWidth className={classes.margin}>
                                             <Button

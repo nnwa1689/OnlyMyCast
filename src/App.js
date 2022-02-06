@@ -23,9 +23,10 @@ import Subreq from './Component/Account/Subreq';
 import Search from './Component/Search/Search'
 import PodcastHome from './Component/Podcast/PodcastHome';
 import AnalyticsPodcastDetails from './Component/Podcast/AnalyticsPodcastDetails';
-import NewPodcast from './Component/Podcast/NewPodcast'
-import PodcastDetails from './Component/Podcast/PodcastDetails'
-import EditPodcast from './Component/Podcast/EditPodcast'
+import NewPodcast from './Component/Podcast/NewPodcast';
+import PodcastDetails from './Component/Podcast/PodcastDetails';
+import EditPodcast from './Component/Podcast/EditPodcast';
+import EditCastDarft from './Component/Podcast/EditCastDarft';
 import EditPodcastDetails from './Component/Podcast/EditPodcastDetails';
 import SignIn from './Component/SignIn/SignIn';
 import SignUp from './Component/SignUp/SignUp';
@@ -40,7 +41,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 
 
-const clientversion = "V220121.16";
+const clientversion = "V220206.23";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -292,6 +293,11 @@ const App = (props) => {
                   <Route path="/editpodcast/:id/:podId" 
                     render={(props) => (
                         <EditPodcastDetails {...props} user={userData} />
+                      )} 
+                  />
+                  <Route path="/editcastdarft/:id/:podId" 
+                    render={(props) => (
+                        <EditCastDarft {...props} user={userData} userUid={userUid.current} />
                       )} 
                   />
                   <Route exact path="/analyticspodcast/:id/:podId" 

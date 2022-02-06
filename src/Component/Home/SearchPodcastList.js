@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme)=>({
     return (
         <>
           <Helmet>
-              <title>頻道搜尋 - OnlyMyCast - 建立私人的Podcast</title>
+              <title>頻道搜尋 - Onlymycast</title>
           </Helmet>
           <ListItem button component={RLink} to={"/podcast/" + props.podcastId} alignItems="flex-start">
                 <ListItemAvatar>

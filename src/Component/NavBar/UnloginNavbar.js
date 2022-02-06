@@ -1,14 +1,9 @@
 //react
 import React from 'react';
-import { Link as RLink } from 'react-router-dom';
-//firebase
-import firebase from "firebase/app";
-import "firebase/auth";
 /*google themes */
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { fade, makeStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 //static
@@ -26,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: "rgba(40, 40, 40, 0.85)",
     backdropFilter: "blur(4px)",
+    boxShadow: "none",
  },
 }));
 

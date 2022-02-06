@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme)=>({
     alignItems:"center",
     paddingBottom: 5,
     backgroundColor: "rgba(255, 255, 255, 0.6)",
-    backdropFilter: "blur(6px)",
+    backdropFilter: "blur(4px)",
   },
   podcastToolbar: {
     justifyContent: "flex-start",
@@ -153,7 +153,7 @@ const Player = (props) => {
             <AppBar position="fixed" color="inherit" className={classes.appBar}>
             { !ready ? <LinearProgress style={{width:"100%"}}/> : 
                 <Slider 
-                style={{marginTop: -15,}} 
+                style={{padding: 0, paddingBottom: 2,}} 
                 step={1} 
                 min={0} 
                 max={100} 

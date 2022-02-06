@@ -28,31 +28,30 @@ const useStyles = makeStyles((theme)=>({
         minWidth: 275,
         marginTop: 100,
         borderRadius: "10px",
-        
         alignItems:"center",
         textAlign:"center"
     },
     appBar: {
-      top: 'auto',
-      bottom: 0,
-      alignItems:"center"
+        top: 'auto',
+        bottom: 0,
+        alignItems:"center"
     },
     large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
-      marginBottom: theme.spacing(3),
-      marginTop:theme.spacing(3),
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
-      marginLeft:"auto",
-      marginRight:"auto"
+        width: theme.spacing(20),
+        height: theme.spacing(20),
+        marginBottom: theme.spacing(3),
+        marginTop:theme.spacing(3),
+        color: theme.palette.getContrastText(deepOrange[500]),
+        backgroundColor: deepOrange[500],
+        marginLeft:"auto",
+        marginRight:"auto"
     },
     orange: {
         color: theme.palette.getContrastText(deepOrange[500]),
         backgroundColor: deepOrange[500],
       },
     menuButton: {
-      margin: theme.spacing(1),
+        margin: theme.spacing(1),
     },
     margin: {
         marginBottom: theme.spacing(2),
@@ -123,7 +122,7 @@ const Search = (props) => {
                     } />
                 </FormControl>
                     <br/><br/>
-                {searchResult!=="" || searchResult!==undefined ? searchResult : "沒有搜尋結果"}
+                {searchResult.length > 0 ? searchResult : "沒有搜尋結果"}
                 </CardContent>
             </Card>
         </Container>

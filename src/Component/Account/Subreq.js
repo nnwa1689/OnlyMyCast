@@ -152,7 +152,7 @@ const Subreq = (props) => {
         return(
             <Container maxWidth="md">
                 <Helmet>
-                    <title>追蹤審核 - OnlyMyCast - 建立私人的Podcast</title>
+                    <title>追蹤審核 - Onlymycast</title>
                 </Helmet>
                 <Card className={classes.root}>
                     <CardContent>

@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Avatar from '@material-ui/core/Avatar';
 //firebase
@@ -91,9 +92,11 @@ const EmbedChannel = (props) => {
     return (
         <Card style={{ background: "#f7f7f7", maxHeight: 200, borderRadius: 20, boxShadow: "none", maxHeight: "200px" }}>
             <div className={classes.slogan}>
-                <Typography href="https://onlymycast.notes-hz.com/" target="_blank" style={{ lineHeight: "10px" }} variant="body2" component="span" color="textSecondary">
-                    <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast - 建立自己私人的Podcast
-                </Typography>
+                <Link href="https://onlymycast.notes-hz.com/" target="_blank">
+                    <Typography style={{ lineHeight: "10px" }} variant="body2" component="span" color="textSecondary">
+                        <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast - 建立自己私人的Podcast
+                    </Typography>
+                </Link>
             </div>
 
             <div className={classes.root}>
@@ -111,6 +114,8 @@ const EmbedChannel = (props) => {
                     </CardContent>
                     <div className={classes.controls}>
                         <Button
+                            fullWidth
+                            style={ { boxShadow: "none", } }
                             href={"https://onlymycast.notes-hz.com/webapp/podcast/" + props.match.params.id}
                             target="_blank"
                             variant="contained"

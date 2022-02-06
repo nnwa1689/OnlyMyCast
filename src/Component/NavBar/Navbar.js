@@ -46,8 +46,9 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
     appBar: {
-       backgroundColor: "rgba(40, 40, 40, 0.85)",
+       backgroundColor: "rgba(40, 40, 40, 0.8)",
        backdropFilter: "blur(4px)",
+       boxShadow: "none",
     },
     menuButton: {
       marginRight: theme.spacing(1),
@@ -165,7 +166,7 @@ const NavBar = (props) => {
               
               windowWidth >= 768 && 
                 <>
-                  <InputBase onChange={(e) => {setSearch(e.target.value)}} value={search} className={classes.search} placeholder="搜尋頻道" startAdornment={
+                  <InputBase onChange={(e) => {setSearch(e.target.value)}} value={search} className={classes.search} placeholder="以完整ID搜尋頻道" startAdornment={
                       <IconButton component={RLink} to={"/search/" + search} aria-label="search" size="small">
                           <SearchIcon/>
                       </IconButton>
@@ -272,8 +273,7 @@ const NavBar = (props) => {
                       </ListItem>
                       <ListItem key="copyright" fontSize={5}>
                         <Typography variant="body2" color="textSecondary">
-                          {' © ' + new Date().getFullYear()}<br/>
-                          <Link href="https://lab.notes-hz.com/">
+                          <Link target="_blank" href="https://lab.notes-hz.com/">
                             <span style={ {fontSize: "24px", color: "#028ff3", fontWeight: "bold"} }>Lab</span>
                             <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>H</span>
                             <span style={ {fontSize: "24px", color: "#FF8738", fontWeight: "bold"} }>a</span>

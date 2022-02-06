@@ -205,9 +205,13 @@ const PodcastHome = (props) => {
         )
     }
 
-    const getSubStatu = ()=>{
+    const getSubStatu = async() =>{
         //已經訂閱
-        firebase.firestore().collection("subscribe").doc(props.userUid).get()
+        let result = false;
+        await firebase.firestore()
+        .collection("subscribe")
+        .doc(props.userUid)
+        .get()
         .then((doc)=>{ 
             const data = (doc.data()===undefined ? "" : doc.data());
             const found = Object.entries(data).find(
@@ -215,10 +219,12 @@ const PodcastHome = (props) => {
             if (found !== undefined){
                 setSubStatu(1);
                 updateClickDate();
+                result = true;
             } else {
-                firebase.database().ref('/subreq/' + props.userUid + "/" + props.match.params.id).once("value", e => {
-                //
-                }).then((e)=>{
+                firebase.database()
+                .ref('/subreq/' + props.userUid + "/" + props.match.params.id)
+                .once("value", e => {/*pass*/ })
+                .then((e)=>{
                         if (e.val()!== null){
                             setSubStatu(3)
                         } else {
@@ -228,6 +234,7 @@ const PodcastHome = (props) => {
                 );
             }
         });
+        return result;
     }
 
     const handleUnsub = (e) => {
@@ -259,9 +266,17 @@ const PodcastHome = (props) => {
     }
 
     const handleRemoveReq = (e) => {
-        firebase.database().ref('/subreq/' + props.userUid + "/" + props.match.params.id).remove().then((e)=>{
-            firebase.database().ref('/subcheck/' + props.match.params.id + "/" + props.userUid).remove().then((e)=>{
-                setSubStatu(2);
+        firebase.database()
+        .ref('/subreq/' + props.userUid + "/" + props.match.params.id)
+        .remove()
+        .then((e)=>{
+            firebase.database()
+            .ref('/subcheck/' + props.match.params.id + "/" + props.userUid)
+            .remove()
+            .then((e)=>{
+                //setSubStatu(2);
+                // 再次確認訂閱狀態
+                getSubStatu();
             })
         }).catch();
     }
@@ -272,7 +287,7 @@ const PodcastHome = (props) => {
         return(
             <Container maxWidth="md">
                 <Helmet>
-                    <title>{ name } - OnlyMyCast - 建立私人的Podcast</title>
+                    <title>{ name } - Onlymycast</title>
                 </Helmet>
                 <Card className={classes.root}>
                     <CardContent>

@@ -78,20 +78,20 @@ const PodcastDetails = (props) => {
 
     const getPlayedStatu = () => {
       firebase.firestore()
-                    .collection("podcast")
-                    .doc(props.match.params.id)
-                    .collection('podcast')
-                    .doc(props.match.params.podId)
-                    .collection('playedlist')
-                    .doc(props.userUid)
-                    .get()
-                    .then(
-                      (e) => {
-                        if (e.exists) {
-                          setPlayed(true);
-                        }
-                      }
-                    )
+      .collection("podcast")
+      .doc(props.match.params.id)
+      .collection('podcast')
+      .doc(props.match.params.podId)
+      .collection('playedlist')
+      .doc(props.userUid)
+      .get()
+      .then(
+        (e) => {
+          if (e.exists) {
+            setPlayed(true);
+          }
+        }
+      )
     }
 
     const getSubStatu = ()=>{
@@ -154,7 +154,7 @@ const PodcastDetails = (props) => {
       return(
         <Container maxWidth="md">
           <Helmet>
-              <title>{ name } - { channelName } - OnlyMyCast - 建立私人的Podcast</title>
+              <title>{ name } - { channelName } - Onlymycast</title>
           </Helmet>
           { subStatu===1 || props.user.userId === props.match.params.id ?
               <Card className={classes.root}>

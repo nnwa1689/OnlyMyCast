@@ -96,11 +96,23 @@ const useStyles = makeStyles((theme)=>({
     )
 
     const handleDelPodcast = () => {
-        setShowMsgBox(false);setHandleCode(2);
-        firebase.firestore().collection("podcast").doc(props.user.userId).collection('podcast').doc(props.match.params.podId)
-        .delete().then(()=>{
+        setShowMsgBox(false);
+        setHandleCode('del');
+        firebase.firestore()
+        .collection("podcast")
+        .doc(props.user.userId)
+        .collection('podcast')
+        .doc(props.match.params.podId)
+        .delete()
+        .then(()=>{
             //delFile
-            firebase.storage().ref().child(audioFileRef.current).delete().then(()=>{setHandleCode("delSuc")});
+            firebase.storage()
+            .ref()
+            .child(audioFileRef.current)
+            .delete()
+            .then(
+                ()=>{setHandleCode("delSuc")
+            });
         }
         )
     }
@@ -130,19 +142,24 @@ const useStyles = makeStyles((theme)=>({
     }
 
     const getSPData = ()=>{
-        firebase.firestore().collection("podcast").doc(props.user.userId).collection('podcast').doc(props.match.params.podId).get()
-          .then((doc)=>{
+        firebase.firestore()
+        .collection("podcast")
+        .doc(props.user.userId)
+        .collection('podcast')
+        .doc(props.match.params.podId)
+        .get()
+        .then((doc)=>{
             const data = doc.data();
             if (data===undefined) {
-  
+
             } else if (Object.entries(data).length===0) {
-  
+
             } else {
-              setTitle(data.title);
-              setIntro(data.intro);
-              audioFileRef.current = data.fileRef;
+                setTitle(data.title);
+                setIntro(data.intro);
+                audioFileRef.current = data.fileRef;
             }
-          })
+        })
       }
 
     if (title===undefined || intro===undefined) {
@@ -151,7 +168,7 @@ const useStyles = makeStyles((theme)=>({
         return(
             <Container maxWidth="md">
                 <Helmet>
-                    <title>編輯單集 - OnlyMyCast - 建立私人的Podcast</title>
+                    <title>編輯單集 - Onlymycast</title>
                 </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
@@ -179,7 +196,7 @@ const useStyles = makeStyles((theme)=>({
                             className={classes.button}
                             startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
                             onClick={handleUpdateInfor}
-                            disabled={handleCode==="loading"}
+                            disabled={handleCode==="loading" || handleCode==="del"}
                         >
                             變更單集資訊
                         </Button>
@@ -188,10 +205,10 @@ const useStyles = makeStyles((theme)=>({
                             variant="contained"
                             color="primary"
                             className={classes.button}
-                            startIcon={<DeleteIcon />}
+                            startIcon={handleCode==="del" ? <CircularProgress size={24} className={classes.buttonProgress} /> : <DeleteIcon />}
                             onClick={()=>{setShowMsgBox(true)}}
                             size="large"
-                            disabled={handleCode==="loading"}
+                            disabled={handleCode==="loading" || handleCode==="del"}
                         >
                             刪除單集
                         </Button> 

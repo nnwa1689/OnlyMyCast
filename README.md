@@ -9,7 +9,6 @@
 ## firestore 資料結構
 
 ### channel -> { channel UserID }
-{
 
 	icon：頻道圖示
 	intro：頻道介紹
@@ -18,17 +17,13 @@
 	updateTime：最後更新日期
 	userId：頻道ＩＤ
 
-}
 
 ### fans -> { channel UserID }
-{
 
 	{ 粉絲UserUID } : 粉絲userUid
 
-}
 
 ### podcast -> { channel UserID } -> podcast -> { podcastID }
-{
 	
 	duration : 單集長度
 	fileRef : 單集firestore file 參考路徑
@@ -38,34 +33,35 @@
 	updateTime:單集發布日期
 	url:單集實體url
 
-}
+### podcast -> { channel UserID } -> castdarft -> { podcastID }
+	
+	duration : 單集長度
+	fileRef : 單集firestore file 參考路徑
+	intro:單集介紹
+	title:單集名稱
+	uid:發布者userUid
+	updateTime:草稿儲存日期
+	url:單集實體url
+
 
 ### podcast -> { channel UserID } -> podcast -> { podcastID } -> playedlist
-{
 
 	{ 收聽者 usrUid } : 收聽者 userUid
 
-}
 
 ### subscribe -> { userUid }
-{
 
 	{ 訂閱頻道UserId } : 訂閱日期
 
-}
 
 ### user -> { userUID }
-{
 
 	avatar : 使用者頭像
 	name : 使用者名稱
 	userId : 使用者建立頻道之ID
 
-}
 
 ## RealTime Database 資料結構
-
--castDarft->Channel UserID->{Intro:暫存單集介紹, podcastTitle: 暫存單集}
 
 -subcheck->{ channel UserID }->{ 追蹤者UserUID: 追蹤者UserUID }
 

@@ -18,6 +18,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PeopleIcon from '@material-ui/icons/People';
 import PodcastspList from './PodcastspList';
 import List from '@material-ui/core/List';
+import Grid from '@material-ui/core/Grid';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -105,14 +106,13 @@ const PodcastHome = (props) => {
         ()=>{
             //get 此頻道資料  是否被目前使用者訂閱
             if (isFirstLoad.current) {
-                if (props.user!=="" && props.userUid!=="") {
-                    getChannleData();
+                getChannleData();
+                countSub();
+                if (props.user!=="" && props.userUid!=="") {    
                     getSubStatu();
-                    countSub();
                 } else if (props.user==="" || props.userUid === "") {
-                    getChannleData();
-                    setSpList("");
                     setSubStatu(4);
+                    setSpList("");
                 }
                 window.scrollTo(0, 0);
                 isFirstLoad.current = false;
@@ -291,61 +291,70 @@ const PodcastHome = (props) => {
                 </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
-                    <Avatar variant="rounded" alt={name} src={avatar==="" ? "." : avatar} className={classes.large} />
-                    <Typography variant="h5">{name}</Typography>
-                    <ListItem style={ {width: "fit-content", marginLeft: "auto", marginRight: "auto"} }>
-                        <ListItemAvatar>
-                        <Avatar style={ {backgroundColor: "#FD3E49"} } variant="circle" alt={podcasterName} src={podcasterAvatar==="" ? "." : podcasterAvatar}/>
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={podcasterName}
-                        />     
-                    </ListItem>
-                    { subStatu !== 4 && (<Typography variant="subtitle1" component="span"><PeopleIcon fontSize='small'/>&nbsp;{subCount} 位聽眾</Typography>) }
-                    <br/>
-                    { facebookLink.length > 0 ? 
-                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
-                        <FacebookIcon/>
-                    </IconButton>
-                    : "" }
-                    { instagramLink.length > 0 ? 
-                    <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
-                        <InstagramIcon />
-                    </IconButton>
-                    : "" }
-                    { youtubeLink.length > 0 ? 
-                    <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
-                        <YouTubeIcon />
-                    </IconButton>
-                    : "" }
-                    { twitterLink.length > 0 ? 
-                    <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
-                        <TwitterIcon />
-                    </IconButton>
-                    : "" }
-                    <br/>
-                    { props.user.userId === props.match.params.id ?
-                        <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
-                    :
-                        <>
-                        { subStatu===1 && 
-                            <Button fullWidth onClick={(e)=>handleUnsub(e)} variant="outlined" color="secondary" size="large" startIcon={<StarBorderIcon />}>
-                                取消追蹤
-                            </Button>
-                        }
+                    <Grid container justify="center" direction="row" spacing={0}>
+                        <Grid item xs={12} sm={5} md={4}>
+                        <Avatar variant="rounded" alt={name} src={avatar==="" ? "." : avatar} className={classes.large} />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={7}>
+                            <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
+                            <ListItem style={ {width: "fit-content", marginLeft: "auto", marginRight: "auto"} }>
+                                <ListItemAvatar>
+                                <Avatar style={ {backgroundColor: "#FD3E49"} } variant="circle" alt={podcasterName} src={podcasterAvatar==="" ? "." : podcasterAvatar}/>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={podcasterName}
+                                />     
+                            </ListItem>
+                            <Typography variant="subtitle1" component="span"><PeopleIcon fontSize='small'/>&nbsp;{subCount} 位聽眾</Typography>
+                            <br/>
+                            { facebookLink.length > 0 ? 
+                            <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
+                                <FacebookIcon/>
+                            </IconButton>
+                            : "" }
+                            { instagramLink.length > 0 ? 
+                            <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
+                                <InstagramIcon />
+                            </IconButton>
+                            : "" }
+                            { youtubeLink.length > 0 ? 
+                            <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
+                                <YouTubeIcon />
+                            </IconButton>
+                            : "" }
+                            { twitterLink.length > 0 ? 
+                            <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
+                                <TwitterIcon />
+                            </IconButton>
+                            : "" }
+                            <br/>
+                            { props.user.userId === props.match.params.id ?
+                                <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
+                            :
+                                <>
+                                { subStatu===1 && 
+                                    <Button fullWidth onClick={(e)=>handleUnsub(e)} variant="outlined" color="secondary" size="large" startIcon={<StarBorderIcon />}>
+                                        取消追蹤
+                                    </Button>
+                                }
 
-                        { subStatu===2 &&
-                            <Button fullWidth onClick={(e)=>handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
-                                要求追蹤
-                            </Button>   
-                        }
+                                { subStatu===2 &&
+                                    <Button fullWidth onClick={(e)=>handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
+                                        要求追蹤
+                                    </Button>   
+                                }
 
-                        {
-                            subStatu===3 &&
-                            <Button fullWidth variant="outlined" size="large" onClick={(e)=>handleRemoveReq(e)}>已送出請求</Button>
-                        }
-                        </>
-                    }
+                                {
+                                    subStatu===3 &&
+                                    <Button fullWidth variant="outlined" size="large" onClick={(e)=>handleRemoveReq(e)}>已送出請求</Button>
+                                }
+                                </>
+                            }
+                        </Grid>
+                    </Grid>
+                    <br/>
+                    <Divider/>
+                    <br/>
                     <Typography style={{textAlign:"left"}} variant="body1" component="span">
                         <ReactMarkdown>{intro}</ReactMarkdown>
                     </Typography>

@@ -18,6 +18,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import EventIcon from '@material-ui/icons/Event';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import Grid from '@material-ui/core/Grid';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -37,8 +38,8 @@ const useStyles = makeStyles((theme)=>({
         textAlign:"center"
     },
     large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
+      width: theme.spacing(24),
+      height: theme.spacing(24),
       marginBottom: theme.spacing(3),
       marginTop:theme.spacing(3),
       color: "#FFFFFF",
@@ -159,35 +160,41 @@ const PodcastDetails = (props) => {
           { subStatu===1 || props.user.userId === props.match.params.id ?
               <Card className={classes.root}>
                 <CardContent>
-                <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
-                <Typography variant="h5">{name}</Typography>
-                <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
+                <Grid container justify="center" direction="row" spacing={0}>
+                  <Grid item xs={12} sm={5} md={4}>
+                    <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                  </Grid>  
+                  <Grid item xs={12} sm={6} md={7}>
+                    <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
+                    <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
+                    <br/>
+                    <Typography variant="body1" component="span">
+                      <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon><br/>
+                      <ListItemIcon><AccessTimeIcon/>{duration}</ListItemIcon>
+                      &nbsp;
+                      { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
+                      </Typography>
+                    <br/>
+                    <Button 
+                        color="primary"
+                        variant="contained"
+                        size="large"
+                        fullWidth 
+                        startIcon={<PlayCircleFilledWhiteIcon/>}
+                        value={props.match.params.podId}
+                        data-uri={audioUrl}
+                        data-coveruri={avatar}
+                        data-titlename={name}
+                        data-podcastname={channelName}
+                        data-poduserid = { props.match.params.id }
+                        onClick={props.setPlayer}>
+                        播放單集
+                    </Button>
+                  </Grid>
+                </Grid>
                 <br/>
-                <Typography variant="body1" component="span">
-                  <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon><br/>
-                  <ListItemIcon><AccessTimeIcon/>{duration}</ListItemIcon>
-                  &nbsp;
-                  { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
-                  </Typography>
-                <br/><br/>
-                <Button 
-                    color="primary"
-                    variant="contained"
-                    size="large"
-                    fullWidth 
-                    startIcon={<PlayCircleFilledWhiteIcon/>}
-                    value={props.match.params.podId}
-                    data-uri={audioUrl}
-                    data-coveruri={avatar}
-                    data-titlename={name}
-                    data-podcastname={channelName}
-                    data-poduserid = { props.match.params.id }
-                    onClick={props.setPlayer}>
-                    播放單集
-                </Button>
-                <br/><br/>
                 <Divider/>
-                <br/><br/>
+                <br/>
                 <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
                 </CardContent>
               </Card>

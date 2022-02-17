@@ -11,6 +11,7 @@ import "firebase/messaging";
 import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
 //DevMode
 //import FirebaseConfig from './FirebaseConfig/FirebaseConfig-dev';
+import { fcmVapidKey_prod, fcmVapidKey_dev } from './FirebaseConfig/FcmVapidKey';
 
 //component
 import AdsenseComponent from './Component/Adsense/AdsenseComponent';
@@ -63,19 +64,19 @@ const App = (props) => {
 
 
   if (!firebase.apps.length) {
-    firebase.initializeApp(FirebaseConfig);  
+    firebase.initializeApp(FirebaseConfig);
   }
 
   //開發環境
   var basename = "/";
   var basenameIndex = 1;
-  var fcmVapidKey = 'BBPvT3efBxPguqWhRsn349AGlOkCa5KoGECtVQqOrcAMgDUKEZebLORp5v_KJ6kgVsWGqLvu-TqVG8wTgDA34RY';
+  var fcmVapidKey = fcmVapidKey_dev;
 
   if (process.env.NODE_ENV !== "development") {
     //產品環境
     basename = "/webapp/";
     basenameIndex = 2;
-    fcmVapidKey = 'BF1eW1y0DHQl40_Vz1IPqvxKRlOiSr98s2ZlUWDdHT6-VPxMIPXPrWxtCii4g8cdEBSMX37YB1suR85fGjtxpHI';
+    fcmVapidKey = fcmVapidKey_prod;
   } else {
     if (!(firebase.messaging.isSupported())) {
       console.log('This browser does not support notification');
@@ -83,7 +84,7 @@ const App = (props) => {
       // 僅在本機測試環境啟用，如產品環境使用 src/service-worker.js 提供 FCM 功能
       const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`;
       navigator.serviceWorker
-      .register(swUrl);
+        .register(swUrl);
     }
   }
 
@@ -92,13 +93,13 @@ const App = (props) => {
     return (useragent.indexOf("FBAN") > -1) || (useragent.indexOf("FBAV") > -1) || (useragent.indexOf("Instagram") > -1) || (useragent.indexOf("Line") > -1);
   }
 
-  const handleUserUpdate = ()=>{
+  const handleUserUpdate = () => {
     setUserUpdate(userUpdate + 1);
   }
 
   useEffect(
     () => {
-      firebase.auth().onAuthStateChanged(async(user)=>{
+      firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
 
           //檢查 Token，如果 email 驗證結果沒有更新，就重新取得 token。
@@ -119,59 +120,59 @@ const App = (props) => {
             userUid.current = user.uid;
             userEmail.current = user.email;
           } else {
-             //notification webbrowser
+            //notification webbrowser
             if (!(firebase.messaging.isSupported())) {
               console.log('This browser does not support notification');
             } else {
               const messaging = firebase.messaging();
               const registration = await navigator.serviceWorker.ready;
               messaging.getToken(
-                { 
+                {
                   serviceWorkerRegistration: registration,
-                  vapidKey: fcmVapidKey 
+                  vapidKey: fcmVapidKey
                 })
                 .then((currentToken) => {
                   if (currentToken) {
                     //update token to user
                     firebase.firestore().collection("user")
-                    .doc(user.uid)
-                    .collection("pushNotificationToken")
-                    .doc(currentToken)
-                    .set({ token: currentToken, updateTime: firebase.firestore.FieldValue.serverTimestamp() })
-                    .then(
-                      () => {
-                        console.log("You can got notification.")
-                      }
-                    );
+                      .doc(user.uid)
+                      .collection("pushNotificationToken")
+                      .doc(currentToken)
+                      .set({ token: currentToken, updateTime: firebase.firestore.FieldValue.serverTimestamp() })
+                      .then(
+                        () => {
+                          console.log("You can got notification.")
+                        }
+                      );
                   } else {
                     // Show permission request UI
                     console.log('No registration token available. Request permission to generate one.');
                   }
-              }).catch((err) => {
+                }).catch((err) => {
                   console.log('An error occurred while retrieving token.');
-              });
+                });
             }
 
             //取得 user 資料
             firebase.firestore().collection("user").doc(user.uid).get()
-            .then(
-              (doc)=>{
-                setUserData(doc.data());
-                userUid.current = user.uid;
-                userEmail.current = user.email;
-                setAuth(true);
-              }
-            );  
-          }        
+              .then(
+                (doc) => {
+                  setUserData(doc.data());
+                  userUid.current = user.uid;
+                  userEmail.current = user.email;
+                  setAuth(true);
+                }
+              );
+          }
         } else {
           setAuth(false);
         }
       });
-    },[userUpdate]
+    }, [userUpdate]
   )
 
   useEffect(
-    ()=>{
+    () => {
       if (isFirstLoading.current === true) {
         document.body.style.backgroundColor = "#f7f7f7";
         setInApp(isInApp());
@@ -187,26 +188,26 @@ const App = (props) => {
   )
 
 
-  const setPlayer = async(e) => {
+  const setPlayer = async (e) => {
 
     //recoding play history this user
     firebase.firestore().collection("podcast")
-    .doc(e.currentTarget.dataset.poduserid)
-    .collection('podcast')
-    .doc(e.currentTarget.value)
-    .collection('playedlist')
-    .doc(userUid.current)
-    .set(userData)
-    .then(
-      () => {
-        console.log('click');
-      }
-    )
-    .catch(
-      (e) => {
-        console.log("e");
-      }
-    );
+      .doc(e.currentTarget.dataset.poduserid)
+      .collection('podcast')
+      .doc(e.currentTarget.value)
+      .collection('playedlist')
+      .doc(userUid.current)
+      .set(userData)
+      .then(
+        () => {
+          console.log('click');
+        }
+      )
+      .catch(
+        (e) => {
+          console.log("e");
+        }
+      );
 
     //set player
     setPlayerTitle(e.currentTarget.dataset.titlename);
@@ -218,123 +219,123 @@ const App = (props) => {
   const theme = createMuiTheme({
     palette: {
       primary: {
-          main: "#FD3E49",
+        main: "#FD3E49",
       },
       secondary: {
-          main: "#363636",
+        main: "#363636",
       },
     },
     typography: {
       fontFamily: 'NotoSansTC-Regular',
     },
     overrides: {
-      MuiCard: 
-        {
-          root: {
-            boxShadow: "0 16px 32px 0 rgba(145, 158, 171, 0.2)",
-            borderRadius: "16px",
-          }
-        },
+      MuiCard:
+      {
+        root: {
+          boxShadow: "0 16px 32px 0 rgba(145, 158, 171, 0.2)",
+          borderRadius: "16px",
+        }
+      },
     }
   });
 
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <BrowserRouter basename={ basename }>
+        <BrowserRouter basename={basename}>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>
-            { inApp===true &&
-            <Container maxWidth="md">
-              <MuiAlert style={ { marginTop: "100px", marginBottom: "-50px" } } elevation={6} variant="filled" severity="warning">
-              您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過瀏覽器開啟
-              </MuiAlert>
-            </Container>
+            {inApp === true &&
+              <Container maxWidth="md">
+                <MuiAlert style={{ marginTop: "100px", marginBottom: "-50px" }} elevation={6} variant="filled" severity="warning">
+                  您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過瀏覽器開啟
+                </MuiAlert>
+              </Container>
             }
-            { isAuth !== 0 ?  
-                <>
-                  <Route exact path="/" 
-                    render={(props) => (
-                        <Home {...props} user={userData} userUid={userUid.current} />
-                      )}/>
-                  <Route exact path="/account"
-                    render={(props) => (
-                        <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} />
-                      )}
-                  />
-                  <Route exact path="/podcastaccount" 
-                    render={(props) => (
-                        <PodcastAccount {...props} user={userData} userUid={userUid.current}/>
-                      )}/>
-                  <Route exact path="/fansadmin"
-                    render={(props) => (
-                        <FansAdmin {...props} user={userData} userUid={userUid.current} />
-                      )} />
-                  <Route exact path="/subreq" 
-                    render={(props) => (
-                        <Subreq {...props} user={userData} userUid={userUid.current}/>
-                      )} />
-                  <Route exact path="/search" component={Search} />
-                  <Route path="/search/:q" component={Search} />
-                  <Route path="/podcastdetail/:id/:podId"                  
-                    render={(props) => (
-                        <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} />
-                      )} />
-                  <Route path="/podcast/:id"
-                    render={(props) => (
-                        <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} />
-                      )} />
-                  <Route exact path="/uploadpodcast"
-                    render={(props) => (
-                        <NewPodcast {...props} user={userData} userUid={userUid.current} />
-                      )} />
-                  <Route exact path="/editpodcasts" 
-                    render={(props) => (
-                        <EditPodcast {...props} user={userData} />
-                      )} 
-                  />
-                  <Route path="/editpodcast/:id/:podId" 
-                    render={(props) => (
-                        <EditPodcastDetails {...props} user={userData} />
-                      )} 
-                  />
-                  <Route path="/editcastdarft/:id/:podId" 
-                    render={(props) => (
-                        <EditCastDarft {...props} user={userData} userUid={userUid.current} />
-                      )} 
-                  />
-                  <Route exact path="/analyticspodcast/:id/:podId" 
-                    render={(props) => (
-                        <AnalyticsPodcastDetails {...props} user={userData} />
-                      )} 
-                  />
-                  <Route path="/embed/:id" 
-                    render={(props) => (
-                        <EmbedChannel {...props} user={userData} />
-                      )} 
-                  />
-                  <Route exact path="/signin" component={SignIn} />
-                  <Route exact path="/signup" component={SignUp} />
-                  <Route exact path="/forgetpassword" component={ForgetPassword} />
-                  <Route exact path="/emailverified" component={EmailVerified} />
-                  { (!removeNavbarPath.includes(pathname) && isAuth) && <Navbar ver={clientversion} user={userData} userEmail={userEmail.current}></Navbar> }         
-                  {
-                    /* Email 沒有驗證 emailUnVerified*/
-                     !emailVeri && <Redirect to='/emailverified'/>
-                  }
-                  { /* 如果頁面是廣播首頁則允許沒有登入預覽 */
-                    !isAuth && (!allowUnloginPath.includes(pathname)) && <Redirect to='/signin'/>
-                  }
-                  { !isAuth && pathname ==="podcast" && <UnloginNavBar></UnloginNavBar>}
-                  { 
-                    /*Google Adsense*/
-                    !(removeAdsensePath.includes(pathname)) && <AdsenseComponent/>
-                  }
-                </>
-                :
-                <LinearProgress style={{ wdith: 100 }}/>
+            {isAuth !== 0 ?
+              <>
+                <Route exact path="/"
+                  render={(props) => (
+                    <Home {...props} user={userData} userUid={userUid.current} />
+                  )} />
+                <Route exact path="/account"
+                  render={(props) => (
+                    <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} />
+                  )}
+                />
+                <Route exact path="/podcastaccount"
+                  render={(props) => (
+                    <PodcastAccount {...props} user={userData} userUid={userUid.current} />
+                  )} />
+                <Route exact path="/fansadmin"
+                  render={(props) => (
+                    <FansAdmin {...props} user={userData} userUid={userUid.current} />
+                  )} />
+                <Route exact path="/subreq"
+                  render={(props) => (
+                    <Subreq {...props} user={userData} userUid={userUid.current} />
+                  )} />
+                <Route exact path="/search" component={Search} />
+                <Route path="/search/:q" component={Search} />
+                <Route path="/podcastdetail/:id/:podId"
+                  render={(props) => (
+                    <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} />
+                  )} />
+                <Route path="/podcast/:id"
+                  render={(props) => (
+                    <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} />
+                  )} />
+                <Route exact path="/uploadpodcast"
+                  render={(props) => (
+                    <NewPodcast {...props} user={userData} userUid={userUid.current} />
+                  )} />
+                <Route exact path="/editpodcasts"
+                  render={(props) => (
+                    <EditPodcast {...props} user={userData} />
+                  )}
+                />
+                <Route path="/editpodcast/:id/:podId"
+                  render={(props) => (
+                    <EditPodcastDetails {...props} user={userData} />
+                  )}
+                />
+                <Route path="/editcastdarft/:id/:podId"
+                  render={(props) => (
+                    <EditCastDarft {...props} user={userData} userUid={userUid.current} />
+                  )}
+                />
+                <Route exact path="/analyticspodcast/:id/:podId"
+                  render={(props) => (
+                    <AnalyticsPodcastDetails {...props} user={userData} />
+                  )}
+                />
+                <Route path="/embed/:id"
+                  render={(props) => (
+                    <EmbedChannel {...props} user={userData} />
+                  )}
+                />
+                <Route exact path="/signin" component={SignIn} />
+                <Route exact path="/signup" component={SignUp} />
+                <Route exact path="/forgetpassword" component={ForgetPassword} />
+                <Route exact path="/emailverified" component={EmailVerified} />
+                {(!removeNavbarPath.includes(pathname) && isAuth) && <Navbar ver={clientversion} user={userData} userEmail={userEmail.current}></Navbar>}
+                {
+                  /* Email 沒有驗證 emailUnVerified*/
+                  !emailVeri && <Redirect to='/emailverified' />
                 }
+                { /* 如果頁面是廣播首頁則允許沒有登入預覽 */
+                  !isAuth && (!allowUnloginPath.includes(pathname)) && <Redirect to='/signin' />
+                }
+                {!isAuth && pathname === "podcast" && <UnloginNavBar></UnloginNavBar>}
+                {
+                  /*Google Adsense*/
+                  !(removeAdsensePath.includes(pathname)) && <AdsenseComponent />
+                }
+              </>
+              :
+              <LinearProgress style={{ wdith: 100 }} />
+            }
           </Player>
-        </BrowserRouter> 
+        </BrowserRouter>
       </div>
     </ThemeProvider>
   );

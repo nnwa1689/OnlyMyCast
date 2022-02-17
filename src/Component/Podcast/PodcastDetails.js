@@ -38,8 +38,8 @@ const useStyles = makeStyles((theme)=>({
         textAlign:"center"
     },
     large: {
-      width: theme.spacing(24),
-      height: theme.spacing(24),
+      width: theme.spacing(20),
+      height: theme.spacing(20),
       marginBottom: theme.spacing(3),
       marginTop:theme.spacing(3),
       color: "#FFFFFF",
@@ -160,11 +160,11 @@ const PodcastDetails = (props) => {
           { subStatu===1 || props.user.userId === props.match.params.id ?
               <Card className={classes.root}>
                 <CardContent>
-                <Grid container justify="center" direction="row" spacing={0}>
-                  <Grid item xs={12} sm={5} md={4}>
+                <Grid container justify="center" direction="row">
+                  <Grid item xs={12} sm={4} md={3}>
                     <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                   </Grid>  
-                  <Grid item xs={12} sm={6} md={7}>
+                  <Grid item xs={12} sm={7} md={8}>
                     <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
                     <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
                     <br/>

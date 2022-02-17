@@ -36,28 +36,28 @@ import { Helmet } from 'react-helmet';
 import { ListItem } from '@material-ui/core';
 
 
-const useStyles = makeStyles((theme)=>({
+const useStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         marginTop: 100,
         borderRadius: "10px",
-        alignItems:"center",
-        textAlign:"center"
+        alignItems: "center",
+        textAlign: "center"
     },
     appBar: {
         top: 'auto',
         bottom: 0,
-        alignItems:"center"
+        alignItems: "center"
     },
     large: {
         width: theme.spacing(24),
         height: theme.spacing(24),
         marginBottom: theme.spacing(3),
-        marginTop:theme.spacing(3),
+        marginTop: theme.spacing(3),
         color: "#FFFFFF",
         backgroundColor: "#FD3E49",
-        marginLeft:"auto",
-        marginRight:"auto"
+        marginLeft: "auto",
+        marginRight: "auto"
     },
     markDownBlock: {
         color: "#000000"
@@ -82,13 +82,13 @@ const useStyles = makeStyles((theme)=>({
         color: "#1DA1F2",
         margin: theme.spacing(1),
     }
-  }));
+}));
 
 
 const PodcastHome = (props) => {
     const classes = useStyles();
     const [name, setName] = useState("");
-    const [avatar,setAvatar] = useState("");
+    const [avatar, setAvatar] = useState("");
     const [intro, setIntro] = useState("");
     const [subStatu, setSubStatu] = useState(0);
     const [podcasterName, setPodcasterName] = useState();
@@ -98,19 +98,19 @@ const PodcastHome = (props) => {
     const [subCount, setSubCount] = useState(0);
     const [spList, setSpList] = useState();
     const [facebookLink, setFacebookLink] = useState("");
-    const [youtubeLink, setYoutubeLink] = useState ("");
+    const [youtubeLink, setYoutubeLink] = useState("");
     const [instagramLink, setInstagramLink] = useState("");
     const [twitterLink, setTwitterLink] = useState("");
 
     useEffect(
-        ()=>{
+        () => {
             //get 此頻道資料  是否被目前使用者訂閱
             if (isFirstLoad.current) {
                 getChannleData();
                 countSub();
-                if (props.user!=="" && props.userUid!=="") {    
+                if (props.user !== "" && props.userUid !== "") {
                     getSubStatu();
-                } else if (props.user==="" || props.userUid === "") {
+                } else if (props.user === "" || props.userUid === "") {
                     setSubStatu(4);
                     setSpList("");
                 }
@@ -121,8 +121,8 @@ const PodcastHome = (props) => {
     )
 
     useEffect(
-        ()=>{
-            if (subStatu===1 || props.user.userId === props.match.params.id) {
+        () => {
+            if (subStatu === 1 || props.user.userId === props.match.params.id) {
                 getPodcastList();
             } else {
                 setSpList(false);
@@ -130,136 +130,136 @@ const PodcastHome = (props) => {
         }, [subStatu]
     )
 
-    const getPodcastList = async()=>{
+    const getPodcastList = async () => {
         var changeArr = Array();
         await firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').orderBy('updateTime', "desc").get()
-        .then(async(e)=>{
-            if (e.docs.length ===0) {
-                changeArr = "";
-            } else {
-                for (var doc of e.docs) {
-                    const qd = doc.data();
-                    changeArr.push(
-                        <PodcastspList
-                            key={doc.id}
-                            podId={doc.id}
-                            podTitle={qd.title}
-                            channelName={name}
-                            audioUrl={qd.url}
-                            podIcon={avatar}
-                            podIntro={qd.intro}
-                            setPlayer={props.setPlayer}
-                            userId={props.match.params.id}
-                            updateTime={qd.updateTime}
-                            duration={qd.duration}
-                            intro={qd.intro}
-                        />
-                    )
-                }  
-            }
-        }).then(()=>{setSpList(changeArr)})
-    }
-
-    const countSub = ()=>{
-        firebase.firestore().collection("fans").doc(props.match.params.id).get()
-        .then((doc)=>{
-            const data = doc.data();
-            if (data===undefined){
-                setSubCount(0);
-            } else {
-                setSubCount(Object.entries(data).length);
-            }
-        })
-    }
-
-    const getChannleData = ()=>{
-        firebase.firestore().collection("channel").doc(props.match.params.id).get()
-        .then(
-          (doc)=>{
-              if (doc.exists){
-                const data = doc.data();
-                //podcast擁有者
-                firebase.firestore().collection("user").doc(data.uid).get()
-                .then(
-                    (doc) => {
-                        const data = doc.data();
-                        setPodcasterAvatar(data.avatar);
-                        setPodcasterName(data.name);
+            .then(async (e) => {
+                if (e.docs.length === 0) {
+                    changeArr = "";
+                } else {
+                    for (var doc of e.docs) {
+                        const qd = doc.data();
+                        changeArr.push(
+                            <PodcastspList
+                                key={doc.id}
+                                podId={doc.id}
+                                podTitle={qd.title}
+                                channelName={name}
+                                audioUrl={qd.url}
+                                podIcon={avatar}
+                                podIntro={qd.intro}
+                                setPlayer={props.setPlayer}
+                                userId={props.match.params.id}
+                                updateTime={qd.updateTime}
+                                duration={qd.duration}
+                                intro={qd.intro}
+                            />
+                        )
                     }
-                );
-                setName(data.name);
-                setIntro(data.intro);
-                setAvatar(data.icon);
-                setFacebookLink(data.facebook !== undefined && data.facebook);
-                setInstagramLink(data.instagram !== undefined && data.instagram);
-                setYoutubeLink(data.youtube !== undefined && data.youtube);
-                setTwitterLink(data.twitter !== undefined && data.twitter);
-              }
-          }
-        );
+                }
+            }).then(() => { setSpList(changeArr) })
     }
 
-    const updateClickDate = ()=>{
+    const countSub = () => {
+        firebase.firestore().collection("fans").doc(props.match.params.id).get()
+            .then((doc) => {
+                const data = doc.data();
+                if (data === undefined) {
+                    setSubCount(0);
+                } else {
+                    setSubCount(Object.entries(data).length);
+                }
+            })
+    }
+
+    const getChannleData = () => {
+        firebase.firestore().collection("channel").doc(props.match.params.id).get()
+            .then(
+                (doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        //podcast擁有者
+                        firebase.firestore().collection("user").doc(data.uid).get()
+                            .then(
+                                (doc) => {
+                                    const data = doc.data();
+                                    setPodcasterAvatar(data.avatar);
+                                    setPodcasterName(data.name);
+                                }
+                            );
+                        setName(data.name);
+                        setIntro(data.intro);
+                        setAvatar(data.icon);
+                        setFacebookLink(data.facebook !== undefined && data.facebook);
+                        setInstagramLink(data.instagram !== undefined && data.instagram);
+                        setYoutubeLink(data.youtube !== undefined && data.youtube);
+                        setTwitterLink(data.twitter !== undefined && data.twitter);
+                    }
+                }
+            );
+    }
+
+    const updateClickDate = () => {
         firebase.firestore().collection("subscribe").doc(props.userUid).set(
-            {[props.match.params.id] : firebase.firestore.FieldValue.serverTimestamp()},{ merge: true }
+            { [props.match.params.id]: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }
         )
     }
 
-    const getSubStatu = async() =>{
+    const getSubStatu = async () => {
         //已經訂閱
         let result = false;
         await firebase.firestore()
-        .collection("subscribe")
-        .doc(props.userUid)
-        .get()
-        .then((doc)=>{ 
-            const data = (doc.data()===undefined ? "" : doc.data());
-            const found = Object.entries(data).find(
-                ([key, value]) => key === props.match.params.id );
-            if (found !== undefined){
-                setSubStatu(1);
-                updateClickDate();
-                result = true;
-            } else {
-                firebase.database()
-                .ref('/subreq/' + props.userUid + "/" + props.match.params.id)
-                .once("value", e => {/*pass*/ })
-                .then((e)=>{
-                        if (e.val()!== null){
-                            setSubStatu(3)
-                        } else {
-                            setSubStatu(2);
+            .collection("subscribe")
+            .doc(props.userUid)
+            .get()
+            .then((doc) => {
+                const data = (doc.data() === undefined ? "" : doc.data());
+                const found = Object.entries(data).find(
+                    ([key, value]) => key === props.match.params.id);
+                if (found !== undefined) {
+                    setSubStatu(1);
+                    updateClickDate();
+                    result = true;
+                } else {
+                    firebase.database()
+                        .ref('/subreq/' + props.userUid + "/" + props.match.params.id)
+                        .once("value", e => {/*pass*/ })
+                        .then((e) => {
+                            if (e.val() !== null) {
+                                setSubStatu(3)
+                            } else {
+                                setSubStatu(2);
+                            }
                         }
-                    }
-                );
-            }
-        });
+                        );
+                }
+            });
         return result;
     }
 
     const handleUnsub = (e) => {
         firebase.firestore().collection("subscribe").doc(props.userUid).update(
-            {[props.match.params.id] : firebase.firestore.FieldValue.delete()}
+            { [props.match.params.id]: firebase.firestore.FieldValue.delete() }
         ).then(
             firebase.firestore().collection("fans").doc(props.match.params.id).update(
-                {[props.userUid] : firebase.firestore.FieldValue.delete()}
+                { [props.userUid]: firebase.firestore.FieldValue.delete() }
             ).then(
-                ()=>{setSubStatu(2);}
-            )  
+                () => { setSubStatu(2); }
+            )
         )
     }
 
     const handleSub = (e) => {
         firebase.database().ref('/subreq/' + props.userUid).update(
             {
-                [props.match.params.id] : props.match.params.id
+                [props.match.params.id]: props.match.params.id
             }
-        ).then((e)=>{
+        ).then((e) => {
             firebase.database().ref('/subcheck/' + props.match.params.id).update(
                 {
-                    [props.userUid] : props.userUid
+                    [props.userUid]: props.userUid
                 }
-            ).then((e)=>{
+            ).then((e) => {
                 setSubStatu(3);
             })
         }).catch();
@@ -267,108 +267,108 @@ const PodcastHome = (props) => {
 
     const handleRemoveReq = (e) => {
         firebase.database()
-        .ref('/subreq/' + props.userUid + "/" + props.match.params.id)
-        .remove()
-        .then((e)=>{
-            firebase.database()
-            .ref('/subcheck/' + props.match.params.id + "/" + props.userUid)
+            .ref('/subreq/' + props.userUid + "/" + props.match.params.id)
             .remove()
-            .then((e)=>{
-                //setSubStatu(2);
-                // 再次確認訂閱狀態
-                getSubStatu();
-            })
-        }).catch();
+            .then((e) => {
+                firebase.database()
+                    .ref('/subcheck/' + props.match.params.id + "/" + props.userUid)
+                    .remove()
+                    .then((e) => {
+                        //setSubStatu(2);
+                        // 再次確認訂閱狀態
+                        getSubStatu();
+                    })
+            }).catch();
     }
 
-    if ( name==="" || avatar==="" || subStatu===0 || spList===undefined || podcasterAvatar===undefined || podcasterName===undefined) {
-        return(<CircularProgress style={{marginTop: "25%"}} />);
+    if (name === "" || avatar === "" || subStatu === 0 || spList === undefined || podcasterAvatar === undefined || podcasterName === undefined) {
+        return (<CircularProgress style={{ marginTop: "25%" }} />);
     } else {
-        return(
+        return (
             <Container maxWidth="md">
                 <Helmet>
-                    <title>{ name } - Onlymycast</title>
+                    <title>{name} - Onlymycast</title>
                 </Helmet>
                 <Card className={classes.root}>
                     <CardContent>
-                    <Grid container justify="center" direction="row" spacing={0}>
-                        <Grid item xs={12} sm={5} md={4}>
-                        <Avatar variant="rounded" alt={name} src={avatar==="" ? "." : avatar} className={classes.large} />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={7}>
-                            <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
-                            <ListItem style={ {width: "fit-content", marginLeft: "auto", marginRight: "auto"} }>
-                                <ListItemAvatar>
-                                <Avatar style={ {backgroundColor: "#FD3E49"} } variant="circle" alt={podcasterName} src={podcasterAvatar==="" ? "." : podcasterAvatar}/>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={podcasterName}
-                                />     
-                            </ListItem>
-                            <Typography variant="subtitle1" component="span"><PeopleIcon fontSize='small'/>&nbsp;{subCount} 位聽眾</Typography>
-                            <br/>
-                            { facebookLink.length > 0 ? 
-                            <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
-                                <FacebookIcon/>
-                            </IconButton>
-                            : "" }
-                            { instagramLink.length > 0 ? 
-                            <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
-                                <InstagramIcon />
-                            </IconButton>
-                            : "" }
-                            { youtubeLink.length > 0 ? 
-                            <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
-                                <YouTubeIcon />
-                            </IconButton>
-                            : "" }
-                            { twitterLink.length > 0 ? 
-                            <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
-                                <TwitterIcon />
-                            </IconButton>
-                            : "" }
-                            <br/>
-                            { props.user.userId === props.match.params.id ?
-                                <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
-                            :
-                                <>
-                                { subStatu===1 && 
-                                    <Button fullWidth onClick={(e)=>handleUnsub(e)} variant="outlined" color="secondary" size="large" startIcon={<StarBorderIcon />}>
-                                        取消追蹤
-                                    </Button>
-                                }
+                        <Grid container justify='center' direction="row" spacing={0}>
+                            <Grid item xs={12} sm={4} md={3}>
+                                <Avatar variant="rounded" alt={name} src={avatar === "" ? "." : avatar} className={classes.large} />
+                            </Grid>
+                            <Grid item xs={12} sm={7} md={8}>
+                                <Typography style={{ paddingTop: "16px" }} variant="h5">{name}</Typography>
+                                <ListItem style={{ width: "fit-content", marginLeft: "auto", marginRight: "auto" }}>
+                                    <ListItemAvatar>
+                                        <Avatar style={{ backgroundColor: "#FD3E49" }} variant="circle" alt={podcasterName} src={podcasterAvatar === "" ? "." : podcasterAvatar} />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={podcasterName}
+                                    />
+                                </ListItem>
+                                <Typography variant="subtitle1" component="span"><PeopleIcon fontSize='small' />&nbsp;{subCount} 位聽眾</Typography>
+                                <br />
+                                {facebookLink.length > 0 ?
+                                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
+                                        <FacebookIcon fontSize='large' />
+                                    </IconButton>
+                                    : ""}
+                                {instagramLink.length > 0 ?
+                                    <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
+                                        <InstagramIcon fontSize='large' />
+                                    </IconButton>
+                                    : ""}
+                                {youtubeLink.length > 0 ?
+                                    <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
+                                        <YouTubeIcon fontSize='large' />
+                                    </IconButton>
+                                    : ""}
+                                {twitterLink.length > 0 ?
+                                    <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
+                                        <TwitterIcon fontSize='large' />
+                                    </IconButton>
+                                    : ""}
+                                <br />
+                                {props.user.userId === props.match.params.id ?
+                                    <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
+                                    :
+                                    <>
+                                        {subStatu === 1 &&
+                                            <Button fullWidth onClick={(e) => handleUnsub(e)} variant="outlined" color="secondary" size="large" startIcon={<StarBorderIcon />}>
+                                                取消追蹤
+                                            </Button>
+                                        }
 
-                                { subStatu===2 &&
-                                    <Button fullWidth onClick={(e)=>handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
-                                        要求追蹤
-                                    </Button>   
-                                }
+                                        {subStatu === 2 &&
+                                            <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
+                                                要求追蹤
+                                            </Button>
+                                        }
 
-                                {
-                                    subStatu===3 &&
-                                    <Button fullWidth variant="outlined" size="large" onClick={(e)=>handleRemoveReq(e)}>已送出請求</Button>
+                                        {
+                                            subStatu === 3 &&
+                                            <Button fullWidth variant="outlined" size="large" onClick={(e) => handleRemoveReq(e)}>已送出請求</Button>
+                                        }
+                                    </>
                                 }
-                                </>
-                            }
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <br/>
-                    <Divider/>
-                    <br/>
-                    <Typography style={{textAlign:"left"}} variant="body1" component="span">
-                        <ReactMarkdown>{intro}</ReactMarkdown>
-                    </Typography>
-                    <Divider/>
-                    { subStatu===1 || props.user.userId === props.match.params.id ?
-                            spList === "" ? 
-                            <Typography variant="h4" component="span"><br/>¯\_(ツ)_/¯<br/>還沒有任何節目<br/>稍後再回來吧</Typography>
+                        <br />
+                        <Divider />
+                        <br />
+                        <Typography style={{ textAlign: "left" }} variant="body1" component="span">
+                            <ReactMarkdown>{intro}</ReactMarkdown>
+                        </Typography>
+                        <Divider />
+                        {subStatu === 1 || props.user.userId === props.match.params.id ?
+                            spList === "" ?
+                                <Typography variant="h4" component="span"><br />¯\_(ツ)_/¯<br />還沒有任何節目<br />稍後再回來吧</Typography>
+                                :
+                                <List>
+                                    {spList}
+                                </List>
                             :
-                            <List>
-                                {spList}
-                            </List>
-                    :
-                        <Typography variant="h4" component="span"><br/>(＞^ω^＜)<br/><br/>訂閱後即可收聽</Typography>
-                    }
+                            <Typography variant="h4" component="span"><br />(＞^ω^＜)<br /><br />訂閱後即可收聽</Typography>
+                        }
                     </CardContent>
                 </Card>
             </Container>

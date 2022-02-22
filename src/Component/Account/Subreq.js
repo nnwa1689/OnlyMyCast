@@ -112,7 +112,6 @@ const Subreq = (props) => {
                         </IconButton>
                         <IconButton
                             variant="contained"
-                            color="secondary"
                             value={i[0]}
                             onClick={(e)=>{handleRejReq(e.currentTarget.value)}}
                             className={classes.button}>

@@ -3,6 +3,9 @@ import './App.css';
 import { useState, useRef, useEffect } from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
+//redux
+import { useSelector } from 'react-redux';
+
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -41,9 +44,10 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-const clientversion = "V220217.13";
+const clientversion = "V220222.15";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -61,7 +65,6 @@ const App = (props) => {
   const userUid = useRef("");
   const userEmail = useRef("");
   const isFirstLoading = useRef(true);
-
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig);
@@ -83,8 +86,7 @@ const App = (props) => {
     } else {
       // 僅在本機測試環境啟用，如產品環境使用 src/service-worker.js 提供 FCM 功能
       const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`;
-      navigator.serviceWorker
-        .register(swUrl);
+      navigator.serviceWorker.register(swUrl);
     }
   }
 
@@ -174,7 +176,7 @@ const App = (props) => {
   useEffect(
     () => {
       if (isFirstLoading.current === true) {
-        document.body.style.backgroundColor = "#f7f7f7";
+        //document.body.style.backgroundColor = "#f7f7f7";
         setInApp(isInApp());
         isFirstLoading.current = false;
       }
@@ -216,8 +218,44 @@ const App = (props) => {
     setCoverUri(e.currentTarget.dataset.coveruri);
   }
 
-  const theme = createMuiTheme({
+  const darkTheme = createMuiTheme({
     palette: {
+      type:'dark',
+      background:{
+        default: 'rgb(24, 24, 24)',
+      },
+      primary: {
+        main: "#FD3E49",
+      },
+      secondary: {
+        main: "#363636",
+      },
+    },
+    typography: {
+      fontFamily: 'NotoSansTC-Regular',
+    },
+    overrides: {
+      MuiCard:
+      {
+        root: {
+          boxShadow: "none",
+          borderRadius: "16px",
+        }
+      },
+      MuiAppBar: {
+        colorDefault: {
+          backgroundColor:'none',
+        }
+      },
+    }
+  });
+
+  const lightTheme = createMuiTheme({
+    palette: {
+      type:'light',
+      background:{
+        default: '#f7f7f7',
+      },
       primary: {
         main: "#FD3E49",
       },
@@ -236,11 +274,17 @@ const App = (props) => {
           borderRadius: "16px",
         }
       },
+      MuiAppBar: {
+        colorDefault: {
+          backgroundColor:'none',
+        }
+      },
     }
   });
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={ useSelector(state => state.mode) === 'light' ? lightTheme : darkTheme}>
+      <CssBaseline />
       <div className="App">
         <BrowserRouter basename={basename}>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>

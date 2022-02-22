@@ -80,7 +80,6 @@ const useStyles = makeStyles((theme)=>({
     tabBar: {
         marginBottom: 10,
         boxShadow : "none",
-        background: "#FFFFFF"
     },
     facebookColor: {
         color: "#4267B2",
@@ -295,7 +294,7 @@ const PodcastAccount = (props) => {
         })
     }
 
-    if (name===undefined){
+    if (name === "" || avatar === "" || intro === ""){
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(

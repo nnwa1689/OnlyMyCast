@@ -333,7 +333,7 @@ const PodcastHome = (props) => {
                                     :
                                     <>
                                         {subStatu === 1 &&
-                                            <Button fullWidth onClick={(e) => handleUnsub(e)} variant="outlined" color="secondary" size="large" startIcon={<StarBorderIcon />}>
+                                            <Button fullWidth onClick={(e) => handleUnsub(e)} variant="outlined" size="large" startIcon={<StarBorderIcon />}>
                                                 取消追蹤
                                             </Button>
                                         }

@@ -1,5 +1,6 @@
 //react
 import React, { useState, createRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 //ui
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -31,7 +32,6 @@ const useStyles = makeStyles((theme)=>({
     bottom: 0,
     alignItems:"center",
     paddingBottom: 5,
-    backgroundColor: "rgba(255, 255, 255, 0.6)",
     backdropFilter: "blur(4px)",
   },
   podcastToolbar: {
@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme)=>({
   },
 }));
 
+const darkAppbarStyle = { backgroundColor: "rgba(66, 66, 66, 0.6)", };
+const lightAppbarStyle = { backgroundColor: "rgba(255, 255, 255, 0.6)", }
+
 
 const Player = (props) => {
     const classes = useStyles();
@@ -75,6 +78,7 @@ const Player = (props) => {
     const [podcastName, setPodcastName] = useState();
     const [playBackRate, setPlayBackRate] = useState(1);
     const [loadedRate, setLoadedRate] = useState();
+    const darkmode = useSelector(state => state.mode);
 
     useEffect(
         ()=>{
@@ -150,7 +154,7 @@ const Player = (props) => {
                 config={{ file:{ forceAudio:true } }}
                 playbackRate={playBackRate}
             />
-            <AppBar position="fixed" color="inherit" className={classes.appBar}>
+            <AppBar position="fixed" color="inherit" style={ darkmode === 'light' ? lightAppbarStyle : darkAppbarStyle } className={classes.appBar}>
             { !ready ? <LinearProgress style={{width:"100%"}}/> : 
                 <Slider 
                 style={{padding: 0, paddingBottom: 2,}} 

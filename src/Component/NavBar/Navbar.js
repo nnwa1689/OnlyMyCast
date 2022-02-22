@@ -1,8 +1,10 @@
 //react
 import React, { useState, useEffect } from 'react';
 import { Link as RLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 //customhook
-import useWindowWidth from '../../Hook/useWindowWidth'
+import useWindowWidth from '../../Hook/useWindowWidth';
+import Darkmode from './Darkmode';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -10,7 +12,7 @@ import "firebase/auth";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import List from '@material-ui/core/List';
@@ -41,6 +43,7 @@ import InputBase from '@material-ui/core/InputBase';
 import LogoIcon from '../../static/only-my-cast-icon.svg'
 import Logo from '../../static/only-my-cast.svg'
 
+
 const useStyles = makeStyles((theme) => ({
     grow: {
       flexGrow: 1,
@@ -62,6 +65,20 @@ const useStyles = makeStyles((theme) => ({
       },
       '&:focus-within': {
         backgroundColor: "rgba(255, 255, 255, 0.9)",
+      },
+      marginLeft: theme.spacing(3),
+      width: '300px',
+      padding: "5px",
+    },
+    searchDark: {
+      borderRadius: theme.shape.borderRadius,
+      transition: 'background-color .15s',
+      backgroundColor: "rgba(55, 55, 55, 0.9)",
+      '&:hover': {
+        backgroundColor: "rgba(0, 0, 0, 0.9)",
+      },
+      '&:focus-within': {
+        backgroundColor: "rgba(0, 0, 0, 0.9)",
       },
       marginLeft: theme.spacing(3),
       width: '300px',
@@ -97,6 +114,7 @@ const NavBar = (props) => {
     const [reqCount, setReqCount] = useState("");
     const windowWidth = useWindowWidth();
     const [search, setSearch] = useState("");
+    const darkmode = useSelector(state => state.mode);
     const handleLogout = ()=>{
       firebase.auth().signOut().then(() => {
         // Sign-out successful.
@@ -166,7 +184,7 @@ const NavBar = (props) => {
               
               windowWidth >= 768 && 
                 <>
-                  <InputBase onChange={(e) => {setSearch(e.target.value)}} value={search} className={classes.search} placeholder="以完整ID搜尋頻道" startAdornment={
+                  <InputBase onChange={(e) => {setSearch(e.target.value)}} value={search} className={ darkmode === 'light' ? classes.search: classes.searchDark} placeholder="以完整ID搜尋頻道" startAdornment={
                       <IconButton component={RLink} to={"/search/" + search} aria-label="search" size="small">
                           <SearchIcon/>
                       </IconButton>
@@ -197,6 +215,7 @@ const NavBar = (props) => {
                       <AddIcon />
                 </Fab>
               </Tooltip>
+              <Darkmode />
           </Toolbar>
           </AppBar>
 

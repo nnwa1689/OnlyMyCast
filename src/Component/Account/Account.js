@@ -76,7 +76,6 @@ const useStyles = makeStyles((theme)=>({
     tabBar: {
         marginBottom: 10,
         boxShadow : "none",
-        background: "#FFFFFF"
     }
   }));
 
@@ -155,7 +154,6 @@ const Account = (props) => {
                         <ListItemSecondaryAction>
                         <IconButton
                             variant="contained"
-                            color="secondary"
                             value={value[0]}
                             onClick={(e)=>{showUnSubMsgBox(e)}}
                             className={classes.button}>

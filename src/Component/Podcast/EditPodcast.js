@@ -56,7 +56,6 @@ const useStyles = makeStyles((theme)=>({
     tabBar: {
         marginBottom: 10,
         boxShadow : "none",
-        background: "#FFFFFF"
     },
   }));
 

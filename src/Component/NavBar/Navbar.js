@@ -118,6 +118,7 @@ const NavBar = (props) => {
     const handleLogout = ()=>{
       firebase.auth().signOut().then(() => {
         // Sign-out successful.
+        localStorage.removeItem('themeMode');
         window.location.reload();
       }).catch((error) => {
         // An error happened.

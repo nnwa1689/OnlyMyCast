@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
       flex: '1 0 auto',
       paddingTop: 0,
       paddingBottom: 10,
-      maxHeight: 75,
-      minHeight: 75,
+      maxHeight: 95,
+      minHeight: 95,
       overflow: "hidden",
       textAlign: "left",
     },
@@ -65,14 +65,25 @@ const EmbedChannel = (props) => {
     const [name, setName] = useState();
     const [avatar, setAvatar] = useState();
     const [intro, setIntro] = useState();
+    const [podcasterName, setPodcasterName] = useState();
+    const [podcasterAvatar, setPodcasterAvatar] = useState();
 
     const getChannleData = ()=>{
         firebase.firestore().collection("channel").doc(props.match.params.id).get()
         .then(
           (doc)=>{
               if (doc.exists){
+                const data = doc.data();
+                firebase.firestore().collection("user").doc(data.uid).get()
+                .then(
+                    (doc) => {
+                        const data = doc.data();
+                        setPodcasterAvatar(data.avatar);
+                        setPodcasterName(data.name);
+                    }
+                );
                 setName(doc.data().name.length > 10 ? doc.data().name.substring(0, 9) + "⋯" : doc.data().name);
-                setIntro( doc.data().intro.length > 60 ?  doc.data().intro.substring(0, 59) + "⋯" : doc.data().intro );
+                setIntro( doc.data().intro );
                 setAvatar(doc.data().icon);
               }
           }
@@ -90,11 +101,11 @@ const EmbedChannel = (props) => {
     )
 
     return (
-        <Card style={{ background: "#f7f7f7", maxHeight: 200, borderRadius: 20, boxShadow: "none", maxHeight: "200px" }}>
+        <Card style={{ background: "#f7f7f7", maxHeight: 200, borderRadius: 20, boxShadow: "none", }}>
             <div className={classes.slogan}>
                 <Link href="https://onlymycast.notes-hz.com/" target="_blank">
-                    <Typography style={{ lineHeight: "10px" }} variant="body2" component="span" color="textSecondary">
-                        <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast - 建立自己私人的Podcast
+                    <Typography style={{ lineHeight: "10px", color: "rgba(0, 0, 0, 0.54)" }} variant="body2" component="span" color="textSecondary">
+                        <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast - 建立私人的 Podcast
                     </Typography>
                 </Link>
             </div>
@@ -105,10 +116,17 @@ const EmbedChannel = (props) => {
                 </CardMedia>
                 <div className={classes.details}>
                     <CardContent className={classes.content}>
-                    <Typography component="span" variant="h6">
+                    <Typography style={ { color: "rgb(24, 24, 24)" } } component="span"  variant="h6">
                         { name }
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography 
+                        style={ { color: "rgba(0, 0, 0, 0.54)", 
+                                display:"-webkit-box", 
+                                overflow:"hidden", 
+                                whiteSpace: "normal", 
+                                WebkitLineClamp: 3, 
+                                WebkitBoxOrient: "vertical" } } 
+                        variant="body2" color="textSecondary">
                         { intro }
                     </Typography>
                     </CardContent>

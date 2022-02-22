@@ -1,5 +1,5 @@
 //react
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
 import { setMode } from '../../Reducer/action';
@@ -12,7 +12,6 @@ import Brightness7Icon from '@material-ui/icons/Brightness7';
 const Darkmode = (props) => {
 
     const [isDarkmode, setButtonMode] = useState( useSelector(state => state.mode));
-    console.log(useSelector(state => state.mode));
     const lightStyle = { background: '#f7f7f7' };
     const darkStyle = { background: 'rgb(24, 24, 24)', color: "white" };
     const dispatch = useDispatch();

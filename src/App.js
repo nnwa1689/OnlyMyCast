@@ -47,7 +47,7 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-const clientversion = "V220222.15";
+const clientversion = "V220222.21";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -109,7 +109,6 @@ const App = (props) => {
             (idToken) => {
               if (idToken.claims.email_verified !== user.emailVerified) {
                 user.getIdToken(true);
-                console.log(idToken.claims);
               }
             }
           );
@@ -202,7 +201,7 @@ const App = (props) => {
       .set(userData)
       .then(
         () => {
-          console.log('click');
+          //pass
         }
       )
       .catch(

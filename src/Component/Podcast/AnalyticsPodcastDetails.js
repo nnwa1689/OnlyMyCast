@@ -9,9 +9,13 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
 import PeopleIcon from '@material-ui/icons/People';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -41,13 +45,6 @@ const useStyles = makeStyles((theme)=>({
         color: "#FFFFFF",
         backgroundColor: "#FD3E49",
     },
-      list:{
-        display: 'flex',
-        '& > *': {
-          margin: theme.spacing(1),
-        },
-        justifyContent: 'center',
-      }
   })
   );
 
@@ -84,9 +81,22 @@ const useStyles = makeStyles((theme)=>({
                         //
                     } else {
                         chanArr.push(
-                            <Tooltip title={ data.name }>
-                                <Avatar alt={ data.name } src={ data.avatar=="" ? "." : data.avatar } className={classes.pink} />
-                            </Tooltip>
+                            <>
+                            <ListItem key={data.name}>
+                            <ListItemAvatar>
+                            <Avatar alt={data.name} src={data.avatar==="" ? "." : data.avatar} className={classes.pink}/>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={data.name}
+                            />
+                            <ListItemSecondaryAction>
+                            </ListItemSecondaryAction>
+                            </ListItem>
+                            <br/>
+                            <Divider />
+                            <br/>
+                            </>
+
                         )
                     }
                 }
@@ -111,9 +121,9 @@ const useStyles = makeStyles((theme)=>({
                     <br/><br/>
                     <Divider /><br/>
                     <Typography variant="h6" component="span"><PeopleIcon />&nbsp;誰播放過</Typography><br/>
-                    <div className={classes.list}>
+                    <List dense>
                         { playedList }
-                    </div>
+                    </List>
                     </CardContent>
                 </Card>
             </Container>

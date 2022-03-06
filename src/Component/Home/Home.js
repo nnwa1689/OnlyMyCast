@@ -11,6 +11,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -140,20 +142,22 @@ const Home = (props) => {
         <Helmet>
             <title>Onlymycast</title>
         </Helmet>
-        <Typography variant="h5" component="h1"><CastIcon/>我的頻道</Typography>
+        <Typography variant="h5" component="h1"><CastIcon/>我的頻道</Typography><br/>
+        <Card>
+          <CardContent>
+          <Grid container justify="center" direction="row">
+            {
+              props.user.userId ==="" ?
+              <Typography variant="body1" component="span">
+                你目前沒有建立電台<br/>
+              </Typography>
+              :
+              <MyPodcastList key={0} spCount={spCount} podcastFansCount={subCount} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></MyPodcastList>
+            }
+          </Grid>
+          </CardContent>
+        </Card>
         <br/>
-        <Grid container justify="center" direction="row">
-          {
-            props.user.userId ==="" ?
-            <Typography variant="body1" component="span">
-              你目前沒有建立電台<br/>
-            </Typography>
-            :
-            <MyPodcastList key={0} spCount={spCount} podcastFansCount={subCount} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></MyPodcastList>
-          }
-        </Grid>
-        <br/>
-        <Divider />
         <br/>
         <Typography variant="h5">
             <FavoriteIcon/>我的訂閱

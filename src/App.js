@@ -1,7 +1,7 @@
 //react
 import './App.css';
 import { useState, useRef, useEffect } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 //redux
 import { useSelector } from 'react-redux';
@@ -38,7 +38,8 @@ import UnloginNavBar from './Component/NavBar/UnloginNavbar';
 import FansAdmin from './Component/Account/FansAdmin';
 import ForgetPassword from './Component/Account/ForgetPassword';
 import EmbedChannel from './Component/Podcast/EmbedChannel';
-import EmailVerified from './Component/Account/EmailVerified'
+import EmailVerified from './Component/Account/EmailVerified';
+import NotFound from './Component/Home/NotFound';
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -47,7 +48,7 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-const clientversion = "V220227.00";
+const clientversion = "V220306.13";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -188,7 +189,7 @@ const App = (props) => {
     }
   )
 
-
+  //Player
   const setPlayer = async (e) => {
 
     //recoding play history this user
@@ -217,6 +218,7 @@ const App = (props) => {
     setCoverUri(e.currentTarget.dataset.coveruri);
   }
 
+  //darkmode
   const darkTheme = createMuiTheme({
     palette: {
       type:'dark',
@@ -249,6 +251,7 @@ const App = (props) => {
     }
   });
 
+  //lightMode
   const lightTheme = createMuiTheme({
     palette: {
       type:'light',
@@ -296,70 +299,73 @@ const App = (props) => {
             }
             {isAuth !== 0 ?
               <>
+              <Switch>
                 <Route exact path="/"
-                  render={(props) => (
-                    <Home {...props} user={userData} userUid={userUid.current} />
-                  )} />
-                <Route exact path="/account"
-                  render={(props) => (
-                    <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} />
-                  )}
-                />
-                <Route exact path="/podcastaccount"
-                  render={(props) => (
-                    <PodcastAccount {...props} user={userData} userUid={userUid.current} />
-                  )} />
-                <Route exact path="/fansadmin"
-                  render={(props) => (
-                    <FansAdmin {...props} user={userData} userUid={userUid.current} />
-                  )} />
-                <Route exact path="/subreq"
-                  render={(props) => (
-                    <Subreq {...props} user={userData} userUid={userUid.current} />
-                  )} />
-                <Route exact path="/search" component={Search} />
-                <Route path="/search/:q" component={Search} />
-                <Route path="/podcastdetail/:id/:podId"
-                  render={(props) => (
-                    <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} />
-                  )} />
-                <Route path="/podcast/:id"
-                  render={(props) => (
-                    <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} />
-                  )} />
-                <Route exact path="/uploadpodcast"
-                  render={(props) => (
-                    <NewPodcast {...props} user={userData} userUid={userUid.current} />
-                  )} />
-                <Route exact path="/editpodcasts"
-                  render={(props) => (
-                    <EditPodcast {...props} user={userData} />
-                  )}
-                />
-                <Route path="/editpodcast/:id/:podId"
-                  render={(props) => (
-                    <EditPodcastDetails {...props} user={userData} />
-                  )}
-                />
-                <Route path="/editcastdarft/:id/:podId"
-                  render={(props) => (
-                    <EditCastDarft {...props} user={userData} userUid={userUid.current} />
-                  )}
-                />
-                <Route exact path="/analyticspodcast/:id/:podId"
-                  render={(props) => (
-                    <AnalyticsPodcastDetails {...props} user={userData} />
-                  )}
-                />
-                <Route path="/embed/:id"
-                  render={(props) => (
-                    <EmbedChannel {...props} user={userData} />
-                  )}
-                />
-                <Route exact path="/signin" component={SignIn} />
-                <Route exact path="/signup" component={SignUp} />
-                <Route exact path="/forgetpassword" component={ForgetPassword} />
-                <Route exact path="/emailverified" component={EmailVerified} />
+                    render={(props) => (
+                      <Home {...props} user={userData} userUid={userUid.current} />
+                    )} />
+                  <Route exact path="/account"
+                    render={(props) => (
+                      <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} />
+                    )}
+                  />
+                  <Route exact path="/podcastaccount"
+                    render={(props) => (
+                      <PodcastAccount {...props} user={userData} userUid={userUid.current} />
+                    )} />
+                  <Route exact path="/fansadmin"
+                    render={(props) => (
+                      <FansAdmin {...props} user={userData} userUid={userUid.current} />
+                    )} />
+                  <Route exact path="/subreq"
+                    render={(props) => (
+                      <Subreq {...props} user={userData} userUid={userUid.current} />
+                    )} />
+                  <Route exact path="/search" component={Search} />
+                  <Route path="/search/:q" component={Search} />
+                  <Route path="/podcastdetail/:id/:podId"
+                    render={(props) => (
+                      <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} />
+                    )} />
+                  <Route path="/podcast/:id"
+                    render={(props) => (
+                      <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} />
+                    )} />
+                  <Route exact path="/uploadpodcast"
+                    render={(props) => (
+                      <NewPodcast {...props} user={userData} userUid={userUid.current} />
+                    )} />
+                  <Route exact path="/editpodcasts"
+                    render={(props) => (
+                      <EditPodcast {...props} user={userData} />
+                    )}
+                  />
+                  <Route path="/editpodcast/:id/:podId"
+                    render={(props) => (
+                      <EditPodcastDetails {...props} user={userData} />
+                    )}
+                  />
+                  <Route path="/editcastdarft/:id/:podId"
+                    render={(props) => (
+                      <EditCastDarft {...props} user={userData} userUid={userUid.current} />
+                    )}
+                  />
+                  <Route exact path="/analyticspodcast/:id/:podId"
+                    render={(props) => (
+                      <AnalyticsPodcastDetails {...props} user={userData} />
+                    )}
+                  />
+                  <Route exact path="/embed/:id"
+                    render={(props) => (
+                      <EmbedChannel {...props} user={userData} />
+                    )}
+                  />
+                  <Route exact path="/signin" component={SignIn} />
+                  <Route exact path="/signup" component={SignUp} />
+                  <Route exact path="/forgetpassword" component={ForgetPassword} />
+                  <Route exact path="/emailverified" component={EmailVerified} />
+                  <Route path="/" component={NotFound} />
+                </Switch>
                 {(!removeNavbarPath.includes(pathname) && isAuth) && <Navbar ver={clientversion} user={userData} userEmail={userEmail.current}></Navbar>}
                 {
                   /* Email 沒有驗證 emailUnVerified*/

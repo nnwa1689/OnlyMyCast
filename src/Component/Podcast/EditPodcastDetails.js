@@ -132,7 +132,7 @@ const useStyles = makeStyles((theme)=>({
                 }, { merge: true }
             ).then((doc)=>{
                 //rss產生
-                genrssfeed(props.user.userId);
+                genrssfeed(props.user.userId, props.userEmail);
                 setHandleCode("suc");
             })
         } else {

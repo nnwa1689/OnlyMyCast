@@ -314,7 +314,7 @@ const App = (props) => {
                   />
                   <Route exact path="/podcastaccount"
                     render={(props) => (
-                      <PodcastAccount {...props} user={userData} userUid={userUid.current} />
+                      <PodcastAccount {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} />
                     )} />
                   <Route exact path="/fansadmin"
                     render={(props) => (
@@ -336,7 +336,7 @@ const App = (props) => {
                     )} />
                   <Route exact path="/uploadpodcast"
                     render={(props) => (
-                      <NewPodcast {...props} user={userData} userUid={userUid.current} />
+                      <NewPodcast {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} />
                     )} />
                   <Route exact path="/editpodcasts"
                     render={(props) => (
@@ -345,12 +345,12 @@ const App = (props) => {
                   />
                   <Route path="/editpodcast/:id/:podId"
                     render={(props) => (
-                      <EditPodcastDetails {...props} user={userData} />
+                      <EditPodcastDetails {...props} user={userData} userEmail={userEmail.current}/>
                     )}
                   />
                   <Route path="/editcastdarft/:id/:podId"
                     render={(props) => (
-                      <EditCastDarft {...props} user={userData} userUid={userUid.current} />
+                      <EditCastDarft {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current}/>
                     )}
                   />
                   <Route exact path="/analyticspodcast/:id/:podId"

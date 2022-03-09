@@ -14,7 +14,7 @@ import "firebase/database";
 //rss
 import RSS from "rss-generator";
 
-export default function genrssfeed(userId) {
+export default function genrssfeed(userId, userEmail) {
 
     let channelName, intro, image, autor, rss, hashId;
     const poweredby = '<br/>本節目由 <a href="https://onlymycast.notes-hz.com/">Onlymycast </a> 強力驅動！';
@@ -58,7 +58,7 @@ export default function genrssfeed(userId) {
                                             {'itunes:summary': intro},
                                             {'itunes:owner': [
                                                 {'itunes:name': autor},
-                                                {'itunes:email': ''}
+                                                {'itunes:email': userEmail}
                                             ]},
                                             {'itunes:image': {
                                             _attr: {

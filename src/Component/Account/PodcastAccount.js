@@ -273,7 +273,7 @@ const PodcastAccount = (props) => {
                 ()=>{
                     //rss產生
                     if ( publicStatu === 'true' ) {
-                        genrssfeed(userId);
+                        genrssfeed(userId, props.userEmail);
                     } else {
                     // rss 消滅
                         delrssfeed(userId);

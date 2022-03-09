@@ -224,7 +224,7 @@ const useStyles = makeStyles((theme)=>({
             uid:props.userUid
         }, { merge: true }).then((event)=>{
             //rss產生
-            genrssfeed(props.user.userId);
+            genrssfeed(props.user.userId, props.userEmail);
         }).catch((error)=>{
             setErr(error);
         })

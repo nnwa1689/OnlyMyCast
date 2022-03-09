@@ -304,7 +304,7 @@ const useStyles = makeStyles((theme)=>({
         }, { merge: true }).then((event)=>{
 
             //rss產生
-            genrssfeed(props.user.userId);
+            genrssfeed(props.user.userId, props.userEmail);
             
         }).catch((error)=>{
             setUploadStatu(3);

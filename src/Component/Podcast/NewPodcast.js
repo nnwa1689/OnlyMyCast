@@ -47,6 +47,7 @@ import "firebase/storage";
 import "firebase/functions";
 //other
 import { Helmet } from 'react-helmet';
+import genrssfeed from '../../Functions/genRssfeed';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -263,26 +264,6 @@ const useStyles = makeStyles((theme)=>({
           });
     }
 
-    /*
-    const getDarft = () => {
-        firebase.database().ref('/castDarft/' + props.user.userId).once("value", e => {
-        }).then(async(e)=>{
-            const data = e.val();
-            if (data !== undefined && data !== null) {
-                setHandleDarftCode("get");
-                setPodcastTitle(data.podcastTitle);
-                setIntro(data.intro);
-            }
-        })
-    }
-    */
-
-    /*
-    const handleRemoveDarft = async() => {
-        await firebase.database().ref('/castDarft/' + props.user.userId).remove();
-    }
-    */
-
     const handleSaveDarft = async() => {
         if (podcastTitle==="" || intro==="") {
             if (podcastTitle==="") {
@@ -314,27 +295,6 @@ const useStyles = makeStyles((theme)=>({
                 })
             });
         }
-        /*
-        if (podcastTitle==="" || intro==="") {
-            setErr(true);
-            if (podcastTitle==="") {
-                setTitleErr("單集標題不能為空");
-            }
-            if (intro==="") {
-                setIntroErr("單集介紹不能為空");
-            }
-        } else {
-            setHandleDarftCode('loading');
-            firebase.database().ref('/castDarft/' + props.user.userId).update(
-                {
-                    podcastTitle : podcastTitle,
-                    intro:intro,
-                }
-            ).then(()=>{
-                setHandleDarftCode('suc');
-            }).catch();
-        }
-        */
     }
 
     const updateChannelDate = async()=>{
@@ -343,8 +303,12 @@ const useStyles = makeStyles((theme)=>({
             uid:props.userUid
         }, { merge: true }).then((event)=>{
 
+            //rss產生
+            genrssfeed(props.user.userId);
+            
         }).catch((error)=>{
-            setUploadStatu(3); setErr(error);
+            setUploadStatu(3);
+            setErr(error);
         })
     }
     
@@ -446,18 +410,18 @@ const useStyles = makeStyles((theme)=>({
                             }>
                         <Typography variant="h4">
                             <MicIcon fontSize="large" />
-                            <br/>線上快速錄製<br/><br/><Divider/><br/>
+                            <br/>線上錄製<br/><br/><Divider/><br/>
                             <Typography variant="body1" color="textSecondary">
-                                透過網頁直接錄製節目，建議較短或隨性節目使用此方式。
+                                透過網頁直接錄製單集，建議較短或隨性的單集使用此方式。
                             </Typography></Typography><br/><br/><br/>
                         </Button>
 
                         <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(1) }}>
                         <Typography variant="h4">
                             <PublishIcon fontSize="large" />
-                            <br/>上傳預錄檔案<br/><br/><Divider/><br/>
+                            <br/>上傳檔案<br/><br/><Divider/><br/>
                             <Typography variant="body1" color="textSecondary">
-                                上傳您後製完成的完整節目，如錄製較長且需剪輯建議使用此方式。
+                                上傳您後製完成的完整單集，如錄製較長且需剪輯建議使用此方式。
                             </Typography></Typography><br/><br/><br/>
                         </Button>
                     </>)

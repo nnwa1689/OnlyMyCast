@@ -30,6 +30,7 @@ import "firebase/storage";
 import "firebase/database";
 //other
 import { Helmet } from 'react-helmet';
+import genrssfeed from '../../Functions/genRssfeed';
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -111,7 +112,10 @@ const useStyles = makeStyles((theme)=>({
             .child(audioFileRef.current)
             .delete()
             .then(
-                ()=>{setHandleCode("delSuc")
+                ()=>{
+                    //rss產生
+                    genrssfeed(props.user.userId);
+                    setHandleCode("delSuc");
             });
         }
         )
@@ -127,6 +131,8 @@ const useStyles = makeStyles((theme)=>({
                     intro:intro
                 }, { merge: true }
             ).then((doc)=>{
+                //rss產生
+                genrssfeed(props.user.userId);
                 setHandleCode("suc");
             })
         } else {

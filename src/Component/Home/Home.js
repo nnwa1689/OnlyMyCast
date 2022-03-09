@@ -9,7 +9,6 @@ import MyPodcastList from './MyPodcastList';
 import PodcastList from './PodcastList';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -142,14 +141,14 @@ const Home = (props) => {
         <Helmet>
             <title>Onlymycast</title>
         </Helmet>
-        <Typography variant="h5" component="h1"><CastIcon/>我的頻道</Typography><br/>
+        <Typography variant="h5" component="h1"><CastIcon/>我的節目</Typography><br/>
         <Card>
           <CardContent>
           <Grid container justify="center" direction="row">
             {
               props.user.userId ==="" ?
               <Typography variant="body1" component="span">
-                你目前沒有建立電台<br/>
+                你目前沒有建立節目<br/>
               </Typography>
               :
               <MyPodcastList key={0} spCount={spCount} podcastFansCount={subCount} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></MyPodcastList>
@@ -170,7 +169,7 @@ const Home = (props) => {
                     (^ｰ^)ノ<br/>
                 </Typography>
                 <Typography variant="h5" component="span">
-                    嗨<br/>你還沒有訂閱任何電台<br/>快去尋找屬於你的電台吧！
+                    嗨<br/>你還沒有訂閱任何節目<br/>快去尋找屬於你的節目吧！
                 </Typography>
               </>
               :

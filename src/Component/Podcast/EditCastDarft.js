@@ -36,6 +36,7 @@ import "firebase/database";
 import "firebase/functions";
 //other
 import { Helmet } from 'react-helmet';
+import genrssfeed from '../../Functions/genRssfeed';
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -222,7 +223,8 @@ const useStyles = makeStyles((theme)=>({
             updateTime:firebase.firestore.FieldValue.serverTimestamp(),
             uid:props.userUid
         }, { merge: true }).then((event)=>{
-
+            //rss產生
+            genrssfeed(props.user.userId);
         }).catch((error)=>{
             setErr(error);
         })

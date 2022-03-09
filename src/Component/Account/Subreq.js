@@ -133,8 +133,6 @@ const Subreq = (props) => {
         firebase.database().ref('/subcheck/' + props.user.userId).once("value", e => {
           }).then(async(e)=>{
               const data = e.val();
-              console.log(data);
-              console.log(props.user.userId.length);
               if (data !== undefined && data !== null && props.user.userId.length > 0) {
                   genListItem(data).then((arr)=>{
                     setReqList(arr);
@@ -159,7 +157,7 @@ const Subreq = (props) => {
                             (^ｰ^)ノ<br/>
                         </Typography>
                         <Typography variant="h5" component="span">
-                            嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
+                            嗨<br/>你還沒有建立節目 ╮(╯▽╰)╭<br/>                            
                         </Typography>
                         <br/>
                         <Button
@@ -170,7 +168,7 @@ const Subreq = (props) => {
                             size="large"
                             variant="contained"
                             >              
-                            立即建立屬於我的私人電台
+                            立即建立屬於我的節目
                             </Button>
                     </CardContent>
                 </Card>
@@ -184,7 +182,7 @@ const Subreq = (props) => {
                             <Card className={classes.root}>
                                 <CardContent>
                                 <Typography variant="h5" component="h1">追蹤審核</Typography>
-                                <Typography variant="body1" component="span">允許或拒絕電台追蹤要求</Typography>
+                                <Typography variant="body1" component="span">允許或拒絕節目追蹤要求</Typography>
                                 <List dense>
                                     {reqList === "" ? 
                                         <>

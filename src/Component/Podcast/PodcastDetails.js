@@ -61,6 +61,7 @@ const PodcastDetails = (props) => {
     const [duration, setDuration] =  useState("");
     const [subStatu, setSubStatu] = useState();
     const [played, setPlayed] = useState(false);
+    const [publicStatu, setPublicStatu] = useState();
 
     const isFirstLoad = useRef(true);
 
@@ -69,8 +70,14 @@ const PodcastDetails = (props) => {
         if (isFirstLoad.current) {
           getSPData();
           getChannelData();
-          getPlayedStatu();
-          getSubStatu();
+          //沒有登入就不取得訂閱狀態與播放狀態，將播放狀態設定為永遠未播放，訂閱狀態在 getChannelData 設定
+          if (props.isAuth) {
+            getPlayedStatu();
+            getSubStatu();
+          } else {
+            setPlayed(false);
+            setSubStatu(0);
+          }
           window.scrollTo(0, 0);
           isFirstLoad.current = false;
         }
@@ -127,6 +134,13 @@ const PodcastDetails = (props) => {
           } else {
             setChannelName(data.name)
             setAvatar(data.icon);
+            
+            // 檢查頻道公不公開
+            if (data.publicStatu === 'true') {
+              setPublicStatu(true);
+            } else {
+              setPublicStatu(false);
+            }
         }
       })
     }
@@ -149,16 +163,16 @@ const PodcastDetails = (props) => {
         })
     }
     
-    if (name===undefined || audioUrl===undefined || intro===undefined || updateTime===undefined || channelName===undefined || subStatu===undefined) {
+    if (name===undefined || audioUrl===undefined || intro===undefined || updateTime===undefined || publicStatu === undefined || subStatu === undefined || channelName===undefined ) {
       return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
       return(
         <Container maxWidth="md">
-          <Helmet>
-              <title>{ name } - { channelName } - Onlymycast</title>
-          </Helmet>
-          { subStatu===1 || props.user.userId === props.match.params.id ?
+          { subStatu===1 || publicStatu || props.user.userId === props.match.params.id ?
               <Card className={classes.root}>
+                <Helmet>
+                    <title>{ name } - { channelName } - Onlymycast</title>
+                </Helmet>
                 <CardContent>
                 <Grid container justify="center" direction="row">
                   <Grid item xs={12} sm={4} md={3}>
@@ -199,7 +213,7 @@ const PodcastDetails = (props) => {
                 </CardContent>
               </Card>
           :
-          <Redirect to={'/podcast/' +props.match.params.id }/>
+          ""
         }
         </Container>
       );

@@ -67,6 +67,28 @@
 
 -subreq->{ 追蹤者UserUID  } -> { 被追蹤頻道userID : 被追蹤頻道的UserID }
 
+## firestore Storage 目錄結構
+
+### /avatar/userHashId
+
+	放置使用者頭貼
+
+### /channelIcon/channelId
+
+	放置節目封面
+
+### /podcastaudio/channelId/
+
+	放置 podcast 音訊檔案
+
+### /rss/channelId/userHashId
+
+	放置公開節目的 RSS Feed
+
+## Functions
+
+	進行新單集通知的 Functions 會放在另外一個 repo
+
 # 程式編譯事項
 
 ## FirebaseConfig

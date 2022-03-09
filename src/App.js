@@ -48,10 +48,11 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-const clientversion = "V220306.13";
+const clientversion = "V220309.15";
 const App = (props) => {
-  const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin'];
+  const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
+  const usingUnloginNavbarPath = ['podcast', 'podcastdetail']
   const removeAdsensePath = ['embed'];
   const [isAuth, setAuth] = useState(0);
   const [playerUrl, setPlayerUrl] = useState();
@@ -192,8 +193,9 @@ const App = (props) => {
   //Player
   const setPlayer = async (e) => {
 
-    //recoding play history this user
-    firebase.firestore().collection("podcast")
+    if (isAuth) {
+      //recoding play history this user
+      firebase.firestore().collection("podcast")
       .doc(e.currentTarget.dataset.poduserid)
       .collection('podcast')
       .doc(e.currentTarget.value)
@@ -210,6 +212,7 @@ const App = (props) => {
           console.log("e");
         }
       );
+    }
 
     //set player
     setPlayerTitle(e.currentTarget.dataset.titlename);
@@ -325,11 +328,11 @@ const App = (props) => {
                   <Route path="/search/:q" component={Search} />
                   <Route path="/podcastdetail/:id/:podId"
                     render={(props) => (
-                      <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} />
+                      <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} isAuth={isAuth} />
                     )} />
                   <Route path="/podcast/:id"
                     render={(props) => (
-                      <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} />
+                      <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} isAuth={isAuth} />
                     )} />
                   <Route exact path="/uploadpodcast"
                     render={(props) => (
@@ -366,7 +369,10 @@ const App = (props) => {
                   <Route exact path="/emailverified" component={EmailVerified} />
                   <Route path="/" component={NotFound} />
                 </Switch>
-                {(!removeNavbarPath.includes(pathname) && isAuth) && <Navbar ver={clientversion} user={userData} userEmail={userEmail.current}></Navbar>}
+                
+                {
+                  /* 不必移除navbar 而且登入 -> 顯示正常版navbar */
+                  (!removeNavbarPath.includes(pathname) && isAuth) && <Navbar ver={clientversion} user={userData} userEmail={userEmail.current}></Navbar>}
                 {
                   /* Email 沒有驗證 emailUnVerified*/
                   !emailVeri && <Redirect to='/emailverified' />
@@ -374,7 +380,10 @@ const App = (props) => {
                 { /* 如果頁面是廣播首頁則允許沒有登入預覽 */
                   !isAuth && (!allowUnloginPath.includes(pathname)) && <Redirect to='/signin' />
                 }
-                {!isAuth && pathname === "podcast" && <UnloginNavBar></UnloginNavBar>}
+                {
+                  /*顯示沒有登入版本的 navbar*/
+                  !isAuth && (usingUnloginNavbarPath.includes(pathname)) && <UnloginNavBar></UnloginNavBar>
+                }
                 {
                   /*Google Adsense*/
                   !(removeAdsensePath.includes(pathname)) && <AdsenseComponent />

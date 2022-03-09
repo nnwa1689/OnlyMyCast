@@ -91,12 +91,13 @@ const PodcastHome = (props) => {
     const [avatar, setAvatar] = useState("");
     const [intro, setIntro] = useState("");
     const [subStatu, setSubStatu] = useState(0);
-    const [podcasterName, setPodcasterName] = useState();
-    const [podcasterAvatar, setPodcasterAvatar] = useState();
+    const [podcasterName, setPodcasterName] = useState(0);
+    const [podcasterAvatar, setPodcasterAvatar] = useState(0);
     //0:init 1:sub 2:unsub 3:req
     const isFirstLoad = useRef(true);
     const [subCount, setSubCount] = useState(0);
-    const [spList, setSpList] = useState();
+    const [spList, setSpList] = useState(0);
+    const [publicStatu, setPublicStatu] = useState(false);
     const [facebookLink, setFacebookLink] = useState("");
     const [youtubeLink, setYoutubeLink] = useState("");
     const [instagramLink, setInstagramLink] = useState("");
@@ -108,11 +109,8 @@ const PodcastHome = (props) => {
             if (isFirstLoad.current) {
                 getChannleData();
                 countSub();
-                if (props.user !== "" && props.userUid !== "") {
+                if (props.isAuth) {
                     getSubStatu();
-                } else if (props.user === "" || props.userUid === "") {
-                    setSubStatu(4);
-                    setSpList("");
                 }
                 window.scrollTo(0, 0);
                 isFirstLoad.current = false;
@@ -122,12 +120,13 @@ const PodcastHome = (props) => {
 
     useEffect(
         () => {
-            if (subStatu === 1 || props.user.userId === props.match.params.id) {
+            if (subStatu === 1 || publicStatu || props.user.userId === props.match.params.id) {
                 getPodcastList();
             } else {
                 setSpList(false);
             }
-        }, [subStatu]
+            countSub();
+        }, [subStatu, publicStatu]
     )
 
     const getPodcastList = async () => {
@@ -194,6 +193,10 @@ const PodcastHome = (props) => {
                         setInstagramLink(data.instagram !== undefined && data.instagram);
                         setYoutubeLink(data.youtube !== undefined && data.youtube);
                         setTwitterLink(data.twitter !== undefined && data.twitter);
+                        //檢查節目公不公開
+                        if ( data.publicStatu === 'true') { // 公開
+                            setPublicStatu(true);
+                        }
                     }
                 }
             );
@@ -250,19 +253,31 @@ const PodcastHome = (props) => {
     }
 
     const handleSub = (e) => {
-        firebase.database().ref('/subreq/' + props.userUid).update(
-            {
-                [props.match.params.id]: props.match.params.id
-            }
-        ).then((e) => {
-            firebase.database().ref('/subcheck/' + props.match.params.id).update(
+        if ( publicStatu ) {
+            firebase.firestore().collection("subscribe").doc(props.userUid).set(
+                {[props.match.params.id] : firebase.firestore.FieldValue.serverTimestamp()},{ merge: true }
+            ).then(
+                firebase.firestore().collection("fans").doc(props.match.params.id).set(
+                    {[props.userUid] : props.userUid},{ merge: true }
+                ).then(()=>{
+                    setSubStatu(1);
+                }
+            ));
+        } else {
+            firebase.database().ref('/subreq/' + props.userUid).update(
                 {
-                    [props.userUid]: props.userUid
+                    [props.match.params.id]: props.match.params.id
                 }
             ).then((e) => {
-                setSubStatu(3);
-            })
-        }).catch();
+                firebase.database().ref('/subcheck/' + props.match.params.id).update(
+                    {
+                        [props.userUid]: props.userUid
+                    }
+                ).then((e) => {
+                    setSubStatu(3);
+                })
+            }).catch();
+        }
     }
 
     const handleRemoveReq = (e) => {
@@ -281,7 +296,7 @@ const PodcastHome = (props) => {
             }).catch();
     }
 
-    if (name === "" || avatar === "" || subStatu === 0 || spList === undefined || podcasterAvatar === undefined || podcasterName === undefined) {
+    if (name === "" || avatar === "" || spList === 0 || podcasterAvatar === 0 || podcasterName === 0) {
         return (<CircularProgress style={{ marginTop: "25%" }} />);
     } else {
         return (
@@ -332,15 +347,24 @@ const PodcastHome = (props) => {
                                     <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
                                     :
                                     <>
-                                        {subStatu === 1 &&
+                                        {
+                                            (subStatu === 1) &&
                                             <Button fullWidth onClick={(e) => handleUnsub(e)} variant="outlined" size="large" startIcon={<StarBorderIcon />}>
                                                 取消追蹤
                                             </Button>
                                         }
 
-                                        {subStatu === 2 &&
+                                        {
+                                            (subStatu === 2 && !publicStatu) &&
                                             <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
                                                 要求追蹤
+                                            </Button>
+                                        }
+
+                                        {
+                                            (subStatu === 2 && publicStatu) &&
+                                            <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
+                                                追蹤
                                             </Button>
                                         }
 
@@ -359,7 +383,7 @@ const PodcastHome = (props) => {
                             <ReactMarkdown>{intro}</ReactMarkdown>
                         </Typography>
                         <Divider />
-                        {subStatu === 1 || props.user.userId === props.match.params.id ?
+                        {subStatu === 1|| publicStatu || props.user.userId === props.match.params.id ?
                             spList === "" ?
                                 <Typography variant="h4" component="span"><br />¯\_(ツ)_/¯<br />還沒有任何節目<br />稍後再回來吧</Typography>
                                 :

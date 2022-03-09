@@ -185,7 +185,7 @@ const NavBar = (props) => {
               
               windowWidth >= 768 && 
                 <>
-                  <InputBase onChange={(e) => {setSearch(e.target.value)}} value={search} className={ darkmode === 'light' ? classes.search: classes.searchDark} placeholder="以完整ID搜尋頻道" startAdornment={
+                  <InputBase onChange={(e) => {setSearch(e.target.value)}} value={search} className={ darkmode === 'light' ? classes.search: classes.searchDark} placeholder="以完整ID搜尋節目" startAdornment={
                       <IconButton component={RLink} to={"/search/" + search} aria-label="search" size="small">
                           <SearchIcon/>
                       </IconButton>
@@ -245,7 +245,7 @@ const NavBar = (props) => {
                   <List>
                   <ListItem button component={RLink} to="/podcastaccount" key="podcastsetting">
                           <ListItemIcon><GraphicEqIcon /></ListItemIcon>
-                          <ListItemText primary="電台設定"></ListItemText>
+                          <ListItemText primary="節目設定"></ListItemText>
                       </ListItem>
                       <ListItem button component={RLink} to="/uploadpodcast" key="publish">
                           <ListItemIcon><PublishIcon /></ListItemIcon>

@@ -112,6 +112,7 @@ const PodcastAccount = (props) => {
     const [fileBit, setFileBit] = useState();
     const [handleCode, setHandleCode] = useState('init');
     const [uid, setUid] = useState();
+    const [category, setCategory] = useState("");
     const [publicStatu, setPublicStatu] = useState(false);
     const [nameErr, setNameErr] = useState(false);
     const [userIdErr, setUserIdErr] = useState(false);
@@ -119,6 +120,29 @@ const PodcastAccount = (props) => {
     const isFirstLoad = useRef(true);
     const [embedCode, setEmbedCode] = useState();
     const [showCopyMsg, setShowCopyMsg] = useState(false);
+
+    const categoryListItem = [
+        <MenuItem value={"Arts"}>藝術</MenuItem>,
+        <MenuItem value={"Business"}>商業與財經</MenuItem>,
+        <MenuItem value={"Comedy"}>喜劇</MenuItem>,
+        <MenuItem value={"Education"}>教育</MenuItem>,
+        <MenuItem value={"Fiction"}>虛構幻想</MenuItem>,
+        <MenuItem value={"Government"}>政府與政治</MenuItem>,
+        <MenuItem value={"History"}>歷史</MenuItem>,
+        <MenuItem value={"Health &amp; Fitness"}>健康與健身</MenuItem>,
+        <MenuItem value={"Kids &amp; Family"}>兒童與家庭</MenuItem>,
+        <MenuItem value={"Leisure"}>休閒</MenuItem>,
+        <MenuItem value={"Music"}>音樂</MenuItem>,
+        <MenuItem value={"News"}>新聞</MenuItem>,
+        <MenuItem value={"Religion &amp; Spirituality"}>宗教與修行</MenuItem>,
+        <MenuItem value={"Science"}>科學</MenuItem>,
+        <MenuItem value={"Society &amp; Culture"}>社會與文化</MenuItem>,
+        <MenuItem value={"Sports"}>體育競技</MenuItem>,
+        <MenuItem value={"Technology"}>科技</MenuItem>,
+        <MenuItem value={"True Crime"}>犯罪紀實</MenuItem>,
+        <MenuItem value={"TV &amp; Film"}>影集與電影</MenuItem>
+    ]
+
 
     const [facebookLink, setFacebookLink] = useState();
     const [youtubeLink, setYoutubeLink] = useState ();
@@ -146,7 +170,8 @@ const PodcastAccount = (props) => {
                         setPublicStatu(data.publicStatu === undefined ? "false" : data.publicStatu);
                         setEmbedCode(
                             `<iframe frameborder="0" height="200px" style="width:100%;max-width:660px;overflow:hidden;" src="https://onlymycast.notes-hz.com/webapp/embed/` + props.user.userId + `"></iframe>`
-                        )
+                        );
+                        setCategory( data.category === undefined ? "" : data.category );
                       }
                     );
                 } else {
@@ -204,38 +229,27 @@ const PodcastAccount = (props) => {
                                 userId: userId,
                                 updateTime:firebase.firestore.FieldValue.serverTimestamp(),
                                 uid : props.userUid,
-                                publicStatu: publicStatu
+                                publicStatu: publicStatu,
+                                category : category
                             }, { merge: true }).then(
-                                ()=>{
-
-                                    //rss產生
-                                    if ( publicStatu === 'true' ) {
-                                        genrssfeed(userId);
-                                    }
-
-
+                                async()=>{
                                     if (filename !== "") {
                                         var storageRef = firebase.storage().ref().child('/channelIcon/' + userId + "/" + filename);
-                                        storageRef.put(fileBit).then((s) => {
-                                            storageRef.getDownloadURL()
-                                            .then((url) => {
+                                        await storageRef.put(fileBit).then(async(s) => {
+                                            await storageRef.getDownloadURL()
+                                            .then(async(url) => {
                                                 setAvatar(url);
-                                                firebase.firestore().collection("channel").doc(userId).set({
+                                                await firebase.firestore().collection("channel").doc(userId).set({
                                                     icon:url
-                                                }, { merge: true }).then(
-                                                    ()=>{
-                                                        setHandleCode('suc');
-                                                        setFilename("");
-                                                        setFileBit();
-                                                    }
-                                                )
+                                                }, { merge: true })
                                             })
                                         });
-                                    } else {
-                                        setHandleCode('suc');
-                                        setFilename("");
-                                        setFileBit();
                                     }
+                                    setHandleCode('suc');
+                                    setFilename("");
+                                    setFileBit();
+                                    //rss產生
+                                    genrssfeed(userId);
                                 }
                             )
                         }
@@ -268,39 +282,32 @@ const PodcastAccount = (props) => {
                 instagram : instagramLink,
                 youtube : youtubeLink,
                 twitter : twitterLink,
-                publicStatu: publicStatu
+                publicStatu: publicStatu,
+                category : category
             }, { merge: true }).then(
-                ()=>{
+                async() => {
+                    //如果有新的頭貼
+                    if (filename !== "") {
+                        var storageRef = firebase.storage().ref().child('/channelIcon/' + userId + "/" + filename);
+                        await storageRef.put(fileBit).then(async(s) => {
+                            await storageRef.getDownloadURL()
+                            .then(async(url) => {
+                                setAvatar(url);
+                                await firebase.firestore().collection("channel").doc(userId).set({
+                                    icon:url
+                                }, { merge: true })
+                            })
+                        });
+                    }
+                    setHandleCode('suc');
+                    setFilename("");
+                    setFileBit();
                     //rss產生
                     if ( publicStatu === 'true' ) {
                         genrssfeed(userId, props.userEmail);
                     } else {
                     // rss 消滅
                         delrssfeed(userId);
-                    }
-
-                    //如果有新的頭貼
-                    if (filename !== "") {
-                        var storageRef = firebase.storage().ref().child('/channelIcon/' + userId + "/" + filename);
-                        storageRef.put(fileBit).then((s) => {
-                            storageRef.getDownloadURL()
-                            .then((url) => {
-                                setAvatar(url);
-                                firebase.firestore().collection("channel").doc(userId).set({
-                                    icon:url
-                                }, { merge: true }).then(
-                                    ()=>{
-                                        setHandleCode('suc');
-                                        setFilename("");
-                                        setFileBit();
-                                    }
-                                )
-                            })
-                        });
-                    } else {
-                        setHandleCode('suc');
-                        setFilename("");
-                        setFileBit();
                     }
                 }
             )
@@ -370,7 +377,7 @@ const PodcastAccount = (props) => {
                                     label="節目名稱"
                                     disabled={handleCode==='loading'|| handleCode==="suc"}
                                     required />
-                                </FormControl> 
+                                </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
                                     <TextField
                                     error={ userIdErr!==false } 
@@ -394,10 +401,28 @@ const PodcastAccount = (props) => {
                                     label="公開狀態"
                                     fullWidth
                                     >
-                                    <MenuItem value={"true"}>公開（任何人都能收聽並且透過 RSS 上架其他平台）</MenuItem>
-                                    <MenuItem value={"false"}>私人（只有被允許的人可以收聽）</MenuItem>
+                                    <MenuItem value={"true"}>公開節目</MenuItem>
+                                    <MenuItem value={"false"}>私人節目</MenuItem>
                                     </Select>
+                                    <Typography variant="subtitle2" component="span">公開：任何人都能收聽並且透過 RSS 上架其他平台<br/>私人：只有被允許的人可以收聽且不提供 RSS</Typography>
                                 </FormControl>
+
+                                <FormControl fullWidth variant="outlined" className={classes.margin}>
+                                    <InputLabel id="demo-simple-select-outlined-label">節目分類</InputLabel>
+                                    <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    helperText={"te"}
+                                    id="demo-simple-select-outlined"
+                                    value={category}
+                                    onChange={ (e) => { setCategory(e.target.value);} }
+                                    label="節目分類"
+                                    fullWidth
+                                    >
+                                    { categoryListItem.map(item => item) }
+                                    </Select>
+                                    <Typography variant="subtitle2" component="span">分類將會用於 ApplePodcast 上架的分類</Typography>
+                                </FormControl> 
+
                                 <FormControl fullWidth className={classes.margin}>
                                 <InputLabel>節目簡介</InputLabel>
                                 <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
@@ -471,7 +496,7 @@ const PodcastAccount = (props) => {
                                                     <AttachmentIcon />
                                                     { filename === "" ? "上傳節目封面" : filename }
                                                 </Button>
-                                                <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
+                                                <Typography variant="body2" component="span">接受.jpg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</Typography>
                                             </label>
                                         </FormControl>
                                         <br/> <br/> 
@@ -479,19 +504,36 @@ const PodcastAccount = (props) => {
                                             <TextField required disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="節目名稱" variant="outlined" />
                                         </FormControl>
 
-                                        <FormControl fullWidth variant="outlined" className={classes.formControl}>
+                                        <FormControl fullWidth variant="outlined" className={classes.margin}>
                                             <InputLabel id="demo-simple-select-outlined-label">公開狀態</InputLabel>
                                             <Select
                                             labelId="demo-simple-select-outlined-label"
                                             id="demo-simple-select-outlined"
                                             value={publicStatu}
-                                            onChange={ (e) => { setPublicStatu(e.target.value); console.log(e.target.value) } }
+                                            onChange={ (e) => { setPublicStatu(e.target.value); } }
                                             label="公開狀態"
                                             fullWidth
                                             >
-                                            <MenuItem value={"true"}>公開（任何人都能收聽並且透過 RSS 上架其他平台）</MenuItem>
-                                            <MenuItem value={"false"}>私人（只有被允許的人可以收聽）</MenuItem>
+                                            <MenuItem value={"true"}>公開節目</MenuItem>
+                                            <MenuItem value={"false"}>私人節目</MenuItem>
                                             </Select>
+                                            <Typography variant="subtitle2" component="span">公開：任何人都能收聽並且透過 RSS 上架其他平台<br/>私人：只有被允許的人可以收聽且不提供 RSS</Typography>
+                                        </FormControl> 
+
+                                        <FormControl fullWidth variant="outlined" className={classes.margin}>
+                                            <InputLabel id="demo-simple-select-outlined-label">節目分類</InputLabel>
+                                            <Select
+                                            labelId="demo-simple-select-outlined-label"
+                                            helperText={"te"}
+                                            id="demo-simple-select-outlined"
+                                            value={category}
+                                            onChange={ (e) => { setCategory(e.target.value);} }
+                                            label="節目分類"
+                                            fullWidth
+                                            >
+                                            { categoryListItem.map(item => item) }
+                                            </Select>
+                                            <Typography variant="subtitle2" component="span">分類將會用於 ApplePodcast 上架的分類</Typography>
                                         </FormControl> 
 
                                         <FormControl fullWidth className={classes.margin}>

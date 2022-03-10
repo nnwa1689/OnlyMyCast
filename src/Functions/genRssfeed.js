@@ -16,8 +16,8 @@ import RSS from "rss-generator";
 
 export default function genrssfeed(userId, userEmail) {
 
-    let channelName, intro, image, autor, rss, hashId;
-    const poweredby = '<br/>本節目由 <a href="https://onlymycast.notes-hz.com/">Onlymycast </a> 強力驅動！';
+    let channelName, intro, image, autor, rss, hashId, category, feedurl;
+    const poweredby = '(Onlymycast-onlymycast.notes-hz.com 強力驅動)';
         firebase.firestore().collection("channel").doc(userId).get()
         .then(
             (doc) => {
@@ -28,7 +28,8 @@ export default function genrssfeed(userId, userEmail) {
                         channelName = data.name;
                         intro = data.intro + poweredby;
                         image = (data.icon === undefined ? "" : "https://storage.googleapis.com/onlymycast.appspot.com/" + data.icon.split('/')[7].split('?')[0]);
-                        
+                        category = ( data.category === undefined ? "" : data.category );
+
                         //podcast擁有者
                         firebase.firestore().collection("user").doc(data.uid).get()
                             .then(
@@ -36,11 +37,14 @@ export default function genrssfeed(userId, userEmail) {
                                     const data = doc.data();
                                     autor = data.name;
                                     hashId = doc.id;
+                                    feedurl = 'https://storage.googleapis.com/onlymycast.appspot.com/rss/' + userId + '/' + hashId;
                                     var feed = new RSS({
                                         title: channelName,
                                         description: intro,
                                         site_url: 'https://onlymycast.notes-hz.com/webapp/podcast/' + userId,
+                                        feed_url: feedurl,
                                         image_url: image,
+                                        category: category,
                                         copyright: autor,
                                         language: 'zh',
                                         generator: 'onlymycast',
@@ -65,6 +69,11 @@ export default function genrssfeed(userId, userEmail) {
                                                 href: image
                                             }
                                             }},
+                                            {'itunes:category': [
+                                                {_attr: {
+                                                  text: category
+                                                }},
+                                            ]}
                                         ]
                                     });
                                     firebase.firestore().collection("podcast").doc(userId).collection('podcast').orderBy('updateTime', "desc").get()
@@ -80,18 +89,21 @@ export default function genrssfeed(userId, userEmail) {
                                                     link: 'https://onlymycast.notes-hz.com/webapp/podcastdetail/' + userId + '/' + doc.id, // link to the item
                                                     guid: doc.id, // optional - defaults to url
                                                     author: autor, // optional - defaults to feed author property
-                                                    pubDate: new Date(qd.updateTime.seconds * 1000).toUTCString(), // any format that js Date can parse.
-                                                    enclosure: {url:'https://storage.googleapis.com/onlymycast.appspot.com/' + qd.fileRef, type:'audio/mpeg'}, // optional enclosure
+                                                    date: new Date(qd.updateTime.seconds * 1000).toUTCString(), // any format that js Date can parse.
+                                                    enclosure: {url:'https://storage.googleapis.com/onlymycast.appspot.com/' + qd.fileRef, type:'audio/mpeg', length: '90000'}, // optional enclosure
                                                     custom_elements: [
                                                         {'itunes:author': autor},
                                                         {'itunes:summary': qd.intro},
+                                                        {'itunes:episodeType': 'full'},
+                                                        {'itunes:explicit': 'no'},
+                                                        {'content:encoded': qd.intro},
                                                         {'googleplay:description': qd.intro},
                                                         {'itunes:image': {
                                                         _attr: {
                                                             href: image
                                                         }
                                                         }},
-                                                        {'itunes:duration':qd.duration}
+                                                        {'itunes:duration':parseInt(qd.duration.split(':')[0]) * 60 + parseInt(qd.duration.split(':')[1])}
                                                     ]
                                                 });
                                             }

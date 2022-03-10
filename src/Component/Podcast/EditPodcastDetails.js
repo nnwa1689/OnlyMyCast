@@ -114,7 +114,7 @@ const useStyles = makeStyles((theme)=>({
             .then(
                 ()=>{
                     //rss產生
-                    genrssfeed(props.user.userId);
+                    genrssfeed(props.user.userId, props.userEmail);
                     setHandleCode("delSuc");
             });
         }

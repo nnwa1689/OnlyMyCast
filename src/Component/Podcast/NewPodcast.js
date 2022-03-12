@@ -117,6 +117,10 @@ const useStyles = makeStyles((theme)=>({
     const isFirstLoad = useRef(true);
     let audioFileRef = "";
 
+    const allowFileType = [
+        'audio/mpeg', 'audio/x-m4a', 'audio/mp3'
+    ]
+
     const [recorderType, setRecorderType] = useState(0);
     const [Mp3Recorder, setMp3Recorder] = useState();
     const [isRecording, setIsRecording] = useState(false);
@@ -221,7 +225,7 @@ const useStyles = makeStyles((theme)=>({
             const blobURL = URL.createObjectURL(blob);
             setFilePath(blobURL);
             setFileBit(blob)
-            setFilename(sha256(new Date().toISOString()).toString());
+            setFilename(sha256(new Date().toISOString()).toString() + '.mp3');
             setIsRecording(false);
           }).catch((e) => console.log(e));
       }
@@ -234,7 +238,7 @@ const useStyles = makeStyles((theme)=>({
     const uploadAudioFile = async()=> {
         //upload
         const hashFilename = sha256(filename + Date.now());
-        const fileRef = 'podcastaudio/' + props.user.userId + "/" + hashFilename;
+        const fileRef = 'podcastaudio/' + props.user.userId + "/" + hashFilename + '.' + filename.split(".").pop();
         audioFileRef = fileRef;
         var storageRef = firebase.storage().ref().child(fileRef);
         return new Promise(async(resole, reject)=>{
@@ -475,7 +479,7 @@ const useStyles = makeStyles((theme)=>({
                     (<>
 
                          <input
-                            accept=".mp3, .mp4, .m4a"
+                            accept=".mp3, .m4a"
                             className={classes.input}
                             id="contained-button-file"
                             multiple
@@ -483,10 +487,13 @@ const useStyles = makeStyles((theme)=>({
                             startIcon={<AttachmentIcon />}
                             onChange={(e)=>{
                                 if (e.target.files.length >= 1) {
-                                    setFilename(e.target.files[0].name);
-                                    setFileBit(e.target.files[0]);
-                                    setFilePath(URL.createObjectURL(e.target.files[0]));
-                                    console.log(fileBit);
+                                    if ( allowFileType.includes(e.target.files[0].type) ) {
+                                        setFilename(e.target.files[0].name);
+                                        setFileBit(e.target.files[0]);
+                                        setFilePath(URL.createObjectURL(e.target.files[0]));
+                                    } else {
+                                        setErr("檔案格式不支援！");
+                                    }
                                 }
                             }}
                         />
@@ -497,7 +504,7 @@ const useStyles = makeStyles((theme)=>({
                                 { filename === "" ? "選擇檔案" : filename }
                                 <br/><br/><Divider/><br/>
                                 <Typography variant="body1" gutterBottom>
-                                    僅限 MP3/MP4/M4A 格式<br/>
+                                    僅限 MP3 與 M4A 格式檔案<br/>
                                 </Typography>
                                 </Typography>
                             </Button>
@@ -619,19 +626,19 @@ const useStyles = makeStyles((theme)=>({
                         </>
                     }
                         <Dialog
-                            open={introErr!==false || titleErr!==false}
-                            onClose={()=>{setIntroErr(false);setTitleErr(false)}}
+                            open={introErr !== false || titleErr !== false || err !== false}
+                            onClose={()=>{setIntroErr(false);setTitleErr(false);setErr(false)}}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
                             <DialogTitle id="alert-dialog-title">{"提示"}</DialogTitle>
                             <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                {introErr}<br/>{titleErr}
+                                {introErr}<br/>{titleErr} {err}
                             </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                            <Button onClick={()=>{setIntroErr(false); setTitleErr(false)}} color="primary" autoFocus>
+                            <Button onClick={()=>{setIntroErr(false); setTitleErr(false); setErr(false);}} color="primary" autoFocus>
                                 好
                             </Button>
                             </DialogActions>

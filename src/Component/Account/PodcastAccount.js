@@ -27,7 +27,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
-import { Divider } from '@material-ui/core';
+import { Divider, setRef } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import YouTubeIcon from '@material-ui/icons/YouTube';
@@ -117,9 +117,12 @@ const PodcastAccount = (props) => {
     const [nameErr, setNameErr] = useState(false);
     const [userIdErr, setUserIdErr] = useState(false);
     const [introErr, setIntroErr] = useState(false);
+    const [err, setErr] = useState(false);
     const isFirstLoad = useRef(true);
     const [embedCode, setEmbedCode] = useState();
     const [showCopyMsg, setShowCopyMsg] = useState(false);
+
+    const allowCoverFileType = [ 'image/png', 'image/jpeg' ];
 
     const categoryListItem = [
         <MenuItem value={"Arts"}>藝術</MenuItem>,
@@ -129,18 +132,18 @@ const PodcastAccount = (props) => {
         <MenuItem value={"Fiction"}>虛構幻想</MenuItem>,
         <MenuItem value={"Government"}>政府與政治</MenuItem>,
         <MenuItem value={"History"}>歷史</MenuItem>,
-        <MenuItem value={"Health &amp; Fitness"}>健康與健身</MenuItem>,
-        <MenuItem value={"Kids &amp; Family"}>兒童與家庭</MenuItem>,
+        <MenuItem value={"Health & Fitness"}>健康與健身</MenuItem>,
+        <MenuItem value={"Kids & Family"}>兒童與家庭</MenuItem>,
         <MenuItem value={"Leisure"}>休閒</MenuItem>,
         <MenuItem value={"Music"}>音樂</MenuItem>,
         <MenuItem value={"News"}>新聞</MenuItem>,
-        <MenuItem value={"Religion &amp; Spirituality"}>宗教與修行</MenuItem>,
+        <MenuItem value={"Religion & Spirituality"}>宗教與修行</MenuItem>,
         <MenuItem value={"Science"}>科學</MenuItem>,
-        <MenuItem value={"Society &amp; Culture"}>社會與文化</MenuItem>,
+        <MenuItem value={"Society & Culture"}>社會與文化</MenuItem>,
         <MenuItem value={"Sports"}>體育競技</MenuItem>,
         <MenuItem value={"Technology"}>科技</MenuItem>,
         <MenuItem value={"True Crime"}>犯罪紀實</MenuItem>,
-        <MenuItem value={"TV &amp; Film"}>影集與電影</MenuItem>
+        <MenuItem value={"TV & Film"}>影集與電影</MenuItem>
     ]
 
 
@@ -351,10 +354,14 @@ const PodcastAccount = (props) => {
                                         startIcon={<AttachmentIcon />}
                                         disabled={handleCode==='loading'|| handleCode==="suc"}
                                         onChange={(e)=>{
-                                            if (e.target.files.length >= 1) {
-                                                setAvatar(URL.createObjectURL(e.target.files[0]));
-                                                setFilename(e.target.files[0].name);
-                                                setFileBit(e.target.files[0])
+                                            if ( e.target.files.length >= 1 ) {
+                                                if ( allowCoverFileType.includes(e.target.files[0].type) ) {
+                                                    setAvatar(URL.createObjectURL(e.target.files[0]));
+                                                    setFilename(e.target.files[0].name);
+                                                    setFileBit(e.target.files[0])
+                                                } else {
+                                                    setErr("不支援的檔案格式");
+                                                }
                                             }
                                         }}
                                     />
@@ -363,7 +370,7 @@ const PodcastAccount = (props) => {
                                             <AttachmentIcon />
                                             { filename === "" ? "上傳節目封面" : filename }
                                         </Button>
-                                        <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
+                                        <Typography variant="body2" component="span">接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</Typography>
                                     </label>
                                     </FormControl>
                                 <FormControl fullWidth className={classes.margin}>
@@ -397,14 +404,14 @@ const PodcastAccount = (props) => {
                                     labelId="demo-simple-select-outlined-label"
                                     id="demo-simple-select-outlined"
                                     value={publicStatu}
-                                    onChange={ (e) => { setPublicStatu(e.target.value); console.log(e.target.value) } }
+                                    onChange={ (e) => { setPublicStatu(e.target.value); } }
                                     label="公開狀態"
                                     fullWidth
                                     >
                                     <MenuItem value={"true"}>公開節目</MenuItem>
                                     <MenuItem value={"false"}>私人節目</MenuItem>
                                     </Select>
-                                    <Typography variant="subtitle2" component="span">公開：任何人都能收聽並且透過 RSS 上架其他平台<br/>私人：只有被允許的人可以收聽且不提供 RSS</Typography>
+                                    <Typography variant="subtitle2" component="span">若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</Typography>
                                 </FormControl>
 
                                 <FormControl fullWidth variant="outlined" className={classes.margin}>
@@ -420,7 +427,7 @@ const PodcastAccount = (props) => {
                                     >
                                     { categoryListItem.map(item => item) }
                                     </Select>
-                                    <Typography variant="subtitle2" component="span">分類將會用於 ApplePodcast 上架的分類</Typography>
+                                    <Typography variant="subtitle2" component="span">分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</Typography>
                                 </FormControl> 
 
                                 <FormControl fullWidth className={classes.margin}>
@@ -484,10 +491,14 @@ const PodcastAccount = (props) => {
                                                 startIcon={<AttachmentIcon />}
                                                 disabled={handleCode==="loading"}
                                                 onChange={(e)=>{
-                                                    if (e.target.files.length >= 1) {
-                                                        setAvatar(URL.createObjectURL(e.target.files[0]));
-                                                        setFilename(e.target.files[0].name);
-                                                        setFileBit(e.target.files[0])
+                                                    if ( e.target.files.length >= 1 ) {
+                                                        if ( allowCoverFileType.includes(e.target.files[0].type) ) {
+                                                            setAvatar(URL.createObjectURL(e.target.files[0]));
+                                                            setFilename(e.target.files[0].name);
+                                                            setFileBit(e.target.files[0])
+                                                        } else {
+                                                            setErr("不支援的檔案格式");
+                                                        }
                                                     }
                                                 }}
                                             />
@@ -496,7 +507,7 @@ const PodcastAccount = (props) => {
                                                     <AttachmentIcon />
                                                     { filename === "" ? "上傳節目封面" : filename }
                                                 </Button>
-                                                <Typography variant="body2" component="span">接受.jpg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</Typography>
+                                                <Typography variant="body2" component="span">接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</Typography>
                                             </label>
                                         </FormControl>
                                         <br/> <br/> 
@@ -517,7 +528,7 @@ const PodcastAccount = (props) => {
                                             <MenuItem value={"true"}>公開節目</MenuItem>
                                             <MenuItem value={"false"}>私人節目</MenuItem>
                                             </Select>
-                                            <Typography variant="subtitle2" component="span">公開：任何人都能收聽並且透過 RSS 上架其他平台<br/>私人：只有被允許的人可以收聽且不提供 RSS</Typography>
+                                            <Typography variant="subtitle2" component="span">若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</Typography>
                                         </FormControl> 
 
                                         <FormControl fullWidth variant="outlined" className={classes.margin}>
@@ -533,7 +544,7 @@ const PodcastAccount = (props) => {
                                             >
                                             { categoryListItem.map(item => item) }
                                             </Select>
-                                            <Typography variant="subtitle2" component="span">分類將會用於 ApplePodcast 上架的分類</Typography>
+                                            <Typography variant="subtitle2" component="span">分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</Typography>
                                         </FormControl> 
 
                                         <FormControl fullWidth className={classes.margin}>
@@ -696,19 +707,19 @@ const PodcastAccount = (props) => {
                         <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={()=>{setHandleCode("init")}} message="您的變更已經儲存"/>
                         <Snackbar open={showCopyMsg===true} autoHideDuration={3000} onClose={()=>{setShowCopyMsg(false)}} message="已經複製到剪貼簿"/>
                         <Dialog
-                            open={introErr!==false || nameErr!==false}
-                            onClose={()=>{setIntroErr(false);setNameErr(false)}}
+                            open={ introErr !== false || nameErr !== false || err !== false }
+                            onClose={()=>{setIntroErr(false);setNameErr(false);setErr(false);}}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
                             <DialogTitle id="alert-dialog-title">{"提示"}</DialogTitle>
                             <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                {introErr}<br/>{nameErr}
+                                {introErr}<br/>{nameErr} {err}
                             </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                            <Button onClick={()=>{setIntroErr(false); setNameErr(false)}} color="primary" autoFocus>
+                            <Button onClick={()=>{setIntroErr(false); setNameErr(false); setErr(false);}} color="primary" autoFocus>
                                 好
                             </Button>
                             </DialogActions>

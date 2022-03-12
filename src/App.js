@@ -48,7 +48,7 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-const clientversion = "V220310.23";
+const clientversion = "V220311.21";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -244,6 +244,9 @@ const App = (props) => {
         root: {
           boxShadow: "none",
           borderRadius: "16px",
+          borderStyle:"solid",
+          borderColor:"rgb(100, 100, 100)",
+          border:"1px",
         }
       },
       MuiAppBar: {
@@ -275,8 +278,10 @@ const App = (props) => {
       MuiCard:
       {
         root: {
-          boxShadow: "0 16px 32px 0 rgba(145, 158, 171, 0.2)",
+          boxShadow: "0 2px 8px 0 rgba(145, 158, 171, 0.2)",
           borderRadius: "16px",
+          borderStyle:"none",
+          border:"0px",
         }
       },
       MuiAppBar: {

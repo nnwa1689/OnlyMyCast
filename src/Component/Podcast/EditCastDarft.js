@@ -108,6 +108,10 @@ const useStyles = makeStyles((theme)=>({
     const [err, setErr] = useState(false);
     const duration = useRef("");
 
+    const allowFileType = [
+        'audio/mpeg', 'audio/x-m4a', 'audio/mp3'
+    ];
+
     useEffect(
         ()=>{
             if (isFirstLoad.current) {
@@ -335,7 +339,7 @@ const useStyles = makeStyles((theme)=>({
                             <br/>                       
                         </FormControl>
                         <input
-                            accept=".mp3, .mp4, .m4a"
+                            accept=".mp3, .m4a"
                             className={classes.input}
                             id="contained-button-file"
                             multiple
@@ -343,9 +347,13 @@ const useStyles = makeStyles((theme)=>({
                             startIcon={<AttachmentIcon />}
                             onChange={(e)=>{
                                 if (e.target.files.length >= 1) {
-                                    setFilename(e.target.files[0].name);
-                                    setFileBit(e.target.files[0]);
-                                    setFilePath(URL.createObjectURL(e.target.files[0]));
+                                    if ( allowFileType.includes(e.target.files[0].type) ) {
+                                        setFilename(e.target.files[0].name);
+                                        setFileBit(e.target.files[0]);
+                                        setFilePath(URL.createObjectURL(e.target.files[0]));
+                                    } else {
+                                        setErr("檔案格式不支援！");
+                                    }
                                 }
                             }}
                         />
@@ -469,19 +477,19 @@ const useStyles = makeStyles((theme)=>({
                 <Snackbar open={handleCode==="suc"} autoHideDuration={6000} onClose={()=>{setHandleCode("init")}} message="您的變更已經儲存"/>
                 { (handleCode==="delSuc" || handleCode === "publishSuc") && <Redirect to='/editpodcasts'/> }
                 <Dialog
-                    open={introErr!==false || titleErr!==false}
-                    onClose={()=>{setIntroErr(false);setTitleErr(false)}}
+                    open={introErr!==false || titleErr!==false || err !== false}
+                    onClose={()=>{setIntroErr(false);setTitleErr(false);setErr(false)}}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">{"提示"}</DialogTitle>
                     <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {introErr}<br/>{titleErr}
+                        {introErr}<br/>{titleErr} {err}
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={()=>{setIntroErr(false); setTitleErr(false)}} color="primary" autoFocus>
+                    <Button onClick={()=>{setIntroErr(false); setTitleErr(false); setErr(false);}} color="primary" autoFocus>
                         好
                     </Button>
                     </DialogActions>

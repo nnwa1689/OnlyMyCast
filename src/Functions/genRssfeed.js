@@ -17,7 +17,6 @@ import RSS from "rss-generator";
 export default function genrssfeed(userId, userEmail) {
 
     let channelName, intro, image, autor, rss, hashId, category, feedurl;
-    const poweredby = '(Onlymycast-onlymycast.notes-hz.com 強力驅動)';
         firebase.firestore().collection("channel").doc(userId).get()
         .then(
             (doc) => {
@@ -26,7 +25,7 @@ export default function genrssfeed(userId, userEmail) {
                     if ( data.publicStatu === 'true' ) {
                         
                         channelName = data.name;
-                        intro = data.intro + poweredby;
+                        intro = data.intro + '<br/>----------<br/>本節目由 Onlymycast 強力驅動!';
                         image = (data.icon === undefined ? "" : "https://storage.googleapis.com/onlymycast.appspot.com/" + data.icon.split('/')[7].split('?')[0]);
                         category = ( data.category === undefined ? "" : data.category );
 
@@ -45,9 +44,9 @@ export default function genrssfeed(userId, userEmail) {
                                         feed_url: feedurl,
                                         image_url: image,
                                         category: category,
-                                        copyright: autor,
+                                        copyright: '&#169;' + autor,
                                         language: 'zh',
-                                        generator: 'onlymycast',
+                                        generator: 'Onlymycast',
                                         custom_namespaces: {
                                             'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
                                             'kkbox': 'https://podcast.kkbox.com/',
@@ -83,9 +82,10 @@ export default function genrssfeed(userId, userEmail) {
                                         } else {
                                             for (var doc of e.docs) {
                                                 const qd = doc.data();
+                                                const epintro = qd.intro + '<br/>----------<br/>本節目由 Onlymycast 強力驅動!';
                                                 feed.item({
                                                     title:  qd.title,
-                                                    description: qd.intro + poweredby,
+                                                    description: epintro,
                                                     link: 'https://onlymycast.notes-hz.com/webapp/podcastdetail/' + userId + '/' + doc.id, // link to the item
                                                     guid: doc.id, // optional - defaults to url
                                                     author: autor, // optional - defaults to feed author property
@@ -93,11 +93,11 @@ export default function genrssfeed(userId, userEmail) {
                                                     enclosure: {url:'https://storage.googleapis.com/onlymycast.appspot.com/' + qd.fileRef, type:'audio/mpeg', length: '90000'}, // optional enclosure
                                                     custom_elements: [
                                                         {'itunes:author': autor},
-                                                        {'itunes:summary': qd.intro},
+                                                        {'itunes:summary': epintro},
                                                         {'itunes:episodeType': 'full'},
                                                         {'itunes:explicit': 'no'},
-                                                        {'content:encoded': qd.intro},
-                                                        {'googleplay:description': qd.intro},
+                                                        {'content:encoded': epintro},
+                                                        {'googleplay:description': epintro},
                                                         {'itunes:image': {
                                                         _attr: {
                                                             href: image

@@ -27,13 +27,14 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
-import { Divider, setRef } from '@material-ui/core';
+import { Divider } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
 //customUI
 import TabPanel from '../CustomComponent/TabPanel';
 //firebase
@@ -62,8 +63,8 @@ const useStyles = makeStyles((theme)=>({
       alignItems:"center"
     },
     large: {
-        width: theme.spacing(24),
-        height: theme.spacing(24),
+        width: theme.spacing(32),
+        height: theme.spacing(32),
         marginBottom: theme.spacing(3),
         marginTop:theme.spacing(3),
         color: "#FFFFFF",
@@ -74,10 +75,14 @@ const useStyles = makeStyles((theme)=>({
     menuButton: {
       margin: theme.spacing(1),
     },
-    margin: {
-        marginBottom: theme.spacing(2),
-        marginTop:theme.spacing(2)
+    marginInput: {
+        margin: theme.spacing(2),
+        width: "25rem",
       },
+    fullWidthInput: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+    },
     input: {
         display: 'none',
       },
@@ -96,6 +101,12 @@ const useStyles = makeStyles((theme)=>({
     },
     twitterColor: {
         color: "#1DA1F2",
+    },
+    appleColor: {
+        color: "#872EC4"
+    },
+    googleColor: {
+        color: "#1565C0"
     }
   }));
   
@@ -107,6 +118,7 @@ const PodcastAccount = (props) => {
     const [name, setName] = useState();
     const [avatar,setAvatar] = useState();
     const [intro, setIntro] = useState();
+    const [preUrl, setPreUrl] = useState("");
     const [userId, setUserId] = useState(props.user.userId);
     const [filename, setFilename] = useState("");
     const [fileBit, setFileBit] = useState();
@@ -146,11 +158,12 @@ const PodcastAccount = (props) => {
         <MenuItem value={"TV & Film"}>影集與電影</MenuItem>
     ]
 
-
     const [facebookLink, setFacebookLink] = useState();
     const [youtubeLink, setYoutubeLink] = useState ();
     const [instagramLink, setInstargramLink] = useState();
     const [twitterLink, setTwitterLink] = useState();
+    const [applepodcastLink, setApplepodcastLink] = useState();
+    const [googlepodcastLink, setGooglepodcastLink] = useState();
 
     const [tabValue, setTabValue] = useState(0);
 
@@ -170,11 +183,15 @@ const PodcastAccount = (props) => {
                         setInstargramLink(data.instagram === undefined ? "" : data.instagram);
                         setYoutubeLink(data.youtube === undefined ? "" : data.youtube);
                         setTwitterLink(data.twitter=== undefined ? "" : data.twitter);
+                        setApplepodcastLink(data.applepodcast === undefined ? "" : data.applepodcast);
+                        setGooglepodcastLink(data.googlepodcast === undefined ? "" : data.googlepodcast);
+                        
                         setPublicStatu(data.publicStatu === undefined ? "false" : data.publicStatu);
                         setEmbedCode(
                             `<iframe frameborder="0" height="200px" style="width:100%;max-width:660px;overflow:hidden;" src="https://onlymycast.notes-hz.com/webapp/embed/` + props.user.userId + `"></iframe>`
                         );
                         setCategory( data.category === undefined ? "" : data.category );
+                        setPreUrl( data.preUrl === undefined ? "" : data.preUrl );
                       }
                     );
                 } else {
@@ -233,7 +250,7 @@ const PodcastAccount = (props) => {
                                 updateTime:firebase.firestore.FieldValue.serverTimestamp(),
                                 uid : props.userUid,
                                 publicStatu: publicStatu,
-                                category : category
+                                category : category,
                             }, { merge: true }).then(
                                 async()=>{
                                     if (filename !== "") {
@@ -285,8 +302,11 @@ const PodcastAccount = (props) => {
                 instagram : instagramLink,
                 youtube : youtubeLink,
                 twitter : twitterLink,
+                applepodcast : applepodcastLink,
+                googlepodcast : googlepodcastLink,
                 publicStatu: publicStatu,
-                category : category
+                category : category,
+                preUrl : preUrl,
             }, { merge: true }).then(
                 async() => {
                     //如果有新的頭貼
@@ -344,7 +364,7 @@ const PodcastAccount = (props) => {
                                 <Typography variant="body1" component="span">建立屬於您的私人或公開節目</Typography>
                                 <Avatar variant="rounded" src={avatar} className={classes.large} />
                                 <form noValidate autoComplete="off">
-                                <FormControl fullWidth className={classes.margin}>
+                                <FormControl fullWidth className={classes.marginInput}>
                                     <input
                                         accept="image/jpeg, image/png, image/jpg"
                                         className={classes.input}
@@ -370,10 +390,10 @@ const PodcastAccount = (props) => {
                                             <AttachmentIcon />
                                             { filename === "" ? "上傳節目封面" : filename }
                                         </Button>
-                                        <Typography variant="body2" component="span">接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</Typography>
+                                        <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
                                     </label>
                                     </FormControl>
-                                <FormControl fullWidth className={classes.margin}>
+                                <FormControl fullWidth className={classes.marginInput}>
                                     <TextField 
                                     error={ nameErr!==false } 
                                     helperText={ nameErr !== false && nameErr} 
@@ -385,7 +405,7 @@ const PodcastAccount = (props) => {
                                     disabled={handleCode==='loading'|| handleCode==="suc"}
                                     required />
                                 </FormControl>
-                                <FormControl fullWidth className={classes.margin}>
+                                <FormControl fullWidth className={classes.marginInput}>
                                     <TextField
                                     error={ userIdErr!==false } 
                                     helperText={ userIdErr !== false ? userIdErr : "聽眾將透過節目ID搜尋您的節目，建立後不可變更！"} 
@@ -411,10 +431,10 @@ const PodcastAccount = (props) => {
                                     <MenuItem value={"true"}>公開節目</MenuItem>
                                     <MenuItem value={"false"}>私人節目</MenuItem>
                                     </Select>
-                                    <Typography variant="subtitle2" component="span">若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</Typography>
+                                    <FormHelperText>若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</FormHelperText>
                                 </FormControl>
 
-                                <FormControl fullWidth variant="outlined" className={classes.margin}>
+                                <FormControl fullWidth variant="outlined" className={classes.marginInput}>
                                     <InputLabel id="demo-simple-select-outlined-label">節目分類</InputLabel>
                                     <Select
                                     labelId="demo-simple-select-outlined-label"
@@ -427,10 +447,10 @@ const PodcastAccount = (props) => {
                                     >
                                     { categoryListItem.map(item => item) }
                                     </Select>
-                                    <Typography variant="subtitle2" component="span">分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</Typography>
+                                    <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
                                 </FormControl> 
 
-                                <FormControl fullWidth className={classes.margin}>
+                                <FormControl fullWidth className={classes.marginInput}>
                                 <InputLabel>節目簡介</InputLabel>
                                 <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
                                 <br/>
@@ -469,8 +489,8 @@ const PodcastAccount = (props) => {
                                     aria-label="full width tabs example"
                                     >
                                     <Tab label="節目設定" />
-                                    <Tab label="社群媒體" />
-                                    <Tab label="收聽/推廣" />
+                                    <Tab label="社群/收聽平台" />
+                                    <Tab label="RSS/推廣" />
                                     </Tabs>
                                 </AppBar>
                                 <SwipeableViews
@@ -481,7 +501,7 @@ const PodcastAccount = (props) => {
                                         <Typography variant="h5" component="h1">節目設定</Typography>
                                         <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                                         <form noValidate autoComplete="off">
-                                        <FormControl fullWidth className={classes.margin}>
+                                        <FormControl fullWidth className={classes.fullWidthInput}>
                                             <input
                                                 accept="image/jpge, image/jpg, image/png"
                                                 className={classes.input}
@@ -507,15 +527,35 @@ const PodcastAccount = (props) => {
                                                     <AttachmentIcon />
                                                     { filename === "" ? "上傳節目封面" : filename }
                                                 </Button>
-                                                <Typography variant="body2" component="span">接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</Typography>
+                                                <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
                                             </label>
                                         </FormControl>
-                                        <br/> <br/> 
-                                        <FormControl fullWidth className={classes.margin}>
-                                            <TextField required disabled={handleCode==="loading"} value={name} onChange={(e)=>setName(e.target.value)} id="outlined-basic" label="節目名稱" variant="outlined" />
+                                        <br/>
+
+                                        <FormControl fullWidth className={classes.fullWidthInput}>
+                                            <TextField 
+                                                required 
+                                                disabled={handleCode==="loading"} 
+                                                value={name} 
+                                                onChange={(e)=>setName(e.target.value)} 
+                                                id="outlined-basic" 
+                                                label="節目名稱" 
+                                                variant="outlined" />
                                         </FormControl>
 
-                                        <FormControl fullWidth variant="outlined" className={classes.margin}>
+                                        <FormControl fullWidth className={classes.fullWidthInput}>
+                                            <TextField 
+                                                disabled={handleCode==="loading"} 
+                                                value={preUrl} 
+                                                helperText={ "如使用其他平台追蹤流量，請將前綴輸入此處。若前綴錯誤，將導致節目無法播放！" }
+                                                onChange={(e)=>setPreUrl( e.target.value )} 
+                                                id="outlined-basic" 
+                                                label="播放器前綴" 
+                                                placeholder='https://'
+                                                variant="outlined" />
+                                        </FormControl>
+
+                                        <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
                                             <InputLabel id="demo-simple-select-outlined-label">公開狀態</InputLabel>
                                             <Select
                                             labelId="demo-simple-select-outlined-label"
@@ -528,10 +568,10 @@ const PodcastAccount = (props) => {
                                             <MenuItem value={"true"}>公開節目</MenuItem>
                                             <MenuItem value={"false"}>私人節目</MenuItem>
                                             </Select>
-                                            <Typography variant="subtitle2" component="span">若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</Typography>
+                                            <FormHelperText>若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</FormHelperText>
                                         </FormControl> 
 
-                                        <FormControl fullWidth variant="outlined" className={classes.margin}>
+                                        <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
                                             <InputLabel id="demo-simple-select-outlined-label">節目分類</InputLabel>
                                             <Select
                                             labelId="demo-simple-select-outlined-label"
@@ -544,10 +584,10 @@ const PodcastAccount = (props) => {
                                             >
                                             { categoryListItem.map(item => item) }
                                             </Select>
-                                            <Typography variant="subtitle2" component="span">分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</Typography>
+                                            <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
                                         </FormControl> 
 
-                                        <FormControl fullWidth className={classes.margin}>
+                                        <FormControl fullWidth className={classes.fullWidthInput}>
                                         <InputLabel>節目簡介</InputLabel>
                                         <OutlinedInput id="component-outlined" value="..." style={{display:"none"}}/>
                                         <br/>
@@ -556,8 +596,9 @@ const PodcastAccount = (props) => {
                                             onChange={setIntro}
                                         />
                                         </FormControl>  
+
                                         <br/>
-                                        <FormControl fullWidth className={classes.margin}>
+                                        <FormControl className={classes.menuButton}>
                                             <Button
                                                 variant="contained"
                                                 color="primary"
@@ -575,7 +616,7 @@ const PodcastAccount = (props) => {
                                             <Typography variant="h5" component="h1">社群媒體帳號</Typography>
                                             <Typography variant="body1" component="span">設定節目的社群媒體網址，讓聽眾在別的地方找到您</Typography>
                                             <br/><br/><Divider/>
-                                            <FormControl fullWidth className={classes.margin}>
+                                            <FormControl fullWidth className={classes.fullWidthInput}>
                                             <Typography className={classes.facebookColor} variant="body1" gutterBottom><FacebookIcon/>Facebook</Typography>
                                                 <TextField disabled={handleCode==="loading"} 
                                                             value={facebookLink} 
@@ -584,7 +625,7 @@ const PodcastAccount = (props) => {
                                                             variant="outlined"
                                                             placeholder="https://" />
                                             </FormControl>
-                                            <FormControl fullWidth className={classes.margin}>
+                                            <FormControl fullWidth className={classes.fullWidthInput}>
                                             <Typography className={classes.instagramColor} variant="body1" gutterBottom><InstagramIcon/>Instagram</Typography>
                                                 <TextField disabled={handleCode==="loading"} 
                                                             value={instagramLink} 
@@ -593,7 +634,7 @@ const PodcastAccount = (props) => {
                                                             variant="outlined"
                                                             placeholder="https://" />
                                             </FormControl>
-                                            <FormControl fullWidth className={classes.margin}>
+                                            <FormControl fullWidth className={classes.fullWidthInput}>
                                             <Typography className={classes.youtubeColor} variant="body1" gutterBottom><YouTubeIcon/>Youtube</Typography>
                                                 <TextField disabled={handleCode==="loading"} 
                                                             value={youtubeLink} 
@@ -602,7 +643,7 @@ const PodcastAccount = (props) => {
                                                             variant="outlined"
                                                             placeholder="https://" />
                                             </FormControl>
-                                            <FormControl fullWidth className={classes.margin}>
+                                            <FormControl fullWidth className={classes.fullWidthInput}>
                                             <Typography className={classes.twitterColor} variant="body1" gutterBottom><TwitterIcon/>Twitter</Typography>
                                                 <TextField disabled={handleCode==="loading"} 
                                                             value={twitterLink} 
@@ -611,7 +652,29 @@ const PodcastAccount = (props) => {
                                                             variant="outlined"
                                                             placeholder="https://" />
                                             </FormControl>
-                                            <FormControl fullWidth className={classes.margin}>
+
+                                            <Typography variant="h5" component="h1">其他收聽平台</Typography>
+                                            <Typography variant="body1" component="span">讓您的節目在其他平台上被找到</Typography>
+                                            <br/><br/><Divider/>
+                                            <FormControl fullWidth className={classes.fullWidthInput}>
+                                            <Typography className={classes.appleColor} variant="body1" gutterBottom><img src="./hero_icon__c135x5gz14mu_large_2x.png" width="24px"></img> Apple Podcast</Typography>
+                                                <TextField disabled={handleCode==="loading"} 
+                                                            value={applepodcastLink} 
+                                                            onChange={(e)=>setApplepodcastLink(e.target.value)} 
+                                                            id="apple" 
+                                                            variant="outlined"
+                                                            placeholder="https://" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.fullWidthInput}>
+                                            <Typography className={classes.googleColor} variant="body1" gutterBottom><img src="./icons8-google-podcasts-48.png" width="24px"></img>Google Podcast</Typography>
+                                                <TextField disabled={handleCode==="loading"} 
+                                                            value={googlepodcastLink} 
+                                                            onChange={(e)=>setGooglepodcastLink(e.target.value)} 
+                                                            id="twitter" 
+                                                            variant="outlined"
+                                                            placeholder="https://" />
+                                            </FormControl>
+                                            <FormControl className={classes.menuButton}>
                                             <Button
                                                 variant="contained"
                                                 color="primary"

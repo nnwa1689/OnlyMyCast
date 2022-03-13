@@ -127,11 +127,7 @@ const PodcastDetails = (props) => {
       firebase.firestore().collection("channel").doc(props.match.params.id).get()
         .then((doc)=>{
           const data = doc.data();
-          if (data===undefined) {
-
-          } else if (Object.entries(data).length===0) {
-
-          } else {
+          if ( data !== undefined && Object.entries(data).length !== 0) {
             setChannelName(data.name)
             setAvatar(data.icon);
             
@@ -149,11 +145,7 @@ const PodcastDetails = (props) => {
       firebase.firestore().collection("podcast").doc(props.match.params.id).collection('podcast').doc(props.match.params.podId).get()
         .then((doc)=>{
           const data = doc.data();
-          if (data===undefined) {
-
-          } else if (Object.entries(data).length===0) {
-
-          } else {
+          if ( data !== undefined && Object.entries(data).length !== 0) {
             setName(data.title);
             setIntro(data.intro);
             setUpdateTime(toDataTime(data.updateTime.seconds));

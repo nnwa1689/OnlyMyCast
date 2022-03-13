@@ -13,10 +13,13 @@ import "firebase/storage";
 import "firebase/database";
 //rss
 import RSS from "rss-generator";
+//markdown
+import ReactMarkdown from 'react-markdown';
+
 
 export default function genrssfeed(userId, userEmail) {
 
-    let channelName, intro, image, autor, rss, hashId, category, feedurl;
+    let channelName, intro, image, autor, rss, hashId, category, feedurl, preUrl;
         firebase.firestore().collection("channel").doc(userId).get()
         .then(
             (doc) => {
@@ -25,6 +28,7 @@ export default function genrssfeed(userId, userEmail) {
                     if ( data.publicStatu === 'true' ) {
                         
                         channelName = data.name;
+                        preUrl = data.preUrl === undefined ? "" : data.preUrl;
                         intro = data.intro + '<br/>----------<br/>本節目由 Onlymycast 強力驅動!';
                         image = (data.icon === undefined ? "" : "https://storage.googleapis.com/onlymycast.appspot.com/" + data.icon.split('/')[7].split('?')[0]);
                         category = ( data.category === undefined ? "" : data.category );
@@ -90,7 +94,7 @@ export default function genrssfeed(userId, userEmail) {
                                                     guid: doc.id, // optional - defaults to url
                                                     author: autor, // optional - defaults to feed author property
                                                     date: new Date(qd.updateTime.seconds * 1000).toUTCString(), // any format that js Date can parse.
-                                                    enclosure: {url:'https://storage.googleapis.com/onlymycast.appspot.com/' + qd.fileRef, type:'audio/mpeg', length: '90000'}, // optional enclosure
+                                                    enclosure: {url : preUrl + 'https://storage.googleapis.com/onlymycast.appspot.com/' + qd.fileRef, type:'audio/mpeg', length: '90000'}, // optional enclosure
                                                     custom_elements: [
                                                         {'itunes:author': autor},
                                                         {'itunes:summary': epintro},

@@ -1,7 +1,7 @@
 //react
 import React, { useState, useEffect, useRef } from 'react'
 import { Link as RLink } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from 'react-markdown';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -81,6 +81,12 @@ const useStyles = makeStyles((theme) => ({
         borderColor: "#1DA1F2",
         color: "#1DA1F2",
         margin: theme.spacing(1),
+    },
+    appleColor: {
+        color: "#872EC4"
+    },
+    googleColor: {
+        color: "#1565C0"
     }
 }));
 
@@ -102,6 +108,8 @@ const PodcastHome = (props) => {
     const [youtubeLink, setYoutubeLink] = useState("");
     const [instagramLink, setInstagramLink] = useState("");
     const [twitterLink, setTwitterLink] = useState("");
+    const [applepodcastLink, setApplepodcastLink] = useState();
+    const [googlepodcastLink, setGooglepodcastLink] = useState();
 
     useEffect(
         () => {
@@ -193,6 +201,8 @@ const PodcastHome = (props) => {
                         setInstagramLink(data.instagram !== undefined && data.instagram);
                         setYoutubeLink(data.youtube !== undefined && data.youtube);
                         setTwitterLink(data.twitter !== undefined && data.twitter);
+                        setApplepodcastLink(data.applepodcast === undefined ? "" : data.applepodcast);
+                        setGooglepodcastLink(data.googlepodcast === undefined ? "" : data.googlepodcast);
                         //檢查節目公不公開
                         if ( data.publicStatu === 'true') { // 公開
                             setPublicStatu(true);
@@ -340,6 +350,16 @@ const PodcastHome = (props) => {
                                 {twitterLink.length > 0 ?
                                     <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
                                         <TwitterIcon fontSize='large' />
+                                    </IconButton>
+                                    : ""}
+                                {applepodcastLink.length > 0 ?
+                                    <IconButton className={classes.twitterButton} href={applepodcastLink} target='_blank' size='small'>
+                                        <img alt="apple" src="../hero_icon__c135x5gz14mu_large_2x.png" width="30px"></img>
+                                    </IconButton>
+                                    : ""}
+                                {googlepodcastLink.length > 0 ?
+                                    <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='small'>
+                                        <img alt="google" src="../icons8-google-podcasts-48.png" width="30px"></img>
                                     </IconButton>
                                     : ""}
                                 <br />

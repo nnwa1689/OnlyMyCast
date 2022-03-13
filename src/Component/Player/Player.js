@@ -85,7 +85,8 @@ const Player = (props) => {
             setReady(false);
             setPlayState(true);
             setSingleName(props.singleName);
-            setPodcastName(props.podcastName)
+            setPodcastName(props.podcastName);
+            console.log(props.url);
         },[props.url]
     )
 

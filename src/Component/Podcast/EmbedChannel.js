@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
       flex: '1 0 auto',
       paddingTop: 0,
       paddingBottom: 10,
-      maxHeight: 95,
-      minHeight: 95,
+      maxHeight: 90,
+      minHeight: 90,
       overflow: "hidden",
       textAlign: "left",
     },
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       alignItems: 'center',
       paddingLeft: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
+
     },
     slogan:{
         alignContent: "center",
@@ -105,7 +105,7 @@ const EmbedChannel = (props) => {
             <div className={classes.slogan}>
                 <Link href="https://onlymycast.notes-hz.com/" target="_blank">
                     <Typography style={{ lineHeight: "10px", color: "rgba(0, 0, 0, 0.54)" }} variant="body2" component="span" color="textSecondary">
-                        <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast - 建立私人的 Podcast
+                        <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast－建立專屬的 Podcast
                     </Typography>
                 </Link>
             </div>
@@ -116,7 +116,7 @@ const EmbedChannel = (props) => {
                 </CardMedia>
                 <div className={classes.details}>
                     <CardContent className={classes.content}>
-                    <Typography style={ { color: "rgb(24, 24, 24)" } } component="span"  variant="h6">
+                    <Typography component="span"  variant="h6">
                         { name }
                     </Typography>
                     <Typography 
@@ -124,7 +124,7 @@ const EmbedChannel = (props) => {
                                 display:"-webkit-box", 
                                 overflow:"hidden", 
                                 whiteSpace: "normal", 
-                                WebkitLineClamp: 3, 
+                                WebkitLineClamp: 2, 
                                 WebkitBoxOrient: "vertical" } } 
                         variant="body2" color="textSecondary">
                         { intro }

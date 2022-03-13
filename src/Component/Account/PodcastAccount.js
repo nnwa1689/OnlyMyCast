@@ -364,7 +364,7 @@ const PodcastAccount = (props) => {
                                 <Typography variant="body1" component="span">建立屬於您的私人或公開節目</Typography>
                                 <Avatar variant="rounded" src={avatar} className={classes.large} />
                                 <form noValidate autoComplete="off">
-                                <FormControl fullWidth className={classes.marginInput}>
+                                <FormControl fullWidth className={classes.fullWidthInput}>
                                     <input
                                         accept="image/jpeg, image/png, image/jpg"
                                         className={classes.input}
@@ -393,7 +393,7 @@ const PodcastAccount = (props) => {
                                         <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
                                     </label>
                                     </FormControl>
-                                <FormControl fullWidth className={classes.marginInput}>
+                                <FormControl fullWidth className={classes.fullWidthInput}>
                                     <TextField 
                                     error={ nameErr!==false } 
                                     helperText={ nameErr !== false && nameErr} 
@@ -405,7 +405,7 @@ const PodcastAccount = (props) => {
                                     disabled={handleCode==='loading'|| handleCode==="suc"}
                                     required />
                                 </FormControl>
-                                <FormControl fullWidth className={classes.marginInput}>
+                                <FormControl fullWidth className={classes.fullWidthInput}>
                                     <TextField
                                     error={ userIdErr!==false } 
                                     helperText={ userIdErr !== false ? userIdErr : "聽眾將透過節目ID搜尋您的節目，建立後不可變更！"} 
@@ -434,7 +434,7 @@ const PodcastAccount = (props) => {
                                     <FormHelperText>若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</FormHelperText>
                                 </FormControl>
 
-                                <FormControl fullWidth variant="outlined" className={classes.marginInput}>
+                                <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
                                     <InputLabel id="demo-simple-select-outlined-label">節目分類</InputLabel>
                                     <Select
                                     labelId="demo-simple-select-outlined-label"
@@ -450,7 +450,7 @@ const PodcastAccount = (props) => {
                                     <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
                                 </FormControl> 
 
-                                <FormControl fullWidth className={classes.marginInput}>
+                                <FormControl fullWidth className={classes.fullWidthInput}>
                                 <InputLabel>節目簡介</InputLabel>
                                 <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
                                 <br/>

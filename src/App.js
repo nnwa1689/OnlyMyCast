@@ -254,6 +254,11 @@ const App = (props) => {
           backgroundColor:'none',
         }
       },
+      MuiButton: {
+        root: {
+          boxShadow: "none",
+        }
+      }
     }
   });
 
@@ -289,6 +294,11 @@ const App = (props) => {
           backgroundColor:'none',
         }
       },
+      MuiButton: {
+        root: {
+          boxShadow: "none",
+        }
+      }
     }
   });
 

@@ -48,7 +48,7 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-const clientversion = "V220312.13";
+const clientversion = "V220315.02";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -243,7 +243,7 @@ const App = (props) => {
       {
         root: {
           boxShadow: "none",
-          borderRadius: "16px",
+          borderRadius: "8px",
           borderStyle:"solid",
           borderColor:"rgb(100, 100, 100)",
           border:"1px",
@@ -251,13 +251,22 @@ const App = (props) => {
       },
       MuiAppBar: {
         colorDefault: {
-          backgroundColor:'none',
+          backgroundColor:'transparent',
         }
       },
       MuiButton: {
         root: {
+          height: "54px",
+        },
+        contained: {
           boxShadow: "none",
-        }
+          '&:hover': {
+            boxShadow: "none",
+          },
+          '&:focus': {
+            boxShadow: "none",
+          }
+        },
       }
     }
   });
@@ -283,21 +292,32 @@ const App = (props) => {
       MuiCard:
       {
         root: {
-          boxShadow: "0 2px 8px 0 rgba(145, 158, 171, 0.2)",
-          borderRadius: "16px",
-          borderStyle:"none",
-          border:"0px",
+          //boxShadow: "0 2px 8px 0 rgba(145, 158, 171, 0.2)",
+          boxShadow: "none",
+          borderRadius: "8px",
+          borderStyle:"solid",
+          borderColor:"rgb(220, 220, 220)",
+          border:"1px",
         }
       },
       MuiAppBar: {
         colorDefault: {
-          backgroundColor:'none',
+          backgroundColor:'transparent',
         }
       },
       MuiButton: {
         root: {
+          height: "54px",
+        },
+        contained: {
           boxShadow: "none",
-        }
+          '&:hover': {
+            boxShadow: "none",
+          },
+          '&:focus': {
+            boxShadow: "none",
+          }
+        },
       }
     }
   });
@@ -307,14 +327,16 @@ const App = (props) => {
       <CssBaseline />
       <div className="App">
         <BrowserRouter basename={basename}>
-          <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}>
+          <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}/>
+          <Container maxWidth="md">
             {inApp === true &&
-              <Container maxWidth="md">
+              
                 <MuiAlert style={{ marginTop: "100px", marginBottom: "-50px" }} elevation={6} variant="filled" severity="warning">
                   您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過瀏覽器開啟
                 </MuiAlert>
-              </Container>
+              
             }
+          </Container>
             {isAuth !== 0 ?
               <>
               <Switch>
@@ -407,7 +429,6 @@ const App = (props) => {
               :
               <LinearProgress style={{ wdith: 100 }} />
             }
-          </Player>
         </BrowserRouter>
       </div>
     </ThemeProvider>

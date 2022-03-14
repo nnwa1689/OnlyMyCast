@@ -354,8 +354,8 @@ const useStyles = makeStyles((theme)=>({
 
     if (props.user.userId==="") {
         return(
-            <Container maxWidth="md">
-                <Card className={classes.root}>
+            <Container maxWidth="md" className={classes.root}>
+                <Card>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>
                             (^ｰ^)ノ<br/>
@@ -380,14 +380,13 @@ const useStyles = makeStyles((theme)=>({
         )
     } else {
         return(
-            <Container maxWidth="md">
+            <Container maxWidth="md" className={classes.root}>
                 <Helmet>
                     <title>新增單集 - Onlymycast</title>
                 </Helmet>
-                <Card className={classes.root}>
+                <Card>
                     <CardContent>
                     <Typography variant="h5" component="h1">發佈單集</Typography>
-                    <Typography variant="body1" component="span">依照步驟來發佈您電台的單集</Typography>
                     <Stepper activeStep={activeStep} alternativeLabel>
                         <Step key={0}>
                             <StepLabel>{"選擇錄製方式"}</StepLabel>
@@ -402,7 +401,11 @@ const useStyles = makeStyles((theme)=>({
                             <StepLabel>{"準備上傳"}</StepLabel>
                         </Step>
                     </Stepper>
-
+                    </CardContent>
+                </Card>
+                <br/>
+                <Card>
+                    <CardContent>
                     { activeStep === 0 &&
                     (<>
                         <Button color="primary" variant="outlined" className={classes.mostlarge} 
@@ -517,83 +520,84 @@ const useStyles = makeStyles((theme)=>({
                     </>)
                     }
     
-                    { activeStep === 2 &&
-                    (
-                        <>
-                            <FormControl fullWidth className={classes.margin}>
-                                <TextField value={podcastTitle} onChange={(e)=>setPodcastTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
-                            </FormControl>
-                            <FormControl fullWidth className={classes.margin}>
-                            <InputLabel>單集簡介</InputLabel>
-                                <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
-                                <br/>
-                                <MDEditor
-                                    value={intro}
-                                    onChange={setIntro}
-                                />   
-                                <br/> <br/> 
-                                <div className={classes.wrapper}>
-                                </div>                                 
-                            </FormControl>    
-                        </>
-                    )
-                     }
-    
-                    { activeStep === 3 &&
-                    (
-                        <>
-                            <Typography variant="h6" gutterBottom>
-                                （*＾3＾） 
-                            </Typography>
+                { activeStep === 2 &&
+                (
+                    <>
+                        <FormControl fullWidth className={classes.margin}>
+                            <TextField value={podcastTitle} onChange={(e)=>setPodcastTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
+                        </FormControl>
+                        <FormControl fullWidth className={classes.margin}>
+                        <InputLabel>單集簡介</InputLabel>
+                            <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
                             <br/>
-                            <Typography variant="h6" gutterBottom>
-                                單集上傳已經準備就緒，按下完成後就會開始上傳<br/>期間請不要關閉瀏覽器！  
-                            </Typography>
-                         
-                        </>
-                    )
-                     }
-    
-                    { //upload suc 
-                        uploadStatu === 1 && 
-                        <>
-                        <Redirect to='/editpodcasts'/>
-                        </>
+                            <MDEditor
+                                value={intro}
+                                onChange={setIntro}
+                            />   
+                            <br/> <br/> 
+                            <div className={classes.wrapper}>
+                            </div>                                 
+                        </FormControl>    
+                    </>
+                )
                     }
-    
-                    {  //uploadErr
-                        uploadStatu === 3 && 
-                        <>
-                            <Typography variant="h6" gutterBottom>
-                                (￣◇￣;)<br/><br/>
-                                歐歐，上傳處理發生錯誤，一群猴子正在極力強修
-                            </Typography>
-                            <Typography variant="body2" gutterBottom>
-                                {"ErrorMsg:" + err}
-                            </Typography>
-                        </>
+
+                { activeStep === 3 &&
+                (
+                    <>
+                        <Typography variant="h6" gutterBottom>
+                            （*＾3＾） 
+                        </Typography>
+                        <br/>
+                        <Typography variant="h6" gutterBottom>
+                            單集上傳已經準備就緒，按下完成後就會開始上傳<br/>期間請不要關閉瀏覽器！  
+                        </Typography>
+                        
+                    </>
+                )
                     }
-    
-                    { //uploading
-                        uploadStatu === 2 && 
-                        <>
-                            <CircularProgress size={80} />
-                            <br/><br/>
-                                <LinearProgressWithLabel value={uploadProgress} />
-                            <br/>
-                            <Typography variant="h6" gutterBottom>
-                                正在處理上傳作業，請稍候！ <br/>不要離開頁面唷(＞^ω^＜)
-                            </Typography>
-                        </>
-                    }
-    
-                    <br/><br/>
-    
+
+                { //upload suc 
+                    uploadStatu === 1 && 
+                    <>
+                    <Redirect to='/editpodcasts'/>
+                    </>
+                }
+
+                {  //uploadErr
+                    uploadStatu === 3 && 
+                    <>
+                        <Typography variant="h6" gutterBottom>
+                            (￣◇￣;)<br/><br/>
+                            歐歐，上傳處理發生錯誤，一群猴子正在極力強修
+                        </Typography>
+                        <Typography variant="body2" gutterBottom>
+                            {"ErrorMsg:" + err}
+                        </Typography>
+                    </>
+                }
+
+                { //uploading
+                    uploadStatu === 2 && 
+                    <>
+                        <CircularProgress size={80} />
+                        <br/><br/>
+                            <LinearProgressWithLabel value={uploadProgress} />
+                        <br/>
+                        <Typography variant="h6" gutterBottom>
+                            正在處理上傳作業，請稍候！ <br/>不要離開頁面唷(＞^ω^＜)
+                        </Typography>
+                    </>
+                }
+                    </CardContent>
+                </Card>
+                <br/>
+                <Card>
+                    <CardContent>
                     {
                     //按鈕 
                         activeStep < 3 &&
                         <>
-                            <Divider/>
                             <br/>
                             <Button
                                 disabled={activeStep === 0}
@@ -604,7 +608,7 @@ const useStyles = makeStyles((theme)=>({
                             </Button>
                             {activeStep === 2 ? 
                             <>
-                                <Tooltip className={classes.backButton} onClick={handleSaveDarft} title="草稿不會儲存您的檔案，而且一但上傳完成後就會被清除" aria-label="save">
+                                <Tooltip className={classes.backButton} onClick={handleSaveDarft} title="存入草稿後，仍可變更檔案但不可線上錄製" aria-label="save">
                                     <Button
                                         variant="contained"
                                         color="secondary"
@@ -624,29 +628,29 @@ const useStyles = makeStyles((theme)=>({
                             </Button>
                             }
                         </>
-                    }
-                        <Dialog
-                            open={introErr !== false || titleErr !== false || err !== false}
-                            onClose={()=>{setIntroErr(false);setTitleErr(false);setErr(false)}}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                        >
-                            <DialogTitle id="alert-dialog-title">{"提示"}</DialogTitle>
-                            <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                {introErr}<br/>{titleErr} {err}
-                            </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                            <Button onClick={()=>{setIntroErr(false); setTitleErr(false); setErr(false);}} color="primary" autoFocus>
-                                好
-                            </Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Snackbar open={handleDarftCode==="suc"} autoHideDuration={2000} onClose={()=>{setHandleDarftCode('init')}} message="您的草稿已經儲存"/>
-                        <Snackbar open={handleDarftCode==="get"} onClose={()=>{setHandleDarftCode('fin')}} autoHideDuration={2000} message="您的草稿已經還原"/>
+                    }                    
                     </CardContent>
                 </Card>
+                <Dialog
+                    open={introErr !== false || titleErr !== false || err !== false}
+                    onClose={()=>{setIntroErr(false);setTitleErr(false);setErr(false)}}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"提示"}</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {introErr}<br/>{titleErr} {err}
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={()=>{setIntroErr(false); setTitleErr(false); setErr(false);}} color="primary" autoFocus>
+                        好
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+                <Snackbar open={handleDarftCode==="suc"} autoHideDuration={2000} onClose={()=>{setHandleDarftCode('init')}} message="您的草稿已經儲存"/>
+                <Snackbar open={handleDarftCode==="get"} onClose={()=>{setHandleDarftCode('fin')}} autoHideDuration={2000} message="您的草稿已經還原"/>
             </Container>
         );
     

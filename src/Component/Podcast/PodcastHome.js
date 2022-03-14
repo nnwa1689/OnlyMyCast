@@ -83,11 +83,21 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     appleColor: {
-        color: "#872EC4"
+        color: "#872EC4",
+        margin: theme.spacing(1),
     },
     googleColor: {
-        color: "#1565C0"
-    }
+        color: "#1565C0",
+        margin: theme.spacing(1),
+    },
+    spotifyColor: {
+        color: "#1DB954",
+        margin: theme.spacing(1),
+    },
+    kkColor: {
+        color: "#09CEF6",
+        margin: theme.spacing(1),
+    },
 }));
 
 
@@ -110,6 +120,8 @@ const PodcastHome = (props) => {
     const [twitterLink, setTwitterLink] = useState("");
     const [applepodcastLink, setApplepodcastLink] = useState();
     const [googlepodcastLink, setGooglepodcastLink] = useState();
+    const [spotifyLink, setSpotifyLink] = useState();
+    const [kkLink, setKkLink] = useState();
 
     useEffect(
         () => {
@@ -203,6 +215,9 @@ const PodcastHome = (props) => {
                         setTwitterLink(data.twitter !== undefined && data.twitter);
                         setApplepodcastLink(data.applepodcast === undefined ? "" : data.applepodcast);
                         setGooglepodcastLink(data.googlepodcast === undefined ? "" : data.googlepodcast);
+                        setSpotifyLink(data.spotify === undefined? "" : data.spotify);
+                        setKkLink(data.kkLink === undefined ? "" : data.kkLink);
+
                         //檢查節目公不公開
                         if ( data.publicStatu === 'true') { // 公開
                             setPublicStatu(true);
@@ -360,6 +375,16 @@ const PodcastHome = (props) => {
                                 {googlepodcastLink.length > 0 ?
                                     <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='small'>
                                         <img alt="google" src="../icons8-google-podcasts-48.png" width="30px"></img>
+                                    </IconButton>
+                                    : ""}
+                                {googlepodcastLink.length > 0 ?
+                                    <IconButton className={classes.spotifyColor} href={spotifyLink} target='_blank' size='small'>
+                                        <img alt="spotify" src="../spotify.png" width="30px"></img>
+                                    </IconButton>
+                                    : ""}
+                                {kkLink.length > 0 ?
+                                    <IconButton className={classes.kkColor} href={kkLink} target='_blank' size='small'>
+                                        <img alt="spotify" src="../kkbox_app_icon.png" width="30px"></img>
                                     </IconButton>
                                     : ""}
                                 <br />

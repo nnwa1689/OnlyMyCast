@@ -229,28 +229,24 @@ const EditPodcast = (props) => {
                 return(<CircularProgress style={{marginTop: "25%"}} />);
             } else {
                 return(
-                    <Container maxWidth="md">
+                    <Container maxWidth="md" className={classes.root}>
                         <Helmet>
                             <title>單集管理 - Onlymycast</title>
                         </Helmet>
-                        <Card className={classes.root}>
-                            <CardContent>
-                            <Typography variant="h5" component="h1">單集管理</Typography><br/>
-                            <Typography variant="body1" component="span">修改或刪除您電台的單集，或管理您的草稿夾</Typography>
-                            <br/>
-                            <br/>
-                            <Divider/>
-                            <AppBar className={classes.tabBar} position="static" color="default">
-                                <Tabs
-                                value={tabValue}
-                                onChange={handleChange}
-                                indicatorColor="primary"
-                                textColor="primary"
-                                variant="fullWidth" >
-                                    <Tab label="已發布" />
-                                    <Tab label="草稿夾" />
-                                </Tabs>
-                            </AppBar>
+                        <Typography variant="h5" component="h1">單集管理</Typography><br/>
+                        <AppBar className={classes.tabBar} position="static" color="default">
+                            <Tabs
+                            value={tabValue}
+                            onChange={handleChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            variant="fullWidth" >
+                                <Tab label="已發布" />
+                                <Tab label="草稿夾" />
+                            </Tabs>
+                        </AppBar>
+                        <Card>
+                        <CardContent>
                             <SwipeableViews
                                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                                 index={tabValue}
@@ -279,7 +275,7 @@ const EditPodcast = (props) => {
                                     }
                                 </TabPanel>
                             </SwipeableViews>
-                            </CardContent>
+                        </CardContent>
                         </Card>
                     </Container>
                 );

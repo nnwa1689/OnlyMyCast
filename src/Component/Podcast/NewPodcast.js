@@ -10,6 +10,7 @@ import MDEditor from '@uiw/react-md-editor';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -76,6 +77,13 @@ const useStyles = makeStyles((theme)=>({
       },
     backButton: {
         marginRight: theme.spacing(1),
+    },
+    flexLeft: {
+        marginRight: "auto",
+    },
+    flexRight: {
+        display: "flex",
+        justifyContent: "flex-end"
     },
     instructions: {
         marginTop: theme.spacing(1),
@@ -594,41 +602,47 @@ const useStyles = makeStyles((theme)=>({
                 <br/>
                 <Card>
                     <CardContent>
+                    <CardActions disableSpacing className={ classes.flexRight }>
                     {
                     //按鈕 
                         activeStep < 3 &&
                         <>
-                            <br/>
                             <Button
-                                disabled={activeStep === 0}
-                                onClick={()=>setActiveStep(activeStep - 1)}
-                                className={classes.backButton}
-                            >
-                                上一步
-                            </Button>
-                            {activeStep === 2 ? 
-                            <>
-                                <Tooltip className={classes.backButton} onClick={handleSaveDarft} title="存入草稿後，仍可變更檔案但不可線上錄製" aria-label="save">
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        className={classes.button}
-                                        startIcon={ handleDarftCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                                        disabled={handleDarftCode==="loading"}>
-                                        儲存草稿
-                                    </Button>
-                                </Tooltip>
-                                <Button variant="contained" color="primary" onClick={()=>handleUploadPodcast()}>
-                                    完成並發布
+                                    disabled={activeStep === 0}
+                                    onClick={()=>setActiveStep(activeStep - 1)}
+                                    className={ classes.flexLeft }
+                                >
+                                    上一步
                                 </Button>
-                            </>
-                            :
-                            <Button disabled={ (activeStep===0) || (filename==="" && activeStep===1) || (podcastTitle===""&& activeStep===2) || (intro==="" && activeStep===3) } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
-                                下一步
-                            </Button>
-                            }
+                                {activeStep === 2 ? 
+                                <>
+                                    <Tooltip className={classes.backButton} onClick={handleSaveDarft} title="存入草稿後，仍可變更檔案但不可線上錄製" aria-label="save">
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            className={classes.button}
+                                            startIcon={ handleDarftCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                                            disabled={handleDarftCode==="loading"}
+                                            >
+                                            儲存草稿
+                                        </Button>
+                                    </Tooltip>
+                                    <Button 
+                                        variant="contained" 
+                                        color="primary" 
+                                        onClick={()=>handleUploadPodcast()}
+                                        >
+                                        完成並發布
+                                    </Button>
+                                </>
+                                :
+                                <Button disabled={ (activeStep===0) || (filename==="" && activeStep===1) || (podcastTitle===""&& activeStep===2) || (intro==="" && activeStep===3) } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
+                                    下一步
+                                </Button>
+                                }
                         </>
-                    }                    
+                    }
+                    </CardActions>                   
                     </CardContent>
                 </Card>
                 <Dialog

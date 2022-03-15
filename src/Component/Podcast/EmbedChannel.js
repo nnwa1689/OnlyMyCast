@@ -133,7 +133,7 @@ const EmbedChannel = (props) => {
                     <div className={classes.controls}>
                         <Button
                             fullWidth
-                            style={ { boxShadow: "none", } }
+                            style={ { height: "40px" } }
                             href={"https://onlymycast.notes-hz.com/webapp/podcast/" + props.match.params.id}
                             target="_blank"
                             variant="contained"

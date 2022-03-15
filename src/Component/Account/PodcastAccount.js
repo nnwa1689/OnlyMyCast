@@ -23,7 +23,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
@@ -38,6 +37,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import InfoIcon from '@material-ui/icons/Info';
 //customUI
 import TabPanel from '../CustomComponent/TabPanel';
 //firebase
@@ -53,7 +53,6 @@ import delrssfeed from '../../Functions/delRssfeed';
 
 const useStyles = makeStyles((theme)=>({
     root: {
-        minWidth: 275,
         marginTop: 100,
         alignItems:"center",
         textAlign:"center"
@@ -65,7 +64,7 @@ const useStyles = makeStyles((theme)=>({
     },
     paper: {
         padding: "16px",
-        height: "200px",
+        height: "220px",
     },
     large: {
         width: theme.spacing(32),
@@ -633,7 +632,7 @@ const PodcastAccount = (props) => {
 
                                     <TabPanel value={tabValue} index={1}>
                                         {
-                                            publicStatu === 'true' &&
+                                            publicStatu === 'true' ?
                                             <>
                                                 <Typography variant="h5" component="h1">收聽平台</Typography>
                                                 <br/><Divider/><br/>
@@ -657,6 +656,7 @@ const PodcastAccount = (props) => {
                                                             </Typography>
                                                             <CardActions>
                                                                 <Button 
+                                                                    fullWidth
                                                                     size="large" 
                                                                     color="primary" 
                                                                     variant="outlined" 
@@ -683,6 +683,7 @@ const PodcastAccount = (props) => {
                                                             </Typography>
                                                             <CardActions>
                                                                 <Button 
+                                                                    fullWidth
                                                                     size="large" 
                                                                     color="primary" 
                                                                     variant="outlined" 
@@ -711,6 +712,7 @@ const PodcastAccount = (props) => {
                                                             </Typography>
                                                             <CardActions>
                                                                 <Button 
+                                                                    fullWidth
                                                                     color="primary" 
                                                                     size="large" 
                                                                     variant="outlined" 
@@ -739,12 +741,13 @@ const PodcastAccount = (props) => {
                                                             </Typography>
                                                             <CardActions>
                                                                 <Button 
-                                                                        color="primary" 
-                                                                        size="large" 
-                                                                        variant="outlined" 
-                                                                        target='_blank' 
-                                                                        href="https://podcastsmanager.google.com/add-feed">
-                                                                            申請上架
+                                                                    fullWidth
+                                                                    color="primary" 
+                                                                    size="large" 
+                                                                    variant="outlined" 
+                                                                    target='_blank' 
+                                                                    href="https://podcastsmanager.google.com/add-feed">
+                                                                        申請上架
                                                                 </Button>
                                                             </CardActions>
                                                         </Card>
@@ -768,6 +771,7 @@ const PodcastAccount = (props) => {
                                                             </Typography>
                                                             <CardActions>
                                                                 <Button 
+                                                                    fullWidth
                                                                     color="primary" 
                                                                     size="large" 
                                                                     variant="outlined" 
@@ -795,7 +799,8 @@ const PodcastAccount = (props) => {
                                                                 亞洲最大的聲音串流平台。
                                                             </Typography>
                                                             <CardActions>
-                                                                <Button 
+                                                                <Button
+                                                                    fullWidth
                                                                     color="primary" 
                                                                     size="large" 
                                                                     variant="outlined" 
@@ -807,20 +812,26 @@ const PodcastAccount = (props) => {
                                                         </Card>
                                                     </Grid>
                                                 </Grid>
+                                                <FormControl className={classes.menuButton}>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        size="large"
+                                                        className={classes.button}
+                                                        onClick={handleUpdateChannel}
+                                                        disabled={handleCode==="loading"}
+                                                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                                        儲存設定
+                                                    </Button>   
+                                                </FormControl>
+                                            </>
+                                            :
+                                            <>
+                                                <InfoIcon style={ { fontSize: "128px", } }/>
+                                                <Typography variant="h6">請將節目設為公開</Typography>
+                                                <Typography variant="h6">才能在其他平台上架</Typography>
                                             </>
                                         }
-                                        <FormControl className={classes.menuButton}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="large"
-                                            className={classes.button}
-                                            onClick={handleUpdateChannel}
-                                            disabled={handleCode==="loading"}
-                                            startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                            儲存設定
-                                        </Button>   
-                                    </FormControl>
                                     </TabPanel>
 
                                     <TabPanel value={tabValue} index={2}>

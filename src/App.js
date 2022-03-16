@@ -48,11 +48,11 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-const clientversion = "V220315.10";
+const clientversion = "V220316.12";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
-  const usingUnloginNavbarPath = ['podcast', 'podcastdetail']
+  const usingUnloginNavbarPath = ['podcast', 'podcastdetail', 'signin', 'signup']
   const removeAdsensePath = ['embed'];
   const [isAuth, setAuth] = useState(0);
   const [playerUrl, setPlayerUrl] = useState();
@@ -265,7 +265,10 @@ const App = (props) => {
           },
           '&:focus': {
             boxShadow: "none",
-          }
+          },
+          '&:active': {
+            boxShadow: "none",
+          },
         },
       }
     }
@@ -316,7 +319,10 @@ const App = (props) => {
           },
           '&:focus': {
             boxShadow: "none",
-          }
+          },
+          '&:active': {
+            boxShadow: "none",
+          },
         },
       }
     }

@@ -34,6 +34,11 @@ import "firebase/database";
 //other
 import { Helmet } from 'react-helmet';
 import { ListItem } from '@material-ui/core';
+//media images
+import kklogo from '../../static/kkbox_app_icon.png';
+import spotiflogo from '../../static/spotify.png';
+import applelogo from '../../static/hero_icon__c135x5gz14mu_large_2x.png';
+import googlelogo from '../../static/icons8-google-podcasts-48.png';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -369,22 +374,22 @@ const PodcastHome = (props) => {
                                     : ""}
                                 {applepodcastLink.length > 0 ?
                                     <IconButton className={classes.twitterButton} href={applepodcastLink} target='_blank' size='small'>
-                                        <img alt="apple" src="../hero_icon__c135x5gz14mu_large_2x.png" width="30px"></img>
+                                        <img alt="apple" src={applelogo} width="30px"></img>
                                     </IconButton>
                                     : ""}
                                 {googlepodcastLink.length > 0 ?
                                     <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='small'>
-                                        <img alt="google" src="../icons8-google-podcasts-48.png" width="30px"></img>
+                                        <img alt="google" src={googlelogo} width="30px"></img>
                                     </IconButton>
                                     : ""}
-                                {googlepodcastLink.length > 0 ?
+                                {spotifyLink.length > 0 ?
                                     <IconButton className={classes.spotifyColor} href={spotifyLink} target='_blank' size='small'>
-                                        <img alt="spotify" src="../spotify.png" width="30px"></img>
+                                        <img alt="spotify" src={spotiflogo} width="30px"></img>
                                     </IconButton>
                                     : ""}
                                 {kkLink.length > 0 ?
                                     <IconButton className={classes.kkColor} href={kkLink} target='_blank' size='small'>
-                                        <img alt="spotify" src="../kkbox_app_icon.png" width="30px"></img>
+                                        <img alt="spotify" src={kklogo} width="30px"></img>
                                     </IconButton>
                                     : ""}
                                 <br />

@@ -49,6 +49,11 @@ import "firebase/storage";
 import { Helmet } from 'react-helmet';
 import genrssfeed from '../../Functions/genRssfeed';
 import delrssfeed from '../../Functions/delRssfeed';
+//media images
+import kklogo from '../../static/kkbox_app_icon.png';
+import spotiflogo from '../../static/spotify.png';
+import applelogo from '../../static/hero_icon__c135x5gz14mu_large_2x.png';
+import googlelogo from '../../static/icons8-google-podcasts-48.png';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -695,7 +700,7 @@ const PodcastAccount = (props) => {
                                                     <Grid item xs={12} md={6}>
                                                         <Card variant="outlined" className={classes.paper}>
                                                             <Typography className={classes.appleColor} variant="body1" gutterBottom>
-                                                                <img src="./hero_icon__c135x5gz14mu_large_2x.png" width="24px"></img> Apple Podcast
+                                                                <img src={applelogo} width="24px"></img> Apple Podcast
                                                             </Typography>
 
                                                             <TextField 
@@ -726,7 +731,7 @@ const PodcastAccount = (props) => {
                                                     <Grid item xs={12} md={6}>
                                                         <Card variant="outlined" className={classes.paper}>
                                                             <Typography className={classes.googleColor} variant="body1" gutterBottom>
-                                                                <img src="./icons8-google-podcasts-48.png" width="24px"></img>Google Podcast</Typography>
+                                                                <img src={googlelogo} width="24px"></img>Google Podcast</Typography>
                                                             <TextField 
                                                                 disabled={handleCode==="loading"} 
                                                                 value={googlepodcastLink} 
@@ -755,7 +760,7 @@ const PodcastAccount = (props) => {
                                                     <Grid item xs={12} md={6}>
                                                         <Card variant="outlined" className={classes.paper}>
                                                             <Typography className={classes.spotifyColor} variant="body1" gutterBottom>
-                                                                <img src="./spotify.png" width="24px"></img>Spotify</Typography>
+                                                                <img src={spotiflogo} width="24px"></img>Spotify</Typography>
                                                             <TextField 
                                                                 disabled={handleCode==="loading"} 
                                                                 value={spotifyLink}
@@ -785,7 +790,7 @@ const PodcastAccount = (props) => {
                                                     <Grid item xs={12} md={6}>
                                                         <Card variant="outlined" className={classes.paper}>
                                                             <Typography className={classes.kkColor} variant="body1" gutterBottom>
-                                                                <img alt="kkbox" src="./kkbox_app_icon.png" width="24px"></img>KKBOX</Typography>
+                                                                <img alt="kkbox" src={kklogo} width="24px"></img>KKBOX</Typography>
                                                             <TextField 
                                                                 disabled={handleCode==="loading"} 
                                                                 value={kkLink} 

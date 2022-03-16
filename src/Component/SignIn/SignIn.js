@@ -37,7 +37,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(12),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -106,7 +106,7 @@ const SignIn = () => {
           <CardContent>
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
             <img src={LogoIcon} width="128"></img>
-            <Typography component="h1" variant="h5">立即登入<br/>建立或收聽私人Podcast</Typography>
+            <Typography component="h1" variant="h5">立即登入<br/>建立或收聽精彩故事</Typography>
             <div className={classes.form} noValidate>
             <TextField
                 variant="outlined"

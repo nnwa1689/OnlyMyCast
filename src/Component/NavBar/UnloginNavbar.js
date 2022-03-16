@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
+import Logo from '../../static/only-my-cast.svg';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +33,11 @@ const UnloginNavBar = (props) => {
       <div>
           <AppBar className={classes.appBar} position="fixed">
           <Toolbar>
-              <img alt="OnlyMyCast" src={LogoIcon} width="48" height="48" />
+              <img alt="OnlyMyCast" src={Logo} height="48" />
               <div className={classes.grow}/>
-              <Typography variant="h6">建立、收聽私人Podcast</Typography>
+              <Typography variant="h6">分享您的故事</Typography>
               <div className={classes.grow}/>
-                <Button href="../signin" size="medium" variant="contained" color="primary">
+                <Button href="../signin" size="medium" style={ { borderRadius: "0px", } } variant="contained" color="primary">
                     開始
                 </Button>
           </Toolbar>

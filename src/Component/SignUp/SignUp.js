@@ -18,6 +18,12 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import LogoIcon from '../../static/only-my-cast-icon-pink.svg'
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { Divider } from '@material-ui/core';
+import CheckIcon from '@material-ui/icons/Check';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Badge from '@material-ui/core/Badge';
 
 function Copyright() {
   return (
@@ -38,7 +44,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(12),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -65,6 +71,7 @@ const SignUp = ()=>{
   const [handleCode, setHandleCode] = useState('init');
   const [nameError, setNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [plan, setPlan] = useState("free");
   const [pwError, setPwError] = useState(false);
   const history = useHistory();
 
@@ -131,101 +138,140 @@ const SignUp = ()=>{
 
       handleCode === 'login' ? ""
       :
-      <Container component="main" maxWidth="xs">
-      <Card className={classes.paper}>
-          <CardContent>
-          { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
-          <img style={{fill: "#FD3E49"}} src={LogoIcon} width="128"></img>
-        <Typography component="h1" variant="h5">
-          立即註冊<br/>即可建立私人Podcast
-        </Typography>
-        <div className={classes.form} noValidate>
+      <Container component="main" maxWidth="md">
+        <Card className={classes.paper}>
+            <CardContent>
+            { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
+          <div className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="暱稱"
-                name="name"
-                autoComplete="name"
-                value={name}
-                onChange={(e)=>{setName(e.target.value)}}
-                helperText={ nameError!==false && (nameError)}
-                error={ nameError !== false }
-                disabled={handleCode==="loading"}
-              />
+            <Grid item xs={12} md={6}>
+              <img style={{fill: "#FD3E49"}} src={LogoIcon} width="128"></img>
+              <Typography component="h6" variant="h5">開始分享您的故事</Typography><br/>
+              <RadioGroup name="plans" value={plan} onChange={ ()=> { /*setPlan(e.target.value); console.log(plan)*/ }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <Card>
+                      <FormControlLabel value="free" control={<Radio color='primary' />} label="免費($0/月)" /><Divider/>
+                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">線上錄製</Typography><br/>
+                      <CheckIcon fontSize="small" /><Typography component="span" variant="body1">無限制上傳您的節目</Typography><br/>
+                      <CheckIcon fontSize="small" /><Typography component="span" variant="body1">節目可為私人或公開</Typography><br/>
+                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">RSS上架其他平台</Typography><br/>
+                      <CheckIcon fontSize="small" /><Typography component="span" variant="body1">支援數據追蹤前綴</Typography><br/>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Card>
+                      <Badge badgeContent={"計劃中"} color="primary"   
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                        }}>
+                        <FormControlLabel 
+                          value="personal" 
+                          control={<Radio color='primary' />} 
+                          disabled 
+                          label="個人($50/月)" />
+                      </Badge>       
+                      <Divider/>              
+                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">所有免費的功能</Typography><br/>
+                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">一鍵專人上架所有平台</Typography><br/>
+                      <CheckIcon fontSize="small" /><Typography component="span" variant="body1">專人客服支援</Typography><br/>
+                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">一頁式連結</Typography><br/>
+                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">個人化內嵌頻道</Typography><br/>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </RadioGroup>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
+            <Grid item xs={12} md={6}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="name"
+                    label="暱稱"
+                    name="name"
+                    autoComplete="name"
+                    value={name}
+                    onChange={(e)=>{setName(e.target.value)}}
+                    helperText={ nameError!==false && (nameError)}
+                    error={ nameError !== false }
+                    disabled={handleCode==="loading"}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e)=>{setEmail(e.target.value)}}
+                    helperText={ emailError!==false && (emailError)}
+                    error={ emailError !== false }
+                    disabled={handleCode==="loading"}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="password"
+                    label="密碼"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e)=>{setPassword(e.target.value)}}
+                    helperText={ pwError!==false && (pwError)}
+                    error={ pwError !== false }
+                    disabled={handleCode==="loading"}
+                  />
+                </Grid>
+              </Grid>
+              <Button
                 fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e)=>{setEmail(e.target.value)}}
-                helperText={ emailError!==false && (emailError)}
-                error={ emailError !== false }
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={handleSignup}
                 disabled={handleCode==="loading"}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="密碼"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e)=>{setPassword(e.target.value)}}
-                helperText={ pwError!==false && (pwError)}
-                error={ pwError !== false }
-                disabled={handleCode==="loading"}
-              />
+              >
+                立即註冊
+              </Button>
+              <Grid container justify="center">
+                <Grid item>
+                  <Typography component="span" variant="body2">
+                    註冊即同意本網站的
+                    <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body2">服務條款</Link>
+                    、<Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私政策</Link>
+                  </Typography>
+                </Grid>
+              </Grid>
+              <br/>
+              <Grid container justify="center">
+                <Grid item>
+                  <Typography component="span" variant="body1">
+                    <Link href="./signin">
+                      已有帳號？立即登入
+                    </Link>
+                  </Typography>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleSignup}
-            disabled={handleCode==="loading"}
-          >
-            立即註冊
-          </Button>
-          <Grid container justify="center">
-            <Grid item>
-              <Typography component="span" variant="body2">
-                註冊即同意本網站的
-                <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body2">服務條款</Link>
-                、<Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私政策</Link>
-              </Typography>
-            </Grid>
-          </Grid>
-          <br/>
-          <Grid container justify="center">
-            <Grid item>
-              <Typography component="span" variant="body1">
-                <Link href="./signin">
-                  已有帳號？立即登入
-                </Link>
-              </Typography>
-            </Grid>
-          </Grid>
-        </div>
-        </CardContent>
-      </Card>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+          </div>
+          </CardContent>
+        </Card>
+        <Box mt={5}>
+          <Copyright />
+        </Box>
     </Container>
   );
 }

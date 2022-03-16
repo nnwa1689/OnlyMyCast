@@ -40,8 +40,8 @@ import HelpIcon from '@material-ui/icons/Help';
 import Tooltip from '@material-ui/core/Tooltip';
 import InputBase from '@material-ui/core/InputBase';
 //static
-import LogoIcon from '../../static/only-my-cast-icon.svg'
-import Logo from '../../static/only-my-cast.svg'
+import LogoIcon from '../../static/only-my-cast-icon.svg';
+import Logo from '../../static/only-my-cast.svg';
 
 
 const useStyles = makeStyles((theme) => ({

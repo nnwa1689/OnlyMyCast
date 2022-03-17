@@ -362,7 +362,7 @@ const useStyles = makeStyles((theme)=>({
 
     if (props.user.userId==="") {
         return(
-            <Container maxWidth="md" className={classes.root}>
+            <Container maxWidth="lg" className={classes.root}>
                 <Card>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>
@@ -388,7 +388,7 @@ const useStyles = makeStyles((theme)=>({
         )
     } else {
         return(
-            <Container maxWidth="md" className={classes.root}>
+            <Container maxWidth="lg" className={classes.root}>
                 <Helmet>
                     <title>新增單集 - Onlymycast</title>
                 </Helmet>

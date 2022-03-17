@@ -38,9 +38,9 @@ const useStyles = makeStyles((theme)=>({
         textAlign:"center"
     },
     large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
-      marginBottom: theme.spacing(3),
+      width: theme.spacing(32),
+      height: theme.spacing(32),
+      marginBottom: theme.spacing(1),
       marginTop:theme.spacing(3),
       color: "#FFFFFF",
       backgroundColor: "#FD3E49",
@@ -159,18 +159,16 @@ const PodcastDetails = (props) => {
       return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
       return(
-        <Container maxWidth="md">
+        <Container className={classes.root} maxWidth="lg">
           { subStatu===1 || publicStatu || props.user.userId === props.match.params.id ?
-              <Card className={classes.root}>
-                <Helmet>
-                    <title>{ name } - { channelName } - Onlymycast</title>
-                </Helmet>
-                <CardContent>
-                <Grid container justify="center" direction="row">
-                  <Grid item xs={12} sm={4} md={3}>
-                    <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
-                  </Grid>  
-                  <Grid item xs={12} sm={7} md={8}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={4}>
+                <Card>
+                  <Helmet>
+                      <title>{ name } - { channelName } - Onlymycast</title>
+                  </Helmet>
+                  <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                  <CardContent>
                     <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
                     <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
                     <br/>
@@ -180,7 +178,7 @@ const PodcastDetails = (props) => {
                       &nbsp;
                       { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
                       </Typography>
-                    <br/>
+                    <br/><br/><Divider/><br/>
                     <Button 
                         color="primary"
                         variant="contained"
@@ -196,17 +194,22 @@ const PodcastDetails = (props) => {
                         onClick={props.setPlayer}>
                         播放單集
                     </Button>
-                  </Grid>
-                </Grid>
-                <br/>
-                <Divider/>
-                <br/>
-                <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
-                </CardContent>
-              </Card>
-          :
-          ""
-        }
+                    </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" component="h6">單集介紹</Typography>
+                    <br/><Divider/><br/>
+                    <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+            :
+            ""
+          }
         </Container>
       );
     }

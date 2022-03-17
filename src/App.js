@@ -48,7 +48,7 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-const clientversion = "V220316.12";
+const clientversion = "V220317.01";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -334,7 +334,7 @@ const App = (props) => {
       <div className="App">
         <BrowserRouter basename={basename}>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}/>
-          <Container maxWidth="md">
+          <Container maxWidth="lg">
             {inApp === true &&
               
                 <MuiAlert style={{ marginTop: "100px", marginBottom: "-50px" }} elevation={6} variant="filled" severity="warning">

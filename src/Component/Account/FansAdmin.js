@@ -145,7 +145,7 @@ const FansAdmin = (props) => {
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else if (props.user.userId.length <= 0) {
         return(
-            <Container maxWidth="md">
+            <Container maxWidth="lg">
                 <Card className={classes.root}>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>
@@ -174,7 +174,7 @@ const FansAdmin = (props) => {
                 <Helmet>
                     <title>追蹤管理 - Onlymycast</title>
                 </Helmet>
-                <Container maxWidth="md">
+                <Container maxWidth="lg">
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography variant="h5" component="h1">追蹤管理</Typography>

@@ -316,7 +316,7 @@ const useStyles = makeStyles((theme)=>({
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
-            <Container maxWidth="md">
+            <Container maxWidth="lg">
                 <Helmet>
                     <title>編輯草稿 - Onlymycast</title>
                 </Helmet>

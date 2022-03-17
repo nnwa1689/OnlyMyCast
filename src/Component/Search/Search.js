@@ -106,7 +106,7 @@ const Search = (props) => {
     }
 
     return(
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
             <Card className={classes.root}>
                 <CardContent>
                 <Typography variant="h5" component="h1">搜尋</Typography>

@@ -26,7 +26,7 @@ const AdsenseComponent = () => {
     )
 
     return(
-        <Container maxWidth="md" className={classes.root}>
+        <Container maxWidth="lg" className={classes.root}>
             <ins className="adsbygoogle"
             style={{display:"block"}}
             data-ad-format="fluid"

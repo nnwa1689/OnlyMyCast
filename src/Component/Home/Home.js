@@ -137,7 +137,7 @@ const Home = (props) => {
     return(<CircularProgress style={{marginTop: "25%"}} />);
   } else {
     return (
-      <Container maxWidth="md" style={ { marginTop: 100, } }>
+      <Container maxWidth="lg" style={ { marginTop: 100, } }>
         <Helmet>
             <title>Onlymycast</title>
         </Helmet>

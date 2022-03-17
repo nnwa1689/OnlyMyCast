@@ -147,7 +147,7 @@ const Subreq = (props) => {
 
     if (props.user.userId.length <= 0) {
         return(
-            <Container maxWidth="md">
+            <Container maxWidth="lg">
                 <Helmet>
                     <title>追蹤審核 - Onlymycast</title>
                 </Helmet>
@@ -178,7 +178,7 @@ const Subreq = (props) => {
                     return(<CircularProgress style={{marginTop: "25%"}} />);
                 } else {
                     return(
-                        <Container maxWidth="md">
+                        <Container maxWidth="lg">
                             <Card className={classes.root}>
                                 <CardContent>
                                 <Typography variant="h5" component="h1">追蹤審核</Typography>

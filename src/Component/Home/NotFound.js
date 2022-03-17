@@ -25,7 +25,7 @@ const NotFound = (props) => {
     )
 
   return (
-    <Container maxWidth="md" style={ { marginTop: 100, } }>
+    <Container maxWidth="lg" style={ { marginTop: 100, } }>
       <Helmet>
           <title>Onlymycast</title>
       </Helmet>

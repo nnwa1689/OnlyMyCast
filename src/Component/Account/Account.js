@@ -7,7 +7,6 @@ import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
@@ -32,6 +31,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
+import Grid from '@mui/material/Grid';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme)=>({
     tabBar: {
         marginBottom: 10,
         boxShadow : "none",
+    },
+    button: {
+        margin: "10px"
     }
   }));
 
@@ -319,7 +322,7 @@ const Account = (props) => {
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
-            <Container maxWidth="md" className={classes.root}>
+            <Container maxWidth="lg" className={classes.root}>
             <Helmet>
                 <title>個人設定 - Onlymycast</title>
             </Helmet>
@@ -332,8 +335,8 @@ const Account = (props) => {
                         variant="fullWidth"
                         aria-label="full width tabs example"
                         >
-                        <Tab label="帳號" />
-                        <Tab label="訂閱" />
+                        <Tab label="帳號與密碼" />
+                        <Tab label="訂閱管理" />
                         </Tabs>
                     </AppBar>
                     <SwipeableViews
@@ -341,70 +344,82 @@ const Account = (props) => {
                     index={tabValue}
                     onChangeIndex={handleChangeIndex}>
                         <TabPanel value={tabValue} index={0}>
-                            <Card>
-                            <CardContent>
-                                <Typography variant="h5" component="h1">帳號設定</Typography>
-                                <Typography variant="body1" component="span">更新您的個人資訊<br/>這裡的資訊將用於您訂閱他人時顯示</Typography>
-                                <Avatar alt={name} src={avatar} className={classes.large} />
-                                    <FormControl fullWidth className={classes.margin}>
-                                    <input
-                                        accept="image/jpeg, image/png"
-                                        className={classes.input}
-                                        id="contained-button-file"
-                                        multiple
-                                        type="file"
-                                        startIcon={<AttachmentIcon />}
-                                        disabled={handleCode==="loading"}
-                                        onChange={(e)=>{
-                                            if (e.target.files.length >= 1) {
-                                                setAvatar(URL.createObjectURL(e.target.files[0]));
-                                                setFilename(e.target.files[0].name);
-                                                setFileBit(e.target.files[0])
-                                            }
-                                        }}
-                                    />
-                                    <label htmlFor="contained-button-file">
-                                        <Button variant="contained" size="large" fullWidth color="primary" component="span">
-                                            <AttachmentIcon />
-                                            { filename === "" ? "上傳新頭貼" : filename }
-                                        </Button>
-                                        <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
-                                    </label>
-                                    </FormControl>
-                                    <FormControl fullWidth className={classes.margin}>
-                                        <TextField disabled={true} helperText="Email一但註冊就無法修改" value={props.userEmail} id="email" label="Email" variant="outlined" />
-                                    </FormControl>
-                                    <FormControl fullWidth className={classes.margin}>
-                                        <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="name" label="暱稱" variant="outlined" />
-                                    </FormControl>
-                                </CardContent>
-                                </Card>
-                                    <br/>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={12}>
+                                    <Card>
+                                    <CardContent>
+                                        <Typography variant="h5" component="h1">頭貼設定</Typography>
+                                        <Avatar alt={name} src={avatar} className={classes.large} />
+                                            <FormControl fullWidth className={classes.margin}>
+                                            <input
+                                                accept="image/jpeg, image/png"
+                                                className={classes.input}
+                                                id="contained-button-file"
+                                                multiple
+                                                type="file"
+                                                startIcon={<AttachmentIcon />}
+                                                disabled={handleCode==="loading"}
+                                                onChange={(e)=>{
+                                                    if (e.target.files.length >= 1) {
+                                                        setAvatar(URL.createObjectURL(e.target.files[0]));
+                                                        setFilename(e.target.files[0].name);
+                                                        setFileBit(e.target.files[0])
+                                                    }
+                                                }}
+                                            />
+                                            <label htmlFor="contained-button-file">
+                                                <Button variant="contained" size="large" fullWidth color="primary" component="span">
+                                                    <AttachmentIcon />
+                                                    { filename === "" ? "上傳新頭貼" : filename }
+                                                </Button>
+                                                <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
+                                            </label>
+                                            </FormControl>
+                                        </CardContent>
+                                        </Card>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
                                     <Card>
                                         <CardContent>
-                                        <Typography variant="h5" component="h1">安全與密碼</Typography>
-                                        <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
+                                        <Typography variant="h5" component="h1">個人帳號設定</Typography>
+                                        <Typography variant="body1" component="span">您的帳號資訊</Typography>
                                         <FormControl fullWidth className={classes.margin}>
-                                            <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />
-                                        </FormControl>
-                                        <FormControl fullWidth className={classes.margin}>
-                                            <TextField required disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
-                                        </FormControl>
-                                    <div className={classes.wrapper}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="large"
-                                            className={classes.button}
-                                            startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                                            onClick={handleUpdateAccount}
-                                            disabled={handleCode==="loading"}>
-                                            儲存設定
-                                        </Button>
-                                        </div>
+                                                <TextField disabled={true} helperText="Email一但註冊就無法修改" value={props.userEmail} id="email" label="Email" variant="outlined" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                                <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="name" label="暱稱" variant="outlined" />
+                                            </FormControl>
                                         </CardContent>
                                     </Card>
-                            </TabPanel>             
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                        <Card>
+                                            <CardContent>
+                                            <Typography variant="h5" component="h1">安全與密碼</Typography>
+                                            <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
+                                            <FormControl fullWidth className={classes.margin}>
+                                                <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                                <TextField required disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
+                                            </FormControl>
+                                            </CardContent>
+                                        </Card>
+                                </Grid>
+                            </Grid>
+                            <div className={classes.wrapper}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    className={classes.button}
+                                    startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                                    onClick={handleUpdateAccount}
+                                    disabled={handleCode==="loading"}>
+                                    儲存設定
+                                </Button>
+                            </div>
+                        </TabPanel>             
 
                         <TabPanel value={tabValue} index={1}>
                             <Card>

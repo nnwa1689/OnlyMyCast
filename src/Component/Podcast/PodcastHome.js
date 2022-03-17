@@ -39,6 +39,7 @@ import kklogo from '../../static/kkbox_app_icon.png';
 import spotiflogo from '../../static/spotify.png';
 import applelogo from '../../static/hero_icon__c135x5gz14mu_large_2x.png';
 import googlelogo from '../../static/icons8-google-podcasts-48.png';
+import soundonlogo from '../../static/soundon.png';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -57,8 +58,7 @@ const useStyles = makeStyles((theme) => ({
     large: {
         width: theme.spacing(24),
         height: theme.spacing(24),
-        marginBottom: theme.spacing(3),
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(2),
         color: "#FFFFFF",
         backgroundColor: "#FD3E49",
         marginLeft: "auto",
@@ -127,6 +127,8 @@ const PodcastHome = (props) => {
     const [googlepodcastLink, setGooglepodcastLink] = useState();
     const [spotifyLink, setSpotifyLink] = useState();
     const [kkLink, setKkLink] = useState();
+    const [soundonLink, setSoundonLink] = useState();
+
 
     useEffect(
         () => {
@@ -222,6 +224,7 @@ const PodcastHome = (props) => {
                         setGooglepodcastLink(data.googlepodcast === undefined ? "" : data.googlepodcast);
                         setSpotifyLink(data.spotify === undefined? "" : data.spotify);
                         setKkLink(data.kkLink === undefined ? "" : data.kkLink);
+                        setSoundonLink(data.soundonLink === undefined ? "" : data.soundonLink);
 
                         //檢查節目公不公開
                         if ( data.publicStatu === 'true') { // 公開
@@ -330,121 +333,129 @@ const PodcastHome = (props) => {
         return (<CircularProgress style={{ marginTop: "25%" }} />);
     } else {
         return (
-            <Container maxWidth="md">
+            <Container className={classes.root} maxWidth="lg">
                 <Helmet>
                     <title>{name} - Onlymycast</title>
                 </Helmet>
-                <Card className={classes.root}>
-                    <CardContent>
-                        <Grid container justify='center' direction="row" spacing={0}>
-                            <Grid item xs={12} sm={4} md={3}>
-                                <Avatar variant="rounded" alt={name} src={avatar === "" ? "." : avatar} className={classes.large} />
-                            </Grid>
-                            <Grid item xs={12} sm={7} md={8}>
-                                <Typography style={{ paddingTop: "16px" }} variant="h5">{name}</Typography>
-                                <ListItem style={{ width: "fit-content", marginLeft: "auto", marginRight: "auto" }}>
-                                    <ListItemAvatar>
-                                        <Avatar style={{ backgroundColor: "#FD3E49" }} variant="circle" alt={podcasterName} src={podcasterAvatar === "" ? "." : podcasterAvatar} />
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={podcasterName}
-                                    />
-                                </ListItem>
-                                <Typography variant="subtitle1" component="span"><PeopleIcon fontSize='small' />&nbsp;{subCount} 位聽眾</Typography>
-                                <br />
-                                {facebookLink.length > 0 ?
-                                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
-                                        <FacebookIcon fontSize='large' />
-                                    </IconButton>
-                                    : ""}
-                                {instagramLink.length > 0 ?
-                                    <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
-                                        <InstagramIcon fontSize='large' />
-                                    </IconButton>
-                                    : ""}
-                                {youtubeLink.length > 0 ?
-                                    <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
-                                        <YouTubeIcon fontSize='large' />
-                                    </IconButton>
-                                    : ""}
-                                {twitterLink.length > 0 ?
-                                    <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
-                                        <TwitterIcon fontSize='large' />
-                                    </IconButton>
-                                    : ""}
-                                {applepodcastLink.length > 0 ?
-                                    <IconButton className={classes.twitterButton} href={applepodcastLink} target='_blank' size='small'>
-                                        <img alt="apple" src={applelogo} width="30px"></img>
-                                    </IconButton>
-                                    : ""}
-                                {googlepodcastLink.length > 0 ?
-                                    <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='small'>
-                                        <img alt="google" src={googlelogo} width="30px"></img>
-                                    </IconButton>
-                                    : ""}
-                                {spotifyLink.length > 0 ?
-                                    <IconButton className={classes.spotifyColor} href={spotifyLink} target='_blank' size='small'>
-                                        <img alt="spotify" src={spotiflogo} width="30px"></img>
-                                    </IconButton>
-                                    : ""}
-                                {kkLink.length > 0 ?
-                                    <IconButton className={classes.kkColor} href={kkLink} target='_blank' size='small'>
-                                        <img alt="spotify" src={kklogo} width="30px"></img>
-                                    </IconButton>
-                                    : ""}
-                                <br />
-                                {props.user.userId === props.match.params.id ?
-                                    <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
-                                    :
-                                    <>
-                                        {
-                                            (subStatu === 1) &&
-                                            <Button fullWidth onClick={(e) => handleUnsub(e)} variant="outlined" size="large" startIcon={<StarBorderIcon />}>
-                                                取消追蹤
-                                            </Button>
-                                        }
-
-                                        {
-                                            (subStatu === 2 && !publicStatu) &&
-                                            <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
-                                                要求追蹤
-                                            </Button>
-                                        }
-
-                                        {
-                                            (subStatu === 2 && publicStatu) &&
-                                            <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
-                                                追蹤
-                                            </Button>
-                                        }
-
-                                        {
-                                            subStatu === 3 &&
-                                            <Button fullWidth variant="outlined" size="large" onClick={(e) => handleRemoveReq(e)}>已送出請求</Button>
-                                        }
-                                    </>
-                                }
-                            </Grid>
-                        </Grid>
-                        <br />
-                        <Divider />
-                        <br />
-                        <Typography style={{ textAlign: "left" }} variant="body1" component="span">
-                            <ReactMarkdown>{intro}</ReactMarkdown>
-                        </Typography>
-                        <Divider />
-                        {subStatu === 1|| publicStatu || props.user.userId === props.match.params.id ?
-                            spList === "" ?
-                                <Typography variant="h4" component="span"><br />¯\_(ツ)_/¯<br />還沒有任何節目<br />稍後再回來吧</Typography>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={4}>
+                        <Card>
+                        <CardContent>
+                            <Avatar variant="rounded" alt={name} src={avatar === "" ? "." : avatar} className={classes.large} />
+                            <Typography style={{ paddingTop: "16px" }} variant="h5">{name}</Typography>
+                            <ListItem style={{ width: "fit-content", marginLeft: "auto", marginRight: "auto" }}>
+                                <ListItemAvatar>
+                                    <Avatar style={{ backgroundColor: "#FD3E49" }} variant="circle" alt={podcasterName} src={podcasterAvatar === "" ? "." : podcasterAvatar} />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={podcasterName}
+                                />
+                            </ListItem>
+                            <Typography variant="subtitle1" component="span"><PeopleIcon fontSize='small' />&nbsp;{subCount} 位聽眾</Typography>
+                            <br />
+                            {facebookLink.length > 0 ?
+                                <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
+                                    <FacebookIcon fontSize='large' />
+                                </IconButton>
+                                : ""}
+                            {instagramLink.length > 0 ?
+                                <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
+                                    <InstagramIcon fontSize='large' />
+                                </IconButton>
+                                : ""}
+                            {youtubeLink.length > 0 ?
+                                <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
+                                    <YouTubeIcon fontSize='large' />
+                                </IconButton>
+                                : ""}
+                            {twitterLink.length > 0 ?
+                                <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
+                                    <TwitterIcon fontSize='large' />
+                                </IconButton>
+                                : ""}
+                            {applepodcastLink.length > 0 ?
+                                <IconButton className={classes.twitterButton} href={applepodcastLink} target='_blank' size='small'>
+                                    <img alt="apple" src={applelogo} width="30px"></img>
+                                </IconButton>
+                                : ""}
+                            {googlepodcastLink.length > 0 ?
+                                <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='small'>
+                                    <img alt="google" src={googlelogo} width="30px"></img>
+                                </IconButton>
+                                : ""}
+                            {spotifyLink.length > 0 ?
+                                <IconButton className={classes.spotifyColor} href={spotifyLink} target='_blank' size='small'>
+                                    <img alt="spotify" src={spotiflogo} width="30px"></img>
+                                </IconButton>
+                                : ""}
+                            {kkLink.length > 0 ?
+                                <IconButton className={classes.kkColor} href={kkLink} target='_blank' size='small'>
+                                    <img alt="spotify" src={kklogo} width="30px"></img>
+                                </IconButton>
+                                : ""}
+                            {soundonLink.length > 0 ?
+                                <IconButton href={soundonLink} target='_blank' size='small'>
+                                    <img alt="soundon" src={soundonlogo} width="30px"></img>
+                                </IconButton>
+                                : ""}
+                            <br /><br/>
+                            {props.user.userId === props.match.params.id ?
+                                <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
                                 :
-                                <List>
-                                    {spList}
-                                </List>
-                            :
-                            <Typography variant="h4" component="span"><br />(＞^ω^＜)<br /><br />訂閱後即可收聽</Typography>
-                        }
-                    </CardContent>
-                </Card>
+                                <>
+                                    {
+                                        (subStatu === 1) &&
+                                        <Button fullWidth onClick={(e) => handleUnsub(e)} variant="outlined" size="large" startIcon={<StarBorderIcon />}>
+                                            取消追蹤
+                                        </Button>
+                                    }
+
+                                    {
+                                        (subStatu === 2 && !publicStatu) &&
+                                        <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
+                                            要求追蹤
+                                        </Button>
+                                    }
+
+                                    {
+                                        (subStatu === 2 && publicStatu) &&
+                                        <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
+                                            追蹤
+                                        </Button>
+                                    }
+
+                                    {
+                                        subStatu === 3 &&
+                                        <Button fullWidth variant="outlined" size="large" onClick={(e) => handleRemoveReq(e)}>已送出請求</Button>
+                                    }
+                                </>
+                            }
+                            <br /><br/>
+                            <Divider />
+                            <Typography style={{ textAlign: "left" }} variant="body1" component="span">
+                                <ReactMarkdown>{intro}</ReactMarkdown>
+                            </Typography>
+                        </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item xs={12} md={8}>
+                        <Card>
+                            <CardContent>
+                                <Typography variant="h5" component="h6">單集列表</Typography>
+                                {subStatu === 1|| publicStatu || props.user.userId === props.match.params.id ?
+                                    spList === "" ?
+                                        <Typography variant="h4" component="span"><br />¯\_(ツ)_/¯<br />還沒有任何節目<br />稍後再回來吧</Typography>
+                                        :
+                                        <List>
+                                            {spList}
+                                        </List>
+                                    :
+                                    <Typography variant="h4" component="span"><br />(＞^ω^＜)<br /><br />訂閱後即可收聽</Typography>
+                                }
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
             </Container>
         );
     }

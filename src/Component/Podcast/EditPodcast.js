@@ -201,7 +201,7 @@ const EditPodcast = (props) => {
 
     if (props.user.userId==="") {
         return(
-            <Container maxWidth="md">
+            <Container maxWidth="lg">
                 <Card className={classes.root}>
                     <CardContent>
                         <Typography variant="h2" component="h1" gutterBottom>
@@ -229,7 +229,7 @@ const EditPodcast = (props) => {
                 return(<CircularProgress style={{marginTop: "25%"}} />);
             } else {
                 return(
-                    <Container maxWidth="md" className={classes.root}>
+                    <Container maxWidth="lg" className={classes.root}>
                         <Helmet>
                             <title>單集管理 - Onlymycast</title>
                         </Helmet>

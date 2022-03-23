@@ -8,7 +8,6 @@ import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -351,8 +350,40 @@ const PodcastHome = (props) => {
                                     primary={podcasterName}
                                 />
                             </ListItem>
-                            <Typography variant="subtitle1" component="span"><PeopleIcon fontSize='small' />&nbsp;{subCount} 位聽眾</Typography>
+                            <Typography variant="subtitle1" component="p"><PeopleIcon fontSize='small' />&nbsp;{subCount} 位聽眾</Typography>
                             <br />
+                            {props.user.userId === props.match.params.id ?
+                                <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
+                                :
+                                <>
+                                    {
+                                        (subStatu === 1) &&
+                                        <Button fullWidth onClick={(e) => handleUnsub(e)} variant="outlined" size="large" startIcon={<StarBorderIcon />}>
+                                            取消追蹤
+                                        </Button>
+                                    }
+
+                                    {
+                                        (subStatu === 2 && !publicStatu) &&
+                                        <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
+                                            要求追蹤
+                                        </Button>
+                                    }
+
+                                    {
+                                        (subStatu === 2 && publicStatu) &&
+                                        <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
+                                            追蹤
+                                        </Button>
+                                    }
+
+                                    {
+                                        subStatu === 3 &&
+                                        <Button fullWidth variant="outlined" size="large" onClick={(e) => handleRemoveReq(e)}>已送出請求</Button>
+                                    }
+                                </>
+                            }
+                                                        <br />
                             {facebookLink.length > 0 ?
                                 <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
                                     <FacebookIcon fontSize='large' />
@@ -398,41 +429,12 @@ const PodcastHome = (props) => {
                                     <img alt="soundon" src={soundonlogo} width="30px"></img>
                                 </IconButton>
                                 : ""}
-                            <br /><br/>
-                            {props.user.userId === props.match.params.id ?
-                                <Button fullWidth variant="outlined" size="large" component={RLink} to="/podcastaccount">編輯電台資訊</Button>
-                                :
-                                <>
-                                    {
-                                        (subStatu === 1) &&
-                                        <Button fullWidth onClick={(e) => handleUnsub(e)} variant="outlined" size="large" startIcon={<StarBorderIcon />}>
-                                            取消追蹤
-                                        </Button>
-                                    }
-
-                                    {
-                                        (subStatu === 2 && !publicStatu) &&
-                                        <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
-                                            要求追蹤
-                                        </Button>
-                                    }
-
-                                    {
-                                        (subStatu === 2 && publicStatu) &&
-                                        <Button fullWidth onClick={(e) => handleSub(e)} variant="outlined" color="primary" size="large" startIcon={<StarIcon />}>
-                                            追蹤
-                                        </Button>
-                                    }
-
-                                    {
-                                        subStatu === 3 &&
-                                        <Button fullWidth variant="outlined" size="large" onClick={(e) => handleRemoveReq(e)}>已送出請求</Button>
-                                    }
-                                </>
-                            }
-                            <br /><br/>
-                            <Divider />
-                            <Typography style={{ textAlign: "left" }} variant="body1" component="span">
+                        </CardContent>
+                        </Card>
+                        <br/>
+                        <Card>
+                        <CardContent>
+                            <Typography style={{ textAlign: "left" }} variant="body1" component="p">
                                 <ReactMarkdown>{intro}</ReactMarkdown>
                             </Typography>
                         </CardContent>
@@ -441,7 +443,6 @@ const PodcastHome = (props) => {
                     <Grid item xs={12} md={8}>
                         <Card>
                             <CardContent>
-                                <Typography variant="h5" component="h6">單集列表</Typography>
                                 {subStatu === 1|| publicStatu || props.user.userId === props.match.params.id ?
                                     spList === "" ?
                                         <Typography variant="h4" component="span"><br />¯\_(ツ)_/¯<br />還沒有任何節目<br />稍後再回來吧</Typography>

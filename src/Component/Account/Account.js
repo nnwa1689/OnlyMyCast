@@ -32,6 +32,9 @@ import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
 import Grid from '@mui/material/Grid';
+import LockIcon from '@material-ui/icons/Lock';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -348,7 +351,7 @@ const Account = (props) => {
                                 <Grid item xs={12} md={12}>
                                     <Card>
                                     <CardContent>
-                                        <Typography variant="h5" component="h1">頭貼設定</Typography>
+                                        <Typography variant="h5" component="h1"><AccountCircleIcon/>頭貼設定</Typography>
                                         <Avatar alt={name} src={avatar} className={classes.large} />
                                             <FormControl fullWidth className={classes.margin}>
                                             <input
@@ -381,7 +384,7 @@ const Account = (props) => {
                                 <Grid item xs={12} md={6}>
                                     <Card>
                                         <CardContent>
-                                        <Typography variant="h5" component="h1">個人帳號設定</Typography>
+                                        <Typography variant="h5" component="h1"><AssignmentIndIcon/>個人帳號設定</Typography>
                                         <Typography variant="body1" component="span">您的帳號資訊</Typography>
                                         <FormControl fullWidth className={classes.margin}>
                                                 <TextField disabled={true} helperText="Email一但註冊就無法修改" value={props.userEmail} id="email" label="Email" variant="outlined" />
@@ -395,7 +398,7 @@ const Account = (props) => {
                                 <Grid item xs={12} md={6}>
                                         <Card>
                                             <CardContent>
-                                            <Typography variant="h5" component="h1">安全與密碼</Typography>
+                                            <Typography variant="h5" component="h1"><LockIcon/>安全與密碼</Typography>
                                             <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
                                             <FormControl fullWidth className={classes.margin}>
                                                 <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />

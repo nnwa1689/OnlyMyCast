@@ -8,7 +8,6 @@ import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
@@ -172,13 +171,13 @@ const PodcastDetails = (props) => {
                     <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
                     <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
                     <br/>
-                    <Typography variant="body1" component="span">
+                    <Typography variant="body1" component="p">
                       <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon><br/>
                       <ListItemIcon><AccessTimeIcon/>{duration}</ListItemIcon>
                       &nbsp;
                       { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
                       </Typography>
-                    <br/><br/><Divider/><br/>
+                    <br/>
                     <Button 
                         color="primary"
                         variant="contained"
@@ -200,8 +199,6 @@ const PodcastDetails = (props) => {
               <Grid item xs={12} md={8}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6" component="h6">單集介紹</Typography>
-                    <br/><Divider/><br/>
                     <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
                   </CardContent>
                 </Card>

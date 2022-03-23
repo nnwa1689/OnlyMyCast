@@ -162,7 +162,7 @@ const Home = (props) => {
             <FavoriteIcon/>我的訂閱
         </Typography>
         <br/>
-        <Grid container justify="center" direction="row" spacing={4}>
+        <Grid container justify="center" spacing={2}>
             {subscribeList ==="" ?
               <>
                 <Typography variant="h2" component="span">

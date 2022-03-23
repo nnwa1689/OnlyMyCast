@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme)=>({
       }
     )
     return (
-    <Grid item xs={12} sm={4} md={3}>
+    <Grid item xs={12} sm={4} md={3} lg={2}>
       <Badge
           color={haveNewEP ? "primary" : ""}
           badgeContent={haveNewEP && "新單集"}

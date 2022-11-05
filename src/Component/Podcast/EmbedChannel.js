@@ -116,7 +116,9 @@ const EmbedChannel = (props) => {
                 </CardMedia>
                 <div className={classes.details}>
                     <CardContent className={classes.content}>
-                    <Typography component="span"  variant="h6">
+                    <Typography 
+                        style={ { color: "#000000" } }
+                        component="span"  variant="h6">
                         { name }
                     </Typography>
                     <Typography 

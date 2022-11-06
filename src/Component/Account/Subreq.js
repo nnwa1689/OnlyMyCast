@@ -178,27 +178,25 @@ const Subreq = (props) => {
                     return(<CircularProgress style={{marginTop: "25%"}} />);
                 } else {
                     return(
-                        <Container maxWidth="lg">
-                            <Card className={classes.root}>
-                                <CardContent>
-                                <Typography variant="h5" component="h1">追蹤審核</Typography>
-                                <Typography variant="body1" component="span">允許或拒絕節目追蹤要求</Typography>
-                                <List dense>
-                                    {reqList === "" ? 
-                                        <>
-                                            <Typography variant="h2" component="h1" gutterBottom>
-                                                ╮(╯▽╰)╭ <br/>
-                                            </Typography>
-                                            <Typography variant="h5" component="span">
-                                                呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
-                                            </Typography>
-                                        </>
-                                    :
-                                    reqList
-                                    }
-                                </List>
-                                </CardContent>
-                            </Card>
+                        <Container maxWidth="lg" className={classes.root}>
+                            <CardContent>
+                            <Typography variant="h5" component="h1">追蹤審核</Typography>
+                            <Typography variant="body1" component="span">允許或拒絕節目追蹤要求</Typography>
+                            <List dense>
+                                {reqList === "" ? 
+                                    <>
+                                        <Typography variant="h2" component="h1" gutterBottom>
+                                            ╮(╯▽╰)╭ <br/>
+                                        </Typography>
+                                        <Typography variant="h5" component="span">
+                                            呼～喘口氣<br/>目前沒有任何訂閱要求<br/>喝杯茶再回來吧～
+                                        </Typography>
+                                    </>
+                                :
+                                reqList
+                                }
+                            </List>
+                            </CardContent>
                         </Container>
                     );
                 }

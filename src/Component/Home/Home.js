@@ -142,20 +142,19 @@ const Home = (props) => {
             <title>Onlymycast</title>
         </Helmet>
         <Typography variant="h5" component="h1"><CastIcon/>我的節目</Typography><br/>
-        <Card>
-          <CardContent>
-          <Grid container justify="center" direction="row">
-            {
-              props.user.userId ==="" ?
-              <Typography variant="body1" component="span">
-                你目前沒有建立節目<br/>
-              </Typography>
-              :
-              <MyPodcastList key={0} spCount={spCount} podcastFansCount={subCount} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></MyPodcastList>
-            }
-          </Grid>
-          </CardContent>
-        </Card>
+        <CardContent>
+        <Grid container justify="center" direction="row">
+          {
+            props.user.userId ==="" ?
+            <Typography variant="body1" component="span">
+              你目前沒有建立節目<br/>
+            </Typography>
+            :
+            <MyPodcastList key={0} spCount={spCount} podcastFansCount={subCount} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></MyPodcastList>
+          }
+        </Grid>
+        </CardContent>
+
         <br/>
         <br/>
         <Typography variant="h5">

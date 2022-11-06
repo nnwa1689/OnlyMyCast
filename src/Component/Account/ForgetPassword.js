@@ -32,15 +32,13 @@ function Copyright() {
         <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
         <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
         </Link><br/>
-        <Link href="https://www.notes-hz.com/">筆記長也NotesHazuya</Link>
-        <br/><br/>
     </Typography>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: 100,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

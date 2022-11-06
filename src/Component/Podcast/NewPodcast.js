@@ -49,6 +49,7 @@ import "firebase/functions";
 //other
 import { Helmet } from 'react-helmet';
 import genrssfeed from '../../Functions/genRssfeed';
+import { MicNone } from '@material-ui/icons';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -100,6 +101,7 @@ const useStyles = makeStyles((theme)=>({
         height: theme.spacing(36),
         width: theme.spacing(36),
         margin:theme.spacing(1),
+        borderRadius: 20,
       },
   })
   );
@@ -363,27 +365,25 @@ const useStyles = makeStyles((theme)=>({
     if (props.user.userId==="") {
         return(
             <Container maxWidth="lg" className={classes.root}>
-                <Card>
-                    <CardContent>
-                        <Typography variant="h2" component="h1" gutterBottom>
-                            (^ｰ^)ノ<br/>
-                        </Typography>
-                        <Typography variant="h5" component="span">
-                            嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
-                        </Typography>
-                        <br/>
-                        <Button
-                            component={RLink}
-                            to="/podcastaccount"
-                            color="primary"
-                            fullWidth
-                            size="large"
-                            variant="contained"
-                            >              
-                            立即建立屬於我的私人電台
-                            </Button>
-                    </CardContent>
-                </Card>
+                <CardContent>
+                    <Typography variant="h2" component="h1" gutterBottom>
+                        (^ｰ^)ノ<br/>
+                    </Typography>
+                    <Typography variant="h5" component="span">
+                        嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
+                    </Typography>
+                    <br/>
+                    <Button
+                        component={RLink}
+                        to="/podcastaccount"
+                        color="primary"
+                        fullWidth
+                        size="large"
+                        variant="contained"
+                        >              
+                        立即建立屬於我的私人電台
+                        </Button>
+                </CardContent>
             </Container>
         )
     } else {
@@ -392,27 +392,24 @@ const useStyles = makeStyles((theme)=>({
                 <Helmet>
                     <title>新增單集 - Onlymycast</title>
                 </Helmet>
-                <Card>
-                    <CardContent>
-                    <Typography variant="h5" component="h1">發佈單集</Typography>
-                    <Stepper activeStep={activeStep} alternativeLabel>
-                        <Step key={0}>
-                            <StepLabel>{"選擇錄製方式"}</StepLabel>
-                        </Step>
-                        <Step key={1}>
-                            <StepLabel>{"錄音或選擇預錄音檔"}</StepLabel>
-                        </Step>
-                        <Step key={2}>
-                            <StepLabel>{"設定單集相關資訊"}</StepLabel>
-                        </Step>
-                        <Step key={3}>
-                            <StepLabel>{"準備上傳"}</StepLabel>
-                        </Step>
-                    </Stepper>
-                    </CardContent>
-                </Card>
-                <br/>
-                <Card>
+                <CardContent>
+                <Typography variant="h5" component="h1">發佈單集</Typography>
+                <Stepper style={ { background: "none" } } activeStep={activeStep} alternativeLabel>
+                    <Step key={0}>
+                        <StepLabel>{"錄製方式"}</StepLabel>
+                    </Step>
+                    <Step key={1}>
+                        <StepLabel>{"錄音或選擇音檔"}</StepLabel>
+                    </Step>
+                    <Step key={2}>
+                        <StepLabel>{"單集資訊"}</StepLabel>
+                    </Step>
+                    <Step key={3}>
+                        <StepLabel>{"上傳"}</StepLabel>
+                    </Step>
+                </Stepper>
+                </CardContent>
+                <Divider />
                     <CardContent>
                     { activeStep === 0 &&
                     (<>
@@ -522,7 +519,6 @@ const useStyles = makeStyles((theme)=>({
                             <br/>
                         </label>
                         <br/>
-                        <br/>
                         {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
                         <br/>
                     </>)
@@ -598,9 +594,8 @@ const useStyles = makeStyles((theme)=>({
                     </>
                 }
                     </CardContent>
-                </Card>
-                <br/>
-                <Card>
+
+                <Divider />
                     <CardContent>
                     <CardActions disableSpacing className={ classes.flexRight }>
                     {
@@ -644,7 +639,7 @@ const useStyles = makeStyles((theme)=>({
                     }
                     </CardActions>                   
                     </CardContent>
-                </Card>
+
                 <Dialog
                     open={introErr !== false || titleErr !== false || err !== false}
                     onClose={()=>{setIntroErr(false);setTitleErr(false);setErr(false)}}

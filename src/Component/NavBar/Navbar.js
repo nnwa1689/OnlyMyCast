@@ -284,13 +284,6 @@ const NavBar = (props) => {
                   </List>
                   <Divider />
                   <List alignItems="center">
-                      <ListItem key="privatepolic" fontSize={5}>
-                          <Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私權</Link>
-                          &nbsp;
-                          <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body2">條款</Link>
-                          &nbsp;
-                          <Link target="_blank" href="https://www.notes-hz.com/page/readerService" variant="body2">聯繫</Link>
-                      </ListItem>
                       <ListItem key="copyright" fontSize={5}>
                         <Typography variant="body2" color="textSecondary">
                           <Link target="_blank" href="https://lab.notes-hz.com/">

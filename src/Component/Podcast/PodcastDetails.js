@@ -26,6 +26,7 @@ import "firebase/storage";
 import "firebase/database";
 //other
 import { Helmet } from 'react-helmet';
+import { Divider } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -37,8 +38,8 @@ const useStyles = makeStyles((theme)=>({
         textAlign:"center"
     },
     large: {
-      width: theme.spacing(32),
-      height: theme.spacing(32),
+      width: theme.spacing(24),
+      height: theme.spacing(24),
       marginBottom: theme.spacing(1),
       marginTop:theme.spacing(3),
       color: "#FFFFFF",
@@ -162,7 +163,6 @@ const PodcastDetails = (props) => {
           { subStatu===1 || publicStatu || props.user.userId === props.match.params.id ?
             <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
-                <Card>
                   <Helmet>
                       <title>{ name } - { channelName } - Onlymycast</title>
                   </Helmet>
@@ -193,15 +193,16 @@ const PodcastDetails = (props) => {
                         onClick={props.setPlayer}>
                         播放單集
                     </Button>
-                    </CardContent>
-                </Card>
+                  </CardContent>
               </Grid>
               <Grid item xs={12} md={8}>
-                <Card>
-                  <CardContent>
-                    <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
-                  </CardContent>
-                </Card>
+                <CardContent>
+                  <Typography style={{textAlign:"left"}} variant="subtitle1" component="p">
+                    單集介紹
+                  </Typography>
+                  <br/><Divider/><br/>
+                  <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
+                </CardContent>
               </Grid>
             </Grid>
             :

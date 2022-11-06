@@ -201,28 +201,26 @@ const EditPodcast = (props) => {
 
     if (props.user.userId==="") {
         return(
-            <Container maxWidth="lg">
-                <Card className={classes.root}>
-                    <CardContent>
-                        <Typography variant="h2" component="h1" gutterBottom>
-                            (^ｰ^)ノ<br/>
-                        </Typography>
-                        <Typography variant="h5" component="span">
-                            嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
-                        </Typography>
-                        <br/>
-                        <Button
-                            component={RLink}
-                            to="/podcastaccount"
-                            color="primary"
-                            fullWidth
-                            size="large"
-                            variant="contained"
-                            >              
-                            立即建立屬於我的私人電台
-                            </Button>
-                    </CardContent>
-                </Card>
+            <Container maxWidth="lg" className={classes.root}>
+                <CardContent>
+                    <Typography variant="h2" component="h1" gutterBottom>
+                        (^ｰ^)ノ<br/>
+                    </Typography>
+                    <Typography variant="h5" component="span">
+                        嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
+                    </Typography>
+                    <br/>
+                    <Button
+                        component={RLink}
+                        to="/podcastaccount"
+                        color="primary"
+                        fullWidth
+                        size="large"
+                        variant="contained"
+                        >              
+                        立即建立屬於我的私人電台
+                        </Button>
+                </CardContent>
             </Container>
         )} else {
             if (spList === undefined || castdarftSpList === undefined) {
@@ -245,7 +243,6 @@ const EditPodcast = (props) => {
                                 <Tab label="草稿夾" />
                             </Tabs>
                         </AppBar>
-                        <Card>
                         <CardContent>
                             <SwipeableViews
                                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -276,7 +273,6 @@ const EditPodcast = (props) => {
                                 </TabPanel>
                             </SwipeableViews>
                         </CardContent>
-                        </Card>
                     </Container>
                 );
             }

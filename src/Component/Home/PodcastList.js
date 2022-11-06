@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme)=>({
     large: {
         width: theme.spacing(24),
         height: theme.spacing(24),
+        borderRadius: 25,
         color: "#FFFFFF",
         backgroundColor: "#FD3E49",
       },
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme)=>({
         borderRadius: 6,
       },
     card: {
-      borderRadius: 12,
+      borderRadius: 20,
       height: 250,
       textAlign: 'center',
     },
@@ -82,14 +83,14 @@ const useStyles = makeStyles((theme)=>({
             vertical: 'top',
             horizontal: 'right',
           }}>
-        <Card className={classes.card}>
+        <div className={classes.card}>
           <Avatar component={RLink} to={"/podcast/" + props.podcastId} variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
           <Link component={RLink} to={"/podcast/" + props.podcastId} variant="body1" underline="hover">{podcastName}</Link>
           <Divider variant="middle" />
           <CardActions className={classes.action}>
           <Typography align="left" variant="subtitle2"><ListItemIcon><EventIcon fontSize='small'/>{ toDataTime(props.updateTime) }</ListItemIcon></Typography>
           </CardActions>
-        </Card>
+        </div>
       </Badge>
     </Grid>
     )

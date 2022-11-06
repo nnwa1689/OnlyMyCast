@@ -7,9 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
@@ -18,12 +19,18 @@ import PeopleIcon from '@material-ui/icons/People';
 import PodcastspList from './PodcastspList';
 import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import AppBar from '@material-ui/core/AppBar';
+import SwipeableViews from 'react-swipeable-views';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import TwitterIcon from '@material-ui/icons/Twitter';
+//customUI
+import TabPanel from '../CustomComponent/TabPanel';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -102,11 +109,15 @@ const useStyles = makeStyles((theme) => ({
         color: "#09CEF6",
         margin: theme.spacing(1),
     },
+    tabBar: {
+        boxShadow : "none",
+    },
 }));
 
 
 const PodcastHome = (props) => {
     const classes = useStyles();
+    const theme = useTheme();
     const [name, setName] = useState("");
     const [avatar, setAvatar] = useState("");
     const [intro, setIntro] = useState("");
@@ -127,6 +138,8 @@ const PodcastHome = (props) => {
     const [spotifyLink, setSpotifyLink] = useState();
     const [kkLink, setKkLink] = useState();
     const [soundonLink, setSoundonLink] = useState();
+
+    const [tabValue, setTabValue] = useState(0);
 
 
     useEffect(
@@ -154,6 +167,14 @@ const PodcastHome = (props) => {
             countSub();
         }, [subStatu, publicStatu]
     )
+
+    const handleChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+
+    const handleChangeIndex = (index) => {
+        setTabValue(index);
+    };
 
     const getPodcastList = async () => {
         var changeArr = Array();
@@ -338,7 +359,7 @@ const PodcastHome = (props) => {
                 </Helmet>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={4}>
-                        <Card>
+
                         <CardContent>
                             <Avatar variant="rounded" alt={name} src={avatar === "" ? "." : avatar} className={classes.large} />
                             <Typography style={{ paddingTop: "16px" }} variant="h5">{name}</Typography>
@@ -383,66 +404,26 @@ const PodcastHome = (props) => {
                                     }
                                 </>
                             }
-                                                        <br />
-                            {facebookLink.length > 0 ?
-                                <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
-                                    <FacebookIcon fontSize='large' />
-                                </IconButton>
-                                : ""}
-                            {instagramLink.length > 0 ?
-                                <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
-                                    <InstagramIcon fontSize='large' />
-                                </IconButton>
-                                : ""}
-                            {youtubeLink.length > 0 ?
-                                <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
-                                    <YouTubeIcon fontSize='large' />
-                                </IconButton>
-                                : ""}
-                            {twitterLink.length > 0 ?
-                                <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
-                                    <TwitterIcon fontSize='large' />
-                                </IconButton>
-                                : ""}
-                            {applepodcastLink.length > 0 ?
-                                <IconButton className={classes.twitterButton} href={applepodcastLink} target='_blank' size='small'>
-                                    <img alt="apple" src={applelogo} width="30px"></img>
-                                </IconButton>
-                                : ""}
-                            {googlepodcastLink.length > 0 ?
-                                <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='small'>
-                                    <img alt="google" src={googlelogo} width="30px"></img>
-                                </IconButton>
-                                : ""}
-                            {spotifyLink.length > 0 ?
-                                <IconButton className={classes.spotifyColor} href={spotifyLink} target='_blank' size='small'>
-                                    <img alt="spotify" src={spotiflogo} width="30px"></img>
-                                </IconButton>
-                                : ""}
-                            {kkLink.length > 0 ?
-                                <IconButton className={classes.kkColor} href={kkLink} target='_blank' size='small'>
-                                    <img alt="spotify" src={kklogo} width="30px"></img>
-                                </IconButton>
-                                : ""}
-                            {soundonLink.length > 0 ?
-                                <IconButton href={soundonLink} target='_blank' size='small'>
-                                    <img alt="soundon" src={soundonlogo} width="30px"></img>
-                                </IconButton>
-                                : ""}
                         </CardContent>
-                        </Card>
-                        <br/>
-                        <Card>
-                        <CardContent>
-                            <Typography style={{ textAlign: "left" }} variant="body1" component="p">
-                                <ReactMarkdown>{intro}</ReactMarkdown>
-                            </Typography>
-                        </CardContent>
-                        </Card>
                     </Grid>
                     <Grid item xs={12} md={8}>
-                        <Card>
+                    <AppBar className={classes.tabBar} position="static" color="default">
+                            <Tabs
+                            value={tabValue}
+                            onChange={handleChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            variant="fullWidth" >
+                                <Tab label="單集列表" />
+                                <Tab label="節目介紹與收聽平台" />
+                            </Tabs>
+                        </AppBar>
                             <CardContent>
+                            <SwipeableViews
+                                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                index={tabValue}
+                                onChangeIndex={handleChangeIndex}>
+                                <TabPanel value={tabValue} index={0}>
                                 {subStatu === 1|| publicStatu || props.user.userId === props.match.params.id ?
                                     spList === "" ?
                                         <Typography variant="h4" component="span"><br />¯\_(ツ)_/¯<br />還沒有任何節目<br />稍後再回來吧</Typography>
@@ -453,8 +434,68 @@ const PodcastHome = (props) => {
                                     :
                                     <Typography variant="h4" component="span"><br />(＞^ω^＜)<br /><br />訂閱後即可收聽</Typography>
                                 }
+                                </TabPanel>
+                                <TabPanel value={tabValue} index={1}>
+                                    <Typography style={{ textAlign: "left" }} variant="subtitle1" component="p">
+                                        節目介紹
+                                    </Typography>
+                                    <Typography style={{ textAlign: "left" }} variant="body1" component="p">
+                                        <ReactMarkdown>{intro}</ReactMarkdown>
+                                    </Typography>
+                                    <Divider/>
+                                    <br/>                                    
+                                    <Typography style={{ textAlign: "left" }} variant="subtitle1" component="p">
+                                        連結與其他平台
+                                    </Typography>
+                                    <br/>
+                                    {facebookLink.length > 0 ?
+                                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
+                                        <FacebookIcon fontSize='large' />
+                                    </IconButton>
+                                    : ""}
+                                    {instagramLink.length > 0 ?
+                                        <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
+                                            <InstagramIcon fontSize='large' />
+                                        </IconButton>
+                                        : ""}
+                                    {youtubeLink.length > 0 ?
+                                        <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
+                                            <YouTubeIcon fontSize='large' />
+                                        </IconButton>
+                                        : ""}
+                                    {twitterLink.length > 0 ?
+                                        <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
+                                            <TwitterIcon fontSize='large' />
+                                        </IconButton>
+                                        : ""}
+                                    {applepodcastLink.length > 0 ?
+                                        <IconButton className={classes.twitterButton} href={applepodcastLink} target='_blank' size='small'>
+                                            <img alt="apple" src={applelogo} width="30px"></img>
+                                        </IconButton>
+                                        : ""}
+                                    {googlepodcastLink.length > 0 ?
+                                        <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='small'>
+                                            <img alt="google" src={googlelogo} width="30px"></img>
+                                        </IconButton>
+                                        : ""}
+                                    {spotifyLink.length > 0 ?
+                                        <IconButton className={classes.spotifyColor} href={spotifyLink} target='_blank' size='small'>
+                                            <img alt="spotify" src={spotiflogo} width="30px"></img>
+                                        </IconButton>
+                                        : ""}
+                                    {kkLink.length > 0 ?
+                                        <IconButton className={classes.kkColor} href={kkLink} target='_blank' size='small'>
+                                            <img alt="spotify" src={kklogo} width="30px"></img>
+                                        </IconButton>
+                                        : ""}
+                                    {soundonLink.length > 0 ?
+                                        <IconButton href={soundonLink} target='_blank' size='small'>
+                                            <img alt="soundon" src={soundonlogo} width="30px"></img>
+                                        </IconButton>
+                                        : ""}
+                                </TabPanel>
+                                </SwipeableViews>
                             </CardContent>
-                        </Card>
                     </Grid>
                 </Grid>
             </Container>

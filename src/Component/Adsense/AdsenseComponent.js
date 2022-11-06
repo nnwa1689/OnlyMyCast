@@ -6,7 +6,6 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 50,
-        marginBottom: 100,
         alignItems:"center",
         textAlign:"center"
     },

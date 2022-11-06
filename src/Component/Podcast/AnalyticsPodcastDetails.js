@@ -110,22 +110,20 @@ const useStyles = makeStyles((theme)=>({
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" className={classes.root}>
             <Helmet>
                 <title>單集分析 - Onlymycast</title>
             </Helmet>
-                <Card className={classes.root}>
-                    <CardContent>
-                    <Typography variant="h5" component="h1">單集點閱分析</Typography><br/>
-                    <Typography variant="h6" component="span"><BarChartIcon />&nbsp;總播放人次：{ playedTimes }</Typography>
-                    <br/><br/>
-                    <Divider /><br/>
-                    <Typography variant="h6" component="span"><PeopleIcon />&nbsp;誰播放過</Typography><br/>
-                    <List dense>
-                        { playedList }
-                    </List>
-                    </CardContent>
-                </Card>
+                <CardContent>
+                <Typography variant="h5" component="h1">單集點閱分析</Typography><br/>
+                <Typography variant="h6" component="span"><BarChartIcon />&nbsp;總播放人次：{ playedTimes }</Typography>
+                <br/><br/>
+                <Divider /><br/>
+                <Typography variant="h6" component="span"><PeopleIcon />&nbsp;誰播放過</Typography><br/>
+                <List dense>
+                    { playedList }
+                </List>
+                </CardContent>
             </Container>
         );    
     }

@@ -58,8 +58,8 @@ const useStyles = makeStyles((theme)=>({
       alignItems:"center"
     },
     large: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
+      width: theme.spacing(30),
+      height: theme.spacing(30),
       marginBottom: theme.spacing(3),
       marginTop:theme.spacing(3),
       backgroundColor: "#FD3E49",
@@ -154,7 +154,7 @@ const Account = (props) => {
                         <ListItemAvatar>
                         <Avatar style={ {backgroundColor: "#FD3E49",} } variant="rounded" alt={data.name} src={data.icon}/>
                         </ListItemAvatar>
-                        <Link variant="body2" component={RLink} to={"/podcast/" + value[0]}>
+                        <Link variant="body1" component={RLink} to={"/podcast/" + value[0]}>
                             {data.name}
                         </Link>
                         <ListItemSecondaryAction>
@@ -348,90 +348,74 @@ const Account = (props) => {
                     onChangeIndex={handleChangeIndex}>
                         <TabPanel value={tabValue} index={0}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12} md={12}>
-                                    <Card>
-                                    <CardContent>
-                                        <Typography variant="h5" component="h1"><AccountCircleIcon/>頭貼設定</Typography>
-                                        <Avatar alt={name} src={avatar} className={classes.large} />
-                                            <FormControl fullWidth className={classes.margin}>
-                                            <input
-                                                accept="image/jpeg, image/png"
-                                                className={classes.input}
-                                                id="contained-button-file"
-                                                multiple
-                                                type="file"
-                                                startIcon={<AttachmentIcon />}
-                                                disabled={handleCode==="loading"}
-                                                onChange={(e)=>{
-                                                    if (e.target.files.length >= 1) {
-                                                        setAvatar(URL.createObjectURL(e.target.files[0]));
-                                                        setFilename(e.target.files[0].name);
-                                                        setFileBit(e.target.files[0])
-                                                    }
-                                                }}
-                                            />
-                                            <label htmlFor="contained-button-file">
-                                                <Button variant="contained" size="large" fullWidth color="primary" component="span">
-                                                    <AttachmentIcon />
-                                                    { filename === "" ? "上傳新頭貼" : filename }
-                                                </Button>
-                                                <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
-                                            </label>
-                                            </FormControl>
-                                        </CardContent>
-                                        </Card>
-                                </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <Card>
-                                        <CardContent>
-                                        <Typography variant="h5" component="h1"><AssignmentIndIcon/>個人帳號設定</Typography>
-                                        <Typography variant="body1" component="span">您的帳號資訊</Typography>
+                                <CardContent>
+                                    <Typography variant="h5" component="h1"><AccountCircleIcon/>頭貼設定</Typography>
+                                    <Avatar alt={name} src={avatar} className={classes.large} />
                                         <FormControl fullWidth className={classes.margin}>
-                                                <TextField disabled={true} helperText="Email一但註冊就無法修改" value={props.userEmail} id="email" label="Email" variant="outlined" />
-                                            </FormControl>
-                                            <FormControl fullWidth className={classes.margin}>
-                                                <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="name" label="暱稱" variant="outlined" />
-                                            </FormControl>
-                                        </CardContent>
-                                    </Card>
+                                        <input
+                                            accept="image/jpeg, image/png"
+                                            className={classes.input}
+                                            id="contained-button-file"
+                                            multiple
+                                            type="file"
+                                            startIcon={<AttachmentIcon />}
+                                            disabled={handleCode==="loading"}
+                                            onChange={(e)=>{
+                                                if (e.target.files.length >= 1) {
+                                                    setAvatar(URL.createObjectURL(e.target.files[0]));
+                                                    setFilename(e.target.files[0].name);
+                                                    setFileBit(e.target.files[0])
+                                                }
+                                            }}
+                                        />
+                                        <label htmlFor="contained-button-file">
+                                            <Button variant="contained" size="large" fullWidth color="primary" component="span">
+                                                <AttachmentIcon />
+                                                { filename === "" ? "上傳新頭貼" : filename }
+                                            </Button>
+                                            <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
+                                        </label>
+                                        </FormControl>
+                                    </CardContent>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                        <Card>
-                                            <CardContent>
-                                            <Typography variant="h5" component="h1"><LockIcon/>安全與密碼</Typography>
-                                            <Typography variant="body1" component="span">更新、驗證您的密碼</Typography>
-                                            <FormControl fullWidth className={classes.margin}>
-                                                <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />
-                                            </FormControl>
-                                            <FormControl fullWidth className={classes.margin}>
-                                                <TextField required disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
-                                            </FormControl>
-                                            </CardContent>
-                                        </Card>
+                                    <CardContent>
+                                    <Typography variant="h5" component="h1"><AssignmentIndIcon/>帳號資訊</Typography>
+                                    <FormControl fullWidth className={classes.margin}>
+                                            <TextField disabled={true} helperText="Email一但註冊就無法修改" value={props.userEmail} id="email" label="Email" variant="outlined" />
+                                        </FormControl>
+                                        <FormControl fullWidth className={classes.margin}>
+                                            <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="name" label="暱稱" variant="outlined" />
+                                        </FormControl>
+                                    <Typography variant="h5" component="h1"><LockIcon/>安全與密碼</Typography>
+                                    <FormControl fullWidth className={classes.margin}>
+                                        <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />
+                                    </FormControl>
+                                    <FormControl fullWidth className={classes.margin}>
+                                        <TextField required disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
+                                    </FormControl>
+
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        className={classes.button}
+                                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                                        onClick={handleUpdateAccount}
+                                        disabled={handleCode==="loading"}>
+                                        儲存設定
+                                    </Button>
+                                    </CardContent>
                                 </Grid>
                             </Grid>
-                            <div className={classes.wrapper}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="large"
-                                    className={classes.button}
-                                    startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                                    onClick={handleUpdateAccount}
-                                    disabled={handleCode==="loading"}>
-                                    儲存設定
-                                </Button>
-                            </div>
                         </TabPanel>             
-
                         <TabPanel value={tabValue} index={1}>
-                            <Card>
                             <CardContent>
                             <Typography variant="h5" component="h1">訂閱管理</Typography>
-                                <Typography variant="body1" component="span">取消已經訂閱的頻道</Typography>
                                 { subscribeList !== "" ? 
                                     <>
-                                        <List dense>
+                                        <List>
                                             {  subscribeList }
                         
                                         </List>
@@ -440,9 +424,7 @@ const Account = (props) => {
                                     <Typography variant="h4" component="h1"><br/>╮(╯▽╰)╭<br/>目前沒有任何訂閱！<br/>快去訂閱喜歡的頻道吧！</Typography>
                                     }
                             </CardContent>
-                            </Card>
                         </TabPanel>
-
                     </SwipeableViews>
                 <Dialog
                     open={showUnsubMsg}

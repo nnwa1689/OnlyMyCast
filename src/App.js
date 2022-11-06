@@ -46,9 +46,10 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V221105.22";
+const clientversion = "V221106.22";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -430,6 +431,10 @@ const App = (props) => {
                 {
                   /*Google Adsense*/
                   !(removeAdsensePath.includes(pathname)) && <AdsenseComponent />
+                }
+                {
+                  /* 不必移除footer的地方 */
+                  (!removeNavbarPath.includes(pathname)) && <Footer/>
                 }
               </>
               :

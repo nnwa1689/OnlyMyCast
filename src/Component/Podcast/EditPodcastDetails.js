@@ -172,55 +172,53 @@ const useStyles = makeStyles((theme)=>({
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" className={classes.root}>
                 <Helmet>
                     <title>編輯單集 - Onlymycast</title>
                 </Helmet>
-                <Card className={classes.root}>
-                    <CardContent>
-                    <Typography variant="h5" component="h1">編輯單集</Typography>
-                    <Typography variant="body1" component="span">刪除或編輯這個單集</Typography>
-    
-                        <FormControl fullWidth className={classes.margin}>
-                            <TextField error={titleErr!==false} helperText={ titleErr !== false && titleErr} disabled={handleCode==="loading"} value={title} onChange={(e)=>setTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
-                        </FormControl>
-                        <FormControl fullWidth className={classes.margin}>
-                        <InputLabel>單集簡介</InputLabel>
-                            <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
-                            <br/>
-                            <MDEditor
-                                value={intro}
-                                onChange={setIntro}
-                            />   
-                            <br/> <br/>                         
-                        </FormControl>
-                        <FormControl fullWidth className={classes.margin}>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            size="large"
-                            className={classes.button}
-                            startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                            onClick={handleUpdateInfor}
-                            disabled={handleCode==="loading" || handleCode==="del"}
-                        >
-                            變更單集資訊
-                        </Button>
+                <CardContent>
+                <Typography variant="h5" component="h1">編輯單集</Typography>
+                <Typography variant="body1" component="span">刪除或編輯這個單集</Typography>
+
+                    <FormControl fullWidth className={classes.margin}>
+                        <TextField error={titleErr!==false} helperText={ titleErr !== false && titleErr} disabled={handleCode==="loading"} value={title} onChange={(e)=>setTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
+                    </FormControl>
+                    <FormControl fullWidth className={classes.margin}>
+                    <InputLabel>單集簡介</InputLabel>
+                        <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
                         <br/>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            startIcon={handleCode==="del" ? <CircularProgress size={24} className={classes.buttonProgress} /> : <DeleteIcon />}
-                            onClick={()=>{setShowMsgBox(true)}}
-                            size="large"
-                            disabled={handleCode==="loading" || handleCode==="del"}
-                        >
-                            刪除單集
-                        </Button> 
-                        </FormControl>   
-                    </CardContent>
-                </Card>
+                        <MDEditor
+                            value={intro}
+                            onChange={setIntro}
+                        />   
+                        <br/> <br/>                         
+                    </FormControl>
+                    <FormControl fullWidth className={classes.margin}>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        className={classes.button}
+                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                        onClick={handleUpdateInfor}
+                        disabled={handleCode==="loading" || handleCode==="del"}
+                    >
+                        變更單集資訊
+                    </Button>
+                    <br/>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        startIcon={handleCode==="del" ? <CircularProgress size={24} className={classes.buttonProgress} /> : <DeleteIcon />}
+                        onClick={()=>{setShowMsgBox(true)}}
+                        size="large"
+                        disabled={handleCode==="loading" || handleCode==="del"}
+                    >
+                        刪除單集
+                    </Button> 
+                    </FormControl>   
+                </CardContent>
 
                 <div>
                     <Dialog

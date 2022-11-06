@@ -316,124 +316,122 @@ const useStyles = makeStyles((theme)=>({
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" className={classes.root}>
                 <Helmet>
                     <title>編輯草稿 - Onlymycast</title>
                 </Helmet>
-                <Card className={classes.root}>
-                    <CardContent>
-                    <Typography variant="h5" component="h1">編輯草稿</Typography>
-                    <Typography variant="body1" component="span">刪除或編輯這個草稿</Typography>
-                    <br/>
-                        <FormControl fullWidth className={classes.margin}>
-                            <TextField error={titleErr!==false} helperText={ titleErr !== false && titleErr} disabled={handleCode==="loading"} value={title} onChange={(e)=>setTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
-                        </FormControl>
-                        <FormControl fullWidth className={classes.margin}>
-                        <InputLabel>單集簡介</InputLabel>
-                            <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
-                            <br/>
-                            <MDEditor
-                                value={intro}
-                                onChange={setIntro}
-                            />   
-                            <br/>                       
-                        </FormControl>
-                        <input
-                            accept=".mp3, .m4a"
-                            className={classes.input}
-                            id="contained-button-file"
-                            multiple
-                            type="file"
-                            startIcon={<AttachmentIcon />}
-                            onChange={(e)=>{
-                                if (e.target.files.length >= 1) {
-                                    if ( allowFileType.includes(e.target.files[0].type) ) {
-                                        setFilename(e.target.files[0].name);
-                                        setFileBit(e.target.files[0]);
-                                        setFilePath(URL.createObjectURL(e.target.files[0]));
-                                    } else {
-                                        setErr("檔案格式不支援！");
-                                    }
+                <CardContent>
+                <Typography variant="h5" component="h1">編輯草稿</Typography>
+                <Typography variant="body1" component="span">刪除或編輯這個草稿</Typography>
+                <br/>
+                    <FormControl fullWidth className={classes.margin}>
+                        <TextField error={titleErr!==false} helperText={ titleErr !== false && titleErr} disabled={handleCode==="loading"} value={title} onChange={(e)=>setTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
+                    </FormControl>
+                    <FormControl fullWidth className={classes.margin}>
+                    <InputLabel>單集簡介</InputLabel>
+                        <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
+                        <br/>
+                        <MDEditor
+                            value={intro}
+                            onChange={setIntro}
+                        />   
+                        <br/>                       
+                    </FormControl>
+                    <input
+                        accept=".mp3, .m4a"
+                        className={classes.input}
+                        id="contained-button-file"
+                        multiple
+                        type="file"
+                        startIcon={<AttachmentIcon />}
+                        onChange={(e)=>{
+                            if (e.target.files.length >= 1) {
+                                if ( allowFileType.includes(e.target.files[0].type) ) {
+                                    setFilename(e.target.files[0].name);
+                                    setFileBit(e.target.files[0]);
+                                    setFilePath(URL.createObjectURL(e.target.files[0]));
+                                } else {
+                                    setErr("檔案格式不支援！");
                                 }
-                            }}
-                        />
-                        <label htmlFor="contained-button-file">
-                        <Button fullWidth variant="contained" size="large" color="primary" component="span">
-                            <Typography variant="h6" gutterBottom>
-                            <AttachmentIcon/>
-                            { filename === "" ? "變更檔案" : filename }
-                            <br/>
-                            <Typography variant="body2" gutterBottom>
-                                僅限 MP3/MP4/M4A 格式
-                            </Typography>
-                            </Typography>
+                            }
+                        }}
+                    />
+                    <label htmlFor="contained-button-file">
+                    <Button fullWidth variant="contained" size="large" color="primary" component="span">
+                        <Typography variant="h6" gutterBottom>
+                        <AttachmentIcon/>
+                        { filename === "" ? "變更檔案" : filename }
+                        <br/>
+                        <Typography variant="body2" gutterBottom>
+                            僅限 MP3/MP4/M4A 格式
+                        </Typography>
+                        </Typography>
+                    </Button>
+                    <br/>
+                    </label>
+                    <br/>
+                    <InlinePlayer url={filePath} fileSize={""} returnDuration={(value)=>fromPlayerGetDuration(value)}/>
+                    
+                    <FormControl fullWidth className={classes.margin}>
+                        {
+                            filename !== "" && ( handleCode === "updateDarft" || handleCode === "publish" ) ?
+                            <>
+                                <br/>
+                                <LinearProgressWithLabel value={uploadProgress} />
+                                <br/>
+                                <Typography variant="h6" gutterBottom>
+                                    正在處理上傳作業，請不要關閉視窗。
+                                </Typography>
+                                <br/>
+                            </>
+                            :
+                            ""
+                        }
+        
+                        {  //uploadErr
+                            err && 
+                            <>
+                                <Typography variant="h6" gutterBottom>
+                                    (￣◇￣;)<br/><br/>
+                                    歐歐，上傳處理發生錯誤，一群猴子正在極力強修
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                    {"ErrorMsg:" + err}
+                                </Typography>
+                            </>
+                        }
+                    </FormControl>
+                    <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                            startIcon={ handleCode==='publish'? <CircularProgress size={24} className={classes.buttonProgress} /> : <PublishIcon />}
+                            onClick={() => { setShowPublishMsgBox(true) }}
+                            disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
+                        >
+                            發布
                         </Button>
-                        <br/>
-                        </label>
-                        <br/>
-                        <InlinePlayer url={filePath} fileSize={""} returnDuration={(value)=>fromPlayerGetDuration(value)}/>
-                        
-                        <FormControl fullWidth className={classes.margin}>
-                            {
-                                filename !== "" && ( handleCode === "updateDarft" || handleCode === "publish" ) ?
-                                <>
-                                    <br/>
-                                    <LinearProgressWithLabel value={uploadProgress} />
-                                    <br/>
-                                    <Typography variant="h6" gutterBottom>
-                                        正在處理上傳作業，請不要關閉視窗。
-                                    </Typography>
-                                    <br/>
-                                </>
-                                :
-                                ""
-                            }
-            
-                            {  //uploadErr
-                                err && 
-                                <>
-                                    <Typography variant="h6" gutterBottom>
-                                        (￣◇￣;)<br/><br/>
-                                        歐歐，上傳處理發生錯誤，一群猴子正在極力強修
-                                    </Typography>
-                                    <Typography variant="body2" gutterBottom>
-                                        {"ErrorMsg:" + err}
-                                    </Typography>
-                                </>
-                            }
-                        </FormControl>
                         <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.button}
-                                startIcon={ handleCode==='publish'? <CircularProgress size={24} className={classes.buttonProgress} /> : <PublishIcon />}
-                                onClick={() => { setShowPublishMsgBox(true) }}
-                                disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
-                            >
-                                發布
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                className={classes.button}
-                                startIcon={ handleCode==='updateDarft'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                                onClick={handleUpdateInfor}
-                                disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
-                            >
-                                儲存
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                className={classes.button}
-                                startIcon={<DeleteIcon />}
-                                onClick={()=>{setshowDelMsgBox(true)}}
-                                disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
-                            >
-                                刪除
-                            </Button> 
-                    </CardContent>
-                </Card>
+                            variant="outlined"
+                            color="primary"
+                            className={classes.button}
+                            startIcon={ handleCode==='updateDarft'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                            onClick={handleUpdateInfor}
+                            disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
+                        >
+                            儲存
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.button}
+                            startIcon={<DeleteIcon />}
+                            onClick={()=>{setshowDelMsgBox(true)}}
+                            disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
+                        >
+                            刪除
+                        </Button> 
+                </CardContent>
 
                 <Dialog
                     open={showPublishMsgBox}

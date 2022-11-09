@@ -4,7 +4,7 @@ import { Link as RLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 //customhook
 import useWindowWidth from '../../Hook/useWindowWidth';
-import Darkmode from './Darkmode';
+import UserMenu from './UserMenu';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -22,25 +22,20 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import Drawer from '@material-ui/core/Drawer';
-import Avatar from '@material-ui/core/Avatar';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PublishIcon from '@material-ui/icons/Publish';
 import EditIcon from '@material-ui/icons/Edit';
 import Badge from '@material-ui/core/Badge';
 import Link from '@material-ui/core/Link';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FaceIcon from '@material-ui/icons/Face';
 import HelpIcon from '@material-ui/icons/Help';
 import Tooltip from '@material-ui/core/Tooltip';
 import InputBase from '@material-ui/core/InputBase';
 //static
-import LogoIcon from '../../static/only-my-cast-icon.svg';
+import LogoPink from '../../static/only-my-cast-pink.svg';
 import Logo from '../../static/only-my-cast.svg';
 
 
@@ -115,15 +110,6 @@ const NavBar = (props) => {
     const windowWidth = useWindowWidth();
     const [search, setSearch] = useState("");
     const darkmode = useSelector(state => state.mode);
-    const handleLogout = ()=>{
-      firebase.auth().signOut().then(() => {
-        // Sign-out successful.
-        localStorage.removeItem('themeMode');
-        window.location.reload();
-      }).catch((error) => {
-        // An error happened.
-      });
-    }
 
     useEffect(
       ()=>{
@@ -212,11 +198,11 @@ const NavBar = (props) => {
               </Tooltip>
               }
               <Tooltip title="發佈單集">
-                <Fab component={RLink} to="/uploadpodcast" color="primary" aria-label="add" size="small" className={classes.menuButton} edge="end" >
+                <Fab component={RLink} to="/uploadpodcast" aria-label="add" size="small" className={classes.menuButton} edge="end" >
                       <AddIcon />
                 </Fab>
               </Tooltip>
-              <Darkmode />
+              <UserMenu userName={ props.user.name } avatar={ props.user.avatar } email={ props.userEmail } />
           </Toolbar>
           </AppBar>
 
@@ -226,19 +212,10 @@ const NavBar = (props) => {
                   onClick={ ()=>{ setSideBar(false) } }
                   onKeyDown={ ()=>{ setSideBar(false) } }>
                   <List>
-                      <ListItem key="account">
-                          <ListItemIcon><Avatar alt={props.user.name} src={props.user.avatar==="" ? "." : props.user.avatar} className={ classes.pink } /></ListItemIcon>
-                          <Typography variant="body2" component="span">
-                            {props.user.name}
-                            <br/>
-                            <Typography variant="caption" component="span">{props.userEmail}</Typography>
-                          </Typography>
-                      </ListItem>
-                      <ListItem key="accountedit">
-                      <ButtonGroup size="large" aria-label="outlined primary button group" fullWidth>
-                        <Button key="accoutsetting" component={RLink} to="/account" variant="outlined"><AccountBoxIcon />設定</Button>
-                        <Button key="logout" onClick={handleLogout} variant="outlined"><ExitToAppIcon />登出</Button>
-                      </ButtonGroup>
+                      <ListItem key="logo">
+                        <Link component={RLink} to="/" >
+                          <img alt="OnlyMyCast" src={LogoPink} height="48" />
+                        </Link>
                       </ListItem>
                   </List>
                   <Divider />

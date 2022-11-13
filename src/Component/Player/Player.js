@@ -226,8 +226,6 @@ const Player = (props) => {
                     </Toolbar>
                 </Grid>
             </Grid>
-
-                 
             </AppBar>
         </>
         }

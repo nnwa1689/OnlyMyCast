@@ -9,7 +9,6 @@ import MDEditor from '@uiw/react-md-editor';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,7 +48,6 @@ import "firebase/functions";
 //other
 import { Helmet } from 'react-helmet';
 import genrssfeed from '../../Functions/genRssfeed';
-import { MicNone } from '@material-ui/icons';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -606,6 +604,7 @@ const useStyles = makeStyles((theme)=>({
                                     disabled={activeStep === 0}
                                     onClick={()=>setActiveStep(activeStep - 1)}
                                     className={ classes.flexLeft }
+                                    color="primary"
                                 >
                                     上一步
                                 </Button>

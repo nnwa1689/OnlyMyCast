@@ -5,7 +5,6 @@ import ReactMarkdown from 'react-markdown';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -18,6 +17,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PeopleIcon from '@material-ui/icons/People';
 import PodcastspList from './PodcastspList';
 import List from '@material-ui/core/List';
+import { ListItem } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -39,7 +39,8 @@ import "firebase/storage";
 import "firebase/database";
 //other
 import { Helmet } from 'react-helmet';
-import { ListItem } from '@material-ui/core';
+//Ad
+import AdsenseChannelComponent from '../Adsense/AdsenseChannelComponent';
 //media images
 import kklogo from '../../static/kkbox_app_icon.png';
 import spotiflogo from '../../static/spotify.png';
@@ -359,7 +360,6 @@ const PodcastHome = (props) => {
                 </Helmet>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={4}>
-
                         <CardContent>
                             <Avatar variant="rounded" alt={name} src={avatar === "" ? "." : avatar} className={classes.large} />
                             <Typography style={{ paddingTop: "16px" }} variant="h5">{name}</Typography>
@@ -404,6 +404,8 @@ const PodcastHome = (props) => {
                                     }
                                 </>
                             }
+                            <br/>
+                            <AdsenseChannelComponent />
                         </CardContent>
                     </Grid>
                     <Grid item xs={12} md={8}>
@@ -436,17 +438,16 @@ const PodcastHome = (props) => {
                                 }
                                 </TabPanel>
                                 <TabPanel value={tabValue} index={1}>
-                                    <Typography style={{ textAlign: "left" }} variant="subtitle1" component="p">
+                                    <h3 style={{ textAlign: "left" }} variant="h6" component="h6">
                                         節目介紹
-                                    </Typography>
+                                    </h3>
                                     <Typography style={{ textAlign: "left" }} variant="body1" component="p">
                                         <ReactMarkdown>{intro}</ReactMarkdown>
                                     </Typography>
-                                    <Divider/>
-                                    <br/>                                    
-                                    <Typography style={{ textAlign: "left" }} variant="subtitle1" component="p">
+                                    <Divider/>                                   
+                                    <h3 style={{ textAlign: "left" }} variant="h6" component="h6">
                                         連結與其他平台
-                                    </Typography>
+                                    </h3>
                                     <br/>
                                     {facebookLink.length > 0 ?
                                     <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>

@@ -197,10 +197,10 @@ const PodcastDetails = (props) => {
               </Grid>
               <Grid item xs={12} md={8}>
                 <CardContent>
-                  <Typography style={{textAlign:"left"}} variant="subtitle1" component="p">
+                  <h3 style={{textAlign:"left"}} variant="subtitle1" component="p">
                     單集介紹
-                  </Typography>
-                  <br/><Divider/><br/>
+                  </h3>
+                  <Divider/><br/>
                   <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
                 </CardContent>
               </Grid>

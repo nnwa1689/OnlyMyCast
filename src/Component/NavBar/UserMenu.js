@@ -38,8 +38,9 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledMenu = withStyles({
     paper: {
-      border: '1px solid #D3D3D3',
+      border: '0px solid #D3D3D3',
       borderRadius: '10px',
+      boxShadow: "0px 4px 32px 0px rgb(60 64 67 / 15%)"
     },
   })((props) => (
     <Menu
@@ -125,9 +126,9 @@ const UserMenu = (props) => {
                 </MenuItem>
                 <MenuItem onClick={handleMode}>
                     <ListItemIcon>
-                        { isDarkmode == "dark" ? <Brightness7Icon fontSize='large'/> : <Brightness4Icon fontSize='large'/> }
+                        { isDarkmode == "light" ? <Brightness7Icon fontSize='large'/> : <Brightness4Icon fontSize='large'/> }
                     </ListItemIcon>    
-                        { isDarkmode == "dark" ? 
+                        { isDarkmode == "light" ? 
                         <Typography variant="subtitle2" component="span">
                             外觀：明亮主題
                         </Typography> : 

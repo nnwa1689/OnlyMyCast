@@ -206,18 +206,24 @@ const NavBar = (props) => {
           </Toolbar>
           </AppBar>
 
-          <Drawer anchor="left" open={ sideBar } onClose={ ()=> setSideBar(false) }>
+          <Drawer hideBackdrop="true" anchor="left" open={ sideBar } onClose={ ()=> setSideBar(false) }>
               <div className={ classes.list }
                   role="presentation"
                   onClick={ ()=>{ setSideBar(false) } }
                   onKeyDown={ ()=>{ setSideBar(false) } }>
-                  <List>
-                      <ListItem key="logo">
-                        <Link component={RLink} to="/" >
-                          <img alt="OnlyMyCast" src={LogoPink} height="48" />
-                        </Link>
-                      </ListItem>
-                  </List>
+                  <Toolbar>
+                    <IconButton
+                    edge="start"
+                    className={classes.menuButton}
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={ ()=>{ setSideBar(true) } }>
+                        <MenuIcon />
+                    </IconButton>
+                    <Link component={RLink} to="/" >
+                        <img alt="OnlyMyCast" src={LogoPink} height="48" />
+                    </Link>
+                  </Toolbar>
                   <Divider />
                   <List>
                   <ListItem button component={RLink} to="/podcastaccount" key="podcastsetting">

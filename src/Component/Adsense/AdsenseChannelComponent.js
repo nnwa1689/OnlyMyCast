@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
-        marginTop: 50,
+        marginTop: 30,
         alignItems:"center",
         textAlign:"center"
     },

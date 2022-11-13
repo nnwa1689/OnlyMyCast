@@ -49,7 +49,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V221113.15";
+const clientversion = "V221113.23";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];

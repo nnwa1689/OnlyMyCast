@@ -37,7 +37,7 @@ const PodcastspList = (props)=>{
                 </Typography>
                 <br/>
                 <Link style={{ display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }} variant="subtitle1" underline="none">{props.podTitle}</Link>
-                <Typography style={{ display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }} variant="body2" component="span">{props.intro}</Typography>
+                <Typography style={{ display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }} variant="body2" component="span">{props.intro}</Typography>
             </ListItemText>
             <ListItemSecondaryAction>
                 <Tooltip title="播放">
@@ -51,7 +51,7 @@ const PodcastspList = (props)=>{
                     data-poduserid = { props.userId }
                     onClick={props.setPlayer}
                     edge="end"
-                    size="small"
+                    size="large"
                     >
                         <PlayArrowIcon />
                     </IconButton>

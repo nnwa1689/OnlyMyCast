@@ -112,6 +112,10 @@ const useStyles = makeStyles((theme)=>({
     const [filename, setFilename] = useState("");
     const [filePath, setFilePath] = useState();
     const [fileBit, setFileBit] = useState();
+
+    var fileArray = useRef(new Array());
+    const [fileUiArray, setFileUiArray] = useState(new Array());
+
     const [intro, setIntro] = useState("");
     const [podcastTitle, setPodcastTitle] = useState("");
     const [titleErr, setTitleErr] = useState(false);
@@ -151,6 +155,7 @@ const useStyles = makeStyles((theme)=>({
             */
         }
     )
+
 
     const onlineRecordingInit = () => {
         let changeArr = [];
@@ -232,12 +237,27 @@ const useStyles = makeStyles((theme)=>({
             clearInterval(currentTimer);
             const blobURL = URL.createObjectURL(blob);
             setFilePath(blobURL);
+            
             setFileBit(blob)
             setFilename(sha256(new Date().toISOString()).toString() + '.mp3');
             setIsRecording(false);
+
+            /*console.log(fileArray.current.push(
+                {url : blobURL, data: blob, filename: sha256(new Date().toISOString()).toString() + '.mp3'}
+                ));
+
+            setFileUiArray(
+                [...fileUiArray, 
+                <InlinePlayer 
+                    key={fileUiArray.length + 1} 
+                    url={blobURL} 
+                    fileSize={blob.size} 
+                    returnDuration={(value)=>fromPlayerGetDuration(value)}/>            
+                ]
+            )*/
+
           }).catch((e) => console.log(e));
       }
-
 
     const fromPlayerGetDuration = (value) => {
          duration.current = parseInt(value/60, 10) + ":" + Math.ceil(parseInt(value, 10)%60);
@@ -476,7 +496,10 @@ const useStyles = makeStyles((theme)=>({
                     </>
                     }   
                         <br/><br/>
-                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
+                        {fileUiArray}
+
+                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>
+                        }
                         <br/>
                     </>)
                     }
@@ -601,7 +624,7 @@ const useStyles = makeStyles((theme)=>({
                         activeStep < 3 &&
                         <>
                             <Button
-                                    disabled={activeStep === 0}
+                                    disabled={activeStep === 0 || isRecording === true}
                                     onClick={()=>setActiveStep(activeStep - 1)}
                                     className={ classes.flexLeft }
                                     color="primary"
@@ -630,7 +653,7 @@ const useStyles = makeStyles((theme)=>({
                                     </Button>
                                 </>
                                 :
-                                <Button disabled={ (activeStep===0) || (filename==="" && activeStep===1) || (podcastTitle===""&& activeStep===2) || (intro==="" && activeStep===3) } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
+                                <Button disabled={ (activeStep===0) || (filename==="" && activeStep===1) || (podcastTitle===""&& activeStep===2) || (intro==="" && activeStep===3) || isRecording === true } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
                                     下一步
                                 </Button>
                                 }

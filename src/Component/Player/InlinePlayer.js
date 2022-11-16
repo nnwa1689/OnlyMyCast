@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme)=>({
 
 const InlinePlayer = (props) => {
     const classes = useStyles();
-    const [playState, setPlayState] = useState(true);
+    const [playState, setPlayState] = useState(false);
     const [playSec, setPlaySec] = useState(0);
     const [duration, setDuration] = useState(0);
     const playerRef = createRef();
@@ -46,7 +46,7 @@ const InlinePlayer = (props) => {
     useEffect(
         ()=>{
             setReady(false);
-            setPlayState(true);
+            setPlayState(false);
             console.log(duration);
         },[props.url]
     )
@@ -100,7 +100,7 @@ const InlinePlayer = (props) => {
                 playing={playState}
                 config={{ file:{ forceAudio:true } }}
             />
-            <Paper variant="outlined" style={{ paddingTop: 0, }}>
+            <Paper variant="outlined" style={{ paddingTop: 0, margin: "30px" }}>
                 { !ready ? <LinearProgress style={{width:"100%"}}/>
                 :
                 <Slider 
@@ -113,34 +113,25 @@ const InlinePlayer = (props) => {
                     onChange={(e, newValue)=>{setPlayerSec(e, newValue); console.log(playSec, duration)}} 
                     value={playSec!==undefined ? (playSec/duration)*100:0}/>
                 }
-                <Typography className="playTime" style={{ marginTop: "10px" } } variant="subtitle2">
+                <Typography className="playTime" variant="subtitle2">
                     { parseInt(((parseInt(playSec, 10))/60)) + ":" + Math.ceil(((parseInt(playSec, 10))%60))}
                     { " / " + parseInt(duration/60, 10) + ":" + Math.ceil(parseInt(duration, 10)%60)}
                     {"，容量：" + Math.round((props.fileSize/1024/1024)*100)/100 + "MB"}
+
+                    { (playState) ? 
+                    <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause" size="small">
+                        <IconButton className={classes.menuButton}  color="inherit">
+                            <PauseCircleFilledIcon />
+                        </IconButton>
+                    </Tooltip>
+                    : 
+                    <Tooltip onClick={ handlePlayClick } title="播放" aria-label="play" size="small">
+                        <IconButton className={classes.menuButton}  color="inherit">
+                            <PlayCircleFilledIcon />
+                        </IconButton>
+                    </Tooltip>
+                    }
                 </Typography>
-                <Tooltip onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
-                    <IconButton className={classes.menuButton} edge="end" color="inherit">
-                        <Replay10Icon />
-                    </IconButton>  
-                </Tooltip>
-                { (playState) ? 
-                <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause">
-                    <IconButton className={classes.menuButton}  color="inherit">
-                        <PauseCircleFilledIcon fontSize="large" />
-                    </IconButton>
-                </Tooltip>
-                : 
-                <Tooltip onClick={ handlePlayClick } title="播放" aria-label="play">
-                    <IconButton className={classes.menuButton}  color="inherit">
-                        <PlayCircleFilledIcon fontSize="large" />
-                    </IconButton>
-                </Tooltip>
-                }
-                <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
-                    <IconButton className={classes.menuButton}  edge="end" color="inherit">
-                        <Forward10Icon />
-                    </IconButton>
-                </Tooltip>
             </Paper>
         </>
         }

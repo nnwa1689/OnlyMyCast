@@ -1,6 +1,6 @@
 import * as actions from './action';
 const mode = 
-    localStorage.getItem("themeMode") === null ? 'light' : localStorage.getItem("themeMode")
+    localStorage.getItem("themeMode") === null ? 'light' : localStorage.getItem("themeMode");
 
 const darkmodeReducer = (state = mode, action) => {
     switch (action.type) {

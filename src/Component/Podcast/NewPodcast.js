@@ -91,16 +91,16 @@ const useStyles = makeStyles((theme)=>({
     input: {
         display: 'none',
       },
-      margin: {
+    margin: {
         marginBottom: theme.spacing(2),
         marginTop:theme.spacing(2)
-      },
-      mostlarge: {
+    },
+    mostlarge: {
         height: theme.spacing(36),
         width: theme.spacing(36),
         margin:theme.spacing(1),
         borderRadius: 20,
-      },
+    },
   })
   );
 
@@ -113,8 +113,8 @@ const useStyles = makeStyles((theme)=>({
     const [filePath, setFilePath] = useState();
     const [fileBit, setFileBit] = useState();
 
-    var fileArray = useRef(new Array());
-    const [fileUiArray, setFileUiArray] = useState(new Array());
+    //var fileArray = useRef(new Array());
+    //const [fileUiArray, setFileUiArray] = useState(new Array());
 
     const [intro, setIntro] = useState("");
     const [podcastTitle, setPodcastTitle] = useState("");
@@ -496,7 +496,8 @@ const useStyles = makeStyles((theme)=>({
                     </>
                     }   
                         <br/><br/>
-                        {fileUiArray}
+                        {//fileUiArray
+                        }
 
                         {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>
                         }
@@ -617,20 +618,20 @@ const useStyles = makeStyles((theme)=>({
                     </CardContent>
 
                 <Divider />
-                    <CardContent>
+                <CardContent>
                     <CardActions disableSpacing className={ classes.flexRight }>
                     {
                     //按鈕 
                         activeStep < 3 &&
                         <>
                             <Button
-                                    disabled={activeStep === 0 || isRecording === true}
-                                    onClick={()=>setActiveStep(activeStep - 1)}
-                                    className={ classes.flexLeft }
-                                    color="primary"
-                                >
-                                    上一步
-                                </Button>
+                                disabled={activeStep === 0 || isRecording === true}
+                                onClick={()=>setActiveStep(activeStep - 1)}
+                                className={ classes.flexLeft }
+                                color="primary"
+                            >
+                                上一步
+                            </Button>
                                 {activeStep === 2 ? 
                                 <>
                                     <Tooltip className={classes.backButton} onClick={handleSaveDarft} title="存入草稿後，仍可變更檔案但不可線上錄製" aria-label="save">
@@ -660,7 +661,7 @@ const useStyles = makeStyles((theme)=>({
                         </>
                     }
                     </CardActions>                   
-                    </CardContent>
+                </CardContent>
 
                 <Dialog
                     open={introErr !== false || titleErr !== false || err !== false}

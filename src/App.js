@@ -13,7 +13,7 @@ import "firebase/firestore";
 import "firebase/messaging";
 import FirebaseConfig from './FirebaseConfig/FirebaseConfig';
 //DevMode
-//import FirebaseConfig from './FirebaseConfig/FirebaseConfig-dev';
+import FirebaseConfigDev from './FirebaseConfig/FirebaseConfig-dev';
 import { fcmVapidKey_prod, fcmVapidKey_dev } from './FirebaseConfig/FcmVapidKey';
 
 //component
@@ -49,7 +49,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V221117.00";
+const clientversion = "V221117.23";
 const App = (props) => {
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
@@ -68,9 +68,14 @@ const App = (props) => {
   const userUid = useRef("");
   const userEmail = useRef("");
   const isFirstLoading = useRef(true);
+  
 
   if (!firebase.apps.length) {
-    firebase.initializeApp(FirebaseConfig);
+    if (process.env.NODE_ENV !== "development") {
+      firebase.initializeApp(FirebaseConfig);
+    } else {
+      firebase.initializeApp(FirebaseConfigDev);
+    }
   }
 
   //開發環境

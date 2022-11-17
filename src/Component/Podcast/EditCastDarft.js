@@ -6,7 +6,7 @@ import InlinePlayer from '../Player/InlinePlayer';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -15,6 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
+import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -83,6 +84,13 @@ const useStyles = makeStyles((theme)=>({
     },
     button: {
         margin:theme.spacing(1)
+    },
+    flexLeft: {
+        marginRight: "auto",
+    },
+    flexRight: {
+        display: "flex",
+        justifyContent: "flex-end"
     },
   })
   );
@@ -194,6 +202,7 @@ const useStyles = makeStyles((theme)=>({
                 .then(
                     (url) => {
                         updateDarft(url);
+                        setFilePath(url);
                     }
                 );
             } else {
@@ -401,36 +410,43 @@ const useStyles = makeStyles((theme)=>({
                             </>
                         }
                     </FormControl>
-                    <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            startIcon={ handleCode==='publish'? <CircularProgress size={24} className={classes.buttonProgress} /> : <PublishIcon />}
-                            onClick={() => { setShowPublishMsgBox(true) }}
-                            disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
-                        >
-                            發布
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            className={classes.button}
-                            startIcon={ handleCode==='updateDarft'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                            onClick={handleUpdateInfor}
-                            disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
-                        >
-                            儲存
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            className={classes.button}
-                            startIcon={<DeleteIcon />}
-                            onClick={()=>{setshowDelMsgBox(true)}}
-                            disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
-                        >
-                            刪除
-                        </Button> 
+                    <Divider />
+                    <CardContent>
+                        <CardActions disableSpacing className={ classes.flexRight }>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                className={ classes.flexLeft }
+                                startIcon={<DeleteIcon />}
+                                onClick={()=>{setshowDelMsgBox(true)}}
+                                disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
+                            >
+                                刪除
+                            </Button>
+
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                className={classes.backButton}
+                                startIcon={ handleCode==='updateDarft'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                                onClick={handleUpdateInfor}
+                                disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
+                            >
+                                儲存
+                            </Button>
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.flexRight}
+                                startIcon={ handleCode==='publish'? <CircularProgress size={24} className={classes.buttonProgress} /> : <PublishIcon />}
+                                onClick={() => { setShowPublishMsgBox(true) }}
+                                disabled={handleCode === "updateDarft" || handleCode === "publish" || handleCode === "del"}
+                            >
+                                發布
+                            </Button>
+                        </CardActions>
+                    </CardContent>
                 </CardContent>
 
                 <Dialog

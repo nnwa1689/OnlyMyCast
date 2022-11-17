@@ -19,6 +19,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
+import VolumeUp from '@material-ui/icons/VolumeUp';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -63,8 +64,8 @@ const useStyles = makeStyles((theme)=>({
   },
 }));
 
-const darkAppbarStyle = { backgroundColor: "rgba(66, 66, 66, 0.6)", };
-const lightAppbarStyle = { backgroundColor: "rgba(255, 255, 255, 0.6)", }
+const darkAppbarStyle = { backgroundColor: "rgba(66, 66, 66, 0.7)", };
+const lightAppbarStyle = { backgroundColor: "rgba(255, 255, 255, 0.7)", }
 
 
 const Player = (props) => {
@@ -78,6 +79,7 @@ const Player = (props) => {
     const [podcastName, setPodcastName] = useState();
     const [playBackRate, setPlayBackRate] = useState(1);
     const [loadedRate, setLoadedRate] = useState();
+    const [volume, setVolume] = useState(1);
     const darkmode = useSelector(state => state.mode);
 
     useEffect(
@@ -86,6 +88,7 @@ const Player = (props) => {
             setPlayState(true);
             setSingleName(props.singleName);
             setPodcastName(props.podcastName);
+            setVolume(localStorage.getItem("volume") === null ? 1 : localStorage.getItem("volume"))
             console.log(props.url);
         },[props.url]
     )
@@ -116,6 +119,11 @@ const Player = (props) => {
 
     const setPlayerSec = (e, newValue) => {
         setPlaySec(newValue/100*duration);
+    }
+
+    const handleVolumeChange = (e, newValue) => {
+        setVolume(newValue);
+        localStorage.setItem('volume', newValue);
     }
 
     return (
@@ -150,82 +158,98 @@ const Player = (props) => {
                     setLoadedRate(p.loaded);
                 }}
                 onDuration={(d)=>(setDuration(d))}
-                volume={1}
+                volume={volume}
                 playing={playState}
                 config={{ file:{ forceAudio:true } }}
                 playbackRate={playBackRate}
             />
             <AppBar position="fixed" color="inherit" style={ darkmode === 'light' ? lightAppbarStyle : darkAppbarStyle } className={classes.appBar}>
-            { !ready ? <LinearProgress style={{width:"100%"}}/> : 
-                <Slider 
-                style={{padding: 0, paddingBottom: 2,}} 
-                step={1} 
-                min={0} 
-                max={100} 
-                onChangeCommitted={(e, newValue)=>{setPlayerOnSeek(e, newValue)}} 
-                defaultValue={0} 
-                onChange={(e, newValue)=>{setPlayerSec(e, newValue)}} 
-                value={playSec!==undefined ? (playSec/duration)*100:0}/>
-            }
-            <Grid container spacing={0} direction="row">
-                <Grid item xs={12} sm={4} md={4}>
-                    <Toolbar className={classes.podcastToolbar}>
-                        <Avatar variant="rounded" className={classes.large} alt={podcastName} src={props.coverUrl} />
-                        <div className={classes.epTitleBox}>
-                            <Typography className={classes.epTitle} variant="subtitle2">
-                                {podcastName} - {singleName}
-                            </Typography>     
-                        </div>
-                        <Typography variant="subtitle2">
-                            {parseInt(((parseInt(playSec, 10))/60)) + ":" + Math.ceil(((parseInt(playSec, 10))%60))}
-                            /
-                            { parseInt(parseInt(duration, 10)/60) + ":" + (parseInt(duration, 10)%60) }
-                        </Typography>
-                    </Toolbar>
+                { !ready ? <LinearProgress style={{width:"100%"}}/> : 
+                    <Slider 
+                    style={{padding: 0, paddingBottom: 2,}} 
+                    step={1} 
+                    min={0} 
+                    max={100} 
+                    onChangeCommitted={(e, newValue)=>{setPlayerOnSeek(e, newValue)}} 
+                    defaultValue={0} 
+                    onChange={(e, newValue)=>{setPlayerSec(e, newValue)}} 
+                    value={playSec!==undefined ? (playSec/duration)*100:0}/>
+                }
+                <Grid container spacing={0} direction="row">
+                    <Grid item xs={12} sm={4} md={4}>
+                        <Toolbar className={classes.podcastToolbar}>
+                            <Avatar variant="rounded" className={classes.large} alt={podcastName} src={props.coverUrl} />
+                            <div className={classes.epTitleBox}>
+                                <Typography className={classes.epTitle} variant="subtitle2">
+                                    {podcastName} - {singleName}
+                                </Typography>     
+                            </div>
+                            <Typography variant="subtitle2">
+                                {parseInt(((parseInt(playSec, 10))/60)) + ":" + Math.ceil(((parseInt(playSec, 10))%60))}
+                                /
+                                { parseInt(parseInt(duration, 10)/60) + ":" + (parseInt(duration, 10)%60) }
+                            </Typography>
+                        </Toolbar>
+                    </Grid>
+                    <Grid item xs={5} sm={4} md={4}>
+                        <Toolbar className={classes.controlItemToolbar}>
+                            <Tooltip onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
+                                <IconButton className={classes.menuButton} edge="start" color="inherit" size="small">
+                                    <Replay10Icon fontSize="large"/>
+                                </IconButton>  
+                            </Tooltip>
+                            { (playState) ? 
+                            <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause">
+                                <IconButton className={classes.menuButton}  color="inherit" size="small">
+                                    <PauseCircleFilledIcon fontSize="large" />
+                                </IconButton>
+                            </Tooltip>
+                            : 
+                            <Tooltip onClick={ handlePlayClick } title="播放" aria-label="play">
+                                <IconButton className={classes.menuButton}  color="inherit" size="small">
+                                    <PlayCircleFilledIcon fontSize="large" />
+                                </IconButton>
+                            </Tooltip>
+                            }
+                            <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
+                                <IconButton className={classes.menuButton}  edge="end" color="inherit" size="small">
+                                    <Forward10Icon fontSize="large"/>
+                                </IconButton>
+                            </Tooltip>
+                        </Toolbar> 
+                    </Grid>
+                    <Grid item xs={7} sm={4} md={4}>
+                        <Grid container alignItems="center">
+                            <Grid item xs={2} sm={2} md={2}>
+                                <VolumeUp />
+                            </Grid>
+                            <Grid item xs={5} sm={4} md={4}>
+                                <Slider
+                                    value={volume}
+                                    onChange={handleVolumeChange}
+                                    step={0.01} 
+                                    min={0} 
+                                    max={1} 
+                                />
+                            </Grid>
+                            <Grid item xs={5} sm={6} md={6}>
+                                <Toolbar className={classes.speedToolbar}>
+                                    <Select
+                                    value={playBackRate}
+                                    variant="outlined"
+                                    onChange={(e)=>{changePlayBackRate(e)}}
+                                    >
+                                        <MenuItem value={0.25}>x0.25</MenuItem>
+                                        <MenuItem value={0.5}>x0.5</MenuItem>
+                                        <MenuItem value={1}>x1.0</MenuItem>
+                                        <MenuItem value={1.5}>x1.5</MenuItem>
+                                        <MenuItem value={2.0}>x2.0</MenuItem>
+                                    </Select> 
+                                </Toolbar>
+                            </Grid>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item xs={6} sm={4} md={4}>
-                    <Toolbar className={classes.controlItemToolbar}>
-                        <Tooltip onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
-                            <IconButton className={classes.menuButton} edge="start" color="inherit" size="small">
-                                <Replay10Icon fontSize="large"/>
-                            </IconButton>  
-                        </Tooltip>
-                        { (playState) ? 
-                        <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause">
-                            <IconButton className={classes.menuButton}  color="inherit" size="small">
-                                <PauseCircleFilledIcon fontSize="large" />
-                            </IconButton>
-                        </Tooltip>
-                        : 
-                        <Tooltip onClick={ handlePlayClick } title="播放" aria-label="play">
-                            <IconButton className={classes.menuButton}  color="inherit" size="small">
-                                <PlayCircleFilledIcon fontSize="large" />
-                            </IconButton>
-                        </Tooltip>
-                        }
-                        <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
-                            <IconButton className={classes.menuButton}  edge="end" color="inherit" size="small">
-                                <Forward10Icon fontSize="large"/>
-                            </IconButton>
-                        </Tooltip>
-                    </Toolbar> 
-                </Grid>
-                <Grid item xs={6} sm={4} md={4}>
-                    <Toolbar className={classes.speedToolbar}>
-                        <Select
-                        value={playBackRate}
-                        variant="outlined"
-                        onChange={(e)=>{changePlayBackRate(e)}}
-                        >
-                            <MenuItem value={0.25}>x0.25</MenuItem>
-                            <MenuItem value={0.5}>x0.5</MenuItem>
-                            <MenuItem value={1}>x1.0</MenuItem>
-                            <MenuItem value={1.5}>x1.5</MenuItem>
-                            <MenuItem value={2.0}>x2.0</MenuItem>
-                        </Select> 
-                    </Toolbar>
-                </Grid>
-            </Grid>
             </AppBar>
         </>
         }

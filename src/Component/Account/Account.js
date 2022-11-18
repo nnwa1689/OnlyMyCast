@@ -4,8 +4,8 @@ import { Link as RLink } from 'react-router-dom';
 //googleUi
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import SaveIcon from '@material-ui/icons/Save';
@@ -82,7 +82,14 @@ const useStyles = makeStyles((theme)=>({
     },
     button: {
         margin: "10px"
-    }
+    },
+    flexLeft: {
+        marginRight: "auto",
+    },
+    flexRight: {
+        display: "flex",
+        justifyContent: "flex-end"
+    },
   }));
 
   const TabPanel = (props) => {
@@ -395,17 +402,20 @@ const Account = (props) => {
                                     <FormControl fullWidth className={classes.margin}>
                                         <TextField required disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
                                     </FormControl>
-
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        size="large"
-                                        className={classes.button}
-                                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                                        onClick={handleUpdateAccount}
-                                        disabled={handleCode==="loading"}>
-                                        儲存設定
-                                    </Button>
+                                    <CardContent>
+                                        <CardActions disableSpacing className={ classes.flexRight }>
+                                            <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="large"
+                                            className={ classes.flexRight }
+                                            startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                                            onClick={handleUpdateAccount}
+                                            disabled={handleCode==="loading"}>
+                                            儲存設定
+                                            </Button>
+                                        </CardActions>
+                                    </CardContent>
                                     </CardContent>
                                 </Grid>
                             </Grid>

@@ -21,6 +21,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Tabs from '@material-ui/core/Tabs';
@@ -125,7 +126,14 @@ const useStyles = makeStyles((theme)=>({
     },
     soundonColor: {
         color: "rgb(26, 171, 225)"
-    }
+    },
+    flexLeft: {
+        marginRight: "auto",
+    },
+    flexRight: {
+        display: "flex",
+        justifyContent: "flex-end"
+    },
   }));
   
   
@@ -636,18 +644,20 @@ const PodcastAccount = (props) => {
                                                     </CardContent>
                                                 </Grid>
                                             </Grid>
-                                                <FormControl className={classes.menuButton}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    size="large"
-                                                    className={classes.button}
-                                                    onClick={handleUpdateChannel}
-                                                    disabled={handleCode==="loading"}
-                                                    startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                                    儲存設定
-                                                </Button>   
-                                            </FormControl>
+                                            <CardContent>
+                                                <CardActions disableSpacing className={ classes.flexRight }>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        size="large"
+                                                        className={ classes.flexRight }
+                                                        onClick={handleUpdateChannel}
+                                                        disabled={handleCode==="loading"}
+                                                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                                        儲存設定
+                                                    </Button>   
+                                                </CardActions>
+                                            </CardContent>
                                         </TabPanel>
 
                                     <TabPanel value={tabValue} index={1}>
@@ -850,18 +860,20 @@ const PodcastAccount = (props) => {
                                                         </CardActions>
                                                     </Grid>
                                                 </Grid>
-                                                <FormControl className={classes.menuButton}>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        size="large"
-                                                        className={classes.button}
-                                                        onClick={handleUpdateChannel}
-                                                        disabled={handleCode==="loading"}
-                                                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                                        儲存設定
-                                                    </Button>   
-                                                </FormControl>
+                                                <CardContent>
+                                                    <CardActions disableSpacing className={ classes.flexRight }>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            size="large"
+                                                            className={ classes.flexRight }
+                                                            onClick={handleUpdateChannel}
+                                                            disabled={handleCode==="loading"}
+                                                            startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                                            儲存設定
+                                                        </Button>   
+                                                    </CardActions>
+                                                </CardContent>
                                             </>
                                             :
                                             <>
@@ -946,18 +958,20 @@ const PodcastAccount = (props) => {
                                                 </CardContent>
                                             </Grid>
                                         </Grid>
-                                            <FormControl className={classes.menuButton}>
+                                        <CardContent>
+                                            <CardActions disableSpacing className={ classes.flexRight }>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
                                                     size="large"
-                                                    className={classes.button}
+                                                    className={ classes.flexRight }
                                                     onClick={handleUpdateChannel}
                                                     disabled={handleCode==="loading"}
                                                     startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
                                                     儲存設定
                                                 </Button>   
-                                            </FormControl>
+                                            </CardActions>
+                                        </CardContent>
                                     </TabPanel>
                             </SwipeableViews> 
                             </>

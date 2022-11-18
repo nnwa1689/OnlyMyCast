@@ -20,6 +20,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 import VolumeUp from '@material-ui/icons/VolumeUp';
+import Box from '@material-ui/core/Box';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -89,7 +90,7 @@ const Player = (props) => {
             setSingleName(props.singleName);
             setPodcastName(props.podcastName);
             setVolume(localStorage.getItem("volume") === null ? 1 : localStorage.getItem("volume"))
-            console.log(props.url);
+            //console.log(props.url);
         },[props.url]
     )
 
@@ -191,13 +192,15 @@ const Player = (props) => {
                             </Typography>
                         </Toolbar>
                     </Grid>
-                    <Grid item xs={5} sm={4} md={4}>
+                    <Grid item xs={3} sm={3} md={4}>
                         <Toolbar className={classes.controlItemToolbar}>
-                            <Tooltip onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
-                                <IconButton className={classes.menuButton} edge="start" color="inherit" size="small">
-                                    <Replay10Icon fontSize="large"/>
-                                </IconButton>  
-                            </Tooltip>
+                            <Box display={{ xs: 'none',sm: 'block', md: 'block' }}>
+                                <Tooltip  display={{ xs: 'none', md: 'none' }} onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
+                                    <IconButton className={classes.menuButton} edge="start" color="inherit" size="small">
+                                        <Replay10Icon fontSize="large"/>
+                                    </IconButton>  
+                                </Tooltip>
+                            </Box>
                             { (playState) ? 
                             <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause">
                                 <IconButton className={classes.menuButton}  color="inherit" size="small">
@@ -211,43 +214,43 @@ const Player = (props) => {
                                 </IconButton>
                             </Tooltip>
                             }
-                            <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
-                                <IconButton className={classes.menuButton}  edge="end" color="inherit" size="small">
-                                    <Forward10Icon fontSize="large"/>
-                                </IconButton>
-                            </Tooltip>
+                            <Box display={{ xs: 'none',sm: 'block' ,md: 'block' }}>
+                                <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
+                                    <IconButton className={classes.menuButton}  edge="end" color="inherit" size="small">
+                                        <Forward10Icon fontSize="large"/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
                         </Toolbar> 
                     </Grid>
-                    <Grid item xs={7} sm={4} md={4}>
-                        <Grid container alignItems="center">
-                            <Grid item xs={2} sm={2} md={2}>
-                                <VolumeUp />
+                    <Grid item xs={9} sm={5} md={4}>
+                        <Toolbar className={classes.speedToolbar}>
+                            <Grid container alignItems="center">
+                                <Grid item>
+                                    <VolumeUp />
+                                </Grid>
+                                <Grid item xs={8} sm={8} md={3}>
+                                    <Slider
+                                        value={volume}
+                                        onChange={handleVolumeChange}
+                                        step={0.01} 
+                                        min={0} 
+                                        max={1} 
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={5} sm={4} md={4}>
-                                <Slider
-                                    value={volume}
-                                    onChange={handleVolumeChange}
-                                    step={0.01} 
-                                    min={0} 
-                                    max={1} 
-                                />
-                            </Grid>
-                            <Grid item xs={5} sm={6} md={6}>
-                                <Toolbar className={classes.speedToolbar}>
-                                    <Select
-                                    value={playBackRate}
-                                    variant="outlined"
-                                    onChange={(e)=>{changePlayBackRate(e)}}
-                                    >
-                                        <MenuItem value={0.25}>x0.25</MenuItem>
-                                        <MenuItem value={0.5}>x0.5</MenuItem>
-                                        <MenuItem value={1}>x1.0</MenuItem>
-                                        <MenuItem value={1.5}>x1.5</MenuItem>
-                                        <MenuItem value={2.0}>x2.0</MenuItem>
-                                    </Select> 
-                                </Toolbar>
-                            </Grid>
-                        </Grid>
+                            <Select
+                            value={playBackRate}
+                            variant="outlined"
+                            onChange={(e)=>{changePlayBackRate(e)}}
+                            >
+                                <MenuItem value={0.25}>x0.25</MenuItem>
+                                <MenuItem value={0.5}>x0.5</MenuItem>
+                                <MenuItem value={1}>x1.0</MenuItem>
+                                <MenuItem value={1.5}>x1.5</MenuItem>
+                                <MenuItem value={2.0}>x2.0</MenuItem>
+                            </Select> 
+                        </Toolbar>
                     </Grid>
                 </Grid>
             </AppBar>

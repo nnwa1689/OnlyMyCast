@@ -24,13 +24,13 @@ const Footer = ()=> {
         <Container maxWidth="lg" className={classes.root}>
             <Divider/><br/>
                 &nbsp;&nbsp;
-                <Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="subtitle2">隱私權</Link>
+                <Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="subtitle2">隱私政策</Link>
                 &nbsp;
-                <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="subtitle2">條款</Link>
+                <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="subtitle2">服務條款</Link>
                 &nbsp;
-                <Link target="_blank" href="https://discovered-plantain-cb9.notion.site/OnlyMyCast-57f05f98fbe44254a2f57ca0a07c8203" variant="body2">改版日誌</Link>
+                <Link target="_blank" href="https://discovered-plantain-cb9.notion.site/OnlyMyCast-57f05f98fbe44254a2f57ca0a07c8203" variant="subtitle2">改版日記</Link>
                 &nbsp;
-                <Link target="_blank" href="https://www.notes-hz.com/page/readerService" variant="subtitle2">聯繫</Link>
+                <Link target="_blank" href="https://www.notes-hz.com/page/readerService" variant="subtitle2">聯繫我們</Link>
                 <Typography variant="subtitle2" component="p">Copyright©LabHazuya</Typography>
         </Container>
     );

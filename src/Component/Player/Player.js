@@ -192,15 +192,13 @@ const Player = (props) => {
                             </Typography>
                         </Toolbar>
                     </Grid>
-                    <Grid item xs={3} sm={3} md={4}>
-                        <Toolbar className={classes.controlItemToolbar}>
-                            <Box display={{ xs: 'none',sm: 'block', md: 'block' }}>
-                                <Tooltip  display={{ xs: 'none', md: 'none' }} onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
-                                    <IconButton className={classes.menuButton} edge="start" color="inherit" size="small">
-                                        <Replay10Icon fontSize="large"/>
-                                    </IconButton>  
-                                </Tooltip>
-                            </Box>
+                    <Grid item xs={5} sm={3} md={4}>
+                        <Toolbar className={classes.controlItemToolbar}>                            
+                            <Tooltip  display={{ xs: 'none', md: 'none' }} onClick={ handleBackTenClick } title="倒退10秒" aria-label="back10s">
+                                <IconButton className={classes.menuButton} edge="start" color="inherit" size="small">
+                                    <Replay10Icon fontSize="large"/>
+                                </IconButton>  
+                            </Tooltip>
                             { (playState) ? 
                             <Tooltip onClick={ handlePauseClick } title="暫停" aria-label="pause">
                                 <IconButton className={classes.menuButton}  color="inherit" size="small">
@@ -214,31 +212,32 @@ const Player = (props) => {
                                 </IconButton>
                             </Tooltip>
                             }
-                            <Box display={{ xs: 'none',sm: 'block' ,md: 'block' }}>
-                                <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
-                                    <IconButton className={classes.menuButton}  edge="end" color="inherit" size="small">
-                                        <Forward10Icon fontSize="large"/>
-                                    </IconButton>
-                                </Tooltip>
-                            </Box>
+                            <Tooltip onClick={ handleNextTenClick } title="向前10秒" aria-label="next10s">
+                                <IconButton className={classes.menuButton}  edge="end" color="inherit" size="small">
+                                    <Forward10Icon fontSize="large"/>
+                                </IconButton>
+                            </Tooltip>
                         </Toolbar> 
                     </Grid>
-                    <Grid item xs={9} sm={5} md={4}>
+                    <Grid item xs={7} sm={5} md={4}>
                         <Toolbar className={classes.speedToolbar}>
                             <Grid container alignItems="center">
-                                <Grid item>
-                                    <VolumeUp />
-                                </Grid>
-                                <Grid item xs={8} sm={8} md={3}>
-                                    <Slider
-                                        value={volume}
-                                        onChange={handleVolumeChange}
-                                        step={0.01} 
-                                        min={0} 
-                                        max={1} 
-                                    />
-                                </Grid>
+                                <Box display={{ xs: 'none',sm: 'contents', md: 'contents' }}>
+                                    <Grid item sm={3} md={2}>
+                                        <VolumeUp />
+                                    </Grid>
+                                    <Grid item sm={8} md={3}>
+                                        <Slider
+                                            value={volume}
+                                            onChange={handleVolumeChange}
+                                            step={0.01} 
+                                            min={0} 
+                                            max={1} 
+                                        />
+                                    </Grid>
+                                </Box>
                             </Grid>
+                        
                             <Select
                             value={playBackRate}
                             variant="outlined"

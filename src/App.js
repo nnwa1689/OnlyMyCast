@@ -39,6 +39,7 @@ import FansAdmin from './Component/Account/FansAdmin';
 import ForgetPassword from './Component/Account/ForgetPassword';
 import EmbedChannel from './Component/Podcast/EmbedChannel';
 import EmailVerified from './Component/Account/EmailVerified';
+import Onelink from './Component/Podcast/Onelink';
 import NotFound from './Component/Home/NotFound';
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -49,12 +50,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V221119.02";
+const clientversion = "V221120.21";
 const App = (props) => {
-  const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail'];
-  const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword'];
+  //常用設定
+  const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail', 'onelink'];
+  const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword', 'onelink'];
   const usingUnloginNavbarPath = ['podcast', 'podcastdetail', 'signin', 'signup']
   const removeAdsensePath = ['embed'];
+  const onlyLightModePath = ['onelink'];
   const [isAuth, setAuth] = useState(0);
   const [playerUrl, setPlayerUrl] = useState();
   const [playerTitle, setPlayerTitle] = useState("");
@@ -335,7 +338,10 @@ const App = (props) => {
   });
 
   return (
-    <ThemeProvider theme={ useSelector(state => state.mode) === 'light' ? lightTheme : darkTheme}>
+    <ThemeProvider theme={ 
+      useSelector(state => state.mode) === 'light' || onlyLightModePath.includes(pathname) ? lightTheme : darkTheme
+    }>
+      { /*如果是oneLink 就不載入黑暗模式*/ }
       <CssBaseline />
       <div className="App">
         <BrowserRouter basename={basename}>
@@ -410,6 +416,11 @@ const App = (props) => {
                   <Route exact path="/embed/:id"
                     render={(props) => (
                       <EmbedChannel {...props} user={userData} />
+                    )}
+                  />
+                  <Route exact path="/onelink/:id"
+                    render={(props) => (
+                      <Onelink {...props} user={userData} />
                     )}
                   />
                   <Route exact path="/signin" component={SignIn} />

@@ -4,7 +4,6 @@ import MDEditor from '@uiw/react-md-editor';
 //ui
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -21,7 +20,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Divider from '@material-ui/core/Divider';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Tabs from '@material-ui/core/Tabs';
@@ -159,6 +157,7 @@ const PodcastAccount = (props) => {
     const [err, setErr] = useState(false);
     const isFirstLoad = useRef(true);
     const [embedCode, setEmbedCode] = useState();
+    const [oneLinkUrl, setOneLinkUrl] = useState();
     const [showCopyMsg, setShowCopyMsg] = useState(false);
 
     const allowCoverFileType = [ 'image/png', 'image/jpeg' ];
@@ -223,6 +222,7 @@ const PodcastAccount = (props) => {
                         setEmbedCode(
                             `<iframe frameborder="0" height="200px" style="width:100%;max-width:660px;overflow:hidden;" src="https://onlymycast.notes-hz.com/webapp/embed/` + props.user.userId + `"></iframe>`
                         );
+                        setOneLinkUrl('https://onlymycast.notes-hz.com/webapp/onelink/' + props.user.userId);
                         setCategory( data.category === undefined ? "" : data.category );
                         setPreUrl( data.preUrl === undefined ? "" : data.preUrl );
                       }
@@ -669,30 +669,29 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="h5" component="h1">收聽平台</Typography>
                                                     </Grid>
                                                     <Grid item xs={12} md={12}>
+                                                        <Typography variant="h6" gutterBottom><RssFeedIcon/>RSS Feed</Typography>
+                                                        <TextField
+                                                            label="RSSURL"
+                                                            defaultValue={"https://storage.googleapis.com/onlymycast.appspot.com/rss/" + userId + '/' + uid}
+                                                            variant="outlined"
+                                                            inputProps={
+                                                                { readOnly: true, }
+                                                            }
+                                                            fullWidth
+                                                            />
 
-                                                                <Typography variant="h6" gutterBottom><RssFeedIcon/>RSS Feed</Typography>
-                                                                <TextField
-                                                                    label="RSSURL"
-                                                                    defaultValue={"https://storage.googleapis.com/onlymycast.appspot.com/rss/" + userId + '/' + uid}
-                                                                    variant="outlined"
-                                                                    inputProps={
-                                                                        { readOnly: true, }
-                                                                    }
-                                                                    fullWidth
-                                                                    />
-
-                                                                <Typography variant="body1">
-                                                                提交 RSS 讓節目在其他平台被找到。
-                                                                </Typography>
-                                                                <CardActions>
-                                                                    <Button 
-                                                                        fullWidth
-                                                                        size="large" 
-                                                                        color="primary" 
-                                                                        variant="outlined" 
-                                                                        onClick={()=>{handleCopy("https://storage.googleapis.com/onlymycast.appspot.com/rss/" + userId + '/' + uid)}}>複製
-                                                                    </Button>
-                                                                </CardActions>
+                                                        <Typography variant="body1">
+                                                        提交 RSS 讓節目在其他平台被找到。
+                                                        </Typography>
+                                                        <CardActions>
+                                                            <Button 
+                                                                fullWidth
+                                                                size="large" 
+                                                                color="primary" 
+                                                                variant="outlined" 
+                                                                onClick={()=>{handleCopy("https://storage.googleapis.com/onlymycast.appspot.com/rss/" + userId + '/' + uid)}}>複製
+                                                            </Button>
+                                                        </CardActions>
                                                     </Grid>
                                                     <Grid item xs={12} md={6}>
                                                         <Typography variant="h6" color="primary" gutterBottom>
@@ -955,6 +954,32 @@ const PodcastAccount = (props) => {
                                                                     variant="outlined"
                                                                     placeholder="https://" />
                                                     </FormControl>
+                                                </CardContent>
+                                            </Grid>
+                                            <Grid item xs={12} md={12}>
+                                                <CardContent>
+                                                <Typography variant="h5" component="h5">Onelink</Typography>
+                                                <Typography variant="body1" component="h5">分享單一網址，就讓聽眾前往你的全世界！</Typography><br/>
+                                                <TextField
+                                                    label="Onelink"
+                                                    rows={1}
+                                                    defaultValue={oneLinkUrl}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    inputProps={
+                                                        { readOnly: true, }
+                                                    }
+                                                />
+                                                <br/><br/>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    size="large"
+                                                    className={classes.button}
+                                                    onClick={ () => { handleCopy(oneLinkUrl) } }
+                                                    >
+                                                    複製連結
+                                                </Button>
                                                 </CardContent>
                                             </Grid>
                                         </Grid>

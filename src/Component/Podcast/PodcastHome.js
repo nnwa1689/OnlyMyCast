@@ -1,5 +1,5 @@
 //react
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import { Link as RLink } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 //ui

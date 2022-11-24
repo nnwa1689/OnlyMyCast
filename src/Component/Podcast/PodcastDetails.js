@@ -1,6 +1,6 @@
 //react
 import React, { useState, useEffect, useRef } from 'react'
-import { Link as RLink, Redirect } from 'react-router-dom';
+import { Link as RLink } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown'
 //ui
 import Typography from '@material-ui/core/Typography';
@@ -9,7 +9,11 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import LinkIcon from '@material-ui/icons/Link';
 import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
@@ -17,6 +21,7 @@ import EventIcon from '@material-ui/icons/Event';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import Grid from '@material-ui/core/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -26,6 +31,9 @@ import "firebase/database";
 //other
 import { Helmet } from 'react-helmet';
 import { Divider } from '@material-ui/core';
+import * as htmlToImage from 'html-to-image';
+//static
+import Icon from '../../static/only-my-cast-icon-pink.svg';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -61,6 +69,7 @@ const PodcastDetails = (props) => {
     const [subStatu, setSubStatu] = useState();
     const [played, setPlayed] = useState(false);
     const [publicStatu, setPublicStatu] = useState();
+    const [showCopyMsg, setShowCopyMsg] = useState(false);
 
     const isFirstLoad = useRef(true);
 
@@ -82,6 +91,35 @@ const PodcastDetails = (props) => {
         }
       }
     )
+
+    const handleCopy = (text)=> {
+      navigator.clipboard.writeText(text)
+      .then(() => {
+          setShowCopyMsg(true);
+      }).catch(err => {
+      console.log('Something went wrong', err);
+      })
+    }
+
+    const handleDownloadShareImg = () => {
+
+
+      document.getElementById('shareImg').style.display = "block";
+      htmlToImage.toPng(document.getElementById('shareImg'))
+      .then(function (dataUrl) {
+        const link = document.createElement('a');
+        link.download = "shareImg.png";
+        link.href = dataUrl;
+        link.click();
+
+      })
+      .catch(
+        (e) => { 
+          console.log('downloadError!');
+         }
+      );
+
+    }
 
     const getPlayedStatu = () => {
       firebase.firestore()
@@ -165,8 +203,8 @@ const PodcastDetails = (props) => {
                   <Helmet>
                       <title>{ name } - { channelName } - Onlymycast</title>
                   </Helmet>
-                  <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                   <CardContent>
+                    <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                     <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
                     <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
                     <br/>
@@ -176,6 +214,11 @@ const PodcastDetails = (props) => {
                       &nbsp;
                       { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
                       </Typography>
+                    <Tooltip title="複製分享連結">
+                      <IconButton onClick={ () => {handleCopy("https://onlymycast.notes-hz.com/webapp/podcastdetail/" + props.match.params.id + '/' + props.match.params.podId)} } size='large'>
+                        <LinkIcon fontSize='large' />
+                      </IconButton>
+                    </Tooltip>
                     <br/>
                     <Button 
                         color="primary"
@@ -203,6 +246,7 @@ const PodcastDetails = (props) => {
                   <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
                 </CardContent>
               </Grid>
+              <Snackbar open={showCopyMsg===true} autoHideDuration={3000} onClose={()=>{setShowCopyMsg(false)}} message="已經複製到剪貼簿"/>
             </Grid>
             :
             ""

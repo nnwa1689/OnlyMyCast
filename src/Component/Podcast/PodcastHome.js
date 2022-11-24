@@ -450,47 +450,47 @@ const PodcastHome = (props) => {
                                     </h3>
                                     <br/>
                                     {facebookLink.length > 0 ?
-                                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='small'>
+                                    <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='large'>
                                         <FacebookIcon fontSize='large' />
                                     </IconButton>
                                     : ""}
                                     {instagramLink.length > 0 ?
-                                        <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='small'>
+                                        <IconButton className={classes.instagramButton} href={instagramLink} target='_blank' size='large'>
                                             <InstagramIcon fontSize='large' />
                                         </IconButton>
                                         : ""}
                                     {youtubeLink.length > 0 ?
-                                        <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='small'>
+                                        <IconButton className={classes.youtubeButton} href={youtubeLink} target='_blank' size='large'>
                                             <YouTubeIcon fontSize='large' />
                                         </IconButton>
                                         : ""}
                                     {twitterLink.length > 0 ?
-                                        <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='small'>
+                                        <IconButton className={classes.twitterButton} href={twitterLink} target='_blank' size='large'>
                                             <TwitterIcon fontSize='large' />
                                         </IconButton>
                                         : ""}
                                     {applepodcastLink.length > 0 ?
-                                        <IconButton className={classes.twitterButton} href={applepodcastLink} target='_blank' size='small'>
+                                        <IconButton className={classes.twitterButton} href={applepodcastLink} target='_blank' size='large'>
                                             <img alt="apple" src={applelogo} width="30px"></img>
                                         </IconButton>
                                         : ""}
                                     {googlepodcastLink.length > 0 ?
-                                        <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='small'>
+                                        <IconButton className={classes.twitterButton} href={googlepodcastLink} target='_blank' size='large'>
                                             <img alt="google" src={googlelogo} width="30px"></img>
                                         </IconButton>
                                         : ""}
                                     {spotifyLink.length > 0 ?
-                                        <IconButton className={classes.spotifyColor} href={spotifyLink} target='_blank' size='small'>
+                                        <IconButton className={classes.spotifyColor} href={spotifyLink} target='_blank' size='large'>
                                             <img alt="spotify" src={spotiflogo} width="30px"></img>
                                         </IconButton>
                                         : ""}
                                     {kkLink.length > 0 ?
-                                        <IconButton className={classes.kkColor} href={kkLink} target='_blank' size='small'>
+                                        <IconButton className={classes.kkColor} href={kkLink} target='_blank' size='large'>
                                             <img alt="spotify" src={kklogo} width="30px"></img>
                                         </IconButton>
                                         : ""}
                                     {soundonLink.length > 0 ?
-                                        <IconButton href={soundonLink} target='_blank' size='small'>
+                                        <IconButton href={soundonLink} target='_blank' size='large'>
                                             <img alt="soundon" src={soundonlogo} width="30px"></img>
                                         </IconButton>
                                         : ""}

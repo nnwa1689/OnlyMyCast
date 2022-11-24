@@ -57,47 +57,47 @@ const useStyles = makeStyles((theme) => ({
     facebookButton: {
         borderColor: "#4267B2",
         color: "#4267B2",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
     instagramButton: {
         borderColor: "#C13584",
         color: "#C13584",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
     youtubeButton: {
         borderColor: "#FF0000",
         color: "#FF0000",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
     twitterButton: {
         borderColor: "#1DA1F2",
         color: "#1DA1F2",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
     appleColor: {
         borderColor: "#872EC4",
         color: "#872EC4",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
     googleColor: {
         borderColor: "#1565C0",
         color: "#1565C0",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
     spotifyColor: {
         borderColor: "#000000",
         color: "#1DB954",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
     kkColor: {
         borderColor: "#09CEF6",
         color: "#09CEF6",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
     onlymycastColor: {
         borderColor: "#FD3E49",
         color: "#FD3E49",
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     }
 }));
 

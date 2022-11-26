@@ -50,13 +50,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V221124.22";
+const clientversion = "V221126.14";
 const App = (props) => {
   //常用設定
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail', 'onelink'];
   const removeNavbarPath = ['embed', 'emailverified', 'signin', 'signup', 'forgetpassword', 'onelink'];
-  const usingUnloginNavbarPath = ['podcast', 'podcastdetail', 'signin', 'signup']
-  const removeAdsensePath = ['embed'];
+  const usingUnloginNavbarPath = ['podcast', 'podcastdetail']
+  const removeAdsensePath = ['embed', 'signin', 'signup'];
   const onlyLightModePath = ['onelink'];
   const [isAuth, setAuth] = useState(0);
   const [playerUrl, setPlayerUrl] = useState();
@@ -70,6 +70,7 @@ const App = (props) => {
   const [emailVeri, setEmailVeri] = useState(true);
   const userUid = useRef("");
   const userEmail = useRef("");
+  const withGoogleSingin = useRef("");
   const isFirstLoading = useRef(true);
   
 
@@ -112,9 +113,11 @@ const App = (props) => {
 
   useEffect(
     () => {
-      firebase.auth().onAuthStateChanged(async (user) => {
+      firebase.auth().onAuthStateChanged(async(user) => {
         if (user) {
-
+          console.log(user.photoURL);
+          console.log(firebase.auth().currentUser.providerData[0].providerId);
+          withGoogleSingin.current = firebase.auth().currentUser.providerData[0].providerId == 'google.com' ? true : false;
           //檢查 Token，如果 email 驗證結果沒有更新，就重新取得 token。
           user.getIdTokenResult().then(
             (idToken) => {
@@ -288,7 +291,7 @@ const App = (props) => {
     palette: {
       type:'light',
       background:{
-        default: '#f7f7f7',
+        default: 'rgb(250, 250, 250)',
       },
       primary: {
         main: "#FD3E49",
@@ -364,7 +367,7 @@ const App = (props) => {
                     )} />
                   <Route exact path="/account"
                     render={(props) => (
-                      <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} />
+                      <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} googleSing={withGoogleSingin.current} />
                     )}
                   />
                   <Route exact path="/podcastaccount"

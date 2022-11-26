@@ -35,6 +35,7 @@ import Grid from '@mui/material/Grid';
 import LockIcon from '@material-ui/icons/Lock';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import AssignmentIndRoundedIcon from '@material-ui/icons/AssignmentIndRounded';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -131,6 +132,8 @@ const Account = (props) => {
     const [loaded, setLoaded] = useState(false);
     const [updatePassword, setUpdatePassword] = useState(false);
 
+
+
     const [tabValue, setTabValue] = useState(0);
 
     const handleChange = (event, newValue) => {
@@ -217,94 +220,122 @@ const Account = (props) => {
         setNameErr(false);
         setOldPwErr(false);
         setNewPwErr(false);
-        if (name==="" || oldPassword==="") {
+        if (name==="" || (oldPassword==="" && props.googleSing === false)) {
             if (name==="")
                 setNameErr("暱稱不可為空");
-            if (oldPassword==="")
+            if (oldPassword==="" && props.googleSing === false)
                 setOldPwErr("舊密碼不可為空");
             setHandleCode('error');
         } else {
-            firebase.auth().onAuthStateChanged((user) => {
+            firebase.auth().onAuthStateChanged(async(user) => {
                 if (user) {
-                  var credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
-                  user.reauthenticateWithCredential(credential).then(()=> {
-                      
-                        if (newPassword !== "") {
-                            user.updatePassword(newPassword).then(async()=>{
-                                // 修改密碼完成
-                                if (filename !== "") {
-                                    //uploadAvatar
-                                    var storageRef = firebase.storage().ref().child('avatar/' + user.uid + "/" + filename);
-                                    await storageRef.put(fileBit).then((s) => {
-                                        storageRef.getDownloadURL()
-                                        .then((url) => {
-                                            setAvatar(url);
-                                            firebase.firestore().collection("user").doc(user.uid).set({
-                                                avatar:url
-                                            }, { merge: true })
-                                        })
-                                    }).catch(
-                                        (e)=>{}
-                                    );
-                                }
-        
-                                await firebase.firestore().collection("user").doc(user.uid).set({
-                                    name: name,
-                                }, { merge: true }).then(
-                                    ()=>{
-                                        setHandleCode('suc');
-                                        setFilename("");
-                                        setFileBit();
-                                        setOldPassword("");
-                                        setNewPassword("");
-                                    }
-                                )
-                            }).then(
-                                () => {
-                                    // 重新驗證用戶(登出)，使用者點選確認後登出帳戶
-                                    setUpdatePassword(true);
-                                }
-                            )
-                            .catch((error)=> {
-                                if (error.code==="auth/weak-password") {
-                                    setNewPwErr("密碼必須大於6位數");
-                                    setHandleCode('error');
-                                }
-                            });
-                        } else {
-                            if (filename !== "") {
-                                //uploadAvatar
-                                var storageRef = firebase.storage().ref().child('avatar/' + user.uid + "/" + filename);
-                                storageRef.put(fileBit).then((s) => {
-                                    storageRef.getDownloadURL()
-                                    .then((url) => {
-                                        setAvatar(url);
-                                        firebase.firestore().collection("user").doc(user.uid).set({
-                                            avatar:url
-                                        }, { merge: true })
-                                    })
-                                }).catch(
-                                    (e)=>{}
-                                );
-                            }
-    
-                            firebase.firestore().collection("user").doc(user.uid).set({
-                                name: name,
-                            }, { merge: true }).then(
-                                ()=>{
-                                    setHandleCode('suc');
-                                    setFilename("");
-                                    setFileBit();
-                                    setOldPassword("");
-                                    setNewPassword("");
-                                }
-                            )
+                    //Google
+                    if (props.googleSing) {
+                        if (filename !== "") {
+                            //uploadAvatar
+                            var storageRef = firebase.storage().ref().child('avatar/' + user.uid + "/" + filename);
+                            await storageRef.put(fileBit).then((s) => {
+                                storageRef.getDownloadURL()
+                                .then((url) => {
+                                    setAvatar(url);
+                                    firebase.firestore().collection("user").doc(user.uid).set({
+                                        avatar:url
+                                    }, { merge: true })
+                                })
+                            }).catch(
+                                (e)=>{}
+                            );
                         }
-         
-                  }).catch((error)=>{
-                      setOldPwErr("舊密碼錯誤");
-                      setHandleCode('error');
-                  });
+                        await firebase.firestore().collection("user").doc(user.uid).set({
+                            name: name,
+                        }, { merge: true }).then(
+                            ()=>{
+                                setHandleCode('suc');
+                                setFilename("");
+                                setFileBit();
+                            }
+                        )
+                    } else {
+                        var credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
+                        user.reauthenticateWithCredential(credential).then(()=> {
+                              if (newPassword !== "") {
+                                  user.updatePassword(newPassword).then(async()=>{
+                                      // 修改密碼完成
+                                      if (filename !== "") {
+                                          //uploadAvatar
+                                          var storageRef = firebase.storage().ref().child('avatar/' + user.uid + "/" + filename);
+                                          await storageRef.put(fileBit).then((s) => {
+                                              storageRef.getDownloadURL()
+                                              .then((url) => {
+                                                  setAvatar(url);
+                                                  firebase.firestore().collection("user").doc(user.uid).set({
+                                                      avatar:url
+                                                  }, { merge: true })
+                                              })
+                                          }).catch(
+                                              (e)=>{}
+                                          );
+                                      }
+              
+                                      await firebase.firestore().collection("user").doc(user.uid).set({
+                                          name: name,
+                                      }, { merge: true }).then(
+                                          ()=>{
+                                              setHandleCode('suc');
+                                              setFilename("");
+                                              setFileBit();
+                                              setOldPassword("");
+                                              setNewPassword("");
+                                          }
+                                      )
+                                  }).then(
+                                      () => {
+                                          // 重新驗證用戶(登出)，使用者點選確認後登出帳戶
+                                          setUpdatePassword(true);
+                                      }
+                                  )
+                                  .catch((error)=> {
+                                      if (error.code==="auth/weak-password") {
+                                          setNewPwErr("密碼必須大於6位數");
+                                          setHandleCode('error');
+                                      }
+                                  });
+                              } else {
+                                  if (filename !== "") {
+                                      //uploadAvatar
+                                      var storageRef = firebase.storage().ref().child('avatar/' + user.uid + "/" + filename);
+                                      storageRef.put(fileBit).then((s) => {
+                                          storageRef.getDownloadURL()
+                                          .then((url) => {
+                                              setAvatar(url);
+                                              firebase.firestore().collection("user").doc(user.uid).set({
+                                                  avatar:url
+                                              }, { merge: true })
+                                          })
+                                      }).catch(
+                                          (e)=>{}
+                                      );
+                                  }
+          
+                                  firebase.firestore().collection("user").doc(user.uid).set({
+                                      name: name,
+                                  }, { merge: true }).then(
+                                      ()=>{
+                                          setHandleCode('suc');
+                                          setFilename("");
+                                          setFileBit();
+                                          setOldPassword("");
+                                          setNewPassword("");
+                                      }
+                                  )
+                              }
+               
+                        }).catch((error)=>{
+                            setOldPwErr("舊密碼錯誤");
+                            setHandleCode('error');
+                        });
+                    }
+
                 }
               });
         }
@@ -396,12 +427,22 @@ const Account = (props) => {
                                             <TextField disabled={handleCode==="loading"} error={ nameErr!==false } helperText={ nameErr!==false && (nameErr) } value={name} onChange={(e)=>setName(e.target.value)} id="name" label="暱稱" variant="outlined" />
                                         </FormControl>
                                     <Typography variant="h5" component="h1"><LockIcon/>安全與密碼</Typography>
-                                    <FormControl fullWidth className={classes.margin}>
-                                        <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />
-                                    </FormControl>
-                                    <FormControl fullWidth className={classes.margin}>
-                                        <TextField required disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
-                                    </FormControl>
+                                    { props.googleSing ? 
+                                        <>
+                                            <AssignmentIndRoundedIcon style={ { fontSize: "128px", } }/>
+                                            <Typography variant="h6">您正使用第三方帳號登入</Typography>
+                                            <Typography variant="subtitle1">若要變更密碼，請於第三方平台變更</Typography>
+                                        </>
+                                    :
+                                        <>
+                                            <FormControl fullWidth className={classes.margin}>
+                                            <TextField disabled={handleCode==="loading"} error={newPwErr!==false} helperText={ newPwErr!==false ? newPwErr : "如果不要變更密碼，此欄留空"} type="password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} id="pw" label="新密碼" variant="outlined" />
+                                            </FormControl>
+                                            <FormControl fullWidth className={classes.margin}>
+                                                <TextField required disabled={handleCode==="loading"} error={oldPwErr!==false} helperText={oldPwErr!==false && (oldPwErr)} type="password" value={oldPassword} onChange={(e)=>setOldPassword(e.target.value)} id="old-pw" label="確認舊密碼" variant="outlined" />
+                                            </FormControl>
+                                        </>
+                                    }
                                     <CardContent>
                                         <CardActions disableSpacing className={ classes.flexRight }>
                                             <Button

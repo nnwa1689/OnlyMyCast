@@ -5,6 +5,8 @@ import { Link as RLink, useHistory } from 'react-router-dom';
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+//Oauth
+import { createUserInfoWithSSO, GoogleSigning,checkUserReg } from '../../Functions/SSO';
 /*Google Theme*/
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -14,16 +16,11 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import LogoIcon from '../../static/only-my-cast-icon-pink.svg'
+import LogoIcon from '../../static/only-my-cast-pink.svg';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { Divider } from '@material-ui/core';
-import CheckIcon from '@material-ui/icons/Check';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Badge from '@material-ui/core/Badge';
+import googleicon from '../../static/googleicon.png';
+
 
 function Copyright() {
   return (
@@ -44,7 +41,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(12),
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -125,12 +122,33 @@ const SignUp = ()=>{
 
   useEffect(
     ()=>{
-        firebase.auth().onAuthStateChanged((user)=> {
-            if(user) {
-              // 使用者已登入，redirect to Homepage
-              setHandleCode('login');
-            }
-          });
+      firebase.auth().onAuthStateChanged(async(user)=> {
+        if (user) {
+          setHandleCode("loading");
+          //檢查使用者資料是否被建立（如從google登入）
+          if (user.providerData[0].providerId === "google.com") {
+              await checkUserReg(user)
+              .then(
+                async(r) => {
+                  if(!r) {
+                    //沒有就建立
+                    await createUserInfoWithSSO(user)
+                    .then(
+                      () => {
+                        window.location.href = "./";
+                      }
+                    ).catch((e) => console.log(e))
+                  } else {
+                    window.location.href = "./";
+                  }
+                }
+                )
+          } else {
+            // 使用者已登入，redirect to Homepage
+            window.location.href = "./";
+          }
+        }
+      });
     }
   )
 
@@ -138,53 +156,30 @@ const SignUp = ()=>{
 
       handleCode === 'login' ? ""
       :
-      <Container component="main" maxWidth="md">
-        <Card className={classes.paper}>
-            <CardContent>
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <CardContent>
             { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
           <div className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <img style={{fill: "#FD3E49"}} src={LogoIcon} width="128"></img>
-              <Typography component="h6" variant="h5">開始分享您的故事</Typography><br/>
-              <RadioGroup name="plans" value={plan} onChange={ ()=> { /*setPlan(e.target.value); console.log(plan)*/ }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <Card>
-                      <FormControlLabel value="free" control={<Radio color='primary' />} label="免費($0/月)" /><Divider/>
-                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">線上錄製</Typography><br/>
-                      <CheckIcon fontSize="small" /><Typography component="span" variant="body1">無限制上傳您的節目</Typography><br/>
-                      <CheckIcon fontSize="small" /><Typography component="span" variant="body1">節目可為私人或公開</Typography><br/>
-                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">RSS上架其他平台</Typography><br/>
-                      <CheckIcon fontSize="small" /><Typography component="span" variant="body1">支援數據追蹤前綴</Typography><br/>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Card>
-                      <Badge badgeContent={"計劃中"} color="primary"   
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}>
-                        <FormControlLabel 
-                          value="personal" 
-                          control={<Radio color='primary' />} 
-                          disabled 
-                          label="個人($50/月)" />
-                      </Badge>       
-                      <Divider/>              
-                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">所有免費的功能</Typography><br/>
-                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">一鍵專人上架所有平台</Typography><br/>
-                      <CheckIcon fontSize="small" /><Typography component="span" variant="body1">專人客服支援</Typography><br/>
-                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">一頁式連結</Typography><br/>
-                      <CheckIcon color="primary" fontSize="small" /><Typography component="a" variant="body1">個人化內嵌頻道</Typography><br/>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </RadioGroup>
+            <Grid item xs={12} md={12}>
+              <img style={{fill: "#FD3E49"}} src={LogoIcon} width="200"></img>
+              <h4>以 Google 帳號或 Email 帳號註冊</h4>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={12}>
               <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Button
+                  fullWidth
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.submit}
+                  onClick={GoogleSigning}
+                  disabled={handleCode==="loading"}
+                  >
+                <img src={googleicon} width="28" style={ { marginRight: "10px" } }></img> 使用 Google 帳戶登入或註冊
+              </Button>
+                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     variant="outlined"
@@ -243,12 +238,12 @@ const SignUp = ()=>{
                 onClick={handleSignup}
                 disabled={handleCode==="loading"}
               >
-                立即註冊
+                立即以 Email 註冊
               </Button>
               <Grid container justify="center">
                 <Grid item>
                   <Typography component="span" variant="body2">
-                    註冊即同意本網站的
+                    註冊並登入即同意本網站的
                     <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body2">服務條款</Link>
                     、<Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私政策</Link>
                   </Typography>
@@ -257,18 +252,16 @@ const SignUp = ()=>{
               <br/>
               <Grid container justify="center">
                 <Grid item>
-                  <Typography component="span" variant="body1">
-                    <Link href="./signin">
+                    <Link variant="subtitle2" href="./signin">
                       已有帳號？立即登入
                     </Link>
-                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
           </div>
           </CardContent>
-        </Card>
+        </div>
         <Box mt={5}>
           <Copyright />
         </Box>

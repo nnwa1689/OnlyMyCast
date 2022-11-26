@@ -4,6 +4,8 @@ import { Link as RLink, useHistory } from 'react-router-dom';
 /*Firebase*/
 import firebase from "firebase/app";
 import "firebase/auth";
+/*SSO*/
+import { createUserInfoWithSSO, GoogleSigning,checkUserReg } from '../../Functions/SSO';
 /*Google themes*/
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -12,10 +14,11 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import LogoIcon from '../../static/only-my-cast-icon-pink.svg'
-import Card from '@material-ui/core/Card';
+import LogoIcon from '../../static/only-my-cast-pink.svg';
+import googleicon from '../../static/googleicon.png';
 import CardContent from '@material-ui/core/CardContent';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Grid from '@material-ui/core/Grid';
 
 
 function Copyright() {
@@ -37,7 +40,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(12),
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -91,10 +94,31 @@ const SignIn = () => {
 
   useEffect(
     ()=>{
-        firebase.auth().onAuthStateChanged((user)=> {
+        firebase.auth().onAuthStateChanged(async(user)=> {
             if (user) {
-              // 使用者已登入，redirect to Homepage
-              window.location.href = "./";
+              setHandleCode("loading");
+              //檢查使用者資料是否被建立（如從google登入）
+              if (user.providerData[0].providerId === "google.com") {
+                  await checkUserReg(user)
+                  .then(
+                    async(r) => {
+                      if(!r) {
+                        //沒有就建立
+                        await createUserInfoWithSSO(user)
+                        .then(
+                          () => {
+                            window.location.href = "./";
+                          }
+                        ).catch((e) => console.log(e))
+                      } else {
+                        window.location.href = "./";
+                      }
+                    }
+                    )
+              } else {
+                // 使用者已登入，redirect to Homepage
+                window.location.href = "./";
+              }
             }
           });
     }
@@ -102,65 +126,84 @@ const SignIn = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Card className={classes.paper}>
-          <CardContent>
+          <CardContent className={classes.paper}>
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
-            <img src={LogoIcon} width="128"></img>
-            <Typography component="h1" variant="h5">立即登入<br/>建立或收聽精彩故事</Typography>
-            <div className={classes.form} noValidate>
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={(e)=>{setEmail(e.target.value)}}
-                error={emailErr !== false}
-                helperText={ emailErr !== false && (emailErr) }
-                disabled={handleCode==="loading"}
-            />
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="密碼"
-                label="密碼"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e)=>{setPassword(e.target.value)}}
-                error={pwErr !== false}
-                helperText={ pwErr !== false && (pwErr) }
-                disabled={handleCode==="loading"}
-            />
+            <img src={LogoIcon} width="200"></img>
+            <h4 component="h1" variant="subtitle2">以 Google 帳號或 Email 帳號繼續</h4>
             <Button
                 fullWidth
-                variant="contained"
-                color="primary"
+                variant="outlined"
+                color="secondary"
                 className={classes.submit}
-                onClick={handleSignin}
+                onClick={GoogleSigning}
                 disabled={handleCode==="loading"}
             >
-                登入
+              <img src={googleicon} width="28" style={ { marginRight: "10px" } }></img> 使用 Google 帳戶登入或註冊
             </Button>
-            <Typography component="span" variant="body2">
-              <Link href="./signup" variant="body2">
-                      {"立即註冊"}
-              </Link> &nbsp;&nbsp;
-              <Link component={RLink} to="/forgetpassword" variant="body2">
-                      {"忘記密碼"}
-              </Link>
-            </Typography>
+            <div className={classes.form} noValidate>
+              <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  value={email}
+                  onChange={(e)=>{setEmail(e.target.value)}}
+                  error={emailErr !== false}
+                  helperText={ emailErr !== false && (emailErr) }
+                  disabled={handleCode==="loading"}
+              />
+              <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="密碼"
+                  label="密碼"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e)=>{setPassword(e.target.value)}}
+                  error={pwErr !== false}
+                  helperText={ pwErr !== false && (pwErr) }
+                  disabled={handleCode==="loading"}
+              />
+              <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  onClick={handleSignin}
+                  disabled={handleCode==="loading"}
+              >
+                  使用 Email 登入繼續
+              </Button>
+              <Grid container justify="center">
+                <Grid item>
+                  <Typography component="span" variant="body2">
+                    <Link href="./signup" variant="body2">
+                            {"立即註冊"}
+                    </Link> &nbsp;&nbsp;
+                    <Link component={RLink} to="/forgetpassword" variant="body2">
+                            {"忘記密碼"}
+                    </Link>
+                  </Typography>
+                </Grid>
+                <Grid item className={classes.submit}>
+                  <Typography component="span" variant="body2">
+                    註冊並登入即同意本網站的
+                    <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body2">服務條款</Link>
+                    、<Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私政策</Link>
+                  </Typography>
+                </Grid>
+              </Grid>
             </div>
           </CardContent>
-      </Card>
       <Box mt={8}>
         <Copyright />
       </Box>

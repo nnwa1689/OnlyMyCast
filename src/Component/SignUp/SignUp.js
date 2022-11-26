@@ -6,7 +6,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 //Oauth
-import { createUserInfoWithSSO, GoogleSigning,checkUserReg } from '../../Functions/SSO';
+import { GoogleSigning } from '../../Functions/SSO';
 /*Google Theme*/
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -125,28 +125,8 @@ const SignUp = ()=>{
       firebase.auth().onAuthStateChanged(async(user)=> {
         if (user) {
           setHandleCode("loading");
-          //檢查使用者資料是否被建立（如從google登入）
-          if (user.providerData[0].providerId === "google.com") {
-              await checkUserReg(user)
-              .then(
-                async(r) => {
-                  if(!r) {
-                    //沒有就建立
-                    await createUserInfoWithSSO(user)
-                    .then(
-                      () => {
-                        window.location.href = "./";
-                      }
-                    ).catch((e) => console.log(e))
-                  } else {
-                    window.location.href = "./";
-                  }
-                }
-                )
-          } else {
             // 使用者已登入，redirect to Homepage
             window.location.href = "./";
-          }
         }
       });
     }

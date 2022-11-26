@@ -7,21 +7,13 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 
-export const checkUserReg =  async(user) => {
+export const isWithSSO =  async(user) => {
     //確認 user 資料已被建立
     
     return new Promise((resolve, reject) => {
-
-        firebase.firestore().collection("user").doc(user.uid).get()
-        .then(
-            (doc) => {
-                if (!doc.exists) {
-                      resolve(false);
-                } else {
-                    resolve(true);
-                }
-            }
-        );
+        if (user.providerData[0].providerId === "google.com") {
+            resolve(true);
+        }
     })
 }
 
@@ -44,11 +36,10 @@ export const createUserInfoWithSSO = async(user) => {
 
 export async function GoogleSigning() {
     const providerGoogle = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(providerGoogle)
+    firebase.auth().signInWithPopup(providerGoogle)
     .then((result) => {
         // The signed-in user info.
         var user = result.user;
-        checkUserReg(user);
     }).catch(
       (e) => {
 

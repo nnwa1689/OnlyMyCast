@@ -6,6 +6,9 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 //redux
 import { useSelector } from 'react-redux';
 
+//sso
+import { createUserInfoWithSSO,isWithSSO } from './Functions/SSO';
+
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -50,7 +53,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V221126.14";
+const clientversion = "V221126.16";
 const App = (props) => {
   //常用設定
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail', 'onelink'];
@@ -115,8 +118,6 @@ const App = (props) => {
     () => {
       firebase.auth().onAuthStateChanged(async(user) => {
         if (user) {
-          console.log(user.photoURL);
-          console.log(firebase.auth().currentUser.providerData[0].providerId);
           withGoogleSingin.current = firebase.auth().currentUser.providerData[0].providerId == 'google.com' ? true : false;
           //檢查 Token，如果 email 驗證結果沒有更新，就重新取得 token。
           user.getIdTokenResult().then(
@@ -172,10 +173,19 @@ const App = (props) => {
             firebase.firestore().collection("user").doc(user.uid).get()
               .then(
                 (doc) => {
-                  setUserData(doc.data());
-                  userUid.current = user.uid;
-                  userEmail.current = user.email;
-                  setAuth(true);
+                  //如果 user 資訊不存在，應該是SSO登入但沒有資料，建立一個
+                  if (!doc.exists && isWithSSO(user)) {
+                    createUserInfoWithSSO(user)
+                    .then(
+                      () => { window.location.reload(); }
+                    );
+                  } else {
+                    setUserData(doc.data());
+                    userUid.current = user.uid;
+                    userEmail.current = user.email;
+                    setAuth(true);
+                  }
+
                 }
               );
           }

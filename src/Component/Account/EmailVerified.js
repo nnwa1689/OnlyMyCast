@@ -6,13 +6,12 @@ import firebase from "firebase/app";
 import "firebase/auth";
 /*Google themes*/
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import LogoIcon from '../../static/only-my-cast-icon-pink.svg'
+import LogoIcon from '../../static/only-my-cast-pink.svg';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -37,7 +36,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -93,13 +92,10 @@ const EmailVerified = () => {
     handleCode === "verified" ? (window.location.href = "./")
     :
     <Container component="main" maxWidth="xs">
-    <Card className={classes.paper}>
-        <CardContent>
+        <CardContent className={classes.paper}>
         { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
-          <img src={LogoIcon} width="128"></img>
-          <Typography component="h1" variant="h5">信箱驗證</Typography>
-          <br/>
-          <Typography component="span" variant="body1">驗證您的信箱之後，才能開始使用網站功能</Typography>
+          <img src={LogoIcon} width="200"></img>
+          <h4 component="span" variant="body1">驗證您的信箱之後，才能開始使用網站功能</h4>
           <form className={classes.form} noValidate>
             <Button
                 type="button"
@@ -115,7 +111,6 @@ const EmailVerified = () => {
             </Button>
           </form>
         </CardContent>
-    </Card>
     <Box mt={8}>
       <Copyright />
     </Box>

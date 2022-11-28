@@ -53,7 +53,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V221126.16";
+const clientversion = "V221128.23";
 const App = (props) => {
   //常用設定
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail', 'onelink'];

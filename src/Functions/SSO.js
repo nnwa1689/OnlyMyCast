@@ -7,14 +7,13 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 
-export const isWithSSO =  async(user) => {
+export const isWithSSO =  (user) => {
     //確認 user 資料已被建立
-    
-    return new Promise((resolve, reject) => {
-        if (user.providerData[0].providerId === "google.com") {
-            resolve(true);
-        }
-    })
+    if (user.providerData[0].providerId === "google.com") {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 export const createUserInfoWithSSO = async(user) => {

@@ -12,7 +12,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import LogoIcon from '../../static/only-my-cast-icon-pink.svg'
+import LogoIcon from '../../static/only-my-cast-pink.svg';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -38,7 +38,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: 100,
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -94,53 +94,50 @@ const ForgetPassword = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Card className={classes.paper}>
-          <CardContent>
-          { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
-            <img src={LogoIcon} width="128"></img>
-            <Typography component="h1" variant="h5">忘記密碼</Typography><br/>
-            <Typography component="span" variant="body1">輸入註冊的E-Mail<br/>將會將重設密碼連結送至你的信箱。</Typography>
-            <form className={classes.form} noValidate>
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={(e)=>{setEmail(e.target.value)}}
-                error={emailErr !== false}
-                helperText={ emailErr !== false && (emailErr) }
-                disabled={handleCode==="loading"}
-            />
-            <Button
-                type="button"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={handleSignin}
-                disabled={handleCode==="loading" || handleCode==="suc"}
-            >
-                送出
-            </Button>
-            <Link component={RLink} to="/signin" variant="body2">
-                    {"<-返回登入"}
-            </Link>
-            </form>
-            <Snackbar
-                open={handleCode==="suc"}
-                onClose={()=>{window.location.reload()}}
-                message="重設密碼連結已經送至你的信箱！"
-                key={0}
-                autoHideDuration={4000}
-            />
-          </CardContent>
-      </Card>
+      <CardContent className={classes.paper}>
+      { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
+        <img src={LogoIcon} width="200"></img>
+        <h4 component="span" variant="body1">輸入註冊的E-Mail<br/>將會將重設密碼連結送至你的信箱。</h4>
+        <form className={classes.form} noValidate>
+        <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={(e)=>{setEmail(e.target.value)}}
+            error={emailErr !== false}
+            helperText={ emailErr !== false && (emailErr) }
+            disabled={handleCode==="loading"}
+        />
+        <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={handleSignin}
+            disabled={handleCode==="loading" || handleCode==="suc"}
+        >
+            送出
+        </Button>
+        <Link component={RLink} to="/signin" variant="body2">
+                {"<-返回登入"}
+        </Link>
+        </form>
+        <Snackbar
+            open={handleCode==="suc"}
+            onClose={()=>{window.location.reload()}}
+            message="重設密碼連結已經送至你的信箱！"
+            key={0}
+            autoHideDuration={4000}
+        />
+      </CardContent>
       <Box mt={8}>
         <Copyright />
       </Box>

@@ -1,5 +1,5 @@
 //react
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Link as RLink, useHistory } from 'react-router-dom';
 //firebase
 import firebase from "firebase/app";
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -71,6 +71,7 @@ const SignUp = ()=>{
   const [plan, setPlan] = useState("free");
   const [pwError, setPwError] = useState(false);
   const history = useHistory();
+  const isFirstLoading = useRef(true);
 
   const handleSignup = ()=>{
     setHandleCode('loading');
@@ -122,13 +123,14 @@ const SignUp = ()=>{
 
   useEffect(
     ()=>{
-      firebase.auth().onAuthStateChanged(async(user)=> {
-        if (user) {
+      firebase.auth().onAuthStateChanged((user)=> {
+        if (user && isFirstLoading.current) {
           setHandleCode("loading");
             // 使用者已登入，redirect to Homepage
             window.location.href = "./";
         }
       });
+      isFirstLoading.current = false;
     }
   )
 

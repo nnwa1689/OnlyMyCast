@@ -22,6 +22,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -45,14 +50,20 @@ const useStyles = makeStyles((theme)=>({
         textAlign:"center"
     },
     large: {
-      width: theme.spacing(24),
-      height: theme.spacing(24),
-      marginBottom: theme.spacing(1),
-      marginTop:theme.spacing(3),
+      width: theme.spacing(28),
+      height: theme.spacing(28),
       color: "#FFFFFF",
       backgroundColor: "#FD3E49",
       marginLeft:"auto",
       marginRight:"auto"
+    },
+    shareImg: {
+      padding: theme.spacing(3),
+      background: "rgb(250, 250, 250)",
+      width: "270px",
+      height: "480px",
+      color: "#000000",
+      lineHeight: "18px",
     },
   }));
 
@@ -70,6 +81,7 @@ const PodcastDetails = (props) => {
     const [played, setPlayed] = useState(false);
     const [publicStatu, setPublicStatu] = useState();
     const [showCopyMsg, setShowCopyMsg] = useState(false);
+    const [showIgMsg, setShowIgMsg] = useState(false);
 
     const isFirstLoad = useRef(true);
 
@@ -102,9 +114,6 @@ const PodcastDetails = (props) => {
     }
 
     const handleDownloadShareImg = () => {
-
-
-      document.getElementById('shareImg').style.display = "block";
       htmlToImage.toPng(document.getElementById('shareImg'))
       .then(function (dataUrl) {
         const link = document.createElement('a');
@@ -119,6 +128,10 @@ const PodcastDetails = (props) => {
          }
       );
 
+    }
+
+    const handleOpenClose = () => {
+      setShowIgMsg(!showIgMsg);
     }
 
     const getPlayedStatu = () => {
@@ -216,7 +229,12 @@ const PodcastDetails = (props) => {
                       </Typography>
                     <Tooltip title="複製分享連結">
                       <IconButton onClick={ () => {handleCopy("https://onlymycast.notes-hz.com/webapp/podcastdetail/" + props.match.params.id + '/' + props.match.params.podId)} } size='large'>
-                        <LinkIcon fontSize='large' />
+                        <LinkIcon fontSize='small' />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="以限時動態分享">
+                      <IconButton onClick={ handleOpenClose } size='large'>
+                        <InstagramIcon fontSize='small' />
                       </IconButton>
                     </Tooltip>
                     <br/>
@@ -251,6 +269,34 @@ const PodcastDetails = (props) => {
             :
             ""
           }
+           <Dialog
+            maxWidth={'xs'}
+            open={showIgMsg}
+            onClose={handleOpenClose}
+          >
+            <DialogTitle id="max-width-dialog-title">單集限動圖片</DialogTitle>
+            <DialogContent>
+                <div className={classes.shareImg} style={ { color: "black" } } id="shareImg">
+                  <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                  <h3 style={{ color: "black", display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{name}</h3>
+                  <h3 style={ { color: "black" } }>{channelName}</h3>
+                  <p style={{height:"55px", color: "rgba(0, 0, 0, 0.80)", display:"-webkit-box", overflow:"hidden", whiteSpace: "normal", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }}>{intro}</p>
+                  <div className={classes.slogan}>
+                    <Typography style={{ lineHeight: "10px", color: "rgba(0, 0, 0, 0.54)" }} variant="body2" component="span" color="textSecondary">
+                        <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast-私人Podcast
+                    </Typography>
+                  </div>
+                </div>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDownloadShareImg} color="primary">
+                下載圖片
+              </Button>
+              <Button onClick={handleOpenClose} color="primary">
+                關閉
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Container>
       );
     }

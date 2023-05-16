@@ -228,7 +228,7 @@ const PodcastDetails = (props) => {
                       { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
                       </Typography>
                     <Tooltip title="複製分享連結">
-                      <IconButton onClick={ () => {handleCopy("https://onlymycast.notes-hz.com/webapp/podcastdetail/" + props.match.params.id + '/' + props.match.params.podId)} } size='large'>
+                      <IconButton onClick={ () => {handleCopy("https://dev.n-d.tw/apps/onlymycast/webapp/podcastdetail/" + props.match.params.id + '/' + props.match.params.podId)} } size='large'>
                         <LinkIcon fontSize='small' />
                       </IconButton>
                     </Tooltip>

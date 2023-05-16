@@ -220,9 +220,9 @@ const PodcastAccount = (props) => {
                         
                         setPublicStatu(data.publicStatu === undefined ? "false" : data.publicStatu);
                         setEmbedCode(
-                            `<iframe frameborder="0" height="200px" style="width:100%;max-width:660px;overflow:hidden;" src="https://onlymycast.notes-hz.com/webapp/embed/` + props.user.userId + `"></iframe>`
+                            `<iframe frameborder="0" height="200px" style="width:100%;max-width:660px;overflow:hidden;" src="https://dev.n-d.tw/apps/onlymycast/webapp/embed/` + props.user.userId + `"></iframe>`
                         );
-                        setOneLinkUrl('https://onlymycast.notes-hz.com/webapp/onelink/' + props.user.userId);
+                        setOneLinkUrl('https://dev.n-d.tw/apps/onlymycast/webapp/onelink/' + props.user.userId);
                         setCategory( data.category === undefined ? "" : data.category );
                         setPreUrl( data.preUrl === undefined ? "" : data.preUrl );
                       }
@@ -698,7 +698,7 @@ const PodcastAccount = (props) => {
                                                             <img alt="onlymycast" src="./favicon.ico" width="24px"/>Onlymycast</Typography>
                                                         <TextField
                                                             label="onlymycast"
-                                                            defaultValue={"https://onlymycast.notes-hz.com/webapp/podcast/" + userId}
+                                                            defaultValue={"https://dev.n-d.tw/apps/onlymycast/webapp/podcast/" + userId}
                                                             variant="outlined"
                                                             inputProps={
                                                                 { readOnly: true, }
@@ -715,7 +715,7 @@ const PodcastAccount = (props) => {
                                                                 size="large" 
                                                                 color="primary" 
                                                                 variant="outlined" 
-                                                                onClick={()=>{handleCopy("https://onlymycast.notes-hz.com/webapp/podcast/" + userId)}}>複製
+                                                                onClick={()=>{handleCopy("https://dev.n-d.tw/apps/onlymycast/webapp/podcast/" + userId)}}>複製
                                                             </Button>
                                                         </CardActions>
                                                     </Grid>
@@ -890,7 +890,7 @@ const PodcastAccount = (props) => {
                                                 <Typography variant="h5" component="h5">節目嵌入貼紙</Typography>
                                                 <Typography variant="body1" component="h5">透過程式碼，將節目嵌入在個人網站上</Typography><br/>
                                                 <br/>
-                                                <iframe frameborder="0" height="200px" style={{width:"100%", maxWidth:"660px", overflow:"hidden"}} src={"https://onlymycast.notes-hz.com/webapp/embed/" + props.user.userId}></iframe>
+                                                <iframe frameborder="0" height="200px" style={{width:"100%", maxWidth:"660px", overflow:"hidden"}} src={"https://dev.n-d.tw/apps/onlymycast/webapp/embed/" + props.user.userId}></iframe>
                                                 <br/><br/>
                                                 <TextField
                                                     label="程式碼"

@@ -53,7 +53,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V221208.23";
+const clientversion = "V230516.23";
 const App = (props) => {
   //常用設定
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail', 'onelink'];
@@ -92,8 +92,8 @@ const App = (props) => {
 
   if (process.env.NODE_ENV !== "development") {
     //產品環境
-    basename = "/webapp/";
-    basenameIndex = 2;
+    basename = "/apps/onlymycast/webapp/";
+    basenameIndex = 4;
     fcmVapidKey = fcmVapidKey_prod;
   } else {
     if (!(firebase.messaging.isSupported())) {

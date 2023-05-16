@@ -136,7 +136,7 @@ const EmbedChannel = (props) => {
                         <Button
                             fullWidth
                             style={ { height: "40px" } }
-                            href={"https://onlymycast.notes-hz.com/webapp/podcast/" + props.match.params.id}
+                            href={"https://dev.n-d.tw/apps/onlymycast/webapp/podcast/" + props.match.params.id}
                             target="_blank"
                             variant="contained"
                             color="primary"

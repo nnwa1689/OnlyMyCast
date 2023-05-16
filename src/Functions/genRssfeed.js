@@ -44,7 +44,7 @@ export default function genrssfeed(userId, userEmail) {
                                     var feed = new RSS({
                                         title: channelName,
                                         description: intro,
-                                        site_url: 'https://onlymycast.notes-hz.com/webapp/podcast/' + userId,
+                                        site_url: 'https://dev.n-d.tw/apps/onlymycast/webapp/podcast/' + userId,
                                         feed_url: feedurl,
                                         image_url: image,
                                         category: category,
@@ -90,7 +90,7 @@ export default function genrssfeed(userId, userEmail) {
                                                 feed.item({
                                                     title:  qd.title,
                                                     description: epintro,
-                                                    link: 'https://onlymycast.notes-hz.com/webapp/podcastdetail/' + userId + '/' + doc.id, // link to the item
+                                                    link: 'https://dev.n-d.tw/apps/onlymycast/webapp/podcastdetail/' + userId + '/' + doc.id, // link to the item
                                                     guid: doc.id, // optional - defaults to url
                                                     author: autor, // optional - defaults to feed author property
                                                     date: new Date(qd.updateTime.seconds * 1000).toUTCString(), // any format that js Date can parse.

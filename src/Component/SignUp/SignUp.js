@@ -25,15 +25,8 @@ import googleicon from '../../static/googleicon.png';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © ' + new Date().getFullYear()}<br/>
-      <Link href="https://lab.notes-hz.com/">
-        <span style={ {fontSize: "24px", color: "#028ff3", fontWeight: "bold"} }>Lab</span>
-        <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>H</span>
-        <span style={ {fontSize: "24px", color: "#FF8738", fontWeight: "bold"} }>a</span>
-        <span style={ {fontSize: "24px", color: "#FFA900", fontWeight: "bold"} }>z</span>
-        <span style={ {fontSize: "24px", color: "#00A752", fontWeight: "bold"} }>u</span>
-        <span style={ {fontSize: "24px", color: "#007BEE", fontWeight: "bold"} }>y</span>
-        <span style={ {fontSize: "24px", color: "#9B49DF", fontWeight: "bold"} }>a</span>
+      <Link href="https://n-d.tw/">
+        Made with <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>❤</span> by 筆記設計
         </Link><br/><br/>
     </Typography>
   );

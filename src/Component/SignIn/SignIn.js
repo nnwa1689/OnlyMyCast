@@ -24,9 +24,9 @@ import Grid from '@material-ui/core/Grid';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      <Link href="https://n-d.tw/">
-        Made with <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>❤</span> by 筆記設計
-        </Link><br/><br/>
+      <Link href="https://studio-44s.tw/">
+        <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>❤</span> 四拾四秒網頁製作所©
+      </Link><br/><br/>
     </Typography>
   );
 }
@@ -161,7 +161,7 @@ const SignIn = () => {
                 <Grid item>
                   <Typography component="span" variant="body2">
                     <Link href="./signup" variant="body2">
-                            {"立即註冊"}
+                            {"立即以 Email 註冊"}
                     </Link> &nbsp;&nbsp;
                     <Link component={RLink} to="/forgetpassword" variant="body2">
                             {"忘記密碼"}
@@ -171,8 +171,7 @@ const SignIn = () => {
                 <Grid item className={classes.submit}>
                   <Typography component="span" variant="body2">
                     註冊並登入即同意本網站的
-                    <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body2">服務條款</Link>
-                    、<Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私政策</Link>
+                    <Link target="_blank" href="https://onlymycast.com/page/privacypolicy" variant="body2">服務條款及隱私政策</Link>
                   </Typography>
                 </Grid>
               </Grid>

@@ -103,7 +103,7 @@ const EmbedChannel = (props) => {
     return (
         <Card style={{ background: "#f7f7f7", maxHeight: 200, borderRadius: 20, boxShadow: "none", }}>
             <div className={classes.slogan}>
-                <Link href="https://onlymycast.notes-hz.com/" target="_blank">
+                <Link href={ props.baseWwwUrl } target="_blank">
                     <Typography style={{ lineHeight: "10px", color: "rgba(0, 0, 0, 0.54)" }} variant="body2" component="span" color="textSecondary">
                         <img alt="OnlyMyCast" src={Icon} height="18" />&nbsp;OnlyMyCast－建立專屬的 Podcast
                     </Typography>

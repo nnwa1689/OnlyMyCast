@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 //static
 import LogoIcon from '../../static/only-my-cast-icon.svg'
-import Logo from '../../static/only-my-cast.svg';
+import Logo from '../../static/only-my-cast-pink.svg';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,11 +19,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 1, 1, 1),
     // vertical padding + font size from searchIcon
   },
-  appBar: {
-    backgroundColor: "rgba(40, 40, 40, 0.85)",
-    backdropFilter: "blur(4px)",
-    boxShadow: "none",
- },
 }));
 
 const UnloginNavBar = (props) => {

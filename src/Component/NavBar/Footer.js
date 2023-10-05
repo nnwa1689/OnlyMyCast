@@ -24,13 +24,15 @@ const Footer = ()=> {
         <Container maxWidth="lg" className={classes.root}>
             <Divider/><br/>
                 &nbsp;&nbsp;
-                <Link target="_blank" href="https://n-d.tw/page/privacypolicy" variant="subtitle2">隱私與條款</Link>
-                &nbsp;
-                &nbsp;
-                <Link target="_blank" href="https://discovered-plantain-cb9.notion.site/OnlyMyCast-57f05f98fbe44254a2f57ca0a07c8203" variant="subtitle2">改版日記</Link>
-                &nbsp;
-                <Link target="_blank" href="https://n-d.tw/page/contact" variant="subtitle2">聊天去</Link>
-                <Typography variant="subtitle2" component="p">Copyright©LabHazuya</Typography>
+                <Link target="_blank" href="https://onlymycast.com/page/privacypolicy" variant="subtitle2">隱私與條款</Link>
+                &nbsp;&nbsp;
+                <Link target="_blank" href="https://onlymycast.com/category/45" variant="subtitle2">改版日記</Link>
+                &nbsp;&nbsp;
+                <Link target="_blank" href="https://studio-44s.tw/contact" variant="subtitle2">聯絡我們</Link>
+                &nbsp;&nbsp;
+                <Link target="_blank" href="https://onlymycast.com/page/about" variant="subtitle2">關於我們</Link>
+                &nbsp;&nbsp;
+                <Link target="_blank" href="https://onlymycast.com/blog" variant="subtitle2">部落格</Link>
         </Container>
     );
 }

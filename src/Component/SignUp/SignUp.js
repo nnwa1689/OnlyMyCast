@@ -25,9 +25,9 @@ import googleicon from '../../static/googleicon.png';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      <Link href="https://n-d.tw/">
-        Made with <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>❤</span> by 筆記設計
-        </Link><br/><br/>
+      <Link href="https://studio-44s.tw/">
+        <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>❤</span> 四拾四秒網頁製作所©
+      </Link><br/><br/>
     </Typography>
   );
 }
@@ -138,23 +138,10 @@ const SignUp = ()=>{
           <div className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
-              <img style={{fill: "#FD3E49"}} src={LogoIcon} width="200"></img>
-              <h4>以 Google 帳號或 Email 帳號註冊</h4>
+              <img style={{fill: "#FD3E49", marginBottom: "30px"}} src={LogoIcon} width="200"></img>
             </Grid>
             <Grid item xs={12} md={12}>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Button
-                  fullWidth
-                  variant="outlined"
-                  color="secondary"
-                  className={classes.submit}
-                  onClick={GoogleSigning}
-                  disabled={handleCode==="loading"}
-                  >
-                <img src={googleicon} width="28" style={ { marginRight: "10px" } }></img> 使用 Google 帳戶登入或註冊
-              </Button>
-                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     variant="outlined"
@@ -219,8 +206,7 @@ const SignUp = ()=>{
                 <Grid item>
                   <Typography component="span" variant="body2">
                     註冊並登入即同意本網站的
-                    <Link target="_blank" href="https://www.notes-hz.com/page/serviceRules" variant="body2">服務條款</Link>
-                    、<Link target="_blank" href="https://www.notes-hz.com/page/privacypolicy" variant="body2">隱私政策</Link>
+                    <Link target="_blank" href="https://onlymycast.com/page/privacypolicy" variant="body2">服務條款及隱私政策</Link>
                   </Typography>
                 </Grid>
               </Grid>
@@ -228,7 +214,7 @@ const SignUp = ()=>{
               <Grid container justify="center">
                 <Grid item>
                     <Link variant="subtitle2" href="./signin">
-                      已有帳號？立即登入
+                      已有帳號？立即使用 Google 或 Email 登入
                     </Link>
                 </Grid>
               </Grid>

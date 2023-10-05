@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme)=>({
                   />
             </ListItem>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={3} justify='flex-end'>
             <Tooltip title="編輯頻道">
               <IconButton aria-label="editChannel" component={RLink} to={"/podcastaccount"} color="primary">
                 <GraphicEqIcon />
@@ -102,8 +102,8 @@ const useStyles = makeStyles((theme)=>({
               </IconButton>
             </Tooltip>
             <br/>
-            <Typography variant="subtitle2"><FaceIcon fontSize="small"/>{ props.podcastFansCount } 位粉絲</Typography>
-            <Typography variant="subtitle2"><GraphicEqIcon fontSize="small" />{ props.spCount } 集節目</Typography>
+            <Typography align='center' variant="subtitle2"><FaceIcon fontSize="small"/>{ props.podcastFansCount } 位粉絲</Typography>
+            <Typography align='center' variant="subtitle2"><GraphicEqIcon fontSize="small" />{ props.spCount } 集節目</Typography>
           </Grid>
         </>
     )

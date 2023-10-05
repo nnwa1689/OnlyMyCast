@@ -24,6 +24,7 @@ import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
 //customUI
 import TabPanel from '../CustomComponent/TabPanel';
+import NotCreatePodcast from './NotCreatePodcast';
 //firebase
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -201,27 +202,7 @@ const EditPodcast = (props) => {
 
     if (props.user.userId==="") {
         return(
-            <Container maxWidth="lg" className={classes.root}>
-                <CardContent>
-                    <Typography variant="h2" component="h1" gutterBottom>
-                        (^ｰ^)ノ<br/>
-                    </Typography>
-                    <Typography variant="h5" component="span">
-                        嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
-                    </Typography>
-                    <br/>
-                    <Button
-                        component={RLink}
-                        to="/podcastaccount"
-                        color="primary"
-                        fullWidth
-                        size="large"
-                        variant="contained"
-                        >              
-                        立即建立屬於我的私人電台
-                        </Button>
-                </CardContent>
-            </Container>
+            <NotCreatePodcast/>
         )} else {
             if (spList === undefined || castdarftSpList === undefined) {
                 return(<CircularProgress style={{marginTop: "25%"}} />);

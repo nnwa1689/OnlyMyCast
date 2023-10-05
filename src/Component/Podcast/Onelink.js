@@ -31,6 +31,7 @@ import spotiflogo from '../../static/spotify.png';
 import applelogo from '../../static/hero_icon__c135x5gz14mu_large_2x.png';
 import googlelogo from '../../static/icons8-google-podcasts-48.png';
 import soundonlogo from '../../static/soundon.png';
+import omclogo from '../../static/logo192.png';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -192,7 +193,7 @@ const Onelink = (props) => {
                     </Grid>
                     <Grid item xs={12} md={12}>
                         <Button fullWidth className={classes.onlymycastColor} variant="outlined" href={omcLink} target='_blank' size='large'>
-                            <img alt="onlymycast" src="../favicon.ico" width="24px"/>Onlymycast
+                            <img alt="onlymycast" src={omclogo} width="24px"/>Onlymycast
                         </Button>
                         {facebookLink.length > 0 ?
                         <Button fullWidth className={classes.facebookButton} variant="outlined" href={facebookLink} target='_blank' size='large'>
@@ -243,8 +244,8 @@ const Onelink = (props) => {
                 </Grid>
                 <Typography style={ { lineHeight : "100px" } } variant="subtitle2" component="span" color="textSecondary">
                     本頁面由 &nbsp;
-                    <Link href="https://onlymycast.notes-hz.com/" target="_blank">Onlymycast</Link>
-                    &nbsp;用愛產生！
+                    <Link href={props.baseWwwUrl} target="_blank">Onlymycast</Link>
+                    &nbsp;用 <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>❤</span> 產生！
                 </Typography>
             </Container>
         );

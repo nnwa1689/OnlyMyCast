@@ -132,7 +132,7 @@ const Home = (props) => {
             setSpCount(e.docs.length)
         });
   }
-  
+
   if (subscribeList===undefined || selfChannel===undefined) {
     return(<CircularProgress style={{marginTop: "25%"}} />);
   } else {
@@ -161,7 +161,7 @@ const Home = (props) => {
             <FavoriteIcon/>我的訂閱
         </Typography>
         <br/>
-        <Grid container justify="center" spacing={2}>
+        <Grid container justify="left" spacing={2}>
             {subscribeList ==="" ?
               <>
                 <Typography variant="h2" component="span">

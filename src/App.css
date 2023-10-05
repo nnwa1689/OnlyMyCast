@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  
 }
 
 a{
@@ -7,16 +7,16 @@ a{
 }
 
 @font-face {
-  font-family: 'NotoSansTC-Regular';
+  font-family: 'NotoSansTC-Medium';
   font-style: normal;
-  src: url(./fonts/NotoSansTC-Regular.otf);
+  src: url(./fonts/NotoSansTC-Medium.ttf);
   unicode-range: U+4E00-9FFF;
 }
 
 @font-face {
-  font-family: 'NotoSansTC-Regular';
+  font-family: 'NotoSansTC-Medium';
   font-style: normal;
-  src: url(./fonts/Lexend-Regular.ttf);
+  src: url(./fonts/Rubik-Regular.ttf);
   unicode-range: U+00-024F;
 }
 

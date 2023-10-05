@@ -46,14 +46,14 @@ import Onelink from './Component/Podcast/Onelink';
 import NotFound from './Component/Home/NotFound';
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
 
-const clientversion = "V230516.23";
+const clientversion = "V231005.23";
 const App = (props) => {
   //常用設定
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail', 'onelink'];
@@ -89,12 +89,14 @@ const App = (props) => {
   var basename = "/";
   var basenameIndex = 1;
   var fcmVapidKey = fcmVapidKey_dev;
+  var baseWwwUrl = "http://localhost:3000/";
 
   if (process.env.NODE_ENV !== "development") {
     //產品環境
-    basename = "/apps/onlymycast/webapp/";
+    basename = "/";
     basenameIndex = 4;
     fcmVapidKey = fcmVapidKey_prod;
+    baseWwwUrl = "https://app.onlymycast.com/";
   } else {
     if (!(firebase.messaging.isSupported())) {
       console.log('This browser does not support notification');
@@ -128,8 +130,8 @@ const App = (props) => {
             }
           );
 
-          //checkEmailVerified
-          if (!user.emailVerified) {
+          //checkEmailVerified 僅限產品環境
+          if (!user.emailVerified && process.env.NODE_ENV !== "development") {
             //unVerified, 轉跳到驗證介面
             setAuth(true);
             setEmailVeri(false);
@@ -258,9 +260,28 @@ const App = (props) => {
       },
     },
     typography: {
-      fontFamily: 'NotoSansTC-Regular',
+      fontFamily: 'NotoSansTC-Medium',
     },
     overrides: {
+      MuiPaper: {
+        root: {
+          backgroundColor: "#000000"
+        }
+      },
+      MuiCircularProgress: {
+        root: {
+          display: "block",
+          marginLeft : "auto",
+          marginRight : "auto"
+        }
+      },
+      MuiTypography:
+      {
+        root: {
+          marginBottom: "0.25rem",
+          marginTop: "0.25rem"
+        }
+      },
       MuiCard:
       {
         root: {
@@ -274,6 +295,13 @@ const App = (props) => {
       MuiAppBar: {
         colorDefault: {
           backgroundColor:'transparent',
+        },
+        colorPrimary:{
+          backgroundColor: "rgba(0, 0, 0, 1)",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+          //backdropFilter: "blur(4px)",
+          boxShadow: "none",
+          color: "#FFFFFF"
         }
       },
       MuiButton: {
@@ -311,9 +339,23 @@ const App = (props) => {
       },
     },
     typography: {
-      fontFamily: 'NotoSansTC-Regular',
+      fontFamily: 'NotoSansTC-Medium',
     },
     overrides: {
+      MuiCircularProgress: {
+        root: {
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto"
+        }
+      },
+      MuiTypography:
+      {
+        root: {
+          marginBottom: "0.25rem",
+          marginTop: "0.25rem"
+        }
+      },
       MuiCard:
       {
         root: {
@@ -328,11 +370,23 @@ const App = (props) => {
       MuiAppBar: {
         colorDefault: {
           backgroundColor:'transparent',
+        },
+        colorPrimary:{
+          backgroundColor: "rgba(255, 255, 255, 1)",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+          //backdropFilter: "blur(4px)",
+          boxShadow: "none",
+          color: "#363636"
+        }
+      },
+      MuiFab: {
+        root: {
+          boxShadow: "none"
         }
       },
       MuiButton: {
         root: {
-          height: "54px",
+          height: "64px",
         },
         contained: {
           boxShadow: "none",
@@ -350,6 +404,21 @@ const App = (props) => {
     }
   });
 
+  const theme = useTheme();
+  const useStyles = makeStyles(
+    (theme) => (
+      {
+        content: {
+          [theme.breakpoints.up('sm')]: {
+            width: `calc(100% - ${240}px)`,
+            marginLeft: 240,
+          },
+        }
+      }
+    )
+  );
+  const classes = useStyles();
+
   return (
     <ThemeProvider theme={ 
       useSelector(state => state.mode) === 'light' || onlyLightModePath.includes(pathname) ? lightTheme : darkTheme
@@ -359,90 +428,141 @@ const App = (props) => {
       <div className="App">
         <BrowserRouter basename={basename}>
           <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}/>
-          <Container maxWidth="lg">
             {inApp === true &&
-              
+              <Container maxWidth="lg">
                 <MuiAlert style={{ marginTop: "100px", marginBottom: "-50px" }} elevation={6} variant="filled" severity="warning">
                   您可能正在使用APP內置的瀏覽器，如果要體驗完整功能，請透過瀏覽器開啟
                 </MuiAlert>
-              
+              </Container>
             }
-          </Container>
+
             {isAuth !== 0 ?
               <>
-              <Switch>
-                <Route exact path="/"
+                <Switch>
+                  <Route exact path="/"
                     render={(props) => (
-                      <Home {...props} user={userData} userUid={userUid.current} />
+                      <main className={ classes.content }>
+                        <Home {...props} user={userData} userUid={userUid.current} />
+                      </main>
                     )} />
                   <Route exact path="/account"
                     render={(props) => (
-                      <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} googleSing={withGoogleSingin.current} />
+                      <main className={ classes.content }>
+                        <Account {...props} user={userData} dataupdate={handleUserUpdate} userUid={userUid.current} userEmail={userEmail.current} googleSing={withGoogleSingin.current} />
+                      </main>
                     )}
                   />
                   <Route exact path="/podcastaccount"
                     render={(props) => (
-                      <PodcastAccount {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} />
+                      <main className={ classes.content }>
+                        <PodcastAccount {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} baseWwwUrl={baseWwwUrl}/>
+                      </main>
                     )} />
                   <Route exact path="/fansadmin"
                     render={(props) => (
-                      <FansAdmin {...props} user={userData} userUid={userUid.current} />
+                      <main className={ classes.content }>
+                        <FansAdmin {...props} user={userData} userUid={userUid.current} />
+                      </main>
                     )} />
                   <Route exact path="/subreq"
                     render={(props) => (
-                      <Subreq {...props} user={userData} userUid={userUid.current} />
+                      <main className={ classes.content }>
+                        <Subreq {...props} user={userData} userUid={userUid.current} />
+                      </main>
                     )} />
-                  <Route exact path="/search" component={Search} />
-                  <Route path="/search/:q" component={Search} />
+                  <Route exact path="/search" 
+                    render={(props) => (
+                      <main className={ classes.content }>
+                        <Search {...props} />
+                      </main>
+                      )
+                      } />
+                  <Route path="/search/:q" 
+                    render={(props) => (
+                      <main className={ classes.content }>
+                        <Search {...props} />
+                      </main>
+                    )
+                      } />
                   <Route path="/podcastdetail/:id/:podId"
                     render={(props) => (
-                      <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} isAuth={isAuth} />
+                      <main className={ classes.content }>
+                        <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} isAuth={isAuth} />
+                      </main>
                     )} />
                   <Route path="/podcast/:id"
                     render={(props) => (
-                      <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} isAuth={isAuth} />
+                      <main className={ classes.content }>
+                        <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} isAuth={isAuth} />
+                      </main>
                     )} />
                   <Route exact path="/uploadpodcast"
                     render={(props) => (
-                      <NewPodcast {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} />
+                      <main className={ classes.content }>
+                        <NewPodcast {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} />
+                      </main>
                     )} />
                   <Route exact path="/editpodcasts"
                     render={(props) => (
-                      <EditPodcast {...props} user={userData} />
+                      <main className={ classes.content }>
+                        <EditPodcast {...props} user={userData} />
+                      </main>
                     )}
                   />
                   <Route path="/editpodcast/:id/:podId"
                     render={(props) => (
-                      <EditPodcastDetails {...props} user={userData} userEmail={userEmail.current}/>
+                      <main className={ classes.content }>
+                        <EditPodcastDetails {...props} user={userData} userEmail={userEmail.current}/>
+                      </main>
                     )}
                   />
                   <Route path="/editcastdarft/:id/:podId"
                     render={(props) => (
-                      <EditCastDarft {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current}/>
+                      <main className={ classes.content }>
+                        <EditCastDarft {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current}/>
+                      </main>
                     )}
                   />
                   <Route exact path="/analyticspodcast/:id/:podId"
                     render={(props) => (
-                      <AnalyticsPodcastDetails {...props} user={userData} />
+                      <main className={ classes.content }>
+                        <AnalyticsPodcastDetails {...props} user={userData} />
+                      </main>
                     )}
                   />
+                  
                   <Route exact path="/embed/:id"
                     render={(props) => (
-                      <EmbedChannel {...props} user={userData} />
+                      <EmbedChannel {...props} user={userData} baseWwwUrl={baseWwwUrl}/>
                     )}
                   />
                   <Route exact path="/onelink/:id"
                     render={(props) => (
-                      <Onelink {...props} user={userData} />
+                      <Onelink {...props} user={userData} baseWwwUrl={baseWwwUrl}/>
                     )}
                   />
                   <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/forgetpassword" component={ForgetPassword} />
                   <Route exact path="/emailverified" component={EmailVerified} />
-                  <Route path="/" component={NotFound} />
+                  <Route path="/" render={
+                    (props) => (
+                      <main className={ classes.content }>
+                        <NotFound />
+                      </main>
+                      )}
+                   />
                 </Switch>
-                
+                <main className={ classes.content }>
+                  {
+                  /*Google Adsense*/
+                  !(removeAdsensePath.includes(pathname)) && <AdsenseComponent />
+                  }
+                  {
+                    /* 不必移除footer的地方 */
+                    (!removeNavbarPath.includes(pathname)) && <Footer/>
+                  } 
+                </main>          
                 {
                   /* 不必移除navbar 而且登入 -> 顯示正常版navbar */
                   (!removeNavbarPath.includes(pathname) && isAuth) && <Navbar ver={clientversion} user={userData} userEmail={userEmail.current}></Navbar>}
@@ -457,14 +577,7 @@ const App = (props) => {
                   /*顯示沒有登入版本的 navbar*/
                   !isAuth && (usingUnloginNavbarPath.includes(pathname)) && <UnloginNavBar></UnloginNavBar>
                 }
-                {
-                  /*Google Adsense*/
-                  !(removeAdsensePath.includes(pathname)) && <AdsenseComponent />
-                }
-                {
-                  /* 不必移除footer的地方 */
-                  (!removeNavbarPath.includes(pathname)) && <Footer/>
-                }
+
               </>
               :
               <LinearProgress style={{ wdith: 100 }} />

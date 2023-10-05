@@ -37,19 +37,40 @@ import InputBase from '@material-ui/core/InputBase';
 //static
 import LogoPink from '../../static/only-my-cast-pink.svg';
 import Logo from '../../static/only-my-cast.svg';
+import { Hidden } from '@material-ui/core';
 
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
+  root:{
+   display: "flex", 
+  },
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
     grow: {
       flexGrow: 1,
-    },
-    appBar: {
-       backgroundColor: "rgba(40, 40, 40, 0.8)",
-       backdropFilter: "blur(4px)",
-       boxShadow: "none",
-    },
-    menuButton: {
-      marginRight: theme.spacing(1),
     },
     search: {
       borderRadius: theme.shape.borderRadius,
@@ -110,12 +131,90 @@ const NavBar = (props) => {
     const windowWidth = useWindowWidth();
     const [search, setSearch] = useState("");
     const darkmode = useSelector(state => state.mode);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(
       ()=>{
         getReqCount();
       }
     )
+
+    const drawerList = (
+      <div className={ classes.list }
+        role="presentation"
+        onClick={ ()=>{ setSideBar(false) } }
+        onKeyDown={ ()=>{ setSideBar(false) } }>
+        <Toolbar>
+          <Hidden smUp>
+            <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="open drawer"
+            onClick={ ()=>{ setSideBar(true) } }>
+                <MenuIcon />
+            </IconButton>
+          </Hidden>
+          <Link component={RLink} to="/" >
+              <img alt="OnlyMyCast" src={LogoPink} height="48" />
+          </Link>
+        </Toolbar>
+        <Divider />
+        <List>
+        <ListItem button component={RLink} to="/podcastaccount" key="podcastsetting">
+                <ListItemIcon><GraphicEqIcon /></ListItemIcon>
+                <ListItemText primary="節目設定"></ListItemText>
+            </ListItem>
+            <ListItem button component={RLink} to="/uploadpodcast" key="publish">
+                <ListItemIcon><PublishIcon /></ListItemIcon>
+                <ListItemText primary="單集發佈"></ListItemText>
+            </ListItem>
+            <ListItem button component={RLink} to="/editpodcasts" key="editpod">
+                <ListItemIcon><EditIcon /></ListItemIcon>
+                <ListItemText primary="單集管理"></ListItemText>
+            </ListItem>
+        </List>
+        <Divider />
+        <List>
+        <ListItem button component={RLink} to="/subreq" key="subreq">
+                <ListItemIcon>
+                    <Badge badgeContent={reqCount} color="primary">
+                        <InboxIcon />
+                    </Badge>
+                </ListItemIcon>
+                <ListItemText primary="追蹤請求"></ListItemText>
+            </ListItem>
+          <ListItem button component={RLink} to="/fansadmin" key="fansadmin">
+                <ListItemIcon>
+                  <FaceIcon />
+                </ListItemIcon>
+                <ListItemText primary="追蹤管理"></ListItemText>
+            </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <ListItem button target="_blank" component={Link} underline="none" href="https://nnwa1689.gitbook.io/onlymycast-helpcenter/" key="help">
+                  <ListItemIcon>
+                          <HelpIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="說明支援"></ListItemText>
+          </ListItem>
+        </List>
+        <Divider />
+        <List alignItems="center">
+            <ListItem key="copyright" fontSize={5}>
+              <Typography variant="body2" color="textSecondary" align="center">
+                <Link href="https://studio-44s.tw/">
+                  <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>❤</span> 四拾四秒網頁製作所©
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem key="clientversion">
+              <Typography variant="subtitle2" color="textSecondary">Client:{ props.ver }</Typography>
+            </ListItem>
+        </List>
+    </div>
+    );
 
     const getReqCount = ()=>{
       if (props.user.userId !== undefined && props.user.userId !== null && props.user.userId !== "") {
@@ -134,39 +233,41 @@ const NavBar = (props) => {
 
     return (
       <div>
-          <AppBar className={classes.appBar} position="fixed">
+          <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
-              <Tooltip title="選單">
-                { reqCount > 0 ?
-                    <IconButton
+              <Hidden smUp>
+                <Tooltip title="選單">
+                  { reqCount > 0 ?
+                      <IconButton
+                      edge="start"
+                      className={classes.menuButton}
+                      color="inherit"
+                      aria-label="open drawer"
+                      onClick={ ()=>{ setSideBar(true) } }>
+                      <Badge
+                        color="primary" variant="dot"
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}><MenuIcon />
+                      </Badge>
+                      </IconButton>            
+                    
+                  :
+                  <IconButton
                     edge="start"
                     className={classes.menuButton}
                     color="inherit"
                     aria-label="open drawer"
                     onClick={ ()=>{ setSideBar(true) } }>
-                    <Badge
-                      color="primary" variant="dot"
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}><MenuIcon />
-                    </Badge>
-                    </IconButton>            
-                  
-                :
-                <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={ ()=>{ setSideBar(true) } }>
-                      <MenuIcon />
-                  </IconButton>
-                }
-              </Tooltip>
-              <Link component={RLink} to="/" >
-                <img alt="OnlyMyCast" src={Logo} height="48" />
-              </Link>
+                        <MenuIcon />
+                    </IconButton>
+                  }
+                </Tooltip>
+                <Link component={RLink} to="/" >
+                  <img alt="OnlyMyCast" src={LogoPink} height="48" />
+                </Link>
+              </Hidden>
               { 
               
               windowWidth >= 768 && 
@@ -206,80 +307,17 @@ const NavBar = (props) => {
           </Toolbar>
           </AppBar>
 
-          <Drawer hideBackdrop="true" anchor="left" open={ sideBar } onClose={ ()=> setSideBar(false) }>
-              <div className={ classes.list }
-                  role="presentation"
-                  onClick={ ()=>{ setSideBar(false) } }
-                  onKeyDown={ ()=>{ setSideBar(false) } }>
-                  <Toolbar>
-                    <IconButton
-                    edge="start"
-                    className={classes.menuButton}
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={ ()=>{ setSideBar(true) } }>
-                        <MenuIcon />
-                    </IconButton>
-                    <Link component={RLink} to="/" >
-                        <img alt="OnlyMyCast" src={LogoPink} height="48" />
-                    </Link>
-                  </Toolbar>
-                  <Divider />
-                  <List>
-                  <ListItem button component={RLink} to="/podcastaccount" key="podcastsetting">
-                          <ListItemIcon><GraphicEqIcon /></ListItemIcon>
-                          <ListItemText primary="節目設定"></ListItemText>
-                      </ListItem>
-                      <ListItem button component={RLink} to="/uploadpodcast" key="publish">
-                          <ListItemIcon><PublishIcon /></ListItemIcon>
-                          <ListItemText primary="單集發佈"></ListItemText>
-                      </ListItem>
-                      <ListItem button component={RLink} to="/editpodcasts" key="editpod">
-                          <ListItemIcon><EditIcon /></ListItemIcon>
-                          <ListItemText primary="單集管理"></ListItemText>
-                      </ListItem>
-                  </List>
-                  <Divider />
-                  <List>
-                  <ListItem button component={RLink} to="/subreq" key="subreq">
-                          <ListItemIcon>
-                              <Badge badgeContent={reqCount} color="primary">
-                                  <InboxIcon />
-                              </Badge>
-                          </ListItemIcon>
-                          <ListItemText primary="追蹤請求"></ListItemText>
-                      </ListItem>
-                    <ListItem button component={RLink} to="/fansadmin" key="fansadmin">
-                          <ListItemIcon>
-                            <FaceIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="追蹤管理"></ListItemText>
-                      </ListItem>
-                  </List>
-                  <Divider />
-                  <List>
-                    <ListItem button target="_blank" component={Link} underline="none" href="https://nnwa1689.gitbook.io/onlymycast-helpcenter/" key="help">
-                            <ListItemIcon>
-                                    <HelpIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="說明支援"></ListItemText>
-                    </ListItem>
-                  </List>
-                  <Divider />
-                  <List alignItems="center">
-                      <ListItem key="copyright" fontSize={5}>
-                        <Typography variant="body2" color="textSecondary" align="center">
-                          <Link href="https://n-d.tw/">
-                            Made with <span style={ {fontSize: "24px", color: "#FD3E49", fontWeight: "bold"} }>❤</span> by 筆記設計
-                            </Link><br/><br/>
-                        </Typography>
-                      </ListItem>
-                      <ListItem key="clientversion">
-                        <Typography variant="subtitle2" color="textSecondary">Client:{ props.ver }</Typography>
-                      </ListItem>
-                  </List>
-              </div>
-          </Drawer>
+          <Hidden smUp implementation='css'>
+            <Drawer variant="persistent" hideBackdrop="true" anchor="left" open={ sideBar } onClose={ ()=> setSideBar(false) }>
+              { drawerList }
+            </Drawer>
+          </Hidden>
+
+          <Hidden xsDown>
+          <Drawer variant='permanent' anchor="left" open>
+              { drawerList }
+            </Drawer>
+          </Hidden>
       </div>
     );
 }

@@ -26,6 +26,7 @@ import "firebase/firestore";
 import "firebase/storage";
 //other
 import { Helmet } from 'react-helmet';
+import NotCreatePodcast from '../Podcast/NotCreatePodcast';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -151,27 +152,7 @@ const Subreq = (props) => {
                 <Helmet>
                     <title>追蹤審核 - Onlymycast</title>
                 </Helmet>
-                <Card className={classes.root}>
-                    <CardContent>
-                        <Typography variant="h2" component="h1" gutterBottom>
-                            (^ｰ^)ノ<br/>
-                        </Typography>
-                        <Typography variant="h5" component="span">
-                            嗨<br/>你還沒有建立節目 ╮(╯▽╰)╭<br/>                            
-                        </Typography>
-                        <br/>
-                        <Button
-                            component={RLink}
-                            to="/podcastaccount"
-                            color="primary"
-                            fullWidth
-                            size="large"
-                            variant="contained"
-                            >              
-                            立即建立屬於我的節目
-                            </Button>
-                    </CardContent>
-                </Card>
+                <NotCreatePodcast/>
             </Container>)
             } else {
                 if (reqList === undefined) {

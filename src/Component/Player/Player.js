@@ -25,7 +25,7 @@ import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles((theme)=>({
   root: {
-    width: "100%",
+    width: "9%",
     position:"absolute",
     bottom:0
   },
@@ -34,7 +34,10 @@ const useStyles = makeStyles((theme)=>({
     bottom: 0,
     alignItems:"center",
     paddingBottom: 5,
-    backdropFilter: "blur(4px)",
+    [theme.breakpoints.up('sm')]: {
+        width: `calc(100% - ${240}px)`,
+        marginLeft: 240,
+      },
   },
   podcastToolbar: {
     justifyContent: "flex-start",
@@ -65,8 +68,8 @@ const useStyles = makeStyles((theme)=>({
   },
 }));
 
-const darkAppbarStyle = { backgroundColor: "rgba(66, 66, 66, 0.7)", };
-const lightAppbarStyle = { backgroundColor: "rgba(255, 255, 255, 0.7)", }
+const darkAppbarStyle = { backgroundColor: "rgba(0, 0, 0, 1)", };
+const lightAppbarStyle = { backgroundColor: "rgba(255, 255, 255, 1)", }
 
 
 const Player = (props) => {

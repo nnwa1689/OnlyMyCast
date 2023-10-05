@@ -29,6 +29,7 @@ import "firebase/firestore";
 import "firebase/storage";
 //other
 import { Helmet } from 'react-helmet';
+import NotCreatePodcast from '../Podcast/NotCreatePodcast';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -146,27 +147,7 @@ const FansAdmin = (props) => {
     } else if (props.user.userId.length <= 0) {
         return(
             <Container maxWidth="lg">
-                <Card className={classes.root}>
-                    <CardContent>
-                        <Typography variant="h2" component="h1" gutterBottom>
-                            (^ｰ^)ノ<br/>
-                        </Typography>
-                        <Typography variant="h5" component="span">
-                            嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
-                        </Typography>
-                        <br/>
-                        <Button
-                            component={RLink}
-                            to="/podcastaccount"
-                            color="primary"
-                            fullWidth
-                            size="large"
-                            variant="contained"
-                            >              
-                            立即建立屬於我的私人電台
-                            </Button>
-                    </CardContent>
-                </Card>
+                <NotCreatePodcast/>
             </Container>)
     } else {
         return(

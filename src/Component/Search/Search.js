@@ -107,7 +107,7 @@ const Search = (props) => {
 
     return(
         <Container maxWidth="lg">
-            <Card className={classes.root}>
+            <div className={classes.root}>
                 <CardContent>
                 <Typography variant="h5" component="h1">搜尋</Typography>
                 <Typography variant="body1" component="span">搜尋您朋友的電台，並追蹤他</Typography>
@@ -124,7 +124,7 @@ const Search = (props) => {
                     <br/><br/>
                 {searchResult.length > 0 ? searchResult : "沒有搜尋結果"}
                 </CardContent>
-            </Card>
+            </div>
         </Container>
     );
 

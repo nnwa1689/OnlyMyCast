@@ -52,8 +52,11 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from './Component/NavBar/Footer';
 
+/* function */
+import GetRssfeed from './Functions/GetRssfeed';
 
-const clientversion = "V231005.23";
+const clientversion = "V231006.16";
+
 const App = (props) => {
   //常用設定
   const allowUnloginPath = ['podcast', 'embed', 'signup', 'signin', 'podcastdetail', 'onelink'];
@@ -76,7 +79,6 @@ const App = (props) => {
   const withGoogleSingin = useRef("");
   const isFirstLoading = useRef(true);
   
-
   if (!firebase.apps.length) {
     if (process.env.NODE_ENV !== "development") {
       firebase.initializeApp(FirebaseConfig);
@@ -499,7 +501,7 @@ const App = (props) => {
                   <Route exact path="/uploadpodcast"
                     render={(props) => (
                       <main className={ classes.content }>
-                        <NewPodcast {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} />
+                        <NewPodcast {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} baseWwwUrl={ baseWwwUrl }/>
                       </main>
                     )} />
                   <Route exact path="/editpodcasts"
@@ -512,14 +514,14 @@ const App = (props) => {
                   <Route path="/editpodcast/:id/:podId"
                     render={(props) => (
                       <main className={ classes.content }>
-                        <EditPodcastDetails {...props} user={userData} userEmail={userEmail.current}/>
+                        <EditPodcastDetails {...props} user={userData} userEmail={userEmail.current} baseWwwUrl={ baseWwwUrl }/>
                       </main>
                     )}
                   />
                   <Route path="/editcastdarft/:id/:podId"
                     render={(props) => (
                       <main className={ classes.content }>
-                        <EditCastDarft {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current}/>
+                        <EditCastDarft {...props} user={userData} userUid={userUid.current} userEmail={userEmail.current} baseWwwUrl={ baseWwwUrl }/>
                       </main>
                     )}
                   />
@@ -545,6 +547,11 @@ const App = (props) => {
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/forgetpassword" component={ForgetPassword} />
                   <Route exact path="/emailverified" component={EmailVerified} />
+                  <Route exact path="/rss/:podcastuserid/:uid" render={
+                    (props) => {
+                      GetRssfeed(props.match.params.podcastuserid, props.match.params.uid);
+                    }
+                  } />
                   <Route path="/" render={
                     (props) => (
                       <main className={ classes.content }>

@@ -131,7 +131,8 @@ const useStyles = makeStyles((theme)=>({
     },
     flexRight: {
         display: "flex",
-        justifyContent: "flex-end"
+        justifyContent: "flex-end",
+        marginTop: theme.spacing(2)
     },
   }));
   
@@ -162,6 +163,7 @@ const PodcastAccount = (props) => {
     const [showCopyMsg, setShowCopyMsg] = useState(false);
 
     const allowCoverFileType = [ 'image/png', 'image/jpeg' ];
+    const RssFeedUrl = "https://storage.googleapis.com/onlymycast.appspot.com/" + "rss/" + userId + '/' + uid;
 
     const categoryListItem = [
         <MenuItem value={"Arts"}>藝術</MenuItem>,
@@ -306,7 +308,7 @@ const PodcastAccount = (props) => {
                                     setFilename("");
                                     setFileBit();
                                     //rss產生
-                                    genrssfeed(userId);
+                                    genrssfeed(userId, props.userEmail, props.baseWwwUrl);
                                 }
                             )
                         }
@@ -367,7 +369,7 @@ const PodcastAccount = (props) => {
                     setFileBit();
                     //rss產生
                     if ( publicStatu === 'true' ) {
-                        genrssfeed(userId, props.userEmail);
+                        genrssfeed(userId, props.userEmail, props.baseWwwUrl);
                     } else {
                     // rss 消滅
                         delrssfeed(userId);
@@ -673,7 +675,7 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="h6" gutterBottom><RssFeedIcon/>RSS Feed</Typography>
                                                         <TextField
                                                             label="RSSURL"
-                                                            defaultValue={"https://storage.googleapis.com/onlymycast.appspot.com/rss/" + userId + '/' + uid}
+                                                            defaultValue={ RssFeedUrl }
                                                             variant="outlined"
                                                             inputProps={
                                                                 { readOnly: true, }
@@ -684,15 +686,13 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="body1">
                                                         提交 RSS 讓節目在其他平台被找到。
                                                         </Typography>
-                                                        <CardActions>
-                                                            <Button 
-                                                                fullWidth
-                                                                size="large" 
-                                                                color="primary" 
-                                                                variant="outlined" 
-                                                                onClick={()=>{handleCopy("https://storage.googleapis.com/onlymycast.appspot.com/rss/" + userId + '/' + uid)}}>複製
-                                                            </Button>
-                                                        </CardActions>
+                                                        <Button 
+                                                            fullWidth
+                                                            size="large" 
+                                                            color="primary" 
+                                                            variant="outlined" 
+                                                            onClick={()=>{handleCopy (RssFeedUrl)}}>複製
+                                                        </Button>
                                                     </Grid>
                                                     <Grid item xs={12} md={6}>
                                                         <Typography variant="h6" color="primary" gutterBottom>
@@ -710,15 +710,13 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="body1">
                                                         在這裡聽，最棒。
                                                         </Typography>
-                                                        <CardActions>
-                                                            <Button 
-                                                                fullWidth
-                                                                size="large" 
-                                                                color="primary" 
-                                                                variant="outlined" 
-                                                                onClick={()=>{handleCopy(props.baseWwwUrl + "podcast/" + userId)}}>複製
-                                                            </Button>
-                                                        </CardActions>
+                                                        <Button 
+                                                            fullWidth
+                                                            size="large" 
+                                                            color="primary" 
+                                                            variant="outlined" 
+                                                            onClick={()=>{handleCopy(props.baseWwwUrl + "podcast/" + userId)}}>複製
+                                                        </Button>
                                                     </Grid>
                                                     
                                                     <Grid item xs={12} md={6}>
@@ -738,17 +736,15 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="body1">
                                                             Apple 的 Podcast 播放器，所有 Apple 裝置內建。
                                                         </Typography>
-                                                        <CardActions>
-                                                            <Button 
-                                                                fullWidth
-                                                                color="primary" 
-                                                                size="large" 
-                                                                variant="outlined" 
-                                                                target='_blank' 
-                                                                href="https://podcastsconnect.apple.com">
-                                                                    申請上架
-                                                            </Button>
-                                                        </CardActions>
+                                                        <Button 
+                                                            fullWidth
+                                                            color="primary" 
+                                                            size="large" 
+                                                            variant="outlined" 
+                                                            target='_blank' 
+                                                            href="https://podcastsconnect.apple.com">
+                                                                申請上架
+                                                        </Button>
                                                     </Grid>
                                                     <Grid item xs={12} md={6}>
                                                         <Typography className={classes.googleColor} variant="h6" gutterBottom>
@@ -765,17 +761,15 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="body1">
                                                             Google 的 Podcast 播放器。
                                                         </Typography>
-                                                        <CardActions>
-                                                            <Button 
-                                                                fullWidth
-                                                                color="primary" 
-                                                                size="large" 
-                                                                variant="outlined" 
-                                                                target='_blank' 
-                                                                href="https://podcastsmanager.google.com/add-feed">
-                                                                    申請上架
-                                                            </Button>
-                                                        </CardActions>
+                                                        <Button 
+                                                            fullWidth
+                                                            color="primary" 
+                                                            size="large" 
+                                                            variant="outlined" 
+                                                            target='_blank' 
+                                                            href="https://podcastsmanager.google.com/add-feed">
+                                                                申請上架
+                                                        </Button>           
                                                     </Grid>
                                                     <Grid item xs={12} md={6}>
                                                         <Typography className={classes.spotifyColor} variant="h6" gutterBottom>
@@ -793,17 +787,15 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="body1">
                                                             有名的音樂與聲音播放串流平台。
                                                         </Typography>
-                                                        <CardActions>
-                                                            <Button 
-                                                                fullWidth
-                                                                color="primary" 
-                                                                size="large" 
-                                                                variant="outlined" 
-                                                                target='_blank' 
-                                                                href="https://podcasters.spotify.com/submit">
-                                                                    申請上架
-                                                            </Button>
-                                                        </CardActions>
+                                                        <Button 
+                                                            fullWidth
+                                                            color="primary" 
+                                                            size="large" 
+                                                            variant="outlined" 
+                                                            target='_blank' 
+                                                            href="https://podcasters.spotify.com/submit">
+                                                                申請上架
+                                                        </Button>
                                                     </Grid>
                                                     <Grid item xs={12} md={6}>
                                                         <Typography className={classes.kkColor} variant="h6" gutterBottom>
@@ -820,17 +812,15 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="body1">
                                                             亞洲最大的聲音串流平台。
                                                         </Typography>
-                                                        <CardActions>
-                                                            <Button
-                                                                fullWidth
-                                                                color="primary" 
-                                                                size="large" 
-                                                                variant="outlined" 
-                                                                target='_blank' 
-                                                                href="https://podcast.kkbox.com/podcasters?lang=tc">
-                                                                    申請上架
-                                                            </Button>
-                                                        </CardActions>
+                                                        <Button
+                                                            fullWidth
+                                                            color="primary" 
+                                                            size="large" 
+                                                            variant="outlined" 
+                                                            target='_blank' 
+                                                            href="https://podcast.kkbox.com/podcasters?lang=tc">
+                                                                申請上架
+                                                        </Button>
                                                     </Grid>
                                                     <Grid item xs={12} md={6}>
                                                         <Typography className={classes.soundonColor} variant="h6" gutterBottom>
@@ -847,33 +837,30 @@ const PodcastAccount = (props) => {
                                                         <Typography variant="body1">
                                                             台灣本土的Podcast平台。
                                                         </Typography>
-                                                        <CardActions>
+                                                        <Button
+                                                            fullWidth
+                                                            color="primary" 
+                                                            size="large" 
+                                                            variant="outlined" 
+                                                            target='_blank' 
+                                                            href="https://airtable.com/shrJdWIve8yhFirdU">
+                                                                申請上架
+                                                        </Button>
+                                                    </Grid>
+                                                    <Grid item xs={12} md={12}>
+                                                        <div className={ classes.flexRight }>
                                                             <Button
-                                                                fullWidth
-                                                                color="primary" 
-                                                                size="large" 
-                                                                variant="outlined" 
-                                                                target='_blank' 
-                                                                href="https://airtable.com/shrJdWIve8yhFirdU">
-                                                                    申請上架
-                                                            </Button>
-                                                        </CardActions>
+                                                                variant="contained"
+                                                                color="primary"
+                                                                size="large"
+                                                                onClick={handleUpdateChannel}
+                                                                disabled={handleCode==="loading"}
+                                                                startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                                                儲存設定
+                                                            </Button>   
+                                                        </div>
                                                     </Grid>
                                                 </Grid>
-                                                <CardContent>
-                                                    <CardActions disableSpacing className={ classes.flexRight }>
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            size="large"
-                                                            className={ classes.flexRight }
-                                                            onClick={handleUpdateChannel}
-                                                            disabled={handleCode==="loading"}
-                                                            startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                                            儲存設定
-                                                        </Button>   
-                                                    </CardActions>
-                                                </CardContent>
                                             </>
                                             :
                                             <>
@@ -984,20 +971,17 @@ const PodcastAccount = (props) => {
                                                 </CardContent>
                                             </Grid>
                                         </Grid>
-                                        <CardContent>
-                                            <CardActions disableSpacing className={ classes.flexRight }>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    size="large"
-                                                    className={ classes.flexRight }
-                                                    onClick={handleUpdateChannel}
-                                                    disabled={handleCode==="loading"}
-                                                    startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                                    儲存設定
-                                                </Button>   
-                                            </CardActions>
-                                        </CardContent>
+                                        <div className={ classes.flexRight }>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="large"
+                                                onClick={handleUpdateChannel}
+                                                disabled={handleCode==="loading"}
+                                                startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                                儲存設定
+                                            </Button>   
+                                        </div>
                                     </TabPanel>
                             </SwipeableViews> 
                             </>

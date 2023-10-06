@@ -17,7 +17,7 @@ import RSS from "rss-generator";
 import ReactMarkdown from 'react-markdown';
 
 
-export default function genrssfeed(userId, userEmail) {
+export default function genrssfeed(userId, userEmail, baseWwwUrl) {
 
     let channelName, intro, image, autor, rss, hashId, category, feedurl, preUrl;
         firebase.firestore().collection("channel").doc(userId).get()
@@ -44,7 +44,7 @@ export default function genrssfeed(userId, userEmail) {
                                     var feed = new RSS({
                                         title: channelName,
                                         description: intro,
-                                        site_url: 'https://dev.n-d.tw/apps/onlymycast/webapp/podcast/' + userId,
+                                        site_url: baseWwwUrl + 'podcast/' + userId,
                                         feed_url: feedurl,
                                         image_url: image,
                                         category: category,
@@ -90,7 +90,7 @@ export default function genrssfeed(userId, userEmail) {
                                                 feed.item({
                                                     title:  qd.title,
                                                     description: epintro,
-                                                    link: 'https://dev.n-d.tw/apps/onlymycast/webapp/podcastdetail/' + userId + '/' + doc.id, // link to the item
+                                                    link: baseWwwUrl + 'podcastdetail/' + userId + '/' + doc.id, // link to the item
                                                     guid: doc.id, // optional - defaults to url
                                                     author: autor, // optional - defaults to feed author property
                                                     date: new Date(qd.updateTime.seconds * 1000).toUTCString(), // any format that js Date can parse.
@@ -120,10 +120,8 @@ export default function genrssfeed(userId, userEmail) {
                                                 console.log('rss gen suc!');
                                             }
                                         )
-                                    }
-                                        )
-                                }
-                            );
+                                    })
+                                });
                     }
                 }
             }

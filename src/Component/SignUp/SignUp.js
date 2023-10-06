@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
+    textAlign: 'center'
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -136,10 +137,8 @@ const SignUp = ()=>{
           <CardContent>
             { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
           <div className={classes.form} noValidate>
+          <img style={{fill: "#FD3E49", marginBottom: "30px"}} src={LogoIcon} width="200"></img>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              <img style={{fill: "#FD3E49", marginBottom: "30px"}} src={LogoIcon} width="200"></img>
-            </Grid>
             <Grid item xs={12} md={12}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>

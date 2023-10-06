@@ -121,7 +121,7 @@ const Onelink = (props) => {
     const [spotifyLink, setSpotifyLink] = useState();
     const [kkLink, setKkLink] = useState();
     const [soundonLink, setSoundonLink] = useState();
-    const omcLink = "https://dev.n-d.tw/apps/onlymycast/webapp/podcast/" + props.match.params.id;
+    const omcLink = props.baseWwwUrl + "podcast/" + props.match.params.id;
 
 
     useEffect(

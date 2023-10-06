@@ -193,7 +193,7 @@ const NavBar = (props) => {
         </List>
         <Divider />
         <List>
-          <ListItem button target="_blank" component={Link} underline="none" href="https://nnwa1689.gitbook.io/onlymycast-helpcenter/" key="help">
+          <ListItem button target="_blank" component={Link} underline="none" href="https://onlymycast.com/category/46" key="help">
                   <ListItemIcon>
                           <HelpIcon />
                   </ListItemIcon>

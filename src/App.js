@@ -94,7 +94,7 @@ const App = (props) => {
   if (process.env.NODE_ENV !== "development") {
     //產品環境
     basename = "/";
-    basenameIndex = 4;
+    basenameIndex = 1;
     fcmVapidKey = fcmVapidKey_prod;
     baseWwwUrl = "https://app.onlymycast.com/";
   } else {

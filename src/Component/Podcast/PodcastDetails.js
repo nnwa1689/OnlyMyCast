@@ -216,7 +216,7 @@ const PodcastDetails = (props) => {
                   <Helmet>
                       <title>{ name } - { channelName } - Onlymycast</title>
                   </Helmet>
-                  <CardContent>
+                  
                     <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                     <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
                     <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
@@ -253,16 +253,16 @@ const PodcastDetails = (props) => {
                         onClick={props.setPlayer}>
                         播放單集
                     </Button>
-                  </CardContent>
+                  
               </Grid>
               <Grid item xs={12} md={8}>
-                <CardContent>
+                
                   <h3 style={{textAlign:"left"}} variant="subtitle1" component="p">
                     單集介紹
                   </h3>
                   <Divider/><br/>
                   <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
-                </CardContent>
+                
               </Grid>
               <Snackbar open={showCopyMsg===true} autoHideDuration={3000} onClose={()=>{setShowCopyMsg(false)}} message="已經複製到剪貼簿"/>
             </Grid>

@@ -27,18 +27,21 @@ const useStyles = makeStyles((theme)=>({
       marginBottom: 12,
     },
     large: {
+      [theme.breakpoints.up('sm')]: {
         width: theme.spacing(24),
         height: theme.spacing(24),
-        borderRadius: 25,
-        color: "#FFFFFF",
-        backgroundColor: "#FD3E49",
+      },
+      width: "100%",
+      height: "80%",
+      borderRadius: 25,
+      color: "#FFFFFF",
+      backgroundColor: "#FD3E49",
       },
     media: {
         borderRadius: 6,
       },
     card: {
       borderRadius: 20,
-      height: 250,
       textAlign: 'center',
     },
     header: {
@@ -85,7 +88,8 @@ const useStyles = makeStyles((theme)=>({
           }}>
         <div className={classes.card}>
           <Avatar component={RLink} to={"/podcast/" + props.podcastId} variant="rounded" className={classes.large} alt={props.podcastName} src={props.podcastCover} />
-          <Link component={RLink} to={"/podcast/" + props.podcastId} variant="body1" underline="hover">{podcastName}</Link>
+          <br/>
+          <Link component={RLink} to={"/podcast/" + props.podcastId} variant="subtitle1" underline="hover">{podcastName}</Link>
           <Divider variant="middle" />
           <CardActions className={classes.action}>
           <Typography align="left" variant="subtitle2"><ListItemIcon><EventIcon fontSize='small'/>{ toDataTime(props.updateTime) }</ListItemIcon></Typography>

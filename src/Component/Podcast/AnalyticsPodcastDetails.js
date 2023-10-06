@@ -114,7 +114,7 @@ const useStyles = makeStyles((theme)=>({
             <Helmet>
                 <title>單集分析 - Onlymycast</title>
             </Helmet>
-                <CardContent>
+                
                 <Typography variant="h5" component="h1">單集點閱分析</Typography><br/>
                 <Typography variant="h6" component="span"><BarChartIcon />&nbsp;總播放人次：{ playedTimes }</Typography>
                 <br/><br/>
@@ -123,7 +123,7 @@ const useStyles = makeStyles((theme)=>({
                 <List dense>
                     { playedList }
                 </List>
-                </CardContent>
+                
             </Container>
         );    
     }

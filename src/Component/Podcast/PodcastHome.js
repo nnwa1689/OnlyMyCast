@@ -360,7 +360,7 @@ const PodcastHome = (props) => {
                 </Helmet>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={4}>
-                        <CardContent>
+                        
                             <Avatar variant="rounded" alt={name} src={avatar === "" ? "." : avatar} className={classes.large} />
                             <Typography style={{ paddingTop: "16px" }} variant="h5">{name}</Typography>
                             <ListItem style={{ width: "fit-content", marginLeft: "auto", marginRight: "auto" }}>
@@ -406,7 +406,7 @@ const PodcastHome = (props) => {
                             }
                             <br/>
                             <AdsenseChannelComponent />
-                        </CardContent>
+                        
                     </Grid>
                     <Grid item xs={12} md={8}>
                     <AppBar className={classes.tabBar} position="static" color="default">
@@ -420,7 +420,7 @@ const PodcastHome = (props) => {
                                 <Tab label="節目介紹與收聽平台" />
                             </Tabs>
                         </AppBar>
-                            <CardContent>
+                            
                             <SwipeableViews
                                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                                 index={tabValue}
@@ -496,7 +496,7 @@ const PodcastHome = (props) => {
                                         : ""}
                                 </TabPanel>
                                 </SwipeableViews>
-                            </CardContent>
+                            
                     </Grid>
                 </Grid>
             </Container>

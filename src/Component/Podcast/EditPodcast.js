@@ -224,7 +224,7 @@ const EditPodcast = (props) => {
                                 <Tab label="草稿夾" />
                             </Tabs>
                         </AppBar>
-                        <CardContent>
+                        
                             <SwipeableViews
                                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                                 index={tabValue}
@@ -253,7 +253,7 @@ const EditPodcast = (props) => {
                                     }
                                 </TabPanel>
                             </SwipeableViews>
-                        </CardContent>
+                        
                     </Container>
                 );
             }

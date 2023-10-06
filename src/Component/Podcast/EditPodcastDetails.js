@@ -245,7 +245,7 @@ const useStyles = makeStyles((theme)=>({
                 <Helmet>
                     <title>編輯單集 - Onlymycast</title>
                 </Helmet>
-                <CardContent>
+                
                 <Typography variant="h5" component="h1">編輯單集</Typography>
                 <Typography variant="body1" component="span">刪除或編輯這個單集</Typography>
                     <FormControl fullWidth className={classes.margin}>
@@ -325,7 +325,7 @@ const useStyles = makeStyles((theme)=>({
                         }
                     </FormControl>
                     <Divider />
-                    <CardContent>
+                    
                         <CardActions disableSpacing className={ classes.flexRight }>
                             <Button
                             variant="contained"
@@ -351,8 +351,8 @@ const useStyles = makeStyles((theme)=>({
                                 變更單集資訊
                             </Button>
                         </CardActions>                   
-                    </CardContent>
-                </CardContent>
+                    
+                
 
                 <div>
                     <Dialog

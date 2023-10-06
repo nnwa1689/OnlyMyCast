@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme)=>({
                   />
             </ListItem>
           </Grid>
-          <Grid item xs={12} sm={3} justify='flex-end'>
+          <Grid item xs={12} sm={3} align='center'>
             <Tooltip title="編輯頻道">
               <IconButton aria-label="editChannel" component={RLink} to={"/podcastaccount"} color="primary">
                 <GraphicEqIcon />

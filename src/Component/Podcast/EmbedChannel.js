@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       alignItems: 'center',
       paddingLeft: theme.spacing(1),
-
     },
     slogan:{
         alignContent: "center",
@@ -115,14 +114,14 @@ const EmbedChannel = (props) => {
                     <Avatar variant="rounded" src={avatar} className={classes.large} />
                 </CardMedia>
                 <div className={classes.details}>
-                    <CardContent className={classes.content}>
                     <Typography 
-                        style={ { color: "#000000" } }
+                        style={ { color: "#000000", marginLeft: 10 } }
                         component="span"  variant="h6">
                         { name }
                     </Typography>
                     <Typography 
                         style={ { color: "rgba(0, 0, 0, 0.54)", 
+                                marginLeft: 10,
                                 display:"-webkit-box", 
                                 overflow:"hidden", 
                                 whiteSpace: "normal", 
@@ -131,12 +130,12 @@ const EmbedChannel = (props) => {
                         variant="body2" color="textSecondary">
                         { intro }
                     </Typography>
-                    </CardContent>
+                    
                     <div className={classes.controls}>
                         <Button
                             fullWidth
                             style={ { height: "40px" } }
-                            href={"https://dev.n-d.tw/apps/onlymycast/webapp/podcast/" + props.match.params.id}
+                            href={ props.baseWwwUrl + "podcast/" + props.match.params.id}
                             target="_blank"
                             variant="contained"
                             color="primary"

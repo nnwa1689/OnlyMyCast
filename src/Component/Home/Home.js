@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 //ui
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { Container } from '@material-ui/core';
+import { Container, Divider } from '@material-ui/core';
 import CastIcon from '@material-ui/icons/Cast';
 import MyPodcastList from './MyPodcastList';
 import PodcastList from './PodcastList';
@@ -142,8 +142,7 @@ const Home = (props) => {
             <title>Onlymycast</title>
         </Helmet>
         <Typography variant="h5" component="h1"><CastIcon/>我的節目</Typography><br/>
-        <CardContent>
-        <Grid container justify="center" direction="row">
+        <Grid container direction="row">
           {
             props.user.userId ==="" ?
             <Typography variant="body1" component="span">
@@ -153,15 +152,14 @@ const Home = (props) => {
             <MyPodcastList key={0} spCount={spCount} podcastFansCount={subCount} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></MyPodcastList>
           }
         </Grid>
-        </CardContent>
-
         <br/>
+        <Divider/>
         <br/>
         <Typography variant="h5">
             <FavoriteIcon/>我的訂閱
         </Typography>
         <br/>
-        <Grid container justify="left" spacing={2}>
+        <Grid container justify="left" spacing={5}>
             {subscribeList ==="" ?
               <>
                 <Typography variant="h2" component="span">

@@ -48,6 +48,7 @@ import "firebase/functions";
 //other
 import { Helmet } from 'react-helmet';
 import genrssfeed from '../../Functions/genRssfeed';
+import NotCreatePodcast from './NotCreatePodcast';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -382,35 +383,14 @@ const useStyles = makeStyles((theme)=>({
 
     if (props.user.userId==="") {
         return(
-            <Container maxWidth="lg" className={classes.root}>
-                <CardContent>
-                    <Typography variant="h2" component="h1" gutterBottom>
-                        (^ｰ^)ノ<br/>
-                    </Typography>
-                    <Typography variant="h5" component="span">
-                        嗨<br/>你還沒有建立電台 ╮(╯▽╰)╭<br/>                            
-                    </Typography>
-                    <br/>
-                    <Button
-                        component={RLink}
-                        to="/podcastaccount"
-                        color="primary"
-                        fullWidth
-                        size="large"
-                        variant="contained"
-                        >              
-                        立即建立屬於我的私人電台
-                        </Button>
-                </CardContent>
-            </Container>
+            <NotCreatePodcast/>
         )
     } else {
         return(
             <Container maxWidth="lg" className={classes.root}>
                 <Helmet>
                     <title>新增單集 - Onlymycast</title>
-                </Helmet>
-                <CardContent>
+                </Helmet>       
                 <Typography variant="h5" component="h1">發佈單集</Typography>
                 <Stepper style={ { background: "none" } } activeStep={activeStep} alternativeLabel>
                     <Step key={0}>
@@ -426,34 +406,36 @@ const useStyles = makeStyles((theme)=>({
                         <StepLabel>{"上傳"}</StepLabel>
                     </Step>
                 </Stepper>
-                </CardContent>
+                
                 <Divider />
-                    <CardContent>
+                    
                     { activeStep === 0 &&
                     (<>
-                        <Button color="primary" variant="outlined" className={classes.mostlarge} 
-                        onClick={
-                            () => { 
-                                selectRecordingType(0);
-                                onlineRecordingInit(); 
-                                }
-                            }>
-                        <Typography variant="h4">
-                            <MicIcon fontSize="large" />
-                            <br/>線上錄製<br/><br/><Divider/><br/>
-                            <Typography variant="body1" color="textSecondary">
-                                透過網頁直接錄製單集，建議較短或隨性的單集使用此方式。
-                            </Typography></Typography><br/><br/><br/>
-                        </Button>
+                        <CardContent>
+                            <Button color="primary" variant="outlined" className={classes.mostlarge} 
+                            onClick={
+                                () => { 
+                                    selectRecordingType(0);
+                                    onlineRecordingInit(); 
+                                    }
+                                }>
+                            <Typography variant="h4">
+                                <MicIcon fontSize="large" />
+                                <br/>線上錄製<br/><br/><Divider/><br/>
+                                <Typography variant="body1" color="textSecondary">
+                                    透過網頁直接錄製單集，建議較短或隨性的單集使用此方式。
+                                </Typography></Typography><br/><br/><br/>
+                            </Button>
 
-                        <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(1) }}>
-                        <Typography variant="h4">
-                            <PublishIcon fontSize="large" />
-                            <br/>上傳檔案<br/><br/><Divider/><br/>
-                            <Typography variant="body1" color="textSecondary">
-                                上傳您後製完成的完整單集，如錄製較長且需剪輯建議使用此方式。
-                            </Typography></Typography><br/><br/><br/>
-                        </Button>
+                            <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(1) }}>
+                            <Typography variant="h4">
+                                <PublishIcon fontSize="large" />
+                                <br/>上傳檔案<br/><br/><Divider/><br/>
+                                <Typography variant="body1" color="textSecondary">
+                                    上傳您後製完成的完整單集，如錄製較長且需剪輯建議使用此方式。
+                                </Typography></Typography><br/><br/><br/>
+                            </Button>
+                        </CardContent>
                     </>)
                     }
 
@@ -615,10 +597,10 @@ const useStyles = makeStyles((theme)=>({
                         </Typography>
                     </>
                 }
-                    </CardContent>
+                    
 
                 <Divider />
-                <CardContent>
+                
                     <CardActions disableSpacing className={ classes.flexRight }>
                     {
                     //按鈕 
@@ -661,7 +643,7 @@ const useStyles = makeStyles((theme)=>({
                         </>
                     }
                     </CardActions>                   
-                </CardContent>
+                
 
                 <Dialog
                     open={introErr !== false || titleErr !== false || err !== false}

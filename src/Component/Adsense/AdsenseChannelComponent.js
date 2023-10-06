@@ -28,14 +28,14 @@ const AdsenseChannelComponent = () => {
 
     return(
         <Container maxWidth="lg" className={classes.root}>
-            <CardContent>
+            
                 <ins class="adsbygoogle"
                 style={ { display: "block" }}
                 data-ad-client="ca-pub-3826338280068687"
                 data-ad-slot="1963396975"
                 data-ad-format="auto"
                 data-full-width-responsive="true"></ins>
-            </CardContent>
+            
         </Container>
     )
 }

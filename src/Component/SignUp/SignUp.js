@@ -132,9 +132,9 @@ const SignUp = ()=>{
 
       handleCode === 'login' ? ""
       :
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" className={classes.paper}>
         <div className={classes.paper}>
-          <CardContent>
+          
             { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
           <div className={classes.form} noValidate>
           <img style={{fill: "#FD3E49", marginBottom: "30px"}} src={LogoIcon} width="200"></img>
@@ -220,7 +220,7 @@ const SignUp = ()=>{
             </Grid>
           </Grid>
           </div>
-          </CardContent>
+          
         </div>
         <Box mt={5}>
           <Copyright />

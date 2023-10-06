@@ -178,7 +178,7 @@ const Onelink = (props) => {
                 </Helmet>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
-                        <CardContent>
+                        
                             <Avatar variant="rounded" alt={name} src={avatar === "" ? "." : avatar} className={classes.large} />
                             <Typography style={{ paddingTop: "16px" }} variant="h5">{name}</Typography>
                             <ListItem style={{ width: "fit-content", marginLeft: "auto", marginRight: "auto" }}>
@@ -189,7 +189,7 @@ const Onelink = (props) => {
                                     primary={podcasterName}
                                 />
                             </ListItem>
-                        </CardContent>
+                        
                     </Grid>
                     <Grid item xs={12} md={12}>
                         <Button fullWidth className={classes.onlymycastColor} variant="outlined" href={omcLink} target='_blank' size='large'>

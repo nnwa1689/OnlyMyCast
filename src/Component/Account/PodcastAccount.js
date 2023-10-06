@@ -406,7 +406,6 @@ const PodcastAccount = (props) => {
                                     <Typography variant="body1" component="span">建立屬於您的私人或公開節目</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <CardContent>
                                     <Typography variant="h5" component="h1">節目封面</Typography>
                                     <Avatar variant="rounded" src={avatar} className={classes.large} />
                                     <FormControl fullWidth className={classes.fullWidthInput}>
@@ -438,11 +437,8 @@ const PodcastAccount = (props) => {
                                             <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
                                         </label>
                                         </FormControl>
-                                        </CardContent>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-
-                                    <CardContent>
                                         <Typography variant="h5" component="h1">節目資訊</Typography>
                                         <FormControl fullWidth className={classes.fullWidthInput}>
                                         <TextField 
@@ -494,11 +490,8 @@ const PodcastAccount = (props) => {
                                         </Select>
                                         <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
                                     </FormControl> 
-                                    </CardContent>
                                 </Grid>
                                 <Grid item xs={12} md={12}>
-
-                                    <CardContent>
                                         <Typography variant="h5" component="h1">節目簡介</Typography>
                                         <FormControl fullWidth className={classes.fullWidthInput}>
                                         <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
@@ -517,7 +510,6 @@ const PodcastAccount = (props) => {
                                         startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
                                         建立節目
                                         </Button>
-                                    </CardContent>
                                 </Grid>
                                 <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={()=>{window.location.reload()}} message="您的節目已經建立"/>
                             </Grid>
@@ -547,7 +539,7 @@ const PodcastAccount = (props) => {
                                                     <Typography variant="h5" component="h1">節目設定</Typography>
                                                 </Grid>
                                                 <Grid item xs={12} md={6}>
-                                                    <CardContent>
+                                                    
                                                         <Typography variant="h5" component="h1">節目封面</Typography>
                                                         <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
                                                         <FormControl fullWidth className={classes.fullWidthInput}>
@@ -579,10 +571,10 @@ const PodcastAccount = (props) => {
                                                                 <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
                                                             </label>
                                                         </FormControl>
-                                                    </CardContent>
+                                                    
                                                 </Grid>
                                                 <Grid item xs={12} md={6}>
-                                                    <CardContent>
+                                                    
                                                         <FormControl fullWidth className={classes.fullWidthInput}>
                                                             <TextField 
                                                                 required 
@@ -632,10 +624,10 @@ const PodcastAccount = (props) => {
                                                             </Select>
                                                             <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
                                                         </FormControl> 
-                                                    </CardContent>
+                                                    
                                                 </Grid>
                                                 <Grid item xs={12} md={12}>
-                                                    <CardContent>
+                                                    
                                                         <Typography variant="h5" component="h1">節目簡介</Typography>
                                                         <FormControl fullWidth className={classes.fullWidthInput}>
                                                         <OutlinedInput id="component-outlined" value="..." style={{display:"none"}}/>
@@ -644,10 +636,10 @@ const PodcastAccount = (props) => {
                                                             onChange={setIntro}
                                                         />
                                                         </FormControl>
-                                                    </CardContent>
+                                                    
                                                 </Grid>
                                             </Grid>
-                                            <CardContent>
+                                            
                                                 <CardActions disableSpacing className={ classes.flexRight }>
                                                     <Button
                                                         variant="contained"
@@ -660,7 +652,7 @@ const PodcastAccount = (props) => {
                                                         儲存設定
                                                     </Button>   
                                                 </CardActions>
-                                            </CardContent>
+                                            
                                         </TabPanel>
 
                                     <TabPanel value={tabValue} index={1}>
@@ -874,7 +866,7 @@ const PodcastAccount = (props) => {
                                     <TabPanel value={tabValue} index={2}>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} md={6}>
-                                                <CardContent>
+                                                
                                                 <Typography variant="h5" component="h5">節目嵌入貼紙</Typography>
                                                 <Typography variant="body1" component="h5">透過程式碼，將節目嵌入在個人網站上</Typography><br/>
                                                 <br/>
@@ -901,10 +893,10 @@ const PodcastAccount = (props) => {
                                                     >
                                                     複製程式碼
                                                 </Button>
-                                                </CardContent>
+                                                
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                <CardContent>
+                                                
                                                     <Typography variant="h5" component="h5">社群媒體帳號</Typography>
                                                     <FormControl fullWidth className={classes.fullWidthInput}>
                                                     <Typography className={classes.facebookColor} variant="body1" gutterBottom><FacebookIcon/>Facebook</Typography>
@@ -942,10 +934,10 @@ const PodcastAccount = (props) => {
                                                                     variant="outlined"
                                                                     placeholder="https://" />
                                                     </FormControl>
-                                                </CardContent>
+                                                
                                             </Grid>
                                             <Grid item xs={12} md={12}>
-                                                <CardContent>
+                                                
                                                 <Typography variant="h5" component="h5">Onelink</Typography>
                                                 <Typography variant="body1" component="h5">分享單一網址，就讓聽眾前往你的全世界！</Typography><br/>
                                                 <TextField
@@ -968,7 +960,7 @@ const PodcastAccount = (props) => {
                                                     >
                                                     複製連結
                                                 </Button>
-                                                </CardContent>
+                                                
                                             </Grid>
                                         </Grid>
                                         <div className={ classes.flexRight }>

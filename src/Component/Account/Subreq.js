@@ -160,7 +160,7 @@ const Subreq = (props) => {
                 } else {
                     return(
                         <Container maxWidth="lg" className={classes.root}>
-                            <CardContent>
+                            
                             <Typography variant="h5" component="h1">追蹤審核</Typography>
                             <Typography variant="body1" component="span">允許或拒絕節目追蹤要求</Typography>
                             <List dense>
@@ -177,7 +177,7 @@ const Subreq = (props) => {
                                 reqList
                                 }
                             </List>
-                            </CardContent>
+                            
                         </Container>
                     );
                 }

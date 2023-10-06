@@ -86,8 +86,7 @@ const ForgetPassword = () => {
   )
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CardContent className={classes.paper}>
+    <Container component="main" maxWidth="xs" className={classes.paper}>
       { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
         <img src={LogoIcon} width="200"></img>
         <h4 component="span" variant="body1">輸入註冊的E-Mail<br/>將會將重設密碼連結送至你的信箱。</h4>
@@ -130,7 +129,7 @@ const ForgetPassword = () => {
             key={0}
             autoHideDuration={4000}
         />
-      </CardContent>
+      
       <Box mt={8}>
         <Copyright />
       </Box>

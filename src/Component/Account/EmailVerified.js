@@ -85,7 +85,6 @@ const EmailVerified = () => {
     handleCode === "verified" ? (window.location.href = "./")
     :
     <Container component="main" maxWidth="xs">
-        <CardContent className={classes.paper}>
         { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
           <img src={LogoIcon} width="200"></img>
           <h4 component="span" variant="body1">驗證您的信箱之後，才能開始使用網站功能</h4>
@@ -103,7 +102,7 @@ const EmailVerified = () => {
                 { handleCode === "send" ? "已發送驗證信至" + email : "發送驗證Email至" + email }
             </Button>
           </form>
-        </CardContent>
+        
     <Box mt={8}>
       <Copyright />
     </Box>

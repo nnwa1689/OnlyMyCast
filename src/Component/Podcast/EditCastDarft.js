@@ -329,7 +329,7 @@ const useStyles = makeStyles((theme)=>({
                 <Helmet>
                     <title>編輯草稿 - Onlymycast</title>
                 </Helmet>
-                <CardContent>
+                
                 <Typography variant="h5" component="h1">編輯草稿</Typography>
                 <Typography variant="body1" component="span">刪除或編輯這個草稿</Typography>
                 <br/>
@@ -411,7 +411,7 @@ const useStyles = makeStyles((theme)=>({
                         }
                     </FormControl>
                     <Divider />
-                    <CardContent>
+                    
                         <CardActions disableSpacing className={ classes.flexRight }>
                             <Button
                                 variant="contained"
@@ -446,8 +446,8 @@ const useStyles = makeStyles((theme)=>({
                                 發布
                             </Button>
                         </CardActions>
-                    </CardContent>
-                </CardContent>
+                    
+                
 
                 <Dialog
                     open={showPublishMsgBox}

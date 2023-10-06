@@ -99,8 +99,7 @@ const SignIn = () => {
   )
 
   return (
-    <Container component="main" maxWidth="xs">
-          <CardContent className={classes.paper}>
+    <Container component="main" maxWidth="xs" className={ classes.paper }>
           { handleCode==="loading" && <LinearProgress style={{ wdith: 100, marginBottom: 10}}/>}
             <img src={LogoIcon} width="200"></img>
             <h4 component="h1" variant="subtitle2">以 Google 帳號或 Email 帳號繼續</h4>
@@ -176,7 +175,7 @@ const SignIn = () => {
                 </Grid>
               </Grid>
             </div>
-          </CardContent>
+          
       <Box mt={8}>
         <Copyright />
       </Box>

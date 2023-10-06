@@ -387,7 +387,6 @@ const Account = (props) => {
                         <TabPanel value={tabValue} index={0}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={6}>
-                                <CardContent>
                                     <Typography variant="h5" component="h1"><AccountCircleIcon/>頭貼設定</Typography>
                                     <Avatar alt={name} src={avatar} className={classes.large} />
                                         <FormControl fullWidth className={classes.margin}>
@@ -415,10 +414,9 @@ const Account = (props) => {
                                             <Typography variant="body2" component="span">只能上傳.jpg/.jpeg/.png</Typography>
                                         </label>
                                         </FormControl>
-                                    </CardContent>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <CardContent>
+
                                     <Typography variant="h5" component="h1"><AssignmentIndIcon/>帳號資訊</Typography>
                                     <FormControl fullWidth className={classes.margin}>
                                             <TextField disabled={true} helperText="Email一但註冊就無法修改" value={props.userEmail} id="email" label="Email" variant="outlined" />
@@ -443,7 +441,6 @@ const Account = (props) => {
                                             </FormControl>
                                         </>
                                     }
-                                    <CardContent>
                                         <CardActions disableSpacing className={ classes.flexRight }>
                                             <Button
                                             variant="contained"
@@ -456,13 +453,10 @@ const Account = (props) => {
                                             儲存設定
                                             </Button>
                                         </CardActions>
-                                    </CardContent>
-                                    </CardContent>
                                 </Grid>
                             </Grid>
                         </TabPanel>             
                         <TabPanel value={tabValue} index={1}>
-                            <CardContent>
                             <Typography variant="h5" component="h1">訂閱管理</Typography>
                                 { subscribeList !== "" ? 
                                     <>
@@ -474,7 +468,6 @@ const Account = (props) => {
                                     :
                                     <Typography variant="h4" component="h1"><br/>╮(╯▽╰)╭<br/>目前沒有任何訂閱！<br/>快去訂閱喜歡的頻道吧！</Typography>
                                     }
-                            </CardContent>
                         </TabPanel>
                     </SwipeableViews>
                 <Dialog

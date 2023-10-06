@@ -100,7 +100,7 @@ const InlinePlayer = (props) => {
                 playing={playState}
                 config={{ file:{ forceAudio:true } }}
             />
-            <Paper variant="outlined" style={{ paddingTop: 0, margin: "30px" }}>
+            <Paper variant="outlined" style={{ paddingTop: 0, margin: "10px" }}>
                 { !ready ? <LinearProgress style={{width:"100%"}}/>
                 :
                 <Slider 

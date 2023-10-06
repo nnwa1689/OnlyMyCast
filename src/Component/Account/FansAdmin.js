@@ -156,33 +156,31 @@ const FansAdmin = (props) => {
                     <title>追蹤管理 - Onlymycast</title>
                 </Helmet>
                 <Container maxWidth="lg" className={classes.root}>
-                    <CardContent>
-                        <Typography variant="h5" component="h1">追蹤管理</Typography>
-                        <Typography variant="body1" component="span">移除已經被允許追蹤的人</Typography>
-                        <List dense>
-                            {fansList}
-                        </List>
+                    <Typography variant="h5" component="h1">追蹤管理</Typography>
+                    <Typography variant="body1" component="span">移除已經被允許追蹤的人</Typography>
+                    <List dense>
+                        {fansList}
+                    </List>
 
-                        <Dialog
-                            open={showDelMsg}
-                            onClose={()=>{setShowDelMsg(false)}}
-                        >
-                            <DialogTitle>移除追蹤</DialogTitle>
-                            <DialogContent>
-                            <DialogContentText>
-                                確定要移除追蹤？<br/>移除後對方必須重新追蹤才能再收聽您的頻道。
-                            </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                            <Button onClick={()=>{setShowDelMsg(false)}} color="primary" autoFocus>
-                                取消
-                            </Button>
-                            <Button onClick={handelDelFans} color="primary">
-                                確定
-                            </Button>
-                            </DialogActions>
-                        </Dialog>
-                    </CardContent>
+                    <Dialog
+                        open={showDelMsg}
+                        onClose={()=>{setShowDelMsg(false)}}
+                    >
+                        <DialogTitle>移除追蹤</DialogTitle>
+                        <DialogContent>
+                        <DialogContentText>
+                            確定要移除追蹤？<br/>移除後對方必須重新追蹤才能再收聽您的頻道。
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                        <Button onClick={()=>{setShowDelMsg(false)}} color="primary" autoFocus>
+                            取消
+                        </Button>
+                        <Button onClick={handelDelFans} color="primary">
+                            確定
+                        </Button>
+                        </DialogActions>
+                    </Dialog>
                 </Container>
             </>
         )

@@ -55,7 +55,7 @@ import Footer from './Component/NavBar/Footer';
 /* function */
 import GetRssfeed from './Functions/GetRssfeed';
 
-const clientversion = "V231006.16";
+const clientversion = "V231009.11";
 
 const App = (props) => {
   //常用設定
@@ -429,7 +429,7 @@ const App = (props) => {
       <CssBaseline />
       <div className="App">
         <BrowserRouter basename={basename}>
-          <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri}/>
+          <Player url={playerUrl} podcastName={podcastName} singleName={playerTitle} coverUrl={coverUri} isAuth={isAuth} />
             {inApp === true &&
               <Container maxWidth="lg">
                 <MuiAlert style={{ marginTop: "100px", marginBottom: "-50px" }} elevation={6} variant="filled" severity="warning">
@@ -488,13 +488,13 @@ const App = (props) => {
                       } />
                   <Route path="/podcastdetail/:id/:podId"
                     render={(props) => (
-                      <main className={ classes.content }>
+                      <main className={  isAuth && classes.content  }>
                         <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} isAuth={isAuth} />
                       </main>
                     )} />
                   <Route path="/podcast/:id"
                     render={(props) => (
-                      <main className={ classes.content }>
+                      <main className={ isAuth && classes.content }>
                         <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} isAuth={isAuth} />
                       </main>
                     )} />
@@ -560,7 +560,7 @@ const App = (props) => {
                       )}
                    />
                 </Switch>
-                <main className={ classes.content }>
+                <main className={ isAuth && classes.content }>
                   {
                   /*Google Adsense*/
                   !(removeAdsensePath.includes(pathname)) && <AdsenseComponent />

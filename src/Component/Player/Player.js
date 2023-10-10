@@ -33,11 +33,7 @@ const useStyles = makeStyles((theme)=>({
     top: 'auto',
     bottom: 0,
     alignItems:"center",
-    paddingBottom: 5,
-    [theme.breakpoints.up('sm')]: {
-        width: `calc(100% - ${240}px)`,
-        marginLeft: 240,
-      },
+    paddingBottom: 5
   },
   podcastToolbar: {
     justifyContent: "flex-start",
@@ -66,6 +62,12 @@ const useStyles = makeStyles((theme)=>({
     whiteSpace: "nowrap",
     animation: "floatText 15s infinite linear",
   },
+  isAuthContent: {
+    [theme.breakpoints.up('sm')]: {
+        width: `calc(100% - ${240}px)`,
+        marginLeft: 240,
+    },
+  }
 }));
 
 const darkAppbarStyle = { backgroundColor: "rgba(0, 0, 0, 1)", };
@@ -167,7 +169,7 @@ const Player = (props) => {
                 config={{ file:{ forceAudio:true } }}
                 playbackRate={playBackRate}
             />
-            <AppBar position="fixed" color="inherit" style={ darkmode === 'light' ? lightAppbarStyle : darkAppbarStyle } className={classes.appBar}>
+            <AppBar position="fixed" color="inherit" style={ darkmode === 'light' ? lightAppbarStyle : darkAppbarStyle } className={[classes.appBar, (props.isAuth && classes.isAuthContent)]}>
                 { !ready ? <LinearProgress style={{width:"100%"}}/> : 
                     <Slider 
                     style={{padding: 0, paddingBottom: 2,}} 

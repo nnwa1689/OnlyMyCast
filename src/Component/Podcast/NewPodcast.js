@@ -49,6 +49,7 @@ import "firebase/functions";
 import { Helmet } from 'react-helmet';
 import genrssfeed from '../../Functions/genRssfeed';
 import NotCreatePodcast from './NotCreatePodcast';
+import { Grid } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -57,18 +58,9 @@ const useStyles = makeStyles((theme)=>({
         marginTop: 100,
         borderRadius: "10px",
         alignItems:"center",
-        textAlign:"center"
     },
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)',
-    },
-    title: {
-      fontSize: 14,
-    },
-    pos: {
-      marginBottom: 12,
+    centered: {
+        textAlign: "center",
     },
     large: {
         width: theme.spacing(10),
@@ -100,7 +92,6 @@ const useStyles = makeStyles((theme)=>({
         height: theme.spacing(36),
         width: theme.spacing(36),
         margin:theme.spacing(1),
-        borderRadius: 20,
     },
   })
   );
@@ -390,8 +381,63 @@ const useStyles = makeStyles((theme)=>({
             <Container maxWidth="lg" className={classes.root}>
                 <Helmet>
                     <title>新增單集 - Onlymycast</title>
-                </Helmet>       
-                <Typography variant="h5" component="h1">發佈單集</Typography>
+                </Helmet>   
+
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={7}>
+                        <Typography variant="h4">發佈單集</Typography> 
+                    </Grid>
+                    <Grid item xs={12} md={5}>
+                        <CardActions>
+                            {
+                            //按鈕 
+                                activeStep < 3 &&
+                                <>
+                                    <Button
+                                        disabled={activeStep === 0 || isRecording === true}
+                                        onClick={()=>setActiveStep(activeStep - 1)}
+                                        className={ classes.flexLeft }
+                                        color="primary"
+                                        fullWidth
+                                    >
+                                        上一步
+                                    </Button>
+                                    {activeStep === 2 ? 
+                                    <>
+                                        <Tooltip className={classes.backButton} onClick={handleSaveDarft} title="存入草稿後，仍可變更檔案但不可線上錄製" aria-label="save">
+                                            <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                className={classes.button}
+                                                startIcon={ handleDarftCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
+                                                disabled={handleDarftCode==="loading"}
+                                                fullWidth
+                                                >
+                                                儲存草稿
+                                            </Button>
+                                        </Tooltip>
+                                        <Button 
+                                            variant="contained" 
+                                            color="primary" 
+                                            onClick={()=>handleUploadPodcast()}
+                                            fullWidth
+                                            >
+                                            完成並發布
+                                        </Button>
+                                    </>
+                                    :
+                                    <Button fullWidth disabled={ (activeStep===0) || (filename==="" && activeStep===1) || (podcastTitle===""&& activeStep===2) || (intro==="" && activeStep===3) || isRecording === true } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
+                                        下一步
+                                    </Button>
+                                    }
+                                </>
+                            }
+                        </CardActions>
+                    </Grid>
+                </Grid>
+                <br/>
+                <Divider/>
+                <br/>
                 <Stepper style={ { background: "none" } } activeStep={activeStep} alternativeLabel>
                     <Step key={0}>
                         <StepLabel>{"錄製方式"}</StepLabel>
@@ -405,246 +451,218 @@ const useStyles = makeStyles((theme)=>({
                     <Step key={3}>
                         <StepLabel>{"上傳"}</StepLabel>
                     </Step>
-                </Stepper>
-                
+                </Stepper>   
+                <br/>
                 <Divider />
-                    
+                <br/>
+                <div className={ classes.centered }>
                     { activeStep === 0 &&
-                    (<>
-                        <CardContent>
-                            <Button color="primary" variant="outlined" className={classes.mostlarge} 
-                            onClick={
-                                () => { 
-                                    selectRecordingType(0);
-                                    onlineRecordingInit(); 
-                                    }
-                                }>
-                            <Typography variant="h4">
-                                <MicIcon fontSize="large" />
-                                <br/>線上錄製<br/><br/><Divider/><br/>
-                                <Typography variant="body1" color="textSecondary">
-                                    透過網頁直接錄製單集，建議較短或隨性的單集使用此方式。
-                                </Typography></Typography><br/><br/><br/>
-                            </Button>
+                        (<>
+                            <CardContent>
+                                <Button color="primary" variant="outlined" className={classes.mostlarge} 
+                                onClick={
+                                    () => { 
+                                        selectRecordingType(0);
+                                        onlineRecordingInit(); 
+                                        }
+                                    }>
+                                <Typography variant="h4">
+                                    <MicIcon fontSize="large" />
+                                    <br/>線上錄製<br/><br/><Divider/><br/>
+                                    <Typography variant="body1" color="textSecondary">
+                                        透過網頁直接錄製單集，建議較短或隨性的單集使用此方式。
+                                    </Typography></Typography><br/><br/><br/>
+                                </Button>
 
-                            <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(1) }}>
-                            <Typography variant="h4">
-                                <PublishIcon fontSize="large" />
-                                <br/>上傳檔案<br/><br/><Divider/><br/>
-                                <Typography variant="body1" color="textSecondary">
-                                    上傳您後製完成的完整單集，如錄製較長且需剪輯建議使用此方式。
-                                </Typography></Typography><br/><br/><br/>
-                            </Button>
-                        </CardContent>
-                    </>)
+                                <Button color="primary" variant="outlined" className={classes.mostlarge} onClick={() => { selectRecordingType(1) }}>
+                                <Typography variant="h4">
+                                    <PublishIcon fontSize="large" />
+                                    <br/>上傳檔案<br/><br/><Divider/><br/>
+                                    <Typography variant="body1" color="textSecondary">
+                                        上傳您後製完成的完整單集，如錄製較長且需剪輯建議使用此方式。
+                                    </Typography></Typography><br/><br/><br/>
+                                </Button>
+                            </CardContent>
+                        </>)
                     }
 
                     { (activeStep === 1 && recorderType === 0 ) &&
-                    (<>
+                        (<>
 
-                    { isBlocked ? 
-                    <MuiAlert elevation={6} variant="filled" severity='error'>您沒有安裝麥克風或沒有允許存取，請安裝麥克風或授權網站存取麥克風，才能開始錄製您的節目！</MuiAlert>
-                    : 
-                    <>
-                    <Typography variant="body1">選擇錄音裝置</Typography>
-                    <Select
-                    disabled={isRecording}
-                    variant="outlined"
-                    value={recordingDevice}
-                    onChange={(e) => { 
-                        setRecordingDevice(e.target.value);
-                        setMp3Recorder(new MicRecorder({ bitRate: 128, deviceId: e.target.value }));
-                     }}
-                    >
-                    { deviceList }
-                    </Select>
-                    <br/><br/><Divider/><br/><br/>     
-                    <Button disabled={ (deviceList === undefined ? true : false) } color="primary" variant="outlined" className={classes.mostlarge} onClick={handleRecordeingButton}>
-                        <Typography variant="h4">
-                            { isRecording ? 
-                            <>
-                            <FiberManualRecordIcon fontSize="large" /><br/>
-                            正在錄製⋯⋯<br/>
-                            <Typography variant="body1">正在錄製：{currentTime}</Typography>
-                            </>
-                            : 
-                            <>
-                            <MicIcon fontSize="large" /><br/>
-                            { filename == "" ? "開始錄製" : "重新錄製" }
-                            </>
-                            }<br/></Typography><br/>
-                    </Button>
+                        { isBlocked ? 
+                        <MuiAlert elevation={6} variant="filled" severity='error'>您沒有安裝麥克風或沒有允許存取，請安裝麥克風或授權網站存取麥克風，才能開始錄製您的節目！</MuiAlert>
+                        : 
+                        <>
+                        <Typography variant="body1">選擇錄音裝置</Typography>
+                        <Select
+                        disabled={isRecording}
+                        variant="outlined"
+                        value={recordingDevice}
+                        onChange={(e) => { 
+                            setRecordingDevice(e.target.value);
+                            setMp3Recorder(new MicRecorder({ bitRate: 128, deviceId: e.target.value }));
+                        }}
+                        >
+                        { deviceList }
+                        </Select>
+                        <br/><br/><Divider/><br/><br/>     
+                        <Button disabled={ (deviceList === undefined ? true : false) } color="primary" variant="outlined" className={classes.mostlarge} onClick={handleRecordeingButton}>
+                            <Typography variant="h4">
+                                { isRecording ? 
+                                <>
+                                <FiberManualRecordIcon fontSize="large" /><br/>
+                                正在錄製⋯⋯<br/>
+                                <Typography variant="body1">正在錄製：{currentTime}</Typography>
+                                </>
+                                : 
+                                <>
+                                <MicIcon fontSize="large" /><br/>
+                                { filename == "" ? "開始錄製" : "重新錄製" }
+                                </>
+                                }<br/></Typography><br/>
+                        </Button>
 
-                    </>
-                    }   
-                        <br/><br/>
-                        {//fileUiArray
-                        }
+                        </>
+                        }   
+                            <br/><br/>
+                            {//fileUiArray
+                            }
 
-                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>
-                        }
-                        <br/>
-                    </>)
-                    }
-
-                    { (activeStep === 1 && recorderType === 1 ) &&
-                    (<>
-
-                         <input
-                            accept=".mp3, .m4a"
-                            className={classes.input}
-                            id="contained-button-file"
-                            multiple
-                            type="file"
-                            startIcon={<AttachmentIcon />}
-                            onChange={(e)=>{
-                                if (e.target.files.length >= 1) {
-                                    if ( allowFileType.includes(e.target.files[0].type) ) {
-                                        setFilename(e.target.files[0].name);
-                                        setFileBit(e.target.files[0]);
-                                        setFilePath(URL.createObjectURL(e.target.files[0]));
-                                    } else {
-                                        setErr("檔案格式不支援！");
-                                    }
-                                }
-                            }}
-                        />
-                        <label htmlFor="contained-button-file">
-                            <Button className={classes.mostlarge} variant="contained" size="large" color="primary" component="span">
-                                <Typography variant="h5" gutterBottom>
-                                <AttachmentIcon fontSize='large' /><br/>
-                                { filename === "" ? "選擇檔案" : filename }
-                                <br/><br/><Divider/><br/>
-                                <Typography variant="body1" gutterBottom>
-                                    僅限 MP3 與 M4A 格式檔案<br/>
-                                </Typography>
-                                </Typography>
-                            </Button>
+                            {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>
+                            }
                             <br/>
-                        </label>
-                        <br/>
-                        {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
-                        <br/>
-                    </>)
+                        </>)
+                        }
+
+                        { (activeStep === 1 && recorderType === 1 ) &&
+                        (<>
+
+                            <input
+                                accept=".mp3, .m4a"
+                                className={classes.input}
+                                id="contained-button-file"
+                                multiple
+                                type="file"
+                                startIcon={<AttachmentIcon />}
+                                onChange={(e)=>{
+                                    if (e.target.files.length >= 1) {
+                                        if ( allowFileType.includes(e.target.files[0].type) ) {
+                                            setFilename(e.target.files[0].name);
+                                            setFileBit(e.target.files[0]);
+                                            setFilePath(URL.createObjectURL(e.target.files[0]));
+                                        } else {
+                                            setErr("檔案格式不支援！");
+                                        }
+                                    }
+                                }}
+                            />
+                            <label htmlFor="contained-button-file">
+                                <Button className={classes.mostlarge} variant="contained" size="large" color="primary" component="span">
+                                    <Typography variant="h5" gutterBottom>
+                                    <AttachmentIcon fontSize='large' /><br/>
+                                    { filename === "" ? "選擇檔案" : filename }
+                                    <br/><br/><Divider/><br/>
+                                    <Typography variant="body1" gutterBottom>
+                                        僅限 MP3 與 M4A 格式檔案<br/>
+                                    </Typography>
+                                    </Typography>
+                                </Button>
+                                <br/>
+                            </label>
+                            <br/>
+                            {filename !== "" &&<InlinePlayer url={filePath} fileSize={fileBit.size} returnDuration={(value)=>fromPlayerGetDuration(value)}/>}
+                            <br/>
+                        </>)
                     }
-    
+                </div>
                 { activeStep === 2 &&
                 (
                     <>
-                        <FormControl fullWidth className={classes.margin}>
-                            <TextField value={podcastTitle} onChange={(e)=>setPodcastTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
-                        </FormControl>
-                        <FormControl fullWidth className={classes.margin}>
-                        <InputLabel>單集簡介</InputLabel>
-                            <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
-                            <br/>
-                            <MDEditor
-                                value={intro}
-                                onChange={setIntro}
-                            />   
-                            <br/> <br/> 
-                            <div className={classes.wrapper}>
-                            </div>                                 
-                        </FormControl>    
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={3}>
+                                <Typography variant="h4">單集標題</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={9}>
+                                <FormControl fullWidth className={classes.margin}>
+                                    <TextField value={podcastTitle} onChange={(e)=>setPodcastTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <br/>
+                        <Divider/>
+                        <br/>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={3}>
+                                <Typography variant="h4">單集簡介</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={9}>
+                                <FormControl fullWidth className={classes.margin}>
+                                    <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
+                                    <br/>
+                                    <MDEditor
+                                        value={intro}
+                                        onChange={setIntro}
+                                    />   
+                                    <br/> <br/> 
+                                    <div className={classes.wrapper}>
+                                    </div>                                 
+                                </FormControl>  
+                            </Grid>
+                        </Grid>
                     </>
                 )
-                    }
-
-                { activeStep === 3 &&
-                (
-                    <>
-                        <Typography variant="h6" gutterBottom>
-                            （*＾3＾） 
-                        </Typography>
-                        <br/>
-                        <Typography variant="h6" gutterBottom>
-                            單集上傳已經準備就緒，按下完成後就會開始上傳<br/>期間請不要關閉瀏覽器！  
-                        </Typography>
-                        
-                    </>
-                )
-                    }
-
-                { //upload suc 
-                    uploadStatu === 1 && 
-                    <>
-                    <Redirect to='/editpodcasts'/>
-                    </>
                 }
 
-                {  //uploadErr
-                    uploadStatu === 3 && 
-                    <>
-                        <Typography variant="h6" gutterBottom>
-                            (￣◇￣;)<br/><br/>
-                            歐歐，上傳處理發生錯誤，一群猴子正在極力強修
-                        </Typography>
-                        <Typography variant="body2" gutterBottom>
-                            {"ErrorMsg:" + err}
-                        </Typography>
-                    </>
-                }
-
-                { //uploading
-                    uploadStatu === 2 && 
-                    <>
-                        <CircularProgress size={80} />
-                        <br/><br/>
-                            <LinearProgressWithLabel value={uploadProgress} />
-                        <br/>
-                        <Typography variant="h6" gutterBottom>
-                            正在處理上傳作業，請稍候！ <br/>不要離開頁面唷(＞^ω^＜)
-                        </Typography>
-                    </>
-                }
-                    
-
-                <Divider />
-                
-                    <CardActions disableSpacing className={ classes.flexRight }>
-                    {
-                    //按鈕 
-                        activeStep < 3 &&
+                <div className={ classes.centered }>             
+                    { activeStep === 3 &&
+                    (
                         <>
-                            <Button
-                                disabled={activeStep === 0 || isRecording === true}
-                                onClick={()=>setActiveStep(activeStep - 1)}
-                                className={ classes.flexLeft }
-                                color="primary"
-                            >
-                                上一步
-                            </Button>
-                                {activeStep === 2 ? 
-                                <>
-                                    <Tooltip className={classes.backButton} onClick={handleSaveDarft} title="存入草稿後，仍可變更檔案但不可線上錄製" aria-label="save">
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            className={classes.button}
-                                            startIcon={ handleDarftCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
-                                            disabled={handleDarftCode==="loading"}
-                                            >
-                                            儲存草稿
-                                        </Button>
-                                    </Tooltip>
-                                    <Button 
-                                        variant="contained" 
-                                        color="primary" 
-                                        onClick={()=>handleUploadPodcast()}
-                                        >
-                                        完成並發布
-                                    </Button>
-                                </>
-                                :
-                                <Button disabled={ (activeStep===0) || (filename==="" && activeStep===1) || (podcastTitle===""&& activeStep===2) || (intro==="" && activeStep===3) || isRecording === true } variant="contained" color="primary" onClick={()=>setActiveStep(activeStep + 1)}>
-                                    下一步
-                                </Button>
-                                }
+                            <Typography variant="h6" gutterBottom>
+                                （*＾3＾） 
+                            </Typography>
+                            <br/>
+                            <Typography variant="h6" gutterBottom>
+                                單集上傳已經準備就緒，按下完成後就會開始上傳<br/>期間請不要關閉瀏覽器！  
+                            </Typography>
+                            
+                        </>
+                    )
+                        }
+
+                    { //upload suc 
+                        uploadStatu === 1 && 
+                        <>
+                        <Redirect to='/editpodcasts'/>
                         </>
                     }
-                    </CardActions>                   
-                
 
+                    {  //uploadErr
+                        uploadStatu === 3 && 
+                        <>
+                            <Typography variant="h6" gutterBottom>
+                                (￣◇￣;)<br/><br/>
+                                歐歐，上傳處理發生錯誤，一群猴子正在極力強修
+                            </Typography>
+                            <Typography variant="body2" gutterBottom>
+                                {"ErrorMsg:" + err}
+                            </Typography>
+                        </>
+                    }
+
+                    { //uploading
+                        uploadStatu === 2 && 
+                        <>
+                            <CircularProgress size={80} />
+                            <br/><br/>
+                                <LinearProgressWithLabel value={uploadProgress} />
+                            <br/>
+                            <Typography variant="h6" gutterBottom>
+                                正在處理上傳作業，請稍候！ <br/>不要離開頁面唷(＞^ω^＜)
+                            </Typography>
+                        </>
+                    }
+                </div>            
+                    
                 <Dialog
                     open={introErr !== false || titleErr !== false || err !== false}
                     onClose={()=>{setIntroErr(false);setTitleErr(false);setErr(false)}}
@@ -667,7 +685,6 @@ const useStyles = makeStyles((theme)=>({
                 <Snackbar open={handleDarftCode==="get"} onClose={()=>{setHandleDarftCode('fin')}} autoHideDuration={2000} message="您的草稿已經還原"/>
             </Container>
         );
-    
     }
 }
 export default NewPodcast;

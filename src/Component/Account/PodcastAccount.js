@@ -54,13 +54,13 @@ import applelogo from '../../static/hero_icon__c135x5gz14mu_large_2x.png';
 import googlelogo from '../../static/icons8-google-podcasts-48.png';
 import soundonlogo from '../../static/soundon.png';
 import omclogo from '../../static/logo192.png';
+import { Divider } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme)=>({
     root: {
         marginTop: 100,
         alignItems:"center",
-        textAlign:"center"
     },
     appBar: {
       top: 'auto',
@@ -400,122 +400,167 @@ const PodcastAccount = (props) => {
                 pageLoaded ?
                     <Container maxWidth="lg" className={classes.root}>
                         { props.user.userId === "" ? 
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} md={12}>
-                                    <Typography variant="h5" component="h1">建立節目</Typography>
-                                    <Typography variant="body1" component="span">建立屬於您的私人或公開節目</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Typography variant="h5" component="h1">節目封面</Typography>
-                                    <Avatar variant="rounded" src={avatar} className={classes.large} />
-                                    <FormControl fullWidth className={classes.fullWidthInput}>
-                                        <input
-                                            accept="image/jpeg, image/png, image/jpg"
-                                            className={classes.input}
-                                            id="contained-button-file"
-                                            multiple
-                                            type="file"
-                                            startIcon={<AttachmentIcon />}
-                                            disabled={handleCode==='loading'|| handleCode==="suc"}
-                                            onChange={(e)=>{
-                                                if ( e.target.files.length >= 1 ) {
-                                                    if ( allowCoverFileType.includes(e.target.files[0].type) ) {
-                                                        setAvatar(URL.createObjectURL(e.target.files[0]));
-                                                        setFilename(e.target.files[0].name);
-                                                        setFileBit(e.target.files[0])
-                                                    } else {
-                                                        setErr("不支援的檔案格式");
-                                                    }
-                                                }
-                                            }}
-                                        />
-                                        <label htmlFor="contained-button-file">
-                                            <Button disabled={handleCode==='loading'|| handleCode==="suc"} variant="contained" size="large" fullWidth color="primary" component="span">
-                                                <AttachmentIcon />
-                                                { filename === "" ? "上傳節目封面" : filename }
-                                            </Button>
-                                            <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
-                                        </label>
-                                        </FormControl>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                        <Typography variant="h5" component="h1">節目資訊</Typography>
-                                        <FormControl fullWidth className={classes.fullWidthInput}>
-                                        <TextField 
-                                        error={ nameErr!==false } 
-                                        helperText={ nameErr !== false && nameErr} 
-                                        value={name} 
-                                        onChange={(e)=>setName(e.target.value)} 
-                                        id="outlined-name"
-                                        variant="outlined"
-                                        label="節目名稱"
-                                        disabled={handleCode==='loading'|| handleCode==="suc"}
-                                        required />
-                                    </FormControl>
-                                    <FormControl fullWidth className={classes.fullWidthInput}>
-                                        <TextField
-                                        helperText={"聽眾將透過節目ID搜尋您的節目，建立後不可變更！"} 
-                                        value={userId} 
-                                        onChange={(e)=>setUserId(e.target.value.replace("/[\W]/g,''"))}
-                                        id="outlined-basic" 
-                                        label="節目ID" 
-                                        variant="outlined"
-                                        disabled={handleCode==='loading'|| handleCode==="suc"} 
-                                        required
-                                        />
-                                    </FormControl>
-                                    <FormControl fullWidth variant="outlined" className={classes.formControl}>
-                                        <InputLabel>公開狀態</InputLabel>
-                                        <Select
-                                        value={publicStatu}
-                                        onChange={ (e) => { setPublicStatu(e.target.value); } }
-                                        label="公開狀態"
-                                        fullWidth
-                                        >
-                                        <MenuItem value={"true"}>公開節目</MenuItem>
-                                        <MenuItem value={"false"}>私人節目</MenuItem>
-                                        </Select>
-                                        <FormHelperText>若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</FormHelperText>
-                                    </FormControl>
-
-                                    <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
-                                        <InputLabel>節目分類</InputLabel>
-                                        <Select
-                                        value={category}
-                                        onChange={ (e) => { setCategory(e.target.value);} }
-                                        label="節目分類"
-                                        fullWidth
-                                        >
-                                        { categoryListItem.map(item => item) }
-                                        </Select>
-                                        <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
-                                    </FormControl> 
-                                </Grid>
-                                <Grid item xs={12} md={12}>
-                                        <Typography variant="h5" component="h1">節目簡介</Typography>
-                                        <FormControl fullWidth className={classes.fullWidthInput}>
-                                        <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
-                                        <MDEditor
-                                            value={intro}
-                                            onChange={setIntro}
-                                        />                    
-                                        </FormControl>  
-                                        <Button
-                                        variant="contained"
-                                        color="primary"
-                                        size="large"
-                                        className={classes.button}
-                                        onClick={handleCreateChannel}
-                                        disabled={handleCode==='loading'|| handleCode==="suc"}
-                                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                        建立節目
-                                        </Button>
-                                </Grid>
-                                <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={()=>{window.location.reload()}} message="您的節目已經建立"/>
+                        <>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={9}>
+                                <Typography variant="h4">建立節目</Typography>
+                                <Typography variant="body1" component="span">建立屬於您的私人或公開節目</Typography>
                             </Grid>
-                            
-                            :
+                            <Grid item xs={12} md={3}>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    className={classes.button}
+                                    onClick={handleCreateChannel}
+                                    disabled={handleCode==='loading'|| handleCode==="suc"}
+                                    startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                    建立節目
+                                </Button>
+                            </Grid>
+                        </Grid>
+                        <br/>
+                        <Divider/>
+                        <br/>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={4}>
+                                <Typography variant="h4">節目封面</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={8}>
+                                <Avatar variant="rounded" src={avatar} className={classes.large} />
+                                <FormControl fullWidth className={classes.fullWidthInput}>
+                                    <input
+                                        accept="image/jpeg, image/png, image/jpg"
+                                        className={classes.input}
+                                        id="contained-button-file"
+                                        multiple
+                                        type="file"
+                                        startIcon={<AttachmentIcon />}
+                                        disabled={handleCode==='loading'|| handleCode==="suc"}
+                                        onChange={(e)=>{
+                                            if ( e.target.files.length >= 1 ) {
+                                                if ( allowCoverFileType.includes(e.target.files[0].type) ) {
+                                                    setAvatar(URL.createObjectURL(e.target.files[0]));
+                                                    setFilename(e.target.files[0].name);
+                                                    setFileBit(e.target.files[0])
+                                                } else {
+                                                    setErr("不支援的檔案格式");
+                                                }
+                                            }
+                                        }}
+                                    />
+                                    <label htmlFor="contained-button-file">
+                                        <Button disabled={handleCode==='loading'|| handleCode==="suc"} variant="contained" size="large" fullWidth color="primary" component="span">
+                                            <AttachmentIcon />
+                                            { filename === "" ? "上傳節目封面" : filename }
+                                        </Button>
+                                        <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
+                                    </label>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <br/>
+                        <Divider/>
+                        <br/>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={4}>
+                                <Typography variant="h4" component="h1">節目資訊</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={8}>
+                                <FormControl fullWidth className={classes.fullWidthInput}>
+                                    <TextField 
+                                    error={ nameErr!==false } 
+                                    helperText={ nameErr !== false && nameErr} 
+                                    value={name} 
+                                    onChange={(e)=>setName(e.target.value)} 
+                                    id="outlined-name"
+                                    variant="outlined"
+                                    label="節目名稱"
+                                    disabled={handleCode==='loading'|| handleCode==="suc"}
+                                    required />
+                                </FormControl>
+                                <FormControl fullWidth className={classes.fullWidthInput}>
+                                    <TextField
+                                    helperText={"聽眾將透過節目ID搜尋您的節目，建立後不可變更！"} 
+                                    value={userId} 
+                                    onChange={(e)=>setUserId(e.target.value.replace("/[\W]/g,''"))}
+                                    id="outlined-basic" 
+                                    label="節目ID" 
+                                    variant="outlined"
+                                    disabled={handleCode==='loading'|| handleCode==="suc"} 
+                                    required
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth variant="outlined" className={classes.formControl}>
+                                    <InputLabel>公開狀態</InputLabel>
+                                    <Select
+                                    value={publicStatu}
+                                    onChange={ (e) => { setPublicStatu(e.target.value); } }
+                                    label="公開狀態"
+                                    fullWidth
+                                    >
+                                    <MenuItem value={"true"}>公開節目</MenuItem>
+                                    <MenuItem value={"false"}>私人節目</MenuItem>
+                                    </Select>
+                                    <FormHelperText>若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</FormHelperText>
+                                </FormControl>
+
+                                <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
+                                    <InputLabel>節目分類</InputLabel>
+                                    <Select
+                                    value={category}
+                                    onChange={ (e) => { setCategory(e.target.value);} }
+                                    label="節目分類"
+                                    fullWidth
+                                    >
+                                    { categoryListItem.map(item => item) }
+                                    </Select>
+                                    <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
+                                </FormControl> 
+                            </Grid>
+                        </Grid>
+                        <br/>
+                        <Divider/>
+                        <br/>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={4}>
+                                <Typography variant="h4">節目簡介</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={8}>
+                                <FormControl fullWidth className={classes.fullWidthInput}>
+                                    <OutlinedInput id="component-outlined" value="falksjd" style={{display:"none"}}/>
+                                    <MDEditor
+                                        value={intro}
+                                        onChange={setIntro}
+                                    />                    
+                                </FormControl>  
+                            </Grid>
+                        </Grid>
+                        <Snackbar open={handleCode==="suc"} autoHideDuration={3000} onClose={()=>{window.location.reload()}} message="您的節目已經建立"/>
+                    </>
+                        :
                             <>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} md={9}>
+                                        <Typography variant="h4">節目設定</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <Button
+                                            fullWidth
+                                            variant="contained"
+                                            color="primary"
+                                            size="large"
+                                            onClick={handleUpdateChannel}
+                                            disabled={handleCode==="loading"}
+                                            startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
+                                            儲存設定
+                                        </Button> 
+                                    </Grid>
+                                </Grid>
+                                <br/>
+                                <Divider/>
+                                <br/>
                                 <AppBar className={classes.tabBar} position="static" color="default">
                                     <Tabs
                                     value={tabValue}
@@ -529,129 +574,125 @@ const PodcastAccount = (props) => {
                                     <Tab label="推廣" />
                                     </Tabs>
                                 </AppBar>
+                                <br/>
                                 <SwipeableViews
                                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                                     index={tabValue}
                                     onChangeIndex={handleChangeIndex}>
                                         <TabPanel value={tabValue} index={0}>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={12}>
-                                                    <Typography variant="h5" component="h1">節目設定</Typography>
+                                                <Grid item xs={12} md={4}>
+                                                    <Typography variant="h4">節目封面</Typography>
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    
-                                                        <Typography variant="h5" component="h1">節目封面</Typography>
-                                                        <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
-                                                        <FormControl fullWidth className={classes.fullWidthInput}>
-                                                            <input
-                                                                accept="image/jpge, image/jpg, image/png"
-                                                                className={classes.input}
-                                                                id="contained-button-file"
-                                                                multiple
-                                                                type="file"
-                                                                startIcon={<AttachmentIcon />}
-                                                                disabled={handleCode==="loading"}
-                                                                onChange={(e)=>{
-                                                                    if ( e.target.files.length >= 1 ) {
-                                                                        if ( allowCoverFileType.includes(e.target.files[0].type) ) {
-                                                                            setAvatar(URL.createObjectURL(e.target.files[0]));
-                                                                            setFilename(e.target.files[0].name);
-                                                                            setFileBit(e.target.files[0])
-                                                                        } else {
-                                                                            setErr("不支援的檔案格式");
-                                                                        }
+                                                <Grid item xs={12} md={8}>                                                    
+                                                    <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                                                    <FormControl fullWidth className={classes.fullWidthInput}>
+                                                        <input
+                                                            accept="image/jpge, image/jpg, image/png"
+                                                            className={classes.input}
+                                                            id="contained-button-file"
+                                                            multiple
+                                                            type="file"
+                                                            startIcon={<AttachmentIcon />}
+                                                            disabled={handleCode==="loading"}
+                                                            onChange={(e)=>{
+                                                                if ( e.target.files.length >= 1 ) {
+                                                                    if ( allowCoverFileType.includes(e.target.files[0].type) ) {
+                                                                        setAvatar(URL.createObjectURL(e.target.files[0]));
+                                                                        setFilename(e.target.files[0].name);
+                                                                        setFileBit(e.target.files[0])
+                                                                    } else {
+                                                                        setErr("不支援的檔案格式");
                                                                     }
-                                                                }}
-                                                            />
-                                                            <label htmlFor="contained-button-file">
-                                                                <Button disabled={handleCode==="loading"} variant="outlined" size="large" fullWidth color="primary" component="span">
-                                                                    <AttachmentIcon />
-                                                                    { filename === "" ? "上傳節目封面" : filename }
-                                                                </Button>
-                                                                <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
-                                                            </label>
-                                                        </FormControl>
-                                                    
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    
-                                                        <FormControl fullWidth className={classes.fullWidthInput}>
-                                                            <TextField 
-                                                                required 
-                                                                disabled={handleCode==="loading"} 
-                                                                value={name} 
-                                                                onChange={(e)=>setName(e.target.value)} 
-                                                                id="outlined-basic" 
-                                                                label="節目名稱" 
-                                                                variant="outlined" />
-                                                        </FormControl>
-
-                                                        <FormControl fullWidth className={classes.fullWidthInput}>
-                                                            <TextField 
-                                                                disabled={handleCode==="loading"} 
-                                                                value={preUrl} 
-                                                                helperText={ "如使用其他平台追蹤流量，請將前綴輸入此處。若前綴錯誤，將導致節目無法播放！" }
-                                                                onChange={(e)=>setPreUrl( e.target.value )} 
-                                                                id="outlined-basic" 
-                                                                label="播放器前綴" 
-                                                                placeholder='https://'
-                                                                variant="outlined" />
-                                                        </FormControl>
-
-                                                        <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
-                                                            <InputLabel>公開狀態</InputLabel>
-                                                            <Select
-                                                            value={publicStatu}
-                                                            onChange={ (e) => { setPublicStatu(e.target.value); } }
-                                                            label="公開狀態"
-                                                            fullWidth
-                                                            >
-                                                            <MenuItem value={"true"}>公開節目</MenuItem>
-                                                            <MenuItem value={"false"}>私人節目</MenuItem>
-                                                            </Select>
-                                                            <FormHelperText>若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</FormHelperText>
-                                                        </FormControl> 
-
-                                                        <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
-                                                            <InputLabel>節目分類</InputLabel>
-                                                            <Select
-                                                            value={category}
-                                                            onChange={ (e) => { setCategory(e.target.value);} }
-                                                            label="節目分類"
-                                                            fullWidth
-                                                            >
-                                                            { categoryListItem.map(item => item) }
-                                                            </Select>
-                                                            <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
-                                                        </FormControl> 
-                                                    
-                                                </Grid>
-                                                <Grid item xs={12} md={12}>
-                                                    
-                                                        <Typography variant="h5" component="h1">節目簡介</Typography>
-                                                        <FormControl fullWidth className={classes.fullWidthInput}>
-                                                        <OutlinedInput id="component-outlined" value="..." style={{display:"none"}}/>
-                                                        <MDEditor
-                                                            value={intro}
-                                                            onChange={setIntro}
+                                                                }
+                                                            }}
                                                         />
-                                                        </FormControl>
-                                                    
+                                                        <label htmlFor="contained-button-file">
+                                                            <Button disabled={handleCode==="loading"} variant="outlined" size="large" fullWidth color="primary" component="span">
+                                                                <AttachmentIcon />
+                                                                { filename === "" ? "上傳節目封面" : filename }
+                                                            </Button>
+                                                            <FormHelperText>接受.jpeg/.png，若需上架 ApplePodcast 請確認尺寸是正方形且介於 1400*1400 至 3000*3000</FormHelperText>
+                                                        </label>
+                                                    </FormControl> 
                                                 </Grid>
                                             </Grid>
-                                            
-                                                <CardActions disableSpacing className={ classes.flexRight }>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        size="large"
-                                                        className={ classes.flexRight }
-                                                        onClick={handleUpdateChannel}
-                                                        disabled={handleCode==="loading"}
-                                                        startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                                        儲存設定
-                                                    </Button>   
-                                                </CardActions>
+                                            <br/>
+                                            <Divider/>
+                                            <br/>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12} md={4}>
+                                                    <Typography variant="h4">節目資訊</Typography>
+                                                </Grid>
+                                                <Grid item xs={12} md={8}>
+                                                    <FormControl fullWidth className={classes.fullWidthInput}>
+                                                        <TextField 
+                                                            required 
+                                                            disabled={handleCode==="loading"} 
+                                                            value={name} 
+                                                            onChange={(e)=>setName(e.target.value)} 
+                                                            id="outlined-basic" 
+                                                            label="節目名稱" 
+                                                            variant="outlined" />
+                                                    </FormControl>
+
+                                                    <FormControl fullWidth className={classes.fullWidthInput}>
+                                                        <TextField 
+                                                            disabled={handleCode==="loading"} 
+                                                            value={preUrl} 
+                                                            helperText={ "如使用其他平台追蹤流量，請將前綴輸入此處。若前綴錯誤，將導致節目無法播放！" }
+                                                            onChange={(e)=>setPreUrl( e.target.value )} 
+                                                            id="outlined-basic" 
+                                                            label="播放器前綴" 
+                                                            placeholder='https://'
+                                                            variant="outlined" />
+                                                    </FormControl>
+
+                                                    <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
+                                                        <InputLabel>公開狀態</InputLabel>
+                                                        <Select
+                                                        value={publicStatu}
+                                                        onChange={ (e) => { setPublicStatu(e.target.value); } }
+                                                        label="公開狀態"
+                                                        fullWidth
+                                                        >
+                                                        <MenuItem value={"true"}>公開節目</MenuItem>
+                                                        <MenuItem value={"false"}>私人節目</MenuItem>
+                                                        </Select>
+                                                        <FormHelperText>若為公開，任何人都能收聽並且透過 RSS 上架其他平台；若為私人，只有被允許的人可以收聽且不提供 RSS</FormHelperText>
+                                                    </FormControl> 
+
+                                                    <FormControl fullWidth variant="outlined" className={classes.fullWidthInput}>
+                                                        <InputLabel>節目分類</InputLabel>
+                                                        <Select
+                                                        value={category}
+                                                        onChange={ (e) => { setCategory(e.target.value);} }
+                                                        label="節目分類"
+                                                        fullWidth
+                                                        >
+                                                        { categoryListItem.map(item => item) }
+                                                        </Select>
+                                                        <FormHelperText>分類會讓其他 Podcast 平台以及聽眾更易於識別節目內容</FormHelperText>
+                                                    </FormControl> 
+                                                </Grid>
+                                            </Grid>
+                                            <br/>
+                                            <Divider/>
+                                            <br/>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12} md={4}>
+                                                    <Typography variant="h4">節目簡介</Typography>
+                                                </Grid>
+                                                <Grid item xs={12} md={8}>
+                                                    <FormControl fullWidth className={classes.fullWidthInput}>
+                                                    <OutlinedInput id="component-outlined" value="..." style={{display:"none"}}/>
+                                                    <MDEditor
+                                                        value={intro}
+                                                        onChange={setIntro}
+                                                    />
+                                                    </FormControl>
+                                                </Grid>
+                                            </Grid>
                                             
                                         </TabPanel>
 
@@ -660,13 +701,11 @@ const PodcastAccount = (props) => {
                                             publicStatu === 'true' ?
                                             <>
                                                 <Grid container spacing={2}>
-                                                    <Grid item xs={12} md={12}>
-                                                        <Typography variant="h5" component="h1">收聽平台</Typography>
+                                                    <Grid item xs={12} md={4}>
+                                                        <Typography variant="h4"><RssFeedIcon/>RSS Feed</Typography>
                                                     </Grid>
-                                                    <Grid item xs={12} md={12}>
-                                                        <Typography variant="h6" gutterBottom><RssFeedIcon/>RSS Feed</Typography>
+                                                    <Grid item xs={12} md={8}>
                                                         <TextField
-                                                            label="RSSURL"
                                                             defaultValue={ RssFeedUrl }
                                                             variant="outlined"
                                                             inputProps={
@@ -686,171 +725,170 @@ const PodcastAccount = (props) => {
                                                             onClick={()=>{handleCopy (RssFeedUrl)}}>複製
                                                         </Button>
                                                     </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <Typography variant="h6" color="primary" gutterBottom>
-                                                            <img alt="onlymycast" src= { omclogo } width="24px"/>Onlymycast</Typography>
-                                                        <TextField
-                                                            label="onlymycast"
-                                                            defaultValue={ props.baseWwwUrl + "podcast/" + userId}
-                                                            variant="outlined"
-                                                            inputProps={
-                                                                { readOnly: true, }
-                                                            }
-                                                            fullWidth
-                                                            />
+                                                </Grid>
+                                                <br/>
+                                                <Divider/>
+                                                <br/>
+                                                <Grid container spacing={2}>
+                                                    <Grid item xs={12} md={4}>
+                                                        <Typography variant="h4"><RssFeedIcon/>收聽平台</Typography>
+                                                    </Grid>
+                                                    <Grid item xs={12} md={8}>
+                                                        <Grid container spacing={2}>
+                                                            <Grid item xs={12} md={6}>
+                                                                <Typography variant="h6" color="primary" gutterBottom>
+                                                                    <img alt="onlymycast" src= { omclogo } width="24px"/>Onlymycast</Typography>
+                                                                <TextField
+                                                                    label="onlymycast"
+                                                                    defaultValue={ props.baseWwwUrl + "podcast/" + userId}
+                                                                    variant="outlined"
+                                                                    inputProps={
+                                                                        { readOnly: true, }
+                                                                    }
+                                                                    fullWidth
+                                                                    />
 
-                                                        <Typography variant="body1">
-                                                        在這裡聽，最棒。
-                                                        </Typography>
-                                                        <Button 
-                                                            fullWidth
-                                                            size="large" 
-                                                            color="primary" 
-                                                            variant="outlined" 
-                                                            onClick={()=>{handleCopy(props.baseWwwUrl + "podcast/" + userId)}}>複製
-                                                        </Button>
-                                                    </Grid>
-                                                    
-                                                    <Grid item xs={12} md={6}>
-                                                        <Typography className={classes.appleColor} variant="h6" gutterBottom>
-                                                            <img src={applelogo} width="24px"></img> Apple Podcast
-                                                        </Typography>
+                                                                <Typography variant="body1">
+                                                                在這裡聽，最棒。
+                                                                </Typography>
+                                                                <Button 
+                                                                    fullWidth
+                                                                    size="large" 
+                                                                    color="primary" 
+                                                                    variant="outlined" 
+                                                                    onClick={()=>{handleCopy(props.baseWwwUrl + "podcast/" + userId)}}>複製
+                                                                </Button>
+                                                            </Grid>
+                                                            
+                                                            <Grid item xs={12} md={6}>
+                                                                <Typography className={classes.appleColor} variant="h6" gutterBottom>
+                                                                    <img src={applelogo} width="24px"></img> Apple Podcast
+                                                                </Typography>
 
-                                                        <TextField 
-                                                            disabled={handleCode==="loading"} 
-                                                            value={applepodcastLink} 
-                                                            onChange={(e)=>setApplepodcastLink(e.target.value)} 
-                                                            id="apple" 
-                                                            variant="outlined"
-                                                            placeholder="https://" 
-                                                            fullWidth
-                                                        />
-                                                        <Typography variant="body1">
-                                                            Apple 的 Podcast 播放器，所有 Apple 裝置內建。
-                                                        </Typography>
-                                                        <Button 
-                                                            fullWidth
-                                                            color="primary" 
-                                                            size="large" 
-                                                            variant="outlined" 
-                                                            target='_blank' 
-                                                            href="https://podcastsconnect.apple.com">
-                                                                申請上架
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <Typography className={classes.googleColor} variant="h6" gutterBottom>
-                                                            <img src={googlelogo} width="24px"></img>Google Podcast</Typography>
-                                                        <TextField 
-                                                            disabled={handleCode==="loading"} 
-                                                            value={googlepodcastLink} 
-                                                            onChange={(e)=>setGooglepodcastLink(e.target.value)} 
-                                                            id="twitter" 
-                                                            variant="outlined"
-                                                            placeholder="https://"
-                                                            fullWidth
-                                                        />
-                                                        <Typography variant="body1">
-                                                            Google 的 Podcast 播放器。
-                                                        </Typography>
-                                                        <Button 
-                                                            fullWidth
-                                                            color="primary" 
-                                                            size="large" 
-                                                            variant="outlined" 
-                                                            target='_blank' 
-                                                            href="https://podcastsmanager.google.com/add-feed">
-                                                                申請上架
-                                                        </Button>           
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <Typography className={classes.spotifyColor} variant="h6" gutterBottom>
-                                                            <img src={spotiflogo} width="24px"></img>Spotify</Typography>
-                                                        <TextField 
-                                                            disabled={handleCode==="loading"} 
-                                                            value={spotifyLink}
-                                                            onChange={(e)=>setSpotifyLink(e.target.value)} 
-                                                            id="twitter" 
-                                                            variant="outlined"
-                                                            placeholder="https://" 
-                                                            fullWidth
-                                                        />
+                                                                <TextField 
+                                                                    disabled={handleCode==="loading"} 
+                                                                    value={applepodcastLink} 
+                                                                    onChange={(e)=>setApplepodcastLink(e.target.value)} 
+                                                                    id="apple" 
+                                                                    variant="outlined"
+                                                                    placeholder="https://" 
+                                                                    fullWidth
+                                                                />
+                                                                <Typography variant="body1">
+                                                                    Apple 的 Podcast 播放器，所有 Apple 裝置內建。
+                                                                </Typography>
+                                                                <Button 
+                                                                    fullWidth
+                                                                    color="primary" 
+                                                                    size="large" 
+                                                                    variant="outlined" 
+                                                                    target='_blank' 
+                                                                    href="https://podcastsconnect.apple.com">
+                                                                        申請上架
+                                                                </Button>
+                                                            </Grid>
+                                                            <Grid item xs={12} md={6}>
+                                                                <Typography className={classes.googleColor} variant="h6" gutterBottom>
+                                                                    <img src={googlelogo} width="24px"></img>Google Podcast</Typography>
+                                                                <TextField 
+                                                                    disabled={handleCode==="loading"} 
+                                                                    value={googlepodcastLink} 
+                                                                    onChange={(e)=>setGooglepodcastLink(e.target.value)} 
+                                                                    id="twitter" 
+                                                                    variant="outlined"
+                                                                    placeholder="https://"
+                                                                    fullWidth
+                                                                />
+                                                                <Typography variant="body1">
+                                                                    Google 的 Podcast 播放器。
+                                                                </Typography>
+                                                                <Button 
+                                                                    fullWidth
+                                                                    color="primary" 
+                                                                    size="large" 
+                                                                    variant="outlined" 
+                                                                    target='_blank' 
+                                                                    href="https://podcastsmanager.google.com/add-feed">
+                                                                        申請上架
+                                                                </Button>           
+                                                            </Grid>
+                                                            <Grid item xs={12} md={6}>
+                                                                <Typography className={classes.spotifyColor} variant="h6" gutterBottom>
+                                                                    <img src={spotiflogo} width="24px"></img>Spotify</Typography>
+                                                                <TextField 
+                                                                    disabled={handleCode==="loading"} 
+                                                                    value={spotifyLink}
+                                                                    onChange={(e)=>setSpotifyLink(e.target.value)} 
+                                                                    id="twitter" 
+                                                                    variant="outlined"
+                                                                    placeholder="https://" 
+                                                                    fullWidth
+                                                                />
 
-                                                        <Typography variant="body1">
-                                                            有名的音樂與聲音播放串流平台。
-                                                        </Typography>
-                                                        <Button 
-                                                            fullWidth
-                                                            color="primary" 
-                                                            size="large" 
-                                                            variant="outlined" 
-                                                            target='_blank' 
-                                                            href="https://podcasters.spotify.com/submit">
-                                                                申請上架
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <Typography className={classes.kkColor} variant="h6" gutterBottom>
-                                                            <img alt="kkbox" src={kklogo} width="24px"></img>KKBOX</Typography>
-                                                        <TextField 
-                                                            disabled={handleCode==="loading"} 
-                                                            value={kkLink} 
-                                                            onChange={(e)=>setKkLink(e.target.value)} 
-                                                            id="Kk" 
-                                                            variant="outlined"
-                                                            placeholder="https://"
-                                                            fullWidth
-                                                        />
-                                                        <Typography variant="body1">
-                                                            亞洲最大的聲音串流平台。
-                                                        </Typography>
-                                                        <Button
-                                                            fullWidth
-                                                            color="primary" 
-                                                            size="large" 
-                                                            variant="outlined" 
-                                                            target='_blank' 
-                                                            href="https://podcast.kkbox.com/podcasters?lang=tc">
-                                                                申請上架
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <Typography className={classes.soundonColor} variant="h6" gutterBottom>
-                                                            <img alt="kkbox" src={soundonlogo} width="24px"></img>SoundOn</Typography>
-                                                        <TextField 
-                                                            disabled={handleCode==="loading"} 
-                                                            value={soundonLink} 
-                                                            onChange={(e)=>setSoundonLink(e.target.value)} 
-                                                            id="Kk" 
-                                                            variant="outlined"
-                                                            placeholder="https://"
-                                                            fullWidth
-                                                        />
-                                                        <Typography variant="body1">
-                                                            台灣本土的Podcast平台。
-                                                        </Typography>
-                                                        <Button
-                                                            fullWidth
-                                                            color="primary" 
-                                                            size="large" 
-                                                            variant="outlined" 
-                                                            target='_blank' 
-                                                            href="https://airtable.com/shrJdWIve8yhFirdU">
-                                                                申請上架
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item xs={12} md={12}>
-                                                        <div className={ classes.flexRight }>
-                                                            <Button
-                                                                variant="contained"
-                                                                color="primary"
-                                                                size="large"
-                                                                onClick={handleUpdateChannel}
-                                                                disabled={handleCode==="loading"}
-                                                                startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                                                儲存設定
-                                                            </Button>   
-                                                        </div>
+                                                                <Typography variant="body1">
+                                                                    有名的音樂與聲音播放串流平台。
+                                                                </Typography>
+                                                                <Button 
+                                                                    fullWidth
+                                                                    color="primary" 
+                                                                    size="large" 
+                                                                    variant="outlined" 
+                                                                    target='_blank' 
+                                                                    href="https://podcasters.spotify.com/submit">
+                                                                        申請上架
+                                                                </Button>
+                                                            </Grid>
+                                                            <Grid item xs={12} md={6}>
+                                                                <Typography className={classes.kkColor} variant="h6" gutterBottom>
+                                                                    <img alt="kkbox" src={kklogo} width="24px"></img>KKBOX</Typography>
+                                                                <TextField 
+                                                                    disabled={handleCode==="loading"} 
+                                                                    value={kkLink} 
+                                                                    onChange={(e)=>setKkLink(e.target.value)} 
+                                                                    id="Kk" 
+                                                                    variant="outlined"
+                                                                    placeholder="https://"
+                                                                    fullWidth
+                                                                />
+                                                                <Typography variant="body1">
+                                                                    亞洲最大的聲音串流平台。
+                                                                </Typography>
+                                                                <Button
+                                                                    fullWidth
+                                                                    color="primary" 
+                                                                    size="large" 
+                                                                    variant="outlined" 
+                                                                    target='_blank' 
+                                                                    href="https://podcast.kkbox.com/podcasters?lang=tc">
+                                                                        申請上架
+                                                                </Button>
+                                                            </Grid>
+                                                            <Grid item xs={12} md={6}>
+                                                                <Typography className={classes.soundonColor} variant="h6" gutterBottom>
+                                                                    <img alt="kkbox" src={soundonlogo} width="24px"></img>SoundOn</Typography>
+                                                                <TextField 
+                                                                    disabled={handleCode==="loading"} 
+                                                                    value={soundonLink} 
+                                                                    onChange={(e)=>setSoundonLink(e.target.value)} 
+                                                                    id="Kk" 
+                                                                    variant="outlined"
+                                                                    placeholder="https://"
+                                                                    fullWidth
+                                                                />
+                                                                <Typography variant="body1">
+                                                                    台灣本土的Podcast平台。
+                                                                </Typography>
+                                                                <Button
+                                                                    fullWidth
+                                                                    color="primary" 
+                                                                    size="large" 
+                                                                    variant="outlined" 
+                                                                    target='_blank' 
+                                                                    href="https://airtable.com/shrJdWIve8yhFirdU">
+                                                                        申請上架
+                                                                </Button>
+                                                            </Grid>
+                                                        </Grid>
                                                     </Grid>
                                                 </Grid>
                                             </>
@@ -865,11 +903,11 @@ const PodcastAccount = (props) => {
 
                                     <TabPanel value={tabValue} index={2}>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={12} md={6}>
-                                                
-                                                <Typography variant="h5" component="h5">節目嵌入貼紙</Typography>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography variant="h4">節目嵌入貼紙</Typography>
                                                 <Typography variant="body1" component="h5">透過程式碼，將節目嵌入在個人網站上</Typography><br/>
-                                                <br/>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
                                                 <iframe frameborder="0" height="200px" style={{width:"100%", maxWidth:"660px", overflow:"hidden"}} src={props.baseWwwUrl + "embed/" + props.user.userId}></iframe>
                                                 <br/><br/>
                                                 <TextField
@@ -893,53 +931,63 @@ const PodcastAccount = (props) => {
                                                     >
                                                     複製程式碼
                                                 </Button>
-                                                
                                             </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                
-                                                    <Typography variant="h5" component="h5">社群媒體帳號</Typography>
-                                                    <FormControl fullWidth className={classes.fullWidthInput}>
-                                                    <Typography className={classes.facebookColor} variant="body1" gutterBottom><FacebookIcon/>Facebook</Typography>
-                                                        <TextField disabled={handleCode==="loading"} 
-                                                                    value={facebookLink} 
-                                                                    onChange={(e)=>setFacebookLink(e.target.value)} 
-                                                                    id="fb" 
-                                                                    variant="outlined"
-                                                                    placeholder="https://" />
-                                                    </FormControl>
-                                                    <FormControl fullWidth className={classes.fullWidthInput}>
-                                                    <Typography className={classes.instagramColor} variant="body1" gutterBottom><InstagramIcon/>Instagram</Typography>
-                                                        <TextField disabled={handleCode==="loading"} 
-                                                                    value={instagramLink} 
-                                                                    onChange={(e)=>setInstargramLink(e.target.value)} 
-                                                                    id="ig" 
-                                                                    variant="outlined"
-                                                                    placeholder="https://" />
-                                                    </FormControl>
-                                                    <FormControl fullWidth className={classes.fullWidthInput}>
-                                                    <Typography className={classes.youtubeColor} variant="body1" gutterBottom><YouTubeIcon/>Youtube</Typography>
-                                                        <TextField disabled={handleCode==="loading"} 
-                                                                    value={youtubeLink} 
-                                                                    onChange={(e)=>setYoutubeLink(e.target.value)} 
-                                                                    id="yt" 
-                                                                    variant="outlined"
-                                                                    placeholder="https://" />
-                                                    </FormControl>
-                                                    <FormControl fullWidth className={classes.fullWidthInput}>
-                                                    <Typography className={classes.twitterColor} variant="body1" gutterBottom><TwitterIcon/>Twitter</Typography>
-                                                        <TextField disabled={handleCode==="loading"} 
-                                                                    value={twitterLink} 
-                                                                    onChange={(e)=>setTwitterLink(e.target.value)} 
-                                                                    id="twitter" 
-                                                                    variant="outlined"
-                                                                    placeholder="https://" />
-                                                    </FormControl>
-                                                
+                                        </Grid>
+                                        <br/>
+                                        <Divider/>
+                                        <br/>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} md={4}>    
+                                                <Typography variant="h4">社群媒體帳號</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={12}>
-                                                
-                                                <Typography variant="h5" component="h5">Onelink</Typography>
+                                            <Grid item xs={12} md={8}>
+                                                <FormControl fullWidth className={classes.fullWidthInput}>
+                                                <Typography className={classes.facebookColor} variant="body1" gutterBottom><FacebookIcon/>Facebook</Typography>
+                                                    <TextField disabled={handleCode==="loading"} 
+                                                                value={facebookLink} 
+                                                                onChange={(e)=>setFacebookLink(e.target.value)} 
+                                                                id="fb" 
+                                                                variant="outlined"
+                                                                placeholder="https://" />
+                                                </FormControl>
+                                                <FormControl fullWidth className={classes.fullWidthInput}>
+                                                <Typography className={classes.instagramColor} variant="body1" gutterBottom><InstagramIcon/>Instagram</Typography>
+                                                    <TextField disabled={handleCode==="loading"} 
+                                                                value={instagramLink} 
+                                                                onChange={(e)=>setInstargramLink(e.target.value)} 
+                                                                id="ig" 
+                                                                variant="outlined"
+                                                                placeholder="https://" />
+                                                </FormControl>
+                                                <FormControl fullWidth className={classes.fullWidthInput}>
+                                                <Typography className={classes.youtubeColor} variant="body1" gutterBottom><YouTubeIcon/>Youtube</Typography>
+                                                    <TextField disabled={handleCode==="loading"} 
+                                                                value={youtubeLink} 
+                                                                onChange={(e)=>setYoutubeLink(e.target.value)} 
+                                                                id="yt" 
+                                                                variant="outlined"
+                                                                placeholder="https://" />
+                                                </FormControl>
+                                                <FormControl fullWidth className={classes.fullWidthInput}>
+                                                <Typography className={classes.twitterColor} variant="body1" gutterBottom><TwitterIcon/>Twitter</Typography>
+                                                    <TextField disabled={handleCode==="loading"} 
+                                                                value={twitterLink} 
+                                                                onChange={(e)=>setTwitterLink(e.target.value)} 
+                                                                id="twitter" 
+                                                                variant="outlined"
+                                                                placeholder="https://" />
+                                                </FormControl>
+                                            </Grid>
+                                        </Grid>
+                                        <br/>
+                                        <Divider/>
+                                        <br/>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography variant="h4">Onelink</Typography>
                                                 <Typography variant="body1" component="h5">分享單一網址，就讓聽眾前往你的全世界！</Typography><br/>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
                                                 <TextField
                                                     label="Onelink"
                                                     rows={1}
@@ -960,20 +1008,9 @@ const PodcastAccount = (props) => {
                                                     >
                                                     複製連結
                                                 </Button>
-                                                
                                             </Grid>
                                         </Grid>
-                                        <div className={ classes.flexRight }>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                size="large"
-                                                onClick={handleUpdateChannel}
-                                                disabled={handleCode==="loading"}
-                                                startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}>
-                                                儲存設定
-                                            </Button>   
-                                        </div>
+
                                     </TabPanel>
                             </SwipeableViews> 
                             </>

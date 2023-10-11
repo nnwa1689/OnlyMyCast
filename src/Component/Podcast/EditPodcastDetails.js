@@ -25,6 +25,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import { Grid } from '@material-ui/core';
 //custom
 import LinearProgressWithLabel from '../CustomComponent/LinearProgressWithLabel';
 //firebase
@@ -37,50 +38,23 @@ import "firebase/database";
 import { Helmet } from 'react-helmet';
 import genrssfeed from '../../Functions/genRssfeed';
 
+
 const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
         borderRadius: "10px",
         alignItems:"center",
-        textAlign:"center"
     },
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)',
-    },
-    title: {
-      fontSize: 14,
-    },
-    pos: {
-      marginBottom: 12,
-    },
-    large: {
-        width: theme.spacing(10),
-        height: theme.spacing(10),
+    spaceRight: {
         marginRight: theme.spacing(2)
       },
-    backButton: {
-        marginRight: theme.spacing(1),
-    },
-    instructions: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-    },
     input: {
         display: 'none',
       },
     margin: {
         marginBottom: theme.spacing(2),
         marginTop:theme.spacing(2)
-    },
-    flexLeft: {
-        marginRight: "auto",
-    },
-    flexRight: {
-        display: "flex",
-        justifyContent: "flex-end"
     },
   })
   );
@@ -246,113 +220,146 @@ const useStyles = makeStyles((theme)=>({
                     <title>編輯單集 - Onlymycast</title>
                 </Helmet>
                 
-                <Typography variant="h5" component="h1">編輯單集</Typography>
-                <Typography variant="body1" component="span">刪除或編輯這個單集</Typography>
-                    <FormControl fullWidth className={classes.margin}>
-                        <TextField required error={titleErr!==false} helperText={ titleErr !== false && titleErr} disabled={handleCode==="loading"} value={title} onChange={(e)=>setTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
-                    </FormControl>
-                    <FormControl fullWidth className={classes.margin}>
-                    <InputLabel>單集簡介</InputLabel>
-                        <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
-                        <br/>
-                        <MDEditor
-                            value={intro}
-                            onChange={setIntro}
-                        />   
-                        <br/> <br/>                         
-                    </FormControl>
-                    <input
-                        accept=".mp3, .m4a"
-                        className={classes.input}
-                        id="contained-button-file"
-                        multiple
-                        type="file"
-                        startIcon={<AttachmentIcon />}
-                        onChange={(e)=>{
-                            if (e.target.files.length >= 1) {
-                                if ( allowFileType.includes(e.target.files[0].type) ) {
-                                    setFilename(e.target.files[0].name);
-                                    setFileBit(e.target.files[0]);
-                                    setFilePath(URL.createObjectURL(e.target.files[0]));
-                                } else {
-                                    setErr("檔案格式不支援！");
-                                }
-                            }
-                        }}
-                    />
-                    <label htmlFor="contained-button-file">
-                    <Button fullWidth variant="contained" size="large" color="primary" component="span">
-                        <Typography variant="h6" gutterBottom>
-                        <AttachmentIcon/>
-                        { filename === "" ? "變更檔案" : filename }
-                        <br/>
-                        <Typography variant="body2" gutterBottom>
-                            僅限 MP3/MP4/M4A 格式
-                        </Typography>
-                        </Typography>
-                    </Button>
-                    <br/>
-                    </label>
-                    <br/>
-                    <InlinePlayer url={filePath} fileSize={""} returnDuration={(value)=>fromPlayerGetDuration(value)}/>
-                    <FormControl fullWidth className={classes.margin}>
-                        {
-                            filename !== "" && ( handleCode === "loading" ) ?
-                            <>
-                                <br/>
-                                <LinearProgressWithLabel value={uploadProgress} />
-                                <br/>
-                                <Typography variant="h6" gutterBottom>
-                                    正在處理上傳作業，請不要關閉視窗。
-                                </Typography>
-                                <br/>
-                            </>
-                            :
-                            ""
-                        }
-        
-                        {  //uploadErr
-                            err && 
-                            <>
-                                <Typography variant="h6" gutterBottom>
-                                    (￣◇￣;)<br/><br/>
-                                    歐歐，上傳處理發生錯誤，一群猴子正在極力強修
-                                </Typography>
-                                <Typography variant="body2" gutterBottom>
-                                    {"ErrorMsg:" + err}
-                                </Typography>
-                            </>
-                        }
-                    </FormControl>
-                    <Divider />
-                    
-                        <CardActions disableSpacing className={ classes.flexRight }>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={8}>
+                        <Typography variant="h4">編輯單集</Typography>
+                        <Typography variant="body1">刪除或編輯這個單集</Typography><br/>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <CardActions disableSpacing>
                             <Button
-                            variant="contained"
-                            color="primary"
-                            className={ classes.flexLeft }
-                            startIcon={handleCode==="del" ? <CircularProgress size={24} className={classes.buttonProgress} /> : <DeleteIcon />}
-                            onClick={()=>{setShowMsgBox(true)}}
-                            size="large"
-                            disabled={handleCode==="loading" || handleCode==="del"}
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                startIcon={handleCode==="del" ? <CircularProgress size={24} className={classes.buttonProgress} /> : <DeleteIcon />}
+                                onClick={()=>{setShowMsgBox(true)}}
+                                size="large"
+                                className={ classes.spaceRight }
+                                disabled={handleCode==="loading" || handleCode==="del"}
                             >
                                 刪除單集
                             </Button> 
         
                             <Button
+                                fullWidth
                                 variant="contained"
                                 color="secondary"
                                 size="large"
-                                className={classes.flexRight}
                                 startIcon={ handleCode==='loading'? <CircularProgress size={24} className={classes.buttonProgress} /> : <SaveIcon />}
                                 onClick={handleUpdateInfor}
                                 disabled={handleCode==="loading" || handleCode==="del"}
                             >
                                 變更單集資訊
                             </Button>
-                        </CardActions>                   
-                    
-                
+                        </CardActions>     
+                    </Grid>
+                </Grid>
+                <br/>
+                <Divider/>
+                <br/>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={3}>
+                        <Typography variant="h4">單集標題</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={9}>
+                        <FormControl fullWidth className={classes.margin}>
+                            <TextField required error={titleErr!==false} helperText={ titleErr !== false && titleErr} disabled={handleCode==="loading"} value={title} onChange={(e)=>setTitle(e.target.value)} id="outlined-basic" label="單集標題" variant="outlined" />
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                <br/>
+                <Divider/>
+                <br/>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={3}>
+                        <Typography variant="h4">單集簡介</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={9}>
+                        <FormControl fullWidth className={classes.margin}>
+                            <OutlinedInput id="component-outlined" value="." style={{display:"none"}}/>
+                            <br/>
+                            <MDEditor
+                                value={intro}
+                                onChange={setIntro}
+                            />   
+                            <br/> <br/>                         
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                <br/>
+                <Divider/>
+                <br/>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={3}>
+                        <Typography variant="h4">音訊檔案</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={9}>
+                        <input
+                            accept=".mp3, .m4a"
+                            className={classes.input}
+                            id="contained-button-file"
+                            multiple
+                            type="file"
+                            startIcon={<AttachmentIcon />}
+                            onChange={(e)=>{
+                                if (e.target.files.length >= 1) {
+                                    if ( allowFileType.includes(e.target.files[0].type) ) {
+                                        setFilename(e.target.files[0].name);
+                                        setFileBit(e.target.files[0]);
+                                        setFilePath(URL.createObjectURL(e.target.files[0]));
+                                    } else {
+                                        setErr("檔案格式不支援！");
+                                    }
+                                }
+                            }}
+                        />
+                        <label htmlFor="contained-button-file">
+                        <Button fullWidth variant="contained" size="large" color="primary" component="span">
+                            <Typography variant="h6" gutterBottom>
+                            <AttachmentIcon/>
+                            { filename === "" ? "變更檔案" : filename }
+                            <br/>
+                            <Typography variant="body2" gutterBottom>
+                                僅限 MP3/MP4/M4A 格式
+                            </Typography>
+                            </Typography>
+                        </Button>
+                        <br/>
+                        </label>
+                        <br/>
+                        <InlinePlayer url={filePath} fileSize={""} returnDuration={(value)=>fromPlayerGetDuration(value)}/>
+                    </Grid>
+                </Grid>
+
+                <FormControl fullWidth className={classes.margin}>
+                    {
+                        filename !== "" && ( handleCode === "loading" ) ?
+                        <>
+                            <br/>
+                            <LinearProgressWithLabel value={uploadProgress} />
+                            <br/>
+                            <Typography variant="h6" gutterBottom>
+                                正在處理上傳作業，請不要關閉視窗。
+                            </Typography>
+                            <br/>
+                        </>
+                        :
+                        ""
+                    }
+    
+                    {  //uploadErr
+                        err && 
+                        <>
+                            <Typography variant="h6" gutterBottom>
+                                (￣◇￣;)<br/><br/>
+                                歐歐，上傳處理發生錯誤，一群猴子正在極力強修
+                            </Typography>
+                            <Typography variant="body2" gutterBottom>
+                                {"ErrorMsg:" + err}
+                            </Typography>
+                        </>
+                    }
+                </FormControl>
 
                 <div>
                     <Dialog

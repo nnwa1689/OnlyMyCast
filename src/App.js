@@ -55,7 +55,7 @@ import Footer from './Component/NavBar/Footer';
 /* function */
 import GetRssfeed from './Functions/GetRssfeed';
 
-const clientversion = "V231009.11";
+const clientversion = "V231011.15";
 
 const App = (props) => {
   //常用設定
@@ -268,7 +268,7 @@ const App = (props) => {
       MuiPaper: {
         root: {
           backgroundColor: "#000000"
-        }
+        },
       },
       MuiCircularProgress: {
         root: {
@@ -331,7 +331,7 @@ const App = (props) => {
     palette: {
       type:'light',
       background:{
-        default: 'rgb(250, 250, 250)',
+        default: '#F1EEE9',
       },
       primary: {
         main: "#FD3E49",
@@ -358,15 +358,51 @@ const App = (props) => {
           marginTop: "0.25rem"
         }
       },
+      MuiDialog: {
+        paper: {
+          border: "1px solid #000",
+          boxShadow: "4px 4px 0px 0px #000",
+          borderRadius: "0px"
+        }
+      },
       MuiCard:
       {
         root: {
           //boxShadow: "0 2px 8px 0 rgba(145, 158, 171, 0.2)",
           boxShadow: "none",
-          borderRadius: "8px",
+          borderRadius: "0px",
           borderStyle:"solid",
           borderColor:"rgb(220, 220, 220)",
           border:"1px",
+        }
+      },
+      MuiTab: {
+        root: {
+          transition: "all 0.3s",
+          border: "1px solid transparent",
+          margin: "4px",
+          '&:hover': {
+            border: "1px solid #000",
+            backgroundColor: "#FFF"
+          },
+        }
+      },
+      MuiAlert: {
+        root: {
+          borderRadius: "0px"
+        }
+      },
+      MuiDivider: {
+        root: {
+          backgroundColor: "#000"
+        }
+      },
+      MuiDrawer: {
+        paper: {
+          backgroundColor: "#F1EEE9"
+        },
+        paperAnchorDockedLeft: {
+          borderRight: "1px solid #000"
         }
       },
       MuiAppBar: {
@@ -374,29 +410,116 @@ const App = (props) => {
           backgroundColor:'transparent',
         },
         colorPrimary:{
-          backgroundColor: "rgba(255, 255, 255, 1)",
-          borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+          backgroundColor: "#F1EEE9",
+          borderBottom: "1px solid #000",
           //backdropFilter: "blur(4px)",
           boxShadow: "none",
           color: "#363636"
         }
       },
+      MuiMenu: {
+        paper: {
+          borderRadius: "0px",
+          boxShadow: "4px 4px 0px 0px #000",
+          border: "1px solid #000"
+        }
+      },
+      MuiIconButton: {
+        root: {
+          transition: "all 0.3s",
+          boxShadow: "none",
+          transform: "translate(0px, 0px)",
+          '&:hover': {
+            boxShadow: " 4px 4px 0px 0px #000",
+            transform: "translate(-4px, -4px)",
+          },
+          '&:focus': {
+            boxShadow: "none",
+            transform: "translate(0px, 0px)"
+          },
+          '&:active': {
+            boxShadow: "none",
+          },
+        }
+      },
       MuiFab: {
         root: {
-          boxShadow: "none"
+          transition: "all 0.3s",
+          boxShadow: "none",
+          transform: "translate(0px, 0px)",
+          '&:hover': {
+            boxShadow: " 4px 4px 0px 0px #000",
+            transform: "translate(-4px, -4px)",
+          },
+          '&:focus': {
+            boxShadow: "none",
+            transform: "translate(0px, 0px)"
+          },
+          '&:active': {
+            boxShadow: "none",
+          },
+        }
+      },
+      MuiOutlinedInput: {
+        notchedOutline: {
+          borderColor: "#000",
+          borderWidth: "1px",
+          borderRadius: "0px",
+        }
+      },
+      MuiSnackbarContent: {
+        root: {
+          borderRadius: "0px"
         }
       },
       MuiButton: {
         root: {
+          transition: "all 0.3s",
           height: "64px",
+          border: "1px solid #000",
+          borderRadius: "0px",
+        },
+        outlinedPrimary: {
+          border: "1px solid #FD3E49",
+        },
+        outlined: {
+          border: "1px solid #000",
+          '&:hover': {
+            border: "1px solid #FD3E49",
+            boxShadow: " 4px 4px 0px 0px #FD3E49",
+            transform: "translate(-4px, -4px)",
+          },
+          '&:focus': {
+            boxShadow: "none",
+            transform: "translate(0px, 0px)"
+          },
+          '&:active': {
+            boxShadow: "none",
+          },
+        },
+        text: {
+          '&:hover': {
+            border: "1px solid #FD3E49",
+            boxShadow: " 4px 4px 0px 0px #FD3E49",
+            transform: "translate(-4px, -4px)",
+          },
+          '&:focus': {
+            boxShadow: "none",
+            transform: "translate(0px, 0px)"
+          },
+          '&:active': {
+            boxShadow: "none",
+          },
         },
         contained: {
           boxShadow: "none",
           '&:hover': {
-            boxShadow: "none",
+            boxShadow: " 4px 4px 0px 0px #000",
+            transform: "translate(-4px, -4px)",
           },
           '&:focus': {
             boxShadow: "none",
+            transform: "translate(0px, 0px)"
           },
           '&:active': {
             boxShadow: "none",
@@ -412,8 +535,8 @@ const App = (props) => {
       {
         content: {
           [theme.breakpoints.up('sm')]: {
-            width: `calc(100% - ${240}px)`,
-            marginLeft: 240,
+            width: `calc(100% - ${200}px)`,
+            marginLeft: 200,
           },
         }
       }

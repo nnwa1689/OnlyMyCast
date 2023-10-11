@@ -39,7 +39,7 @@ import LogoPink from '../../static/only-my-cast-pink.svg';
 import Logo from '../../static/only-my-cast.svg';
 import { Hidden } from '@material-ui/core';
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const useStyles = makeStyles((theme) => ({
   root:{
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
     search: {
-      borderRadius: theme.shape.borderRadius,
+      borderRadius: "0",
       transition: 'background-color .15s',
       backgroundColor: "rgba(200, 200, 200, 0.9)",
       '&:hover': {
@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
       padding: "5px",
     },
     searchDark: {
-      borderRadius: theme.shape.borderRadius,
+      borderRadius: "0",
       transition: 'background-color .15s',
       backgroundColor: "rgba(55, 55, 55, 0.9)",
       '&:hover': {
@@ -107,9 +107,6 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(1, 1, 1, 1),
       // vertical padding + font size from searchIcon
     }, 
-    list: {
-      width: 250,
-    },
     fullList: {
       width: 'auto',
     },

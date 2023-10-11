@@ -64,14 +64,14 @@ const useStyles = makeStyles((theme)=>({
   },
   isAuthContent: {
     [theme.breakpoints.up('sm')]: {
-        width: `calc(100% - ${240}px)`,
-        marginLeft: 240,
+        width: `calc(100% - ${200}px)`,
+        marginLeft: 200,
     },
   }
 }));
 
 const darkAppbarStyle = { backgroundColor: "rgba(0, 0, 0, 1)", };
-const lightAppbarStyle = { backgroundColor: "rgba(255, 255, 255, 1)", }
+const lightAppbarStyle = { backgroundColor: "#F1EEE9", }
 
 
 const Player = (props) => {
@@ -169,7 +169,7 @@ const Player = (props) => {
                 config={{ file:{ forceAudio:true } }}
                 playbackRate={playBackRate}
             />
-            <AppBar position="fixed" color="inherit" style={ darkmode === 'light' ? lightAppbarStyle : darkAppbarStyle } className={[classes.appBar, (props.isAuth && classes.isAuthContent)]}>
+            <AppBar elevation={0} position="fixed" color="inherit" style={ darkmode === 'light' ? lightAppbarStyle : darkAppbarStyle } className={[classes.appBar, (props.isAuth && classes.isAuthContent)]}>
                 { !ready ? <LinearProgress style={{width:"100%"}}/> : 
                     <Slider 
                     style={{padding: 0, paddingBottom: 2,}} 

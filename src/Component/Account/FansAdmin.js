@@ -30,6 +30,7 @@ import "firebase/storage";
 //other
 import { Helmet } from 'react-helmet';
 import NotCreatePodcast from '../Podcast/NotCreatePodcast';
+import { Grid } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -37,8 +38,6 @@ const useStyles = makeStyles((theme)=>({
         minWidth: 275,
         marginTop: 100,
         borderRadius: "10px",
-        alignItems:"center",
-        textAlign:"center"
     },
     appBar: {
       top: 'auto',
@@ -156,12 +155,17 @@ const FansAdmin = (props) => {
                     <title>追蹤管理 - Onlymycast</title>
                 </Helmet>
                 <Container maxWidth="lg" className={classes.root}>
-                    <Typography variant="h5" component="h1">追蹤管理</Typography>
-                    <Typography variant="body1" component="span">移除已經被允許追蹤的人</Typography>
-                    <List dense>
-                        {fansList}
-                    </List>
-
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={3}>
+                            <Typography variant="h4">追蹤管理</Typography>
+                            <Typography variant="body1" component="span">移除已經被允許追蹤的人</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={9}>
+                            <List dense>
+                                {fansList}
+                            </List>
+                        </Grid>
+                    </Grid>
                     <Dialog
                         open={showDelMsg}
                         onClose={()=>{setShowDelMsg(false)}}

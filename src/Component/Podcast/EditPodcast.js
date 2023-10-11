@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Grid from '@mui/material/Grid';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -41,7 +42,6 @@ const useStyles = makeStyles((theme)=>({
         marginTop: 100,
         borderRadius: "10px",
         alignItems:"center",
-        textAlign:"center"
     },
     appBar: {
         top: 'auto',
@@ -212,48 +212,53 @@ const EditPodcast = (props) => {
                         <Helmet>
                             <title>單集管理 - Onlymycast</title>
                         </Helmet>
-                        <Typography variant="h5" component="h1">單集管理</Typography><br/>
-                        <AppBar className={classes.tabBar} position="static" color="default">
-                            <Tabs
-                            value={tabValue}
-                            onChange={handleChange}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            variant="fullWidth" >
-                                <Tab label="已發布" />
-                                <Tab label="草稿夾" />
-                            </Tabs>
-                        </AppBar>
-                        
-                            <SwipeableViews
-                                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                                index={tabValue}
-                                onChangeIndex={handleChangeIndex}>
-                                <TabPanel value={tabValue} index={0}>
-                                    {spList==="" || spList.length===0 ? 
-                                    <Button
-                                    component={RLink}
-                                    to="/uploadpodcast"
-                                    color="primary"
-                                    fullWidth
-                                    size="large"
-                                    variant="contained"
-                                    >              
-                                    立即新增節目
-                                    </Button>
-                                    :
-                                    spList
-                                    }
-                                </TabPanel>
-                                <TabPanel value={tabValue} index={1}>
-                                    {castdarftSpList==="" || castdarftSpList.length===0 ? 
-                                    <Typography variant='body1'>目前沒有任何草稿</Typography>
-                                    :
-                                    castdarftSpList
-                                    }
-                                </TabPanel>
-                            </SwipeableViews>
-                        
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={2}>
+                                <Typography variant="h4" component="h1">單集管理</Typography><br/>
+                            </Grid>
+                            <Grid item xs={12} md={10}>
+                                <AppBar className={classes.tabBar} position="static" color="default">
+                                    <Tabs
+                                    value={tabValue}
+                                    onChange={handleChange}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    variant="fullWidth" >
+                                        <Tab label="已發布" />
+                                        <Tab label="草稿夾" />
+                                    </Tabs>
+                                </AppBar>
+                            
+                                <SwipeableViews
+                                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                    index={tabValue}
+                                    onChangeIndex={handleChangeIndex}>
+                                    <TabPanel value={tabValue} index={0}>
+                                        {spList==="" || spList.length===0 ? 
+                                        <Button
+                                        component={RLink}
+                                        to="/uploadpodcast"
+                                        color="primary"
+                                        fullWidth
+                                        size="large"
+                                        variant="contained"
+                                        >              
+                                        立即新增節目
+                                        </Button>
+                                        :
+                                        spList
+                                        }
+                                    </TabPanel>
+                                    <TabPanel value={tabValue} index={1}>
+                                        {castdarftSpList==="" || castdarftSpList.length===0 ? 
+                                        <Typography variant='body1'>目前沒有任何草稿</Typography>
+                                        :
+                                        castdarftSpList
+                                        }
+                                    </TabPanel>
+                                </SwipeableViews>
+                            </Grid>
+                        </Grid>                        
                     </Container>
                 );
             }

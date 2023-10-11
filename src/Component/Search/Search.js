@@ -7,7 +7,7 @@ import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
-import { OutlinedInput } from '@material-ui/core';
+import { Grid, OutlinedInput } from '@material-ui/core';
 import { InputLabel } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import { deepOrange } from '@material-ui/core/colors';
@@ -28,8 +28,6 @@ const useStyles = makeStyles((theme)=>({
         minWidth: 275,
         marginTop: 100,
         borderRadius: "10px",
-        alignItems:"center",
-        textAlign:"center"
     },
     appBar: {
         top: 'auto',
@@ -106,27 +104,28 @@ const Search = (props) => {
     }
 
     return(
-        <Container maxWidth="lg">
-            <div className={classes.root}>
-                
-                <Typography variant="h5" component="h1">搜尋</Typography>
-                <Typography variant="body1" component="span">搜尋您朋友的電台，並追蹤他</Typography>
-                <FormControl fullWidth className={classes.margin} variant="outlined">
-                <InputLabel htmlFor="queryInput">Search</InputLabel>
-                    <OutlinedInput id="queryInput" value={query} defaultValue={props.q} onChange={(e)=>setQuery(e.target.value)} label="Search" endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton onClick={() => {handleSearch(query)}} aria-label="search" className={classes.margin}>
-                                <SearchIcon fontSize="large" />
-                            </IconButton>
-                        </InputAdornment>
-                    } />
-                </FormControl>
-                    <br/><br/>
-                {searchResult.length > 0 ? searchResult : "沒有搜尋結果"}
-                
-            </div>
+        <Container maxWidth="lg" className={classes.root}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={3}>
+                    <Typography variant="h4">搜尋</Typography>
+                    <Typography variant="body1" component="span">搜尋您朋友的電台，並追蹤他</Typography>
+                </Grid>
+                <Grid item xs={12} md={9}>
+                    <FormControl fullWidth className={classes.margin} variant="outlined">
+                    <InputLabel htmlFor="queryInput">Search</InputLabel>
+                        <OutlinedInput id="queryInput" value={query} defaultValue={props.q} onChange={(e)=>setQuery(e.target.value)} label="Search" endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => {handleSearch(query)}} aria-label="search" className={classes.margin}>
+                                    <SearchIcon fontSize="large" />
+                                </IconButton>
+                            </InputAdornment>
+                        } />
+                    </FormControl>
+                        <br/><br/>
+                    {searchResult.length > 0 ? searchResult : "沒有搜尋結果"}
+                </Grid>
+            </Grid>
         </Container>
     );
-
 }
 export default Search;

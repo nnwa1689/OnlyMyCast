@@ -141,41 +141,50 @@ const Home = (props) => {
         <Helmet>
             <title>Onlymycast</title>
         </Helmet>
-        <Typography variant="h5" component="h1"><CastIcon/>我的節目</Typography><br/>
-        <Grid container direction="row">
-          {
-            props.user.userId ==="" ?
-            <Typography variant="body1" component="span">
-              你目前沒有建立節目<br/>
-            </Typography>
-            :
-            <MyPodcastList key={0} spCount={spCount} podcastFansCount={subCount} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></MyPodcastList>
-          }
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={2}>
+            <Typography variant="h4"><CastIcon/>我的節目</Typography><br/>
+          </Grid>
+          <Grid item xs={12} md={10}>
+            <Grid container direction="row">
+            {
+              props.user.userId ==="" ?
+              <Typography variant="body1" component="span">
+                你目前沒有建立節目<br/>
+              </Typography>
+              :
+              <MyPodcastList key={0} spCount={spCount} podcastFansCount={subCount} podcastName={selfChannel.name} podcastIntro={selfChannel.intro} podcastCover={selfChannel.icon} podcastId={props.user.userId}></MyPodcastList>
+            }
+            </Grid>
+          </Grid>
         </Grid>
         <br/>
         <Divider/>
         <br/>
-        <Typography variant="h5">
-            <FavoriteIcon/>我的訂閱
-        </Typography>
-        <br/>
-        <Grid container justify="left" spacing={5}>
-            {subscribeList ==="" ?
-              <>
-                <Typography variant="h2" component="span">
-                    (^ｰ^)ノ<br/>
-                </Typography>
-                <Typography variant="h5" component="span">
-                    嗨<br/>你還沒有訂閱任何節目<br/>快去尋找屬於你的節目吧！
-                </Typography>
-              </>
-              :
-              subscribeList
-              }
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={2}>
+          <Typography variant="h4"><FavoriteIcon/>我的訂閱</Typography>
+          </Grid>
+          <Grid item xs={12} md={10}>
+            <Grid container justify="left" spacing={5}>
+              {subscribeList ==="" ?
+                <>
+                  <Typography variant="h2" component="span">
+                      (^ｰ^)ノ<br/>
+                  </Typography>
+                  <Typography variant="h5" component="span">
+                      嗨<br/>你還沒有訂閱任何節目<br/>快去尋找屬於你的節目吧！
+                  </Typography>
+                </>
+                :
+                subscribeList
+                }
+            </Grid>
+          </Grid>
         </Grid>
+        <br/>
       </Container>
     )
   }
-    
 }
 export default Home;

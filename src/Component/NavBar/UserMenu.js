@@ -37,11 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const StyledMenu = withStyles({
-    paper: {
-      border: '0px solid #D3D3D3',
-      borderRadius: '10px',
-      boxShadow: "0px 4px 32px 0px rgb(60 64 67 / 15%)"
-    },
+    
   })((props) => (
     <Menu
       elevation={0}
@@ -124,7 +120,9 @@ const UserMenu = (props) => {
                     <ListItemIcon><AccountBoxIcon fontSize='large'/></ListItemIcon>
                     <Typography variant="subtitle2" component="span">管理我的帳號</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleMode}>
+                {
+                  /*
+                                  <MenuItem onClick={handleMode}>
                     <ListItemIcon>
                         { isDarkmode == "light" ? <Brightness7Icon fontSize='large'/> : <Brightness4Icon fontSize='large'/> }
                     </ListItemIcon>    
@@ -137,6 +135,9 @@ const UserMenu = (props) => {
                         </Typography>
                         }
                 </MenuItem>
+                   */
+                }
+
                 <Divider />
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon><ExitToAppIcon fontSize='large'/></ListItemIcon>

@@ -24,18 +24,12 @@ import "firebase/storage";
 import "firebase/database"
 //other
 import { Helmet } from 'react-helmet';
+import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        borderRadius: "10px",
-        alignItems:"center",
-        textAlign:"center",
-        justifyContent: 'center',
-        '& > *': {
-            margin: theme.spacing(1),
-          },
     },
       margin: {
         marginBottom: theme.spacing(2),
@@ -110,21 +104,25 @@ const useStyles = makeStyles((theme)=>({
         return(<CircularProgress style={{marginTop: "25%"}} />);
     } else {
         return(
-            <Container maxWidth="lg" className={classes.root}>
+        <Container maxWidth="lg" className={classes.root}>
             <Helmet>
                 <title>單集分析 - Onlymycast</title>
             </Helmet>
-                
-                <Typography variant="h5" component="h1">單集點閱分析</Typography><br/>
-                <Typography variant="h6" component="span"><BarChartIcon />&nbsp;總播放人次：{ playedTimes }</Typography>
-                <br/><br/>
-                <Divider /><br/>
-                <Typography variant="h6" component="span"><PeopleIcon />&nbsp;誰播放過</Typography><br/>
-                <List dense>
-                    { playedList }
-                </List>
-                
-            </Container>
+            
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={3}>
+                    <Typography variant="h4">單集點閱分析</Typography><br/>
+                    <Typography variant="h6" component="span"><BarChartIcon />&nbsp;總播放人次：{ playedTimes }</Typography>
+                    <br/>   
+                </Grid>
+                <Grid item xs={12} md={9}>
+                    <Typography variant="h4"><PeopleIcon />&nbsp;誰播放過</Typography><br/>
+                    <List dense>
+                        { playedList }
+                    </List>
+                </Grid>
+            </Grid>
+        </Container>
         );    
     }
 }

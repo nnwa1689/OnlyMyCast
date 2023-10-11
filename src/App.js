@@ -267,7 +267,7 @@ const App = (props) => {
     overrides: {
       MuiPaper: {
         root: {
-          backgroundColor: "#000000"
+          backgroundColor: "#000000",
         },
       },
       MuiCircularProgress: {
@@ -344,6 +344,11 @@ const App = (props) => {
       fontFamily: 'NotoSansTC-Medium',
     },
     overrides: {
+      MuiPaper:{
+        elevation6:{
+          boxShadow: "none",
+        }
+      },
       MuiCircularProgress: {
         root: {
           display: "block",
@@ -434,11 +439,11 @@ const App = (props) => {
             transform: "translate(-4px, -4px)",
           },
           '&:focus': {
-            boxShadow: "none",
-            transform: "translate(0px, 0px)"
+
           },
           '&:active': {
             boxShadow: "none",
+            transform: "translate(0px, 0px)"
           },
         }
       },
@@ -452,11 +457,11 @@ const App = (props) => {
             transform: "translate(-4px, -4px)",
           },
           '&:focus': {
-            boxShadow: "none",
-            transform: "translate(0px, 0px)"
+
           },
           '&:active': {
             boxShadow: "none",
+            transform: "translate(0px, 0px)"
           },
         }
       },
@@ -490,11 +495,11 @@ const App = (props) => {
             transform: "translate(-4px, -4px)",
           },
           '&:focus': {
-            boxShadow: "none",
-            transform: "translate(0px, 0px)"
+
           },
           '&:active': {
             boxShadow: "none",
+            transform: "translate(0px, 0px)"
           },
         },
         text: {
@@ -504,11 +509,11 @@ const App = (props) => {
             transform: "translate(-4px, -4px)",
           },
           '&:focus': {
-            boxShadow: "none",
-            transform: "translate(0px, 0px)"
+
           },
           '&:active': {
             boxShadow: "none",
+            transform: "translate(0px, 0px)"
           },
         },
         contained: {
@@ -518,11 +523,11 @@ const App = (props) => {
             transform: "translate(-4px, -4px)",
           },
           '&:focus': {
-            boxShadow: "none",
-            transform: "translate(0px, 0px)"
+
           },
           '&:active': {
             boxShadow: "none",
+            transform: "translate(0px, 0px)"
           },
         },
       }

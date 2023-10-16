@@ -403,7 +403,7 @@ const PodcastAccount = (props) => {
                         <>
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={9}>
-                                <Typography variant="h4">建立節目</Typography>
+                                <Typography variant="h3">建立節目</Typography>
                                 <Typography variant="body1" component="span">建立屬於您的私人或公開節目</Typography>
                             </Grid>
                             <Grid item xs={12} md={3}>
@@ -543,7 +543,7 @@ const PodcastAccount = (props) => {
                             <>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} md={9}>
-                                        <Typography variant="h4">節目設定</Typography>
+                                        <Typography variant="h3">節目設定</Typography>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
                                         <Button

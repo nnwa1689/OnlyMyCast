@@ -213,10 +213,10 @@ const EditPodcast = (props) => {
                             <title>單集管理 - Onlymycast</title>
                         </Helmet>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} md={2}>
-                                <Typography variant="h4" component="h1">單集管理</Typography><br/>
+                            <Grid item xs={12} md={3}>
+                                <Typography variant="h3" component="h1">單集管理</Typography><br/>
                             </Grid>
-                            <Grid item xs={12} md={10}>
+                            <Grid item xs={12} md={9}>
                                 <AppBar className={classes.tabBar} position="static" color="default">
                                     <Tabs
                                     value={tabValue}

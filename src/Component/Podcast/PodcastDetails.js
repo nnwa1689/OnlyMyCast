@@ -45,9 +45,6 @@ const useStyles = makeStyles((theme)=>({
     root: {
         minWidth: 275,
         marginTop: 100,
-        borderRadius: "10px",
-        alignItems:"center",
-        textAlign:"center"
     },
     large: {
       width: theme.spacing(28),
@@ -120,7 +117,6 @@ const PodcastDetails = (props) => {
         link.download = "shareImg.png";
         link.href = dataUrl;
         link.click();
-
       })
       .catch(
         (e) => { 
@@ -210,59 +206,56 @@ const PodcastDetails = (props) => {
     } else {
       return(
         <Container className={classes.root} maxWidth="lg">
+          <Helmet>
+            <title>{ name } - { channelName } - Onlymycast</title>
+          </Helmet>
           { subStatu===1 || publicStatu || props.user.userId === props.match.params.id ?
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={4}>
-                  <Helmet>
-                      <title>{ name } - { channelName } - Onlymycast</title>
-                  </Helmet>
-                  
-                    <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
-                    <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
-                    <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
-                    <br/>
-                    <Typography variant="body1" component="p">
-                      <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon><br/>
-                      <ListItemIcon><AccessTimeIcon/>{duration}</ListItemIcon>
-                      &nbsp;
-                      { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
-                      </Typography>
-                    <Tooltip title="複製分享連結">
-                      <IconButton onClick={ () => {handleCopy("https://dev.n-d.tw/apps/onlymycast/webapp/podcastdetail/" + props.match.params.id + '/' + props.match.params.podId)} } size='large'>
-                        <LinkIcon fontSize='small' />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="以限時動態分享">
-                      <IconButton onClick={ handleOpenClose } size='large'>
-                        <InstagramIcon fontSize='small' />
-                      </IconButton>
-                    </Tooltip>
-                    <br/>
-                    <Button 
-                        color="primary"
-                        variant="contained"
-                        size="large"
-                        fullWidth 
-                        startIcon={<PlayCircleFilledWhiteIcon/>}
-                        value={props.match.params.podId}
-                        data-uri={audioUrl}
-                        data-coveruri={avatar}
-                        data-titlename={name}
-                        data-podcastname={channelName}
-                        data-poduserid = { props.match.params.id }
-                        onClick={props.setPlayer}>
-                        播放單集
-                    </Button>
-                  
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={4} style={{ textAlign: "center" }}>
+                <Avatar variant="rounded" alt={name} src={avatar} className={classes.large} />
+                <Typography style={ {paddingTop: "16px"} } variant="h5">{name}</Typography>
+                <Link component={RLink} to={"/podcast/" + props.match.params.id} variant="h5">{channelName}</Link>
+                <br/>
+                <Typography variant="body1" component="p">
+                  <ListItemIcon><EventIcon/>{updateTime}</ListItemIcon><br/>
+                  <ListItemIcon><AccessTimeIcon/>{duration}</ListItemIcon>
+                  &nbsp;
+                  { played ? <ListItemIcon><PlayCircleOutlineIcon/>已播放</ListItemIcon> : "" }
+                  </Typography>
+                <Tooltip title="複製分享連結">
+                  <IconButton 
+                    onClick={ 
+                      () => {handleCopy(props.baseWwwUrl + "podcastdetail/" + props.match.params.id + '/' + props.match.params.podId)} } 
+                    size='large'>
+                    <LinkIcon fontSize='small' />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="以限時動態分享">
+                  <IconButton onClick={ handleOpenClose } size='large'>
+                    <InstagramIcon fontSize='small' />
+                  </IconButton>
+                </Tooltip>
+                <br/><br/>
+                <Button 
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                    fullWidth 
+                    startIcon={<PlayCircleFilledWhiteIcon/>}
+                    value={props.match.params.podId}
+                    data-uri={audioUrl}
+                    data-coveruri={avatar}
+                    data-titlename={name}
+                    data-podcastname={channelName}
+                    data-poduserid = { props.match.params.id }
+                    onClick={props.setPlayer}>
+                    播放單集
+                </Button>     
               </Grid>
               <Grid item xs={12} md={8}>
-                
-                  <h3 style={{textAlign:"left"}} variant="subtitle1" component="p">
-                    單集介紹
-                  </h3>
-                  <Divider/><br/>
-                  <Typography style={{textAlign:"left"}} variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography>
-                
+                <Typography variant="h5">單集介紹</Typography>
+                <br/><Divider/><br/>
+                <Typography variant="body1" component="span"><ReactMarkdown>{intro}</ReactMarkdown></Typography> 
               </Grid>
               <Snackbar open={showCopyMsg===true} autoHideDuration={3000} onClose={()=>{setShowCopyMsg(false)}} message="已經複製到剪貼簿"/>
             </Grid>

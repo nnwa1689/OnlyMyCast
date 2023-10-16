@@ -369,7 +369,7 @@ const Account = (props) => {
                 </Helmet>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={9}>
-                        <Typography variant="h4">帳號與訂閱管理</Typography><br/>
+                        <Typography variant="h3">帳號與訂閱管理</Typography><br/>
                     </Grid>
                     <Grid item xs={12} md={3}>
                         {

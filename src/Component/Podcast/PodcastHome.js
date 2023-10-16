@@ -54,8 +54,6 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 275,
         marginTop: 100,
         borderRadius: "10px",
-        alignItems: "center",
-        textAlign: "center"
     },
     appBar: {
         top: 'auto',
@@ -358,9 +356,8 @@ const PodcastHome = (props) => {
                 <Helmet>
                     <title>{name} - Onlymycast</title>
                 </Helmet>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                        
+                <Grid container spacing={4}>
+                    <Grid item xs={12} md={4} style={{ textAlign: "center" }}>
                             <Avatar variant="rounded" alt={name} src={avatar === "" ? "." : avatar} className={classes.large} />
                             <Typography style={{ paddingTop: "16px" }} variant="h5">{name}</Typography>
                             <ListItem style={{ width: "fit-content", marginLeft: "auto", marginRight: "auto" }}>
@@ -438,17 +435,14 @@ const PodcastHome = (props) => {
                                 }
                                 </TabPanel>
                                 <TabPanel value={tabValue} index={1}>
-                                    <h3 style={{ textAlign: "left" }} variant="h6" component="h6">
-                                        節目介紹
-                                    </h3>
-                                    <Typography style={{ textAlign: "left" }} variant="body1" component="p">
+                                    <Typography variant="h5">節目介紹</Typography>
+                                    <br/><Divider/><br/>
+                                    <Typography variant="body1" component="p">
                                         <ReactMarkdown>{intro}</ReactMarkdown>
                                     </Typography>
-                                    <Divider/>                                   
-                                    <h3 style={{ textAlign: "left" }} variant="h6" component="h6">
-                                        連結與其他平台
-                                    </h3>
-                                    <br/>
+                                    <br/><br/>                         
+                                    <Typography variant="h5">連結與其他平台</Typography>
+                                    <br/><Divider/><br/>  
                                     {facebookLink.length > 0 ?
                                     <IconButton className={classes.facebookButton} href={facebookLink} target='_blank' size='large'>
                                         <FacebookIcon fontSize='large' />

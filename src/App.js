@@ -55,7 +55,7 @@ import Footer from './Component/NavBar/Footer';
 /* function */
 import GetRssfeed from './Functions/GetRssfeed';
 
-const clientversion = "V231011.15";
+const clientversion = "V231016.11";
 
 const App = (props) => {
   //常用設定
@@ -344,6 +344,16 @@ const App = (props) => {
       fontFamily: 'NotoSansTC-Medium',
     },
     overrides: {
+      MuiTooltip: {
+        tooltip: {
+          borderRadius: 0,
+          border: "1px solid #000",
+          backgroundColor: "#FFF",
+          color: "#000",
+          boxShadow: "2px 2px 0 0 #000",
+          fontSize: "0.75rem"
+        }
+      },
       MuiPaper:{
         elevation6:{
           boxShadow: "none",
@@ -617,7 +627,7 @@ const App = (props) => {
                   <Route path="/podcastdetail/:id/:podId"
                     render={(props) => (
                       <main className={  isAuth && classes.content  }>
-                        <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} isAuth={isAuth} />
+                        <PodcastDetails {...props} setPlayer={setPlayer} userUid={userUid.current} user={userData} isAuth={isAuth} baseWwwUrl={baseWwwUrl}/>
                       </main>
                     )} />
                   <Route path="/podcast/:id"

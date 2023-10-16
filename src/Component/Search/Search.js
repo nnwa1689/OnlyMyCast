@@ -107,7 +107,7 @@ const Search = (props) => {
         <Container maxWidth="lg" className={classes.root}>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={3}>
-                    <Typography variant="h4">搜尋</Typography>
+                    <Typography variant="h3">搜尋</Typography>
                     <Typography variant="body1" component="span">搜尋您朋友的電台，並追蹤他</Typography>
                 </Grid>
                 <Grid item xs={12} md={9}>

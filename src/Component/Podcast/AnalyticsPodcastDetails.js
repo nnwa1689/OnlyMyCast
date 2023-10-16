@@ -111,7 +111,7 @@ const useStyles = makeStyles((theme)=>({
             
             <Grid container spacing={2}>
                 <Grid item xs={12} md={3}>
-                    <Typography variant="h4">單集點閱分析</Typography><br/>
+                    <Typography variant="h3">單集點閱分析</Typography><br/>
                     <Typography variant="h6" component="span"><BarChartIcon />&nbsp;總播放人次：{ playedTimes }</Typography>
                     <br/>   
                 </Grid>

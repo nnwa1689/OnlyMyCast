@@ -222,7 +222,7 @@ const useStyles = makeStyles((theme)=>({
                 
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={8}>
-                        <Typography variant="h4">編輯單集</Typography>
+                        <Typography variant="h3">編輯單集</Typography>
                         <Typography variant="body1">刪除或編輯這個單集</Typography><br/>
                     </Grid>
                     <Grid item xs={12} md={4}>

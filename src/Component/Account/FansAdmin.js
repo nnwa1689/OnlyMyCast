@@ -157,7 +157,7 @@ const FansAdmin = (props) => {
                 <Container maxWidth="lg" className={classes.root}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={3}>
-                            <Typography variant="h4">追蹤管理</Typography>
+                            <Typography variant="h3">追蹤管理</Typography>
                             <Typography variant="body1" component="span">移除已經被允許追蹤的人</Typography>
                         </Grid>
                         <Grid item xs={12} md={9}>

@@ -44,6 +44,8 @@ import EmbedChannel from './Component/Podcast/EmbedChannel';
 import EmailVerified from './Component/Account/EmailVerified';
 import Onelink from './Component/Podcast/Onelink';
 import NotFound from './Component/Home/NotFound';
+import OnlyMySound from './Component/Podcast/OnlyMySound';
+
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles';
@@ -92,6 +94,7 @@ const App = (props) => {
   var basenameIndex = 1;
   var fcmVapidKey = fcmVapidKey_dev;
   var baseWwwUrl = "http://localhost:3000/";
+  var socketUrl = "https://onlymycast.com:8080/";
 
   if (process.env.NODE_ENV !== "development") {
     //產品環境
@@ -636,6 +639,16 @@ const App = (props) => {
                         <PodcastHome {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} isAuth={isAuth} />
                       </main>
                     )} />
+                    
+
+                  <Route path="/livechat/my"
+                    render={(props) => (
+                      <main className={ isAuth && classes.content }>
+                        <OnlyMySound {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} isAuth={isAuth} socketUrl={socketUrl} />
+                      </main>
+                    )} />
+
+
                   <Route exact path="/uploadpodcast"
                     render={(props) => (
                       <main className={ classes.content }>
@@ -670,7 +683,6 @@ const App = (props) => {
                       </main>
                     )}
                   />
-                  
                   <Route exact path="/embed/:id"
                     render={(props) => (
                       <EmbedChannel {...props} user={userData} baseWwwUrl={baseWwwUrl}/>

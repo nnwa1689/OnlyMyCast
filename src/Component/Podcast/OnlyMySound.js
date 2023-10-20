@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme)=>({
   );
 
 
-  const NewPodcast = (props) => {
+  const OnlyMySound = (props) => {
 
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0);
@@ -141,6 +141,7 @@ const useStyles = makeStyles((theme)=>({
     const [deviceList, setDeviceList] = useState();
     const [currentTime, setCurrentTime] = useState("0 : 0");
     let currentTimer;
+    let sendAudioSocketTimer;
 
     useEffect(
         ()=>{
@@ -202,7 +203,14 @@ const useStyles = makeStyles((theme)=>({
 
     const GenRoom = async() => {
         roomHashCode.current = uuidv4();
-        socket.current = io(props.socketUrl + "?room=" + roomHashCode.current, { withCredentials : true });
+        socket.current = io(props.socketUrl, 
+            {   withCredentials : true,
+                query : {
+                    "room" : "123456",
+                    "isHost" : "true"
+                }
+            }
+        );
     }
     
     const start = async() => {
@@ -210,19 +218,24 @@ const useStyles = makeStyles((theme)=>({
           console.log('Permission Denied');
         } else {
             await GenRoom();
-            setFileBit();
-            setFilename("");
-            setFilePath();
             Mp3Recorder
             .start()
             .then(() => {
               setIsRecording(true);
+              sendAudioSocketTimer =  setInterval(
+                () => {
+                    socket.current.volatile.emit("sentlive", Mp3Recorder.lameEncoder.samplesMono)
+                    //console.log(Mp3Recorder.lameEncoder.samplesMono);
+                },1000
+              );
               currentTimer =  setInterval(
                 () => {
                     setCurrentTime(parseInt(((parseInt(Mp3Recorder.context.currentTime, 10))/60)) + " : " + Math.ceil(((parseInt(Mp3Recorder.context.currentTime, 10))%60)));
                 }, 1000
             );
             }).catch((e) => console.error(e));
+
+            
         }
     }
 
@@ -232,6 +245,8 @@ const useStyles = makeStyles((theme)=>({
           .getMp3()
           .then(([buffer, blob]) => {
             clearInterval(currentTimer);
+            clearInterval(sendAudioSocketTimer);
+            socket.current.close();
             const blobURL = URL.createObjectURL(blob);
             setFilePath(blobURL);
             
@@ -397,4 +412,4 @@ const useStyles = makeStyles((theme)=>({
         );
     }
 }
-export default NewPodcast;
+export default OnlyMySound;

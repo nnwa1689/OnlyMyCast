@@ -45,6 +45,7 @@ import EmailVerified from './Component/Account/EmailVerified';
 import Onelink from './Component/Podcast/Onelink';
 import NotFound from './Component/Home/NotFound';
 import OnlyMySound from './Component/Podcast/OnlyMySound';
+import PlayOnlyMySound from './Component/Podcast/PlayOnlyMySound';
 
 /*GoogleUI*/
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -645,6 +646,13 @@ const App = (props) => {
                     render={(props) => (
                       <main className={ isAuth && classes.content }>
                         <OnlyMySound {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} isAuth={isAuth} socketUrl={socketUrl} />
+                      </main>
+                    )} />
+
+                  <Route path="/liveroom/"
+                    render={(props) => (
+                      <main className={ isAuth && classes.content }>
+                        <PlayOnlyMySound {...props} setPlayer={setPlayer} user={userData} userUid={userUid.current} isAuth={isAuth} socketUrl={socketUrl} />
                       </main>
                     )} />
 
